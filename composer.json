@@ -1,6 +1,6 @@
 {
     "name": "lenorix/beel-sdk",
-    "description": "Generated client for BeeL API",
+    "description": "Official PHP SDK for the BeeL invoicing API",
     "keywords": [
         "lenorix",
         "beel-sdk"
@@ -36,7 +36,7 @@
         }
     },
     "scripts": {
-        "test": "vendor/bin/pest",
+        "test": "php -d memory_limit=512M vendor/bin/pest --no-coverage",
         "test-coverage": "vendor/bin/pest --coverage",
         "format": "vendor/bin/pint",
         "generate": "@php bin/prepare-openapi.php && php -d memory_limit=256M vendor/bin/jane-openapi generate"
