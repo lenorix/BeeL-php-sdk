@@ -1,12 +1,22 @@
 {
     "name": "lenorix/beel-sdk",
+    "type": "library",
     "description": "Official PHP SDK for the BeeL invoicing API",
     "keywords": [
+        "api-client",
+        "beel",
         "lenorix",
-        "beel-sdk"
+        "beel-sdk",
+        "invoicing",
+        "php-sdk",
+        "verifactu"
     ],
-    "homepage": "https://github.com/lenorix/beel-php-sdk",
+    "homepage": "https://github.com/lenorix/BeeL-php-sdk",
     "license": "MIT",
+    "support": {
+        "issues": "https://github.com/lenorix/BeeL-php-sdk/issues",
+        "source": "https://github.com/lenorix/BeeL-php-sdk"
+    },
     "authors": [
         {
             "name": "Jesus Hernandez",
@@ -15,15 +25,17 @@
         }
     ],
     "require": {
-        "php": "^8.4",
         "guzzlehttp/guzzle": "^8.2",
-        "jane-php/open-api-runtime": "^7.14"
+        "jane-php/open-api-runtime": "^7.14",
+        "php": "^8.4",
+        "php-http/client-common": "^2.0",
+        "php-http/discovery": "^1.6",
+        "psr/http-client": "^1.0"
     },
     "require-dev": {
         "jane-php/open-api-3": "^7.14",
         "laravel/pint": "^1.0",
-        "pestphp/pest": "^4.0",
-        "spatie/ray": "^1.28"
+        "pestphp/pest": "^4.0"
     },
     "autoload": {
         "psr-4": {
@@ -32,7 +44,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Lenorix\\BeelSdk\\Tests\\": "tests"
+            "Lenorix\\BeelSdk\\Tests\\": "tests/"
         }
     },
     "scripts": {
@@ -45,10 +57,7 @@
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
-            "php-http/discovery": true,
-            "phpstan/extension-installer": true
+            "php-http/discovery": true
         }
-    },
-    "minimum-stability": "dev",
-    "prefer-stable": true
+    }
 }
