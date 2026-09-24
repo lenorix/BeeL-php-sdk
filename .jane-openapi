@@ -1,0 +1,7 @@
+<?php
+
+return [
+  'openapi-file' => 'https://docs.beel.es/api/openapi',
+  'namespace' => 'Lenorix\BeelSdk\Generated',
+  'directory' => __DIR__ . '/src/generated',
+];

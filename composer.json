@@ -1,9 +1,9 @@
 {
-    "name": "lenorix/beel-php-sdk",
+    "name": "lenorix/beel-sdk",
     "description": "Generated client for BeeL API",
     "keywords": [
         "lenorix",
-        "beel-php-sdk"
+        "beel-sdk"
     ],
     "homepage": "https://github.com/lenorix/beel-php-sdk",
     "license": "MIT",
@@ -15,32 +15,37 @@
         }
     ],
     "require": {
-        "php": "^8.4"
+        "php": "^8.4",
+        "guzzlehttp/guzzle": "^8.2",
+        "jane-php/open-api-runtime": "^7.14"
     },
     "require-dev": {
-        "pestphp/pest": "^4.0",
+        "jane-php/open-api-3": "^7.14",
         "laravel/pint": "^1.0",
+        "pestphp/pest": "^4.0",
         "spatie/ray": "^1.28"
     },
     "autoload": {
         "psr-4": {
-            "Lenorix\\BeelPhpSdk\\": "src"
+            "Lenorix\\BeelSdk\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Lenorix\\BeelPhpSdk\\Tests\\": "tests"
+            "Lenorix\\BeelSdk\\Tests\\": "tests"
         }
     },
     "scripts": {
         "test": "vendor/bin/pest",
-            "test-coverage": "vendor/bin/pest --coverage",
-        "format": "vendor/bin/pint"
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint",
+        "generate": "vendor/bin/jane-openapi generate"
     },
     "config": {
         "sort-packages": true,
         "allow-plugins": {
             "pestphp/pest-plugin": true,
+            "php-http/discovery": true,
             "phpstan/extension-installer": true
         }
     },
