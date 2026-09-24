@@ -1,7 +1,7 @@
 <?php
 
 return [
-  'openapi-file' => 'https://docs.beel.es/api/openapi',
+  'openapi-file' => __DIR__ . '/build/openapi.json',
   'namespace' => 'Lenorix\BeelSdk\Generated',
-  'directory' => __DIR__ . '/src/generated',
+  'directory' => __DIR__ . '/src/Generated',
 ];

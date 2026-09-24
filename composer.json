@@ -27,7 +27,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Lenorix\\BeelSdk\\": "src"
+            "Lenorix\\BeelSdk\\": "src/"
         }
     },
     "autoload-dev": {
@@ -39,7 +39,7 @@
         "test": "vendor/bin/pest",
         "test-coverage": "vendor/bin/pest --coverage",
         "format": "vendor/bin/pint",
-        "generate": "vendor/bin/jane-openapi generate"
+        "generate": "@php bin/prepare-openapi.php && php -d memory_limit=256M vendor/bin/jane-openapi generate"
     },
     "config": {
         "sort-packages": true,
