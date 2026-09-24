@@ -2,9 +2,25 @@
 
 namespace Lenorix\BeelSdk\Generated\Endpoint;
 
-class PatchRecurringInvoice extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint implements \Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint
+use Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceBadRequestException;
+use Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceConflictException;
+use Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceForbiddenException;
+use Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceNotFoundException;
+use Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceUnprocessableEntityException;
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Generated\Model\PatchRecurringInvoiceRequest;
+use Lenorix\BeelSdk\Generated\Model\V1RecurringInvoicesRecurringInvoiceIdPatchResponse200;
+use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+use Lenorix\BeelSdk\Generated\Runtime\Client\JsonPayload;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class PatchRecurringInvoice extends BaseEndpoint implements Endpoint
 {
     protected $recurring_invoice_id;
+
     /**
      * **Deprecated.** Use
      * `PATCH /v1/companies/{company_id}/recurring-invoices/{recurring_invoice_id}`, which behaves
@@ -26,72 +42,78 @@ class PatchRecurringInvoice extends \Lenorix\BeelSdk\Generated\Runtime\Client\Ba
      *   template has not generated any invoice yet.
      *
      * **Retires on 9 December 2026.** See the [migration guide](https://docs.beel.es/changelog/resources-under-the-nif) for what moved where and what changes when you switch.
-     *
-     * @param string $recurringInvoiceId
-     * @param \Lenorix\BeelSdk\Generated\Model\PatchRecurringInvoiceRequest $requestBody
      */
-    public function __construct(string $recurringInvoiceId, \Lenorix\BeelSdk\Generated\Model\PatchRecurringInvoiceRequest $requestBody)
+    public function __construct(string $recurringInvoiceId, PatchRecurringInvoiceRequest $requestBody)
     {
         $this->recurring_invoice_id = $recurringInvoiceId;
         $this->body = $requestBody;
     }
-    use \Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+
+    use EndpointTrait;
+
     public function getMethod(): string
     {
         return 'PATCH';
     }
+
     public function getUri(): string
     {
         return str_replace(['{recurring_invoice_id}'], [rawurlencode($this->recurring_invoice_id)], '/v1/recurring-invoices/{recurring_invoice_id}');
     }
-    public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer, $streamFactory = null): array
+
+    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
-        if ($this->body instanceof \Lenorix\BeelSdk\Generated\Model\PatchRecurringInvoiceRequest) {
-            return [['Content-Type' => ['application/json']], \Lenorix\BeelSdk\Generated\Runtime\Client\JsonPayload::encode($serializer, $this->body)];
+        if ($this->body instanceof PatchRecurringInvoiceRequest) {
+            return [['Content-Type' => ['application/json']], JsonPayload::encode($serializer, $this->body)];
         }
+
         return [[], null];
     }
+
     public function getExtraHeaders(): array
     {
         return ['Accept' => ['application/json']];
     }
+
     /**
      * {@inheritdoc}
      *
-     * @throws \Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceBadRequestException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceForbiddenException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceNotFoundException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceConflictException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceUnprocessableEntityException
      *
-     * @return null|\Lenorix\BeelSdk\Generated\Model\V1RecurringInvoicesRecurringInvoiceIdPatchResponse200|\Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @return null|V1RecurringInvoicesRecurringInvoiceIdPatchResponse200|ErrorResponse
+     *
+     * @throws PatchRecurringInvoiceBadRequestException
+     * @throws PatchRecurringInvoiceForbiddenException
+     * @throws PatchRecurringInvoiceNotFoundException
+     * @throws PatchRecurringInvoiceConflictException
+     * @throws PatchRecurringInvoiceUnprocessableEntityException
      */
-    protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (is_null($contentType) === false && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+        if (is_null($contentType) === false && ($status === 200 && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\V1RecurringInvoicesRecurringInvoiceIdPatchResponse200', 'json');
         }
-        if (is_null($contentType) === false && (400 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 400 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new PatchRecurringInvoiceBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (403 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 403 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new PatchRecurringInvoiceForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (404 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceNotFoundException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 404 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new PatchRecurringInvoiceNotFoundException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (409 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceConflictException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 409 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new PatchRecurringInvoiceConflictException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (422 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 422 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new PatchRecurringInvoiceUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
         if (stripos(strtolower($contentType), 'application/json') !== false) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
+
     public function getAuthenticationScopes(): array
     {
         return ['ApiKeyAuth'];

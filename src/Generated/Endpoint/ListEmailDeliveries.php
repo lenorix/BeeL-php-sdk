@@ -2,7 +2,20 @@
 
 namespace Lenorix\BeelSdk\Generated\Endpoint;
 
-class ListEmailDeliveries extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint implements \Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint
+use Lenorix\BeelSdk\Generated\Exception\ListEmailDeliveriesForbiddenException;
+use Lenorix\BeelSdk\Generated\Exception\ListEmailDeliveriesInternalServerErrorException;
+use Lenorix\BeelSdk\Generated\Exception\ListEmailDeliveriesUnauthorizedException;
+use Lenorix\BeelSdk\Generated\Exception\ListEmailDeliveriesUnprocessableEntityException;
+use Lenorix\BeelSdk\Generated\Model\EmailDeliveryListResponse;
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class ListEmailDeliveries extends BaseEndpoint implements Endpoint
 {
     /**
      * Returns the emails the system recorded on behalf of the authenticated account: invoice
@@ -36,24 +49,30 @@ class ListEmailDeliveries extends \Lenorix\BeelSdk\Generated\Runtime\Client\Base
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+
+    use EndpointTrait;
+
     public function getMethod(): string
     {
         return 'GET';
     }
+
     public function getUri(): string
     {
         return '/v1/emails';
     }
-    public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer, $streamFactory = null): array
+
+    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
         return [[], null];
     }
+
     public function getExtraHeaders(): array
     {
         return ['Accept' => ['application/json']];
     }
-    protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
+
+    protected function getQueryOptionsResolver(): OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
         $optionsResolver->setDefined(['page', 'limit', 'type', 'status', 'recipient', 'related_entity_id', 'sort_by', 'sort_order']);
@@ -67,41 +86,45 @@ class ListEmailDeliveries extends \Lenorix\BeelSdk\Generated\Runtime\Client\Base
         $optionsResolver->addAllowedTypes('related_entity_id', ['string']);
         $optionsResolver->addAllowedTypes('sort_by', ['string']);
         $optionsResolver->addAllowedTypes('sort_order', ['string']);
+
         return $optionsResolver;
     }
+
     /**
      * {@inheritdoc}
      *
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ListEmailDeliveriesUnauthorizedException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ListEmailDeliveriesForbiddenException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ListEmailDeliveriesUnprocessableEntityException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ListEmailDeliveriesInternalServerErrorException
      *
-     * @return null|\Lenorix\BeelSdk\Generated\Model\EmailDeliveryListResponse|\Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @return null|EmailDeliveryListResponse|ErrorResponse
+     *
+     * @throws ListEmailDeliveriesUnauthorizedException
+     * @throws ListEmailDeliveriesForbiddenException
+     * @throws ListEmailDeliveriesUnprocessableEntityException
+     * @throws ListEmailDeliveriesInternalServerErrorException
      */
-    protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (is_null($contentType) === false && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+        if (is_null($contentType) === false && ($status === 200 && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\EmailDeliveryListResponse', 'json');
         }
-        if (is_null($contentType) === false && (401 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ListEmailDeliveriesUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 401 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ListEmailDeliveriesUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (403 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ListEmailDeliveriesForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 403 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ListEmailDeliveriesForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (422 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ListEmailDeliveriesUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 422 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ListEmailDeliveriesUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (500 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ListEmailDeliveriesInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ListEmailDeliveriesInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
         if (stripos(strtolower($contentType), 'application/json') !== false) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
+
     public function getAuthenticationScopes(): array
     {
         return ['ApiKeyAuth'];

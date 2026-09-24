@@ -3,6 +3,12 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteItem;
+use Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteLegacyError;
+use Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteMetadata;
+use Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteResult;
+use Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteStatistics;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,46 +17,50 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class CustomerBulkDeleteResultNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class CustomerBulkDeleteResultNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteResult::class;
+        return $type === CustomerBulkDeleteResult::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteResult::class;
+        return is_object($data) && get_class($data) === CustomerBulkDeleteResult::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteResult();
-        if (null === $data || false === \is_array($data)) {
+        $object = new CustomerBulkDeleteResult;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         if (\array_key_exists('metadata', $data)) {
-            $object->setMetadata($this->denormalizer->denormalize($data['metadata'], \Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteMetadata::class, 'json', $context));
+            $object->setMetadata($this->denormalizer->denormalize($data['metadata'], CustomerBulkDeleteMetadata::class, 'json', $context));
             unset($data['metadata']);
         }
         if (\array_key_exists('customers_deletion', $data)) {
             $values = [];
             foreach ($data['customers_deletion'] as $value) {
-                $values[] = $this->denormalizer->denormalize($value, \Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteItem::class, 'json', $context);
+                $values[] = $this->denormalizer->denormalize($value, CustomerBulkDeleteItem::class, 'json', $context);
             }
             $object->setCustomersDeletion($values);
             unset($data['customers_deletion']);
         }
         if (\array_key_exists('statistics', $data)) {
-            $object->setStatistics($this->denormalizer->denormalize($data['statistics'], \Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteStatistics::class, 'json', $context));
+            $object->setStatistics($this->denormalizer->denormalize($data['statistics'], CustomerBulkDeleteStatistics::class, 'json', $context));
             unset($data['statistics']);
         }
         if (\array_key_exists('deleted_ids', $data)) {
@@ -84,7 +94,7 @@ class CustomerBulkDeleteResultNormalizer implements DenormalizerInterface, Norma
         if (\array_key_exists('errors', $data)) {
             $values_3 = [];
             foreach ($data['errors'] as $value_3) {
-                $values_3[] = $this->denormalizer->denormalize($value_3, \Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteLegacyError::class, 'json', $context);
+                $values_3[] = $this->denormalizer->denormalize($value_3, CustomerBulkDeleteLegacyError::class, 'json', $context);
             }
             $object->setErrors($values_3);
             unset($data['errors']);
@@ -94,18 +104,20 @@ class CustomerBulkDeleteResultNormalizer implements DenormalizerInterface, Norma
                 $object[$key] = $value_4;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        $dataArray['metadata'] = $data->getMetadata() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getMetadata(), 'json', $context));
+        $dataArray['metadata'] = $data->getMetadata() === null ? null : new JsonObject($this->normalizer->normalize($data->getMetadata(), 'json', $context));
         $values = [];
         foreach ($data->getCustomersDeletion() as $value) {
-            $values[] = $value === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($value, 'json', $context));
+            $values[] = $value === null ? null : new JsonObject($this->normalizer->normalize($value, 'json', $context));
         }
         $dataArray['customers_deletion'] = $values;
-        $dataArray['statistics'] = $data->getStatistics() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getStatistics(), 'json', $context));
+        $dataArray['statistics'] = $data->getStatistics() === null ? null : new JsonObject($this->normalizer->normalize($data->getStatistics(), 'json', $context));
         $values_1 = [];
         foreach ($data->getDeletedIds() as $value_1) {
             $values_1[] = $value_1;
@@ -119,10 +131,10 @@ class CustomerBulkDeleteResultNormalizer implements DenormalizerInterface, Norma
         $dataArray['total'] = $data->getTotal();
         $dataArray['successful'] = $data->getSuccessful();
         $dataArray['failed'] = $data->getFailed();
-        if ($data->isInitialized('errors') && null !== $data->getErrors()) {
+        if ($data->isInitialized('errors') && $data->getErrors() !== null) {
             $values_3 = [];
             foreach ($data->getErrors() as $value_3) {
-                $values_3[] = $value_3 === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($value_3, 'json', $context));
+                $values_3[] = $value_3 === null ? null : new JsonObject($this->normalizer->normalize($value_3, 'json', $context));
             }
             $dataArray['errors'] = $values_3;
         }
@@ -131,10 +143,12 @@ class CustomerBulkDeleteResultNormalizer implements DenormalizerInterface, Norma
                 $dataArray[$key] = $value_4;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteResult::class => false];
+        return [CustomerBulkDeleteResult::class => false];
     }
 }

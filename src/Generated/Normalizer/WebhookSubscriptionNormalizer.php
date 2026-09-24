@@ -3,7 +3,9 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\WebhookSubscription;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
+use Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -11,27 +13,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class WebhookSubscriptionNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class WebhookSubscriptionNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\WebhookSubscription::class;
+        return $type === WebhookSubscription::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\WebhookSubscription::class;
+        return is_object($data) && get_class($data) === WebhookSubscription::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\WebhookSubscription();
-        if (null === $data || false === \is_array($data)) {
+        $object = new WebhookSubscription;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -70,21 +76,19 @@ class WebhookSubscriptionNormalizer implements DenormalizerInterface, Normalizer
         }
         if (\array_key_exists('deactivated_at', $data) && $data['deactivated_at'] !== null) {
             $date = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['deactivated_at']);
-            if (false === $date) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['deactivated_at'], 'Y-m-d\TH:i:sP');
+            if ($date === false) {
+                throw new InvalidDateException($data['deactivated_at'], 'Y-m-d\TH:i:sP');
             }
             $object->setDeactivatedAt($date);
             unset($data['deactivated_at']);
-        }
-        elseif (\array_key_exists('deactivated_at', $data) && $data['deactivated_at'] === null) {
+        } elseif (\array_key_exists('deactivated_at', $data) && $data['deactivated_at'] === null) {
             $object->setDeactivatedAt(null);
             unset($data['deactivated_at']);
         }
         if (\array_key_exists('last_error', $data) && $data['last_error'] !== null) {
             $object->setLastError($data['last_error']);
             unset($data['last_error']);
-        }
-        elseif (\array_key_exists('last_error', $data) && $data['last_error'] === null) {
+        } elseif (\array_key_exists('last_error', $data) && $data['last_error'] === null) {
             $object->setLastError(null);
             unset($data['last_error']);
         }
@@ -98,20 +102,19 @@ class WebhookSubscriptionNormalizer implements DenormalizerInterface, Normalizer
         }
         if (\array_key_exists('last_used_at', $data) && $data['last_used_at'] !== null) {
             $date_1 = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['last_used_at']);
-            if (false === $date_1) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['last_used_at'], 'Y-m-d\TH:i:sP');
+            if ($date_1 === false) {
+                throw new InvalidDateException($data['last_used_at'], 'Y-m-d\TH:i:sP');
             }
             $object->setLastUsedAt($date_1);
             unset($data['last_used_at']);
-        }
-        elseif (\array_key_exists('last_used_at', $data) && $data['last_used_at'] === null) {
+        } elseif (\array_key_exists('last_used_at', $data) && $data['last_used_at'] === null) {
             $object->setLastUsedAt(null);
             unset($data['last_used_at']);
         }
         if (\array_key_exists('created_at', $data)) {
             $date_2 = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']);
-            if (false === $date_2) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['created_at'], 'Y-m-d\TH:i:sP');
+            if ($date_2 === false) {
+                throw new InvalidDateException($data['created_at'], 'Y-m-d\TH:i:sP');
             }
             $object->setCreatedAt($date_2);
             unset($data['created_at']);
@@ -121,8 +124,10 @@ class WebhookSubscriptionNormalizer implements DenormalizerInterface, Normalizer
                 $object[$key] = $value_1;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -134,25 +139,25 @@ class WebhookSubscriptionNormalizer implements DenormalizerInterface, Normalizer
         }
         $dataArray['events'] = $values;
         $dataArray['active'] = $data->getActive();
-        if ($data->isInitialized('accountRelationship') && null !== $data->getAccountRelationship()) {
+        if ($data->isInitialized('accountRelationship') && $data->getAccountRelationship() !== null) {
             $dataArray['account_relationship'] = $data->getAccountRelationship();
         }
-        if ($data->isInitialized('deactivatedBy') && null !== $data->getDeactivatedBy()) {
+        if ($data->isInitialized('deactivatedBy') && $data->getDeactivatedBy() !== null) {
             $dataArray['deactivated_by'] = $data->getDeactivatedBy();
         }
-        if ($data->isInitialized('deactivatedAt') && null !== $data->getDeactivatedAt()) {
+        if ($data->isInitialized('deactivatedAt') && $data->getDeactivatedAt() !== null) {
             $dataArray['deactivated_at'] = $data->getDeactivatedAt()?->format('Y-m-d\TH:i:sP');
         }
-        if ($data->isInitialized('lastError') && null !== $data->getLastError()) {
+        if ($data->isInitialized('lastError') && $data->getLastError() !== null) {
             $dataArray['last_error'] = $data->getLastError();
         }
-        if ($data->isInitialized('lastErrorCause') && null !== $data->getLastErrorCause()) {
+        if ($data->isInitialized('lastErrorCause') && $data->getLastErrorCause() !== null) {
             $dataArray['last_error_cause'] = $data->getLastErrorCause();
         }
-        if ($data->isInitialized('consecutiveFailures') && null !== $data->getConsecutiveFailures()) {
+        if ($data->isInitialized('consecutiveFailures') && $data->getConsecutiveFailures() !== null) {
             $dataArray['consecutive_failures'] = $data->getConsecutiveFailures();
         }
-        if ($data->isInitialized('lastUsedAt') && null !== $data->getLastUsedAt()) {
+        if ($data->isInitialized('lastUsedAt') && $data->getLastUsedAt() !== null) {
             $dataArray['last_used_at'] = $data->getLastUsedAt()?->format('Y-m-d\TH:i:sP');
         }
         $dataArray['created_at'] = $data->getCreatedAt()->format('Y-m-d\TH:i:sP');
@@ -161,10 +166,12 @@ class WebhookSubscriptionNormalizer implements DenormalizerInterface, Normalizer
                 $dataArray[$key] = $value_1;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\WebhookSubscription::class => false];
+        return [WebhookSubscription::class => false];
     }
 }

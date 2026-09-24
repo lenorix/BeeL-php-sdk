@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\ValidateNifRequest;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class ValidateNifRequestNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class ValidateNifRequestNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\ValidateNifRequest::class;
+        return $type === ValidateNifRequest::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\ValidateNifRequest::class;
+        return is_object($data) && get_class($data) === ValidateNifRequest::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\ValidateNifRequest();
-        if (null === $data || false === \is_array($data)) {
+        $object = new ValidateNifRequest;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -44,8 +49,7 @@ class ValidateNifRequestNormalizer implements DenormalizerInterface, NormalizerI
         if (\array_key_exists('legal_name', $data) && $data['legal_name'] !== null) {
             $object->setLegalName($data['legal_name']);
             unset($data['legal_name']);
-        }
-        elseif (\array_key_exists('legal_name', $data) && $data['legal_name'] === null) {
+        } elseif (\array_key_exists('legal_name', $data) && $data['legal_name'] === null) {
             $object->setLegalName(null);
             unset($data['legal_name']);
         }
@@ -54,13 +58,15 @@ class ValidateNifRequestNormalizer implements DenormalizerInterface, NormalizerI
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['nif'] = $data->getNif();
-        if ($data->isInitialized('legalName') && null !== $data->getLegalName()) {
+        if ($data->isInitialized('legalName') && $data->getLegalName() !== null) {
             $dataArray['legal_name'] = $data->getLegalName();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -68,10 +74,12 @@ class ValidateNifRequestNormalizer implements DenormalizerInterface, NormalizerI
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\ValidateNifRequest::class => false];
+        return [ValidateNifRequest::class => false];
     }
 }

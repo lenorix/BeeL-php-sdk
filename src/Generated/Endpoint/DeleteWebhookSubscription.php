@@ -2,9 +2,20 @@
 
 namespace Lenorix\BeelSdk\Generated\Endpoint;
 
-class DeleteWebhookSubscription extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint implements \Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint
+use Lenorix\BeelSdk\Generated\Exception\DeleteWebhookSubscriptionForbiddenException;
+use Lenorix\BeelSdk\Generated\Exception\DeleteWebhookSubscriptionNotFoundException;
+use Lenorix\BeelSdk\Generated\Exception\DeleteWebhookSubscriptionUnauthorizedException;
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class DeleteWebhookSubscription extends BaseEndpoint implements Endpoint
 {
     protected $webhook_id;
+
     /**
      * **Deprecated.** Use `DELETE /v1/accounts/{account_id}/webhooks/{webhook_id}`, which behaves identically.
      *
@@ -13,59 +24,65 @@ class DeleteWebhookSubscription extends \Lenorix\BeelSdk\Generated\Runtime\Clien
      * `false` instead.
      *
      * **Retires on 9 December 2026.** See the [migration guide](https://docs.beel.es/changelog/resources-under-the-nif) for what moved where and what changes when you switch.
-     *
-     * @param string $webhookId
      */
     public function __construct(string $webhookId)
     {
         $this->webhook_id = $webhookId;
     }
-    use \Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+
+    use EndpointTrait;
+
     public function getMethod(): string
     {
         return 'DELETE';
     }
+
     public function getUri(): string
     {
         return str_replace(['{webhook_id}'], [rawurlencode($this->webhook_id)], '/v1/webhooks/{webhook_id}');
     }
-    public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer, $streamFactory = null): array
+
+    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
         return [[], null];
     }
+
     public function getExtraHeaders(): array
     {
         return ['Accept' => ['application/json']];
     }
+
     /**
      * {@inheritdoc}
      *
-     * @throws \Lenorix\BeelSdk\Generated\Exception\DeleteWebhookSubscriptionUnauthorizedException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\DeleteWebhookSubscriptionForbiddenException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\DeleteWebhookSubscriptionNotFoundException
      *
-     * @return null|\Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @return null|ErrorResponse
+     *
+     * @throws DeleteWebhookSubscriptionUnauthorizedException
+     * @throws DeleteWebhookSubscriptionForbiddenException
+     * @throws DeleteWebhookSubscriptionNotFoundException
      */
-    protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (204 === $status) {
+        if ($status === 204) {
             return null;
         }
-        if (is_null($contentType) === false && (401 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\DeleteWebhookSubscriptionUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 401 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new DeleteWebhookSubscriptionUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (403 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\DeleteWebhookSubscriptionForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 403 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new DeleteWebhookSubscriptionForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (404 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\DeleteWebhookSubscriptionNotFoundException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 404 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new DeleteWebhookSubscriptionNotFoundException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
         if (stripos(strtolower($contentType), 'application/json') !== false) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
+
     public function getAuthenticationScopes(): array
     {
         return ['ApiKeyAuth'];

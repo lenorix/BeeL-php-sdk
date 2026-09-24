@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\InvoiceCustomization;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class InvoiceCustomizationNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class InvoiceCustomizationNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\InvoiceCustomization::class;
+        return $type === InvoiceCustomization::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\InvoiceCustomization::class;
+        return is_object($data) && get_class($data) === InvoiceCustomization::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\InvoiceCustomization();
-        if (null === $data || false === \is_array($data)) {
+        $object = new InvoiceCustomization;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -60,8 +65,7 @@ class InvoiceCustomizationNormalizer implements DenormalizerInterface, Normalize
         if (\array_key_exists('logo_url', $data) && $data['logo_url'] !== null) {
             $object->setLogoUrl($data['logo_url']);
             unset($data['logo_url']);
-        }
-        elseif (\array_key_exists('logo_url', $data) && $data['logo_url'] === null) {
+        } elseif (\array_key_exists('logo_url', $data) && $data['logo_url'] === null) {
             $object->setLogoUrl(null);
             unset($data['logo_url']);
         }
@@ -70,8 +74,10 @@ class InvoiceCustomizationNormalizer implements DenormalizerInterface, Normalize
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -80,7 +86,7 @@ class InvoiceCustomizationNormalizer implements DenormalizerInterface, Normalize
         $dataArray['invoice_accent_color'] = $data->getInvoiceAccentColor();
         $dataArray['invoice_language'] = $data->getInvoiceLanguage();
         $dataArray['email_language'] = $data->getEmailLanguage();
-        if ($data->isInitialized('logoUrl') && null !== $data->getLogoUrl()) {
+        if ($data->isInitialized('logoUrl') && $data->getLogoUrl() !== null) {
             $dataArray['logo_url'] = $data->getLogoUrl();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -88,10 +94,12 @@ class InvoiceCustomizationNormalizer implements DenormalizerInterface, Normalize
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\InvoiceCustomization::class => false];
+        return [InvoiceCustomization::class => false];
     }
 }

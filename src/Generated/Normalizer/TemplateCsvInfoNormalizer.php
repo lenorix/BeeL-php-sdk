@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\TemplateCsvInfo;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class TemplateCsvInfoNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class TemplateCsvInfoNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\TemplateCsvInfo::class;
+        return $type === TemplateCsvInfo::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\TemplateCsvInfo::class;
+        return is_object($data) && get_class($data) === TemplateCsvInfo::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\TemplateCsvInfo();
-        if (null === $data || false === \is_array($data)) {
+        $object = new TemplateCsvInfo;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -69,8 +74,10 @@ class TemplateCsvInfoNormalizer implements DenormalizerInterface, NormalizerInte
                 $object[$key] = $value_1;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -81,10 +88,10 @@ class TemplateCsvInfoNormalizer implements DenormalizerInterface, NormalizerInte
         }
         $dataArray['headers'] = $values;
         $dataArray['example_rows'] = $data->getExampleRows();
-        if ($data->isInitialized('maxRecords') && null !== $data->getMaxRecords()) {
+        if ($data->isInitialized('maxRecords') && $data->getMaxRecords() !== null) {
             $dataArray['max_records'] = $data->getMaxRecords();
         }
-        if ($data->isInitialized('maxFileSizeMb') && null !== $data->getMaxFileSizeMb()) {
+        if ($data->isInitialized('maxFileSizeMb') && $data->getMaxFileSizeMb() !== null) {
             $dataArray['max_file_size_mb'] = $data->getMaxFileSizeMb();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value_1) {
@@ -92,10 +99,12 @@ class TemplateCsvInfoNormalizer implements DenormalizerInterface, NormalizerInte
                 $dataArray[$key] = $value_1;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\TemplateCsvInfo::class => false];
+        return [TemplateCsvInfo::class => false];
     }
 }

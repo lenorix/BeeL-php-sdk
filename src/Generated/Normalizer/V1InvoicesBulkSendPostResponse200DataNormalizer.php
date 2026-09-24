@@ -3,7 +3,11 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\V1InvoicesBulkSendPostResponse200Data;
+use Lenorix\BeelSdk\Generated\Model\V1InvoicesBulkSendPostResponse200DataFailuresItem;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
+use Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -11,27 +15,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class V1InvoicesBulkSendPostResponse200DataNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class V1InvoicesBulkSendPostResponse200DataNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\V1InvoicesBulkSendPostResponse200Data::class;
+        return $type === V1InvoicesBulkSendPostResponse200Data::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\V1InvoicesBulkSendPostResponse200Data::class;
+        return is_object($data) && get_class($data) === V1InvoicesBulkSendPostResponse200Data::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\V1InvoicesBulkSendPostResponse200Data();
-        if (null === $data || false === \is_array($data)) {
+        $object = new V1InvoicesBulkSendPostResponse200Data;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -51,8 +59,8 @@ class V1InvoicesBulkSendPostResponse200DataNormalizer implements DenormalizerInt
         }
         if (\array_key_exists('sent_at', $data)) {
             $date = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['sent_at']);
-            if (false === $date) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['sent_at'], 'Y-m-d\TH:i:sP');
+            if ($date === false) {
+                throw new InvalidDateException($data['sent_at'], 'Y-m-d\TH:i:sP');
             }
             $object->setSentAt($date);
             unset($data['sent_at']);
@@ -68,7 +76,7 @@ class V1InvoicesBulkSendPostResponse200DataNormalizer implements DenormalizerInt
         if (\array_key_exists('failures', $data)) {
             $values_1 = [];
             foreach ($data['failures'] as $value_1) {
-                $values_1[] = $this->denormalizer->denormalize($value_1, \Lenorix\BeelSdk\Generated\Model\V1InvoicesBulkSendPostResponse200DataFailuresItem::class, 'json', $context);
+                $values_1[] = $this->denormalizer->denormalize($value_1, V1InvoicesBulkSendPostResponse200DataFailuresItem::class, 'json', $context);
             }
             $object->setFailures($values_1);
             unset($data['failures']);
@@ -78,8 +86,10 @@ class V1InvoicesBulkSendPostResponse200DataNormalizer implements DenormalizerInt
                 $object[$key] = $value_2;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -92,10 +102,10 @@ class V1InvoicesBulkSendPostResponse200DataNormalizer implements DenormalizerInt
         $dataArray['sent_at'] = $data->getSentAt()->format('Y-m-d\TH:i:sP');
         $dataArray['total_invoices'] = $data->getTotalInvoices();
         $dataArray['invoices_attached'] = $data->getInvoicesAttached();
-        if ($data->isInitialized('failures') && null !== $data->getFailures()) {
+        if ($data->isInitialized('failures') && $data->getFailures() !== null) {
             $values_1 = [];
             foreach ($data->getFailures() as $value_1) {
-                $values_1[] = $value_1 === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($value_1, 'json', $context));
+                $values_1[] = $value_1 === null ? null : new JsonObject($this->normalizer->normalize($value_1, 'json', $context));
             }
             $dataArray['failures'] = $values_1;
         }
@@ -104,10 +114,12 @@ class V1InvoicesBulkSendPostResponse200DataNormalizer implements DenormalizerInt
                 $dataArray[$key] = $value_2;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\V1InvoicesBulkSendPostResponse200Data::class => false];
+        return [V1InvoicesBulkSendPostResponse200Data::class => false];
     }
 }

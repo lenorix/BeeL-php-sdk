@@ -2,17 +2,22 @@
 
 namespace Lenorix\BeelSdk\Generated\Exception;
 
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Psr\Http\Message\ResponseInterface;
+
 class VoidInvoiceBadRequestException extends BadRequestException
 {
     /**
-     * @var \Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @var ErrorResponse
      */
     private $errorResponse;
+
     /**
-     * @var \Psr\Http\Message\ResponseInterface
+     * @var ResponseInterface
      */
     private $response;
-    public function __construct(\Lenorix\BeelSdk\Generated\Model\ErrorResponse $errorResponse, \Psr\Http\Message\ResponseInterface $response)
+
+    public function __construct(ErrorResponse $errorResponse, ResponseInterface $response)
     {
         parent::__construct('Cannot void invoice: the transition is not supported from its current status
 (`TRANSITION_NOT_SUPPORTED`), or the request data is invalid.
@@ -20,11 +25,13 @@ class VoidInvoiceBadRequestException extends BadRequestException
         $this->errorResponse = $errorResponse;
         $this->response = $response;
     }
-    public function getErrorResponse(): \Lenorix\BeelSdk\Generated\Model\ErrorResponse
+
+    public function getErrorResponse(): ErrorResponse
     {
         return $this->errorResponse;
     }
-    public function getResponse(): \Psr\Http\Message\ResponseInterface
+
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }

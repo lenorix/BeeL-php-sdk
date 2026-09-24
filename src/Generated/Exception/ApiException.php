@@ -2,6 +2,4 @@
 
 namespace Lenorix\BeelSdk\Generated\Exception;
 
-interface ApiException extends \Throwable
-{
-}
+interface ApiException extends \Throwable {}

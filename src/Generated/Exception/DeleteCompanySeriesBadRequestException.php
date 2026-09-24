@@ -2,17 +2,22 @@
 
 namespace Lenorix\BeelSdk\Generated\Exception;
 
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Psr\Http\Message\ResponseInterface;
+
 class DeleteCompanySeriesBadRequestException extends BadRequestException
 {
     /**
-     * @var \Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @var ErrorResponse
      */
     private $errorResponse;
+
     /**
-     * @var \Psr\Http\Message\ResponseInterface
+     * @var ResponseInterface
      */
     private $response;
-    public function __construct(\Lenorix\BeelSdk\Generated\Model\ErrorResponse $errorResponse, \Psr\Http\Message\ResponseInterface $response)
+
+    public function __construct(ErrorResponse $errorResponse, ResponseInterface $response)
     {
         parent::__construct('The series cannot be deleted. `error.code` says why:
 
@@ -28,11 +33,13 @@ class DeleteCompanySeriesBadRequestException extends BadRequestException
         $this->errorResponse = $errorResponse;
         $this->response = $response;
     }
-    public function getErrorResponse(): \Lenorix\BeelSdk\Generated\Model\ErrorResponse
+
+    public function getErrorResponse(): ErrorResponse
     {
         return $this->errorResponse;
     }
-    public function getResponse(): \Psr\Http\Message\ResponseInterface
+
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }

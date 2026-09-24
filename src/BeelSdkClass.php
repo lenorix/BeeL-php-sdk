@@ -2,6 +2,4 @@
 
 namespace Lenorix\BeelSdk;
 
-class BeelSdkClass
-{
-}
+class BeelSdkClass {}

@@ -2,9 +2,21 @@
 
 namespace Lenorix\BeelSdk\Generated\Endpoint;
 
-class DownloadAccountImportTemplate extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint implements \Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint
+use Lenorix\BeelSdk\Generated\Exception\DownloadAccountImportTemplateForbiddenException;
+use Lenorix\BeelSdk\Generated\Exception\DownloadAccountImportTemplateInternalServerErrorException;
+use Lenorix\BeelSdk\Generated\Exception\DownloadAccountImportTemplateTooManyRequestsException;
+use Lenorix\BeelSdk\Generated\Exception\DownloadAccountImportTemplateUnauthorizedException;
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class DownloadAccountImportTemplate extends BaseEndpoint implements Endpoint
 {
     protected $accept;
+
     /**
      * Downloads the sample CSV that `POST /v1/accounts/imports` expects: the required headers plus
      * one example row, separated by semicolons and written with a UTF-8 byte order mark so that
@@ -20,64 +32,73 @@ class DownloadAccountImportTemplate extends \Lenorix\BeelSdk\Generated\Runtime\C
      * - **Scope:** the file is the same for every credential and does not depend on any account
      *   or on any NIF.
      *
-     * @param array $accept Accept content header text/csv|application/json
+     * @param  array  $accept  Accept content header text/csv|application/json
      */
     public function __construct(array $accept = [])
     {
         $this->accept = $accept;
     }
-    use \Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+
+    use EndpointTrait;
+
     public function getMethod(): string
     {
         return 'GET';
     }
+
     public function getUri(): string
     {
         return '/v1/templates/account-import';
     }
-    public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer, $streamFactory = null): array
+
+    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
         return [[], null];
     }
+
     public function getExtraHeaders(): array
     {
         if (empty($this->accept)) {
             return ['Accept' => ['text/csv', 'application/json']];
         }
+
         return $this->accept;
     }
+
     /**
      * {@inheritdoc}
      *
-     * @throws \Lenorix\BeelSdk\Generated\Exception\DownloadAccountImportTemplateUnauthorizedException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\DownloadAccountImportTemplateForbiddenException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\DownloadAccountImportTemplateTooManyRequestsException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\DownloadAccountImportTemplateInternalServerErrorException
      *
-     * @return null|\Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @return null|ErrorResponse
+     *
+     * @throws DownloadAccountImportTemplateUnauthorizedException
+     * @throws DownloadAccountImportTemplateForbiddenException
+     * @throws DownloadAccountImportTemplateTooManyRequestsException
+     * @throws DownloadAccountImportTemplateInternalServerErrorException
      */
-    protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (200 === $status) {
+        if ($status === 200) {
         }
-        if (is_null($contentType) === false && (401 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\DownloadAccountImportTemplateUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 401 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new DownloadAccountImportTemplateUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (403 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\DownloadAccountImportTemplateForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 403 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new DownloadAccountImportTemplateForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (429 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\DownloadAccountImportTemplateTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 429 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new DownloadAccountImportTemplateTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (500 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\DownloadAccountImportTemplateInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new DownloadAccountImportTemplateInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
         if (stripos(strtolower($contentType), 'application/json') !== false) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
+
     public function getAuthenticationScopes(): array
     {
         return ['ApiKeyAuth'];

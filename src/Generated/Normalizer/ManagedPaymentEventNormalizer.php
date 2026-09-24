@@ -3,7 +3,9 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\ManagedPaymentEvent;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
+use Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -11,27 +13,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class ManagedPaymentEventNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class ManagedPaymentEventNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\ManagedPaymentEvent::class;
+        return $type === ManagedPaymentEvent::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\ManagedPaymentEvent::class;
+        return is_object($data) && get_class($data) === ManagedPaymentEvent::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\ManagedPaymentEvent();
-        if (null === $data || false === \is_array($data)) {
+        $object = new ManagedPaymentEvent;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -87,80 +93,70 @@ class ManagedPaymentEventNormalizer implements DenormalizerInterface, Normalizer
         if (\array_key_exists('external_payment_id', $data) && $data['external_payment_id'] !== null) {
             $object->setExternalPaymentId($data['external_payment_id']);
             unset($data['external_payment_id']);
-        }
-        elseif (\array_key_exists('external_payment_id', $data) && $data['external_payment_id'] === null) {
+        } elseif (\array_key_exists('external_payment_id', $data) && $data['external_payment_id'] === null) {
             $object->setExternalPaymentId(null);
             unset($data['external_payment_id']);
         }
         if (\array_key_exists('source_object_id', $data) && $data['source_object_id'] !== null) {
             $object->setSourceObjectId($data['source_object_id']);
             unset($data['source_object_id']);
-        }
-        elseif (\array_key_exists('source_object_id', $data) && $data['source_object_id'] === null) {
+        } elseif (\array_key_exists('source_object_id', $data) && $data['source_object_id'] === null) {
             $object->setSourceObjectId(null);
             unset($data['source_object_id']);
         }
         if (\array_key_exists('currency', $data) && $data['currency'] !== null) {
             $object->setCurrency($data['currency']);
             unset($data['currency']);
-        }
-        elseif (\array_key_exists('currency', $data) && $data['currency'] === null) {
+        } elseif (\array_key_exists('currency', $data) && $data['currency'] === null) {
             $object->setCurrency(null);
             unset($data['currency']);
         }
         if (\array_key_exists('amount', $data) && $data['amount'] !== null) {
             $object->setAmount($data['amount']);
             unset($data['amount']);
-        }
-        elseif (\array_key_exists('amount', $data) && $data['amount'] === null) {
+        } elseif (\array_key_exists('amount', $data) && $data['amount'] === null) {
             $object->setAmount(null);
             unset($data['amount']);
         }
         if (\array_key_exists('fee_amount', $data) && $data['fee_amount'] !== null) {
             $object->setFeeAmount($data['fee_amount']);
             unset($data['fee_amount']);
-        }
-        elseif (\array_key_exists('fee_amount', $data) && $data['fee_amount'] === null) {
+        } elseif (\array_key_exists('fee_amount', $data) && $data['fee_amount'] === null) {
             $object->setFeeAmount(null);
             unset($data['fee_amount']);
         }
         if (\array_key_exists('net_amount', $data) && $data['net_amount'] !== null) {
             $object->setNetAmount($data['net_amount']);
             unset($data['net_amount']);
-        }
-        elseif (\array_key_exists('net_amount', $data) && $data['net_amount'] === null) {
+        } elseif (\array_key_exists('net_amount', $data) && $data['net_amount'] === null) {
             $object->setNetAmount(null);
             unset($data['net_amount']);
         }
         if (\array_key_exists('category', $data) && $data['category'] !== null) {
             $object->setCategory($data['category']);
             unset($data['category']);
-        }
-        elseif (\array_key_exists('category', $data) && $data['category'] === null) {
+        } elseif (\array_key_exists('category', $data) && $data['category'] === null) {
             $object->setCategory(null);
             unset($data['category']);
         }
         if (\array_key_exists('money_returned', $data) && $data['money_returned'] !== null) {
             $object->setMoneyReturned($data['money_returned']);
             unset($data['money_returned']);
-        }
-        elseif (\array_key_exists('money_returned', $data) && $data['money_returned'] === null) {
+        } elseif (\array_key_exists('money_returned', $data) && $data['money_returned'] === null) {
             $object->setMoneyReturned(null);
             unset($data['money_returned']);
         }
         if (\array_key_exists('customer_email', $data) && $data['customer_email'] !== null) {
             $object->setCustomerEmail($data['customer_email']);
             unset($data['customer_email']);
-        }
-        elseif (\array_key_exists('customer_email', $data) && $data['customer_email'] === null) {
+        } elseif (\array_key_exists('customer_email', $data) && $data['customer_email'] === null) {
             $object->setCustomerEmail(null);
             unset($data['customer_email']);
         }
         if (\array_key_exists('customer_name', $data) && $data['customer_name'] !== null) {
             $object->setCustomerName($data['customer_name']);
             unset($data['customer_name']);
-        }
-        elseif (\array_key_exists('customer_name', $data) && $data['customer_name'] === null) {
+        } elseif (\array_key_exists('customer_name', $data) && $data['customer_name'] === null) {
             $object->setCustomerName(null);
             unset($data['customer_name']);
         }
@@ -171,40 +167,35 @@ class ManagedPaymentEventNormalizer implements DenormalizerInterface, Normalizer
         if (\array_key_exists('invoice_id', $data) && $data['invoice_id'] !== null) {
             $object->setInvoiceId($data['invoice_id']);
             unset($data['invoice_id']);
-        }
-        elseif (\array_key_exists('invoice_id', $data) && $data['invoice_id'] === null) {
+        } elseif (\array_key_exists('invoice_id', $data) && $data['invoice_id'] === null) {
             $object->setInvoiceId(null);
             unset($data['invoice_id']);
         }
         if (\array_key_exists('invoice_number', $data) && $data['invoice_number'] !== null) {
             $object->setInvoiceNumber($data['invoice_number']);
             unset($data['invoice_number']);
-        }
-        elseif (\array_key_exists('invoice_number', $data) && $data['invoice_number'] === null) {
+        } elseif (\array_key_exists('invoice_number', $data) && $data['invoice_number'] === null) {
             $object->setInvoiceNumber(null);
             unset($data['invoice_number']);
         }
         if (\array_key_exists('failure_category', $data) && $data['failure_category'] !== null) {
             $object->setFailureCategory($data['failure_category']);
             unset($data['failure_category']);
-        }
-        elseif (\array_key_exists('failure_category', $data) && $data['failure_category'] === null) {
+        } elseif (\array_key_exists('failure_category', $data) && $data['failure_category'] === null) {
             $object->setFailureCategory(null);
             unset($data['failure_category']);
         }
         if (\array_key_exists('failure_reason', $data) && $data['failure_reason'] !== null) {
             $object->setFailureReason($data['failure_reason']);
             unset($data['failure_reason']);
-        }
-        elseif (\array_key_exists('failure_reason', $data) && $data['failure_reason'] === null) {
+        } elseif (\array_key_exists('failure_reason', $data) && $data['failure_reason'] === null) {
             $object->setFailureReason(null);
             unset($data['failure_reason']);
         }
         if (\array_key_exists('failure_message', $data) && $data['failure_message'] !== null) {
             $object->setFailureMessage($data['failure_message']);
             unset($data['failure_message']);
-        }
-        elseif (\array_key_exists('failure_message', $data) && $data['failure_message'] === null) {
+        } elseif (\array_key_exists('failure_message', $data) && $data['failure_message'] === null) {
             $object->setFailureMessage(null);
             unset($data['failure_message']);
         }
@@ -230,37 +221,34 @@ class ManagedPaymentEventNormalizer implements DenormalizerInterface, Normalizer
         }
         if (\array_key_exists('received_at', $data)) {
             $date = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['received_at']);
-            if (false === $date) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['received_at'], 'Y-m-d\TH:i:sP');
+            if ($date === false) {
+                throw new InvalidDateException($data['received_at'], 'Y-m-d\TH:i:sP');
             }
             $object->setReceivedAt($date);
             unset($data['received_at']);
         }
         if (\array_key_exists('processed_at', $data) && $data['processed_at'] !== null) {
             $date_1 = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['processed_at']);
-            if (false === $date_1) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['processed_at'], 'Y-m-d\TH:i:sP');
+            if ($date_1 === false) {
+                throw new InvalidDateException($data['processed_at'], 'Y-m-d\TH:i:sP');
             }
             $object->setProcessedAt($date_1);
             unset($data['processed_at']);
-        }
-        elseif (\array_key_exists('processed_at', $data) && $data['processed_at'] === null) {
+        } elseif (\array_key_exists('processed_at', $data) && $data['processed_at'] === null) {
             $object->setProcessedAt(null);
             unset($data['processed_at']);
         }
         if (\array_key_exists('description', $data) && $data['description'] !== null) {
             $object->setDescription($data['description']);
             unset($data['description']);
-        }
-        elseif (\array_key_exists('description', $data) && $data['description'] === null) {
+        } elseif (\array_key_exists('description', $data) && $data['description'] === null) {
             $object->setDescription(null);
             unset($data['description']);
         }
         if (\array_key_exists('payment_method', $data) && $data['payment_method'] !== null) {
             $object->setPaymentMethod($data['payment_method']);
             unset($data['payment_method']);
-        }
-        elseif (\array_key_exists('payment_method', $data) && $data['payment_method'] === null) {
+        } elseif (\array_key_exists('payment_method', $data) && $data['payment_method'] === null) {
             $object->setPaymentMethod(null);
             unset($data['payment_method']);
         }
@@ -270,13 +258,12 @@ class ManagedPaymentEventNormalizer implements DenormalizerInterface, Normalizer
         }
         if (\array_key_exists('discarded_at', $data) && $data['discarded_at'] !== null) {
             $date_2 = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['discarded_at']);
-            if (false === $date_2) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['discarded_at'], 'Y-m-d\TH:i:sP');
+            if ($date_2 === false) {
+                throw new InvalidDateException($data['discarded_at'], 'Y-m-d\TH:i:sP');
             }
             $object->setDiscardedAt($date_2);
             unset($data['discarded_at']);
-        }
-        elseif (\array_key_exists('discarded_at', $data) && $data['discarded_at'] === null) {
+        } elseif (\array_key_exists('discarded_at', $data) && $data['discarded_at'] === null) {
             $object->setDiscardedAt(null);
             unset($data['discarded_at']);
         }
@@ -285,8 +272,10 @@ class ManagedPaymentEventNormalizer implements DenormalizerInterface, Normalizer
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -295,50 +284,50 @@ class ManagedPaymentEventNormalizer implements DenormalizerInterface, Normalizer
         $dataArray['event_type'] = $data->getEventType();
         $dataArray['event_kind'] = $data->getEventKind();
         $dataArray['external_event_id'] = $data->getExternalEventId();
-        if ($data->isInitialized('externalPaymentId') && null !== $data->getExternalPaymentId()) {
+        if ($data->isInitialized('externalPaymentId') && $data->getExternalPaymentId() !== null) {
             $dataArray['external_payment_id'] = $data->getExternalPaymentId();
         }
-        if ($data->isInitialized('sourceObjectId') && null !== $data->getSourceObjectId()) {
+        if ($data->isInitialized('sourceObjectId') && $data->getSourceObjectId() !== null) {
             $dataArray['source_object_id'] = $data->getSourceObjectId();
         }
-        if ($data->isInitialized('currency') && null !== $data->getCurrency()) {
+        if ($data->isInitialized('currency') && $data->getCurrency() !== null) {
             $dataArray['currency'] = $data->getCurrency();
         }
-        if ($data->isInitialized('amount') && null !== $data->getAmount()) {
+        if ($data->isInitialized('amount') && $data->getAmount() !== null) {
             $dataArray['amount'] = $data->getAmount();
         }
-        if ($data->isInitialized('feeAmount') && null !== $data->getFeeAmount()) {
+        if ($data->isInitialized('feeAmount') && $data->getFeeAmount() !== null) {
             $dataArray['fee_amount'] = $data->getFeeAmount();
         }
-        if ($data->isInitialized('netAmount') && null !== $data->getNetAmount()) {
+        if ($data->isInitialized('netAmount') && $data->getNetAmount() !== null) {
             $dataArray['net_amount'] = $data->getNetAmount();
         }
-        if ($data->isInitialized('category') && null !== $data->getCategory()) {
+        if ($data->isInitialized('category') && $data->getCategory() !== null) {
             $dataArray['category'] = $data->getCategory();
         }
-        if ($data->isInitialized('moneyReturned') && null !== $data->getMoneyReturned()) {
+        if ($data->isInitialized('moneyReturned') && $data->getMoneyReturned() !== null) {
             $dataArray['money_returned'] = $data->getMoneyReturned();
         }
-        if ($data->isInitialized('customerEmail') && null !== $data->getCustomerEmail()) {
+        if ($data->isInitialized('customerEmail') && $data->getCustomerEmail() !== null) {
             $dataArray['customer_email'] = $data->getCustomerEmail();
         }
-        if ($data->isInitialized('customerName') && null !== $data->getCustomerName()) {
+        if ($data->isInitialized('customerName') && $data->getCustomerName() !== null) {
             $dataArray['customer_name'] = $data->getCustomerName();
         }
         $dataArray['status'] = $data->getStatus();
-        if ($data->isInitialized('invoiceId') && null !== $data->getInvoiceId()) {
+        if ($data->isInitialized('invoiceId') && $data->getInvoiceId() !== null) {
             $dataArray['invoice_id'] = $data->getInvoiceId();
         }
-        if ($data->isInitialized('invoiceNumber') && null !== $data->getInvoiceNumber()) {
+        if ($data->isInitialized('invoiceNumber') && $data->getInvoiceNumber() !== null) {
             $dataArray['invoice_number'] = $data->getInvoiceNumber();
         }
-        if ($data->isInitialized('failureCategory') && null !== $data->getFailureCategory()) {
+        if ($data->isInitialized('failureCategory') && $data->getFailureCategory() !== null) {
             $dataArray['failure_category'] = $data->getFailureCategory();
         }
-        if ($data->isInitialized('failureReason') && null !== $data->getFailureReason()) {
+        if ($data->isInitialized('failureReason') && $data->getFailureReason() !== null) {
             $dataArray['failure_reason'] = $data->getFailureReason();
         }
-        if ($data->isInitialized('failureMessage') && null !== $data->getFailureMessage()) {
+        if ($data->isInitialized('failureMessage') && $data->getFailureMessage() !== null) {
             $dataArray['failure_message'] = $data->getFailureMessage();
         }
         $dataArray['needs_action'] = $data->getNeedsAction();
@@ -347,17 +336,17 @@ class ManagedPaymentEventNormalizer implements DenormalizerInterface, Normalizer
         $dataArray['discard_available'] = $data->getDiscardAvailable();
         $dataArray['retry_count'] = $data->getRetryCount();
         $dataArray['received_at'] = $data->getReceivedAt()->format('Y-m-d\TH:i:sP');
-        if ($data->isInitialized('processedAt') && null !== $data->getProcessedAt()) {
+        if ($data->isInitialized('processedAt') && $data->getProcessedAt() !== null) {
             $dataArray['processed_at'] = $data->getProcessedAt()?->format('Y-m-d\TH:i:sP');
         }
-        if ($data->isInitialized('description') && null !== $data->getDescription()) {
+        if ($data->isInitialized('description') && $data->getDescription() !== null) {
             $dataArray['description'] = $data->getDescription();
         }
-        if ($data->isInitialized('paymentMethod') && null !== $data->getPaymentMethod()) {
+        if ($data->isInitialized('paymentMethod') && $data->getPaymentMethod() !== null) {
             $dataArray['payment_method'] = $data->getPaymentMethod();
         }
         $dataArray['discarded'] = $data->getDiscarded();
-        if ($data->isInitialized('discardedAt') && null !== $data->getDiscardedAt()) {
+        if ($data->isInitialized('discardedAt') && $data->getDiscardedAt() !== null) {
             $dataArray['discarded_at'] = $data->getDiscardedAt()?->format('Y-m-d\TH:i:sP');
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -365,10 +354,12 @@ class ManagedPaymentEventNormalizer implements DenormalizerInterface, Normalizer
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\ManagedPaymentEvent::class => false];
+        return [ManagedPaymentEvent::class => false];
     }
 }

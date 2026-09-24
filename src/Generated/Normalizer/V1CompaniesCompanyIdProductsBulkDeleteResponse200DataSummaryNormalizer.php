@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummaryNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummaryNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary::class;
+        return $type === V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary::class;
+        return is_object($data) && get_class($data) === V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary();
-        if (null === $data || false === \is_array($data)) {
+        $object = new V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -54,18 +59,20 @@ class V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummaryNormalizer imp
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('totalProcessed') && null !== $data->getTotalProcessed()) {
+        if ($data->isInitialized('totalProcessed') && $data->getTotalProcessed() !== null) {
             $dataArray['total_processed'] = $data->getTotalProcessed();
         }
-        if ($data->isInitialized('successful') && null !== $data->getSuccessful()) {
+        if ($data->isInitialized('successful') && $data->getSuccessful() !== null) {
             $dataArray['successful'] = $data->getSuccessful();
         }
-        if ($data->isInitialized('failed') && null !== $data->getFailed()) {
+        if ($data->isInitialized('failed') && $data->getFailed() !== null) {
             $dataArray['failed'] = $data->getFailed();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -73,10 +80,12 @@ class V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummaryNormalizer imp
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary::class => false];
+        return [V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary::class => false];
     }
 }

@@ -2,17 +2,22 @@
 
 namespace Lenorix\BeelSdk\Generated\Exception;
 
+use Lenorix\BeelSdk\Generated\Model\ResponsePayloadTooLarge;
+use Psr\Http\Message\ResponseInterface;
+
 class SubmitCompanyRepresentationRequestEntityTooLargeException extends RequestEntityTooLargeException
 {
     /**
-     * @var \Lenorix\BeelSdk\Generated\Model\ResponsePayloadTooLarge
+     * @var ResponsePayloadTooLarge
      */
     private $responsePayloadTooLarge;
+
     /**
-     * @var \Psr\Http\Message\ResponseInterface
+     * @var ResponseInterface
      */
     private $response;
-    public function __construct(\Lenorix\BeelSdk\Generated\Model\ResponsePayloadTooLarge $responsePayloadTooLarge, \Psr\Http\Message\ResponseInterface $response)
+
+    public function __construct(ResponsePayloadTooLarge $responsePayloadTooLarge, ResponseInterface $response)
     {
         parent::__construct('Payload too large. On this operation that normally means an uploaded file
 exceeded its own limit (`FILE_TOO_LARGE`). Any request may also be
@@ -23,11 +28,13 @@ the maximum described under *Request body size*. In both cases the
         $this->responsePayloadTooLarge = $responsePayloadTooLarge;
         $this->response = $response;
     }
-    public function getResponsePayloadTooLarge(): \Lenorix\BeelSdk\Generated\Model\ResponsePayloadTooLarge
+
+    public function getResponsePayloadTooLarge(): ResponsePayloadTooLarge
     {
         return $this->responsePayloadTooLarge;
     }
-    public function getResponse(): \Psr\Http\Message\ResponseInterface
+
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }

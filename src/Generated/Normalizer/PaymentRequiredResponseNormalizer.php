@@ -3,6 +3,10 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\ErrorDetail;
+use Lenorix\BeelSdk\Generated\Model\PaymentRequiredResponse;
+use Lenorix\BeelSdk\Generated\Model\ResponseMeta;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +15,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class PaymentRequiredResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class PaymentRequiredResponseNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\PaymentRequiredResponse::class;
+        return $type === PaymentRequiredResponse::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\PaymentRequiredResponse::class;
+        return is_object($data) && get_class($data) === PaymentRequiredResponse::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\PaymentRequiredResponse();
-        if (null === $data || false === \is_array($data)) {
+        $object = new PaymentRequiredResponse;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -45,11 +53,11 @@ class PaymentRequiredResponseNormalizer implements DenormalizerInterface, Normal
             unset($data['success']);
         }
         if (\array_key_exists('error', $data)) {
-            $object->setError($this->denormalizer->denormalize($data['error'], \Lenorix\BeelSdk\Generated\Model\ErrorDetail::class, 'json', $context));
+            $object->setError($this->denormalizer->denormalize($data['error'], ErrorDetail::class, 'json', $context));
             unset($data['error']);
         }
         if (\array_key_exists('meta', $data)) {
-            $object->setMeta($this->denormalizer->denormalize($data['meta'], \Lenorix\BeelSdk\Generated\Model\ResponseMeta::class, 'json', $context));
+            $object->setMeta($this->denormalizer->denormalize($data['meta'], ResponseMeta::class, 'json', $context));
             unset($data['meta']);
         }
         if (\array_key_exists('type', $data)) {
@@ -73,26 +81,28 @@ class PaymentRequiredResponseNormalizer implements DenormalizerInterface, Normal
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['success'] = $data->getSuccess();
-        $dataArray['error'] = $data->getError() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getError(), 'json', $context));
-        if ($data->isInitialized('meta') && null !== $data->getMeta()) {
-            $dataArray['meta'] = $data->getMeta() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getMeta(), 'json', $context));
+        $dataArray['error'] = $data->getError() === null ? null : new JsonObject($this->normalizer->normalize($data->getError(), 'json', $context));
+        if ($data->isInitialized('meta') && $data->getMeta() !== null) {
+            $dataArray['meta'] = $data->getMeta() === null ? null : new JsonObject($this->normalizer->normalize($data->getMeta(), 'json', $context));
         }
-        if ($data->isInitialized('type') && null !== $data->getType()) {
+        if ($data->isInitialized('type') && $data->getType() !== null) {
             $dataArray['type'] = $data->getType();
         }
-        if ($data->isInitialized('title') && null !== $data->getTitle()) {
+        if ($data->isInitialized('title') && $data->getTitle() !== null) {
             $dataArray['title'] = $data->getTitle();
         }
-        if ($data->isInitialized('detail') && null !== $data->getDetail()) {
+        if ($data->isInitialized('detail') && $data->getDetail() !== null) {
             $dataArray['detail'] = $data->getDetail();
         }
-        if ($data->isInitialized('instance') && null !== $data->getInstance()) {
+        if ($data->isInitialized('instance') && $data->getInstance() !== null) {
             $dataArray['instance'] = $data->getInstance();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -100,10 +110,12 @@ class PaymentRequiredResponseNormalizer implements DenormalizerInterface, Normal
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\PaymentRequiredResponse::class => false];
+        return [PaymentRequiredResponse::class => false];
     }
 }

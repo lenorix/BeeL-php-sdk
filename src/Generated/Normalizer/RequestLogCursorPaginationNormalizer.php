@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\RequestLogCursorPagination;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class RequestLogCursorPaginationNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class RequestLogCursorPaginationNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\RequestLogCursorPagination::class;
+        return $type === RequestLogCursorPagination::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\RequestLogCursorPagination::class;
+        return is_object($data) && get_class($data) === RequestLogCursorPagination::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\RequestLogCursorPagination();
-        if (null === $data || false === \is_array($data)) {
+        $object = new RequestLogCursorPagination;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -46,16 +51,14 @@ class RequestLogCursorPaginationNormalizer implements DenormalizerInterface, Nor
         if (\array_key_exists('next_cursor', $data) && $data['next_cursor'] !== null) {
             $object->setNextCursor($data['next_cursor']);
             unset($data['next_cursor']);
-        }
-        elseif (\array_key_exists('next_cursor', $data) && $data['next_cursor'] === null) {
+        } elseif (\array_key_exists('next_cursor', $data) && $data['next_cursor'] === null) {
             $object->setNextCursor(null);
             unset($data['next_cursor']);
         }
         if (\array_key_exists('prev_cursor', $data) && $data['prev_cursor'] !== null) {
             $object->setPrevCursor($data['prev_cursor']);
             unset($data['prev_cursor']);
-        }
-        elseif (\array_key_exists('prev_cursor', $data) && $data['prev_cursor'] === null) {
+        } elseif (\array_key_exists('prev_cursor', $data) && $data['prev_cursor'] === null) {
             $object->setPrevCursor(null);
             unset($data['prev_cursor']);
         }
@@ -72,15 +75,17 @@ class RequestLogCursorPaginationNormalizer implements DenormalizerInterface, Nor
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('nextCursor') && null !== $data->getNextCursor()) {
+        if ($data->isInitialized('nextCursor') && $data->getNextCursor() !== null) {
             $dataArray['next_cursor'] = $data->getNextCursor();
         }
-        if ($data->isInitialized('prevCursor') && null !== $data->getPrevCursor()) {
+        if ($data->isInitialized('prevCursor') && $data->getPrevCursor() !== null) {
             $dataArray['prev_cursor'] = $data->getPrevCursor();
         }
         $dataArray['has_next'] = $data->getHasNext();
@@ -90,10 +95,12 @@ class RequestLogCursorPaginationNormalizer implements DenormalizerInterface, Nor
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\RequestLogCursorPagination::class => false];
+        return [RequestLogCursorPagination::class => false];
     }
 }

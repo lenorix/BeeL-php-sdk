@@ -3,7 +3,9 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\CompanyDeactivation;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
+use Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -11,27 +13,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class CompanyDeactivationNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class CompanyDeactivationNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\CompanyDeactivation::class;
+        return $type === CompanyDeactivation::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CompanyDeactivation::class;
+        return is_object($data) && get_class($data) === CompanyDeactivation::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\CompanyDeactivation();
-        if (null === $data || false === \is_array($data)) {
+        $object = new CompanyDeactivation;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -50,13 +56,12 @@ class CompanyDeactivationNormalizer implements DenormalizerInterface, Normalizer
         }
         if (\array_key_exists('effective_at', $data) && $data['effective_at'] !== null) {
             $date = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['effective_at']);
-            if (false === $date) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['effective_at'], 'Y-m-d\TH:i:sP');
+            if ($date === false) {
+                throw new InvalidDateException($data['effective_at'], 'Y-m-d\TH:i:sP');
             }
             $object->setEffectiveAt($date);
             unset($data['effective_at']);
-        }
-        elseif (\array_key_exists('effective_at', $data) && $data['effective_at'] === null) {
+        } elseif (\array_key_exists('effective_at', $data) && $data['effective_at'] === null) {
             $object->setEffectiveAt(null);
             unset($data['effective_at']);
         }
@@ -69,14 +74,16 @@ class CompanyDeactivationNormalizer implements DenormalizerInterface, Normalizer
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['company_id'] = $data->getCompanyId();
         $dataArray['environment'] = $data->getEnvironment();
-        if ($data->isInitialized('effectiveAt') && null !== $data->getEffectiveAt()) {
+        if ($data->isInitialized('effectiveAt') && $data->getEffectiveAt() !== null) {
             $dataArray['effective_at'] = $data->getEffectiveAt()?->format('Y-m-d\TH:i:sP');
         }
         $dataArray['already_scheduled'] = $data->getAlreadyScheduled();
@@ -85,10 +92,12 @@ class CompanyDeactivationNormalizer implements DenormalizerInterface, Normalizer
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\CompanyDeactivation::class => false];
+        return [CompanyDeactivation::class => false];
     }
 }

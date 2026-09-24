@@ -2,9 +2,24 @@
 
 namespace Lenorix\BeelSdk\Generated\Endpoint;
 
-class ListCompanyStats extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint implements \Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint
+use Lenorix\BeelSdk\Generated\Exception\ListCompanyStatsBadRequestException;
+use Lenorix\BeelSdk\Generated\Exception\ListCompanyStatsForbiddenException;
+use Lenorix\BeelSdk\Generated\Exception\ListCompanyStatsInternalServerErrorException;
+use Lenorix\BeelSdk\Generated\Exception\ListCompanyStatsTooManyRequestsException;
+use Lenorix\BeelSdk\Generated\Exception\ListCompanyStatsUnauthorizedException;
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Generated\Model\ListCompanyStats200Response;
+use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class ListCompanyStats extends BaseEndpoint implements Endpoint
 {
     protected $account_id;
+
     /**
      * Returns, for each company of the account, how many fiscal documents it has
      * issued and when it last issued one.
@@ -23,7 +38,7 @@ class ListCompanyStats extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEnd
      * included — so asking both with the same `page`, `limit` and `search` lines the two
      * responses up company by company.
      *
-     * @param string $accountId Your own account, or an account you provisioned. It — not the credential — decides which account the operation acts on; a `403` is returned when you do not reach it, the same response an account that does not exist gets.
+     * @param  string  $accountId  Your own account, or an account you provisioned. It — not the credential — decides which account the operation acts on; a `403` is returned when you do not reach it, the same response an account that does not exist gets.
      * @param array{
      *    "page"?: int, //Page number, starting at 1. The response echoes it back as `pagination.current_page`.
      *    "limit"?: int, //How many items to return per page. The response echoes it back as `pagination.items_per_page`.
@@ -35,24 +50,30 @@ class ListCompanyStats extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEnd
         $this->account_id = $accountId;
         $this->queryParameters = $queryParameters;
     }
-    use \Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+
+    use EndpointTrait;
+
     public function getMethod(): string
     {
         return 'GET';
     }
+
     public function getUri(): string
     {
         return str_replace(['{account_id}'], [rawurlencode($this->account_id)], '/v1/accounts/{account_id}/companies/stats');
     }
-    public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer, $streamFactory = null): array
+
+    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
         return [[], null];
     }
+
     public function getExtraHeaders(): array
     {
         return ['Accept' => ['application/json']];
     }
-    protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
+
+    protected function getQueryOptionsResolver(): OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
         $optionsResolver->setDefined(['page', 'limit', 'search']);
@@ -61,45 +82,49 @@ class ListCompanyStats extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEnd
         $optionsResolver->addAllowedTypes('page', ['int']);
         $optionsResolver->addAllowedTypes('limit', ['int']);
         $optionsResolver->addAllowedTypes('search', ['string']);
+
         return $optionsResolver;
     }
+
     /**
      * {@inheritdoc}
      *
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ListCompanyStatsBadRequestException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ListCompanyStatsUnauthorizedException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ListCompanyStatsForbiddenException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ListCompanyStatsTooManyRequestsException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ListCompanyStatsInternalServerErrorException
      *
-     * @return null|\Lenorix\BeelSdk\Generated\Model\ListCompanyStats200Response|\Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @return null|ListCompanyStats200Response|ErrorResponse
+     *
+     * @throws ListCompanyStatsBadRequestException
+     * @throws ListCompanyStatsUnauthorizedException
+     * @throws ListCompanyStatsForbiddenException
+     * @throws ListCompanyStatsTooManyRequestsException
+     * @throws ListCompanyStatsInternalServerErrorException
      */
-    protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (is_null($contentType) === false && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+        if (is_null($contentType) === false && ($status === 200 && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ListCompanyStats200Response', 'json');
         }
-        if (is_null($contentType) === false && (400 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ListCompanyStatsBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 400 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ListCompanyStatsBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (401 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ListCompanyStatsUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 401 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ListCompanyStatsUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (403 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ListCompanyStatsForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 403 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ListCompanyStatsForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (429 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ListCompanyStatsTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 429 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ListCompanyStatsTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (500 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ListCompanyStatsInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ListCompanyStatsInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
         if (stripos(strtolower($contentType), 'application/json') !== false) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
+
     public function getAuthenticationScopes(): array
     {
         return ['ApiKeyAuth'];

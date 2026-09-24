@@ -2,17 +2,22 @@
 
 namespace Lenorix\BeelSdk\Generated\Exception;
 
+use Lenorix\BeelSdk\Generated\Model\ResponseInvalidJsonFormat;
+use Psr\Http\Message\ResponseInterface;
+
 class PatchCompanyCustomerBadRequestException extends BadRequestException
 {
     /**
-     * @var \Lenorix\BeelSdk\Generated\Model\ResponseInvalidJsonFormat
+     * @var ResponseInvalidJsonFormat
      */
     private $responseInvalidJsonFormat;
+
     /**
-     * @var \Psr\Http\Message\ResponseInterface
+     * @var ResponseInterface
      */
     private $response;
-    public function __construct(\Lenorix\BeelSdk\Generated\Model\ResponseInvalidJsonFormat $responseInvalidJsonFormat, \Psr\Http\Message\ResponseInterface $response)
+
+    public function __construct(ResponseInvalidJsonFormat $responseInvalidJsonFormat, ResponseInterface $response)
     {
         parent::__construct('Invalid JSON format — a field has a wrong type or format (e.g. invalid date, unknown enum value, malformed UUID).
 The `details` object contains `field`, `invalid_value`, and optionally `expected_format` or `allowed_values`.
@@ -20,11 +25,13 @@ The `details` object contains `field`, `invalid_value`, and optionally `expected
         $this->responseInvalidJsonFormat = $responseInvalidJsonFormat;
         $this->response = $response;
     }
-    public function getResponseInvalidJsonFormat(): \Lenorix\BeelSdk\Generated\Model\ResponseInvalidJsonFormat
+
+    public function getResponseInvalidJsonFormat(): ResponseInvalidJsonFormat
     {
         return $this->responseInvalidJsonFormat;
     }
-    public function getResponse(): \Psr\Http\Message\ResponseInterface
+
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }

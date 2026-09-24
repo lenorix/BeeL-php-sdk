@@ -2,9 +2,26 @@
 
 namespace Lenorix\BeelSdk\Generated\Endpoint;
 
-class UpdateCompanyVeriFactuConfiguration extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint implements \Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint
+use Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationBadRequestException;
+use Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationForbiddenException;
+use Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationInternalServerErrorException;
+use Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationTooManyRequestsException;
+use Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationUnauthorizedException;
+use Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationUnprocessableEntityException;
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Generated\Model\UpdateVeriFactuConfigurationRequest;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdVerifactuConfigurationPutResponse200;
+use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+use Lenorix\BeelSdk\Generated\Runtime\Client\JsonPayload;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class UpdateCompanyVeriFactuConfiguration extends BaseEndpoint implements Endpoint
 {
     protected $company_id;
+
     /**
      * Replaces the VeriFactu configuration of a company.
      *
@@ -26,75 +43,83 @@ class UpdateCompanyVeriFactuConfiguration extends \Lenorix\BeelSdk\Generated\Run
      * Live freeing it for another account — is always
      * `DELETE /v1/companies/{company_id}/activations`.
      *
-     * @param string $companyId Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
-     * @param \Lenorix\BeelSdk\Generated\Model\UpdateVeriFactuConfigurationRequest $requestBody
+     * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      */
-    public function __construct(string $companyId, \Lenorix\BeelSdk\Generated\Model\UpdateVeriFactuConfigurationRequest $requestBody)
+    public function __construct(string $companyId, UpdateVeriFactuConfigurationRequest $requestBody)
     {
         $this->company_id = $companyId;
         $this->body = $requestBody;
     }
-    use \Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+
+    use EndpointTrait;
+
     public function getMethod(): string
     {
         return 'PUT';
     }
+
     public function getUri(): string
     {
         return str_replace(['{company_id}'], [rawurlencode($this->company_id)], '/v1/companies/{company_id}/verifactu-configuration');
     }
-    public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer, $streamFactory = null): array
+
+    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
-        if ($this->body instanceof \Lenorix\BeelSdk\Generated\Model\UpdateVeriFactuConfigurationRequest) {
-            return [['Content-Type' => ['application/json']], \Lenorix\BeelSdk\Generated\Runtime\Client\JsonPayload::encode($serializer, $this->body)];
+        if ($this->body instanceof UpdateVeriFactuConfigurationRequest) {
+            return [['Content-Type' => ['application/json']], JsonPayload::encode($serializer, $this->body)];
         }
+
         return [[], null];
     }
+
     public function getExtraHeaders(): array
     {
         return ['Accept' => ['application/json']];
     }
+
     /**
      * {@inheritdoc}
      *
-     * @throws \Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationBadRequestException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationUnauthorizedException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationForbiddenException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationUnprocessableEntityException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationTooManyRequestsException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationInternalServerErrorException
      *
-     * @return null|\Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdVerifactuConfigurationPutResponse200|\Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @return null|V1CompaniesCompanyIdVerifactuConfigurationPutResponse200|ErrorResponse
+     *
+     * @throws UpdateCompanyVeriFactuConfigurationBadRequestException
+     * @throws UpdateCompanyVeriFactuConfigurationUnauthorizedException
+     * @throws UpdateCompanyVeriFactuConfigurationForbiddenException
+     * @throws UpdateCompanyVeriFactuConfigurationUnprocessableEntityException
+     * @throws UpdateCompanyVeriFactuConfigurationTooManyRequestsException
+     * @throws UpdateCompanyVeriFactuConfigurationInternalServerErrorException
      */
-    protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (is_null($contentType) === false && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+        if (is_null($contentType) === false && ($status === 200 && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdVerifactuConfigurationPutResponse200', 'json');
         }
-        if (is_null($contentType) === false && (400 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 400 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new UpdateCompanyVeriFactuConfigurationBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (401 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 401 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new UpdateCompanyVeriFactuConfigurationUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (403 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 403 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new UpdateCompanyVeriFactuConfigurationForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (422 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 422 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new UpdateCompanyVeriFactuConfigurationUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (429 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 429 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new UpdateCompanyVeriFactuConfigurationTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (500 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\UpdateCompanyVeriFactuConfigurationInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new UpdateCompanyVeriFactuConfigurationInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
         if (stripos(strtolower($contentType), 'application/json') !== false) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
+
     public function getAuthenticationScopes(): array
     {
         return ['ApiKeyAuth'];

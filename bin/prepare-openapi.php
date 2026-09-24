@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 use Symfony\Component\Yaml\Yaml;
 
-require dirname(__DIR__) . '/vendor/autoload.php';
+require dirname(__DIR__).'/vendor/autoload.php';
 
 $source = 'https://docs.beel.es/api/openapi';
-$destination = dirname(__DIR__) . '/build/openapi.json';
+$destination = dirname(__DIR__).'/build/openapi.json';
 $context = stream_context_create([
     'http' => [
         'timeout' => 30,
@@ -29,19 +29,19 @@ try {
     exit(1);
 }
 
-if (!is_array($document) || !isset($document['paths']) || !is_array($document['paths'])) {
+if (! is_array($document) || ! isset($document['paths']) || ! is_array($document['paths'])) {
     fwrite(STDERR, "The BeeL OpenAPI schema does not contain a valid paths object.\n");
     exit(1);
 }
 
 $normalizeParameter = static function (mixed &$parameter) use ($document): void {
-    if (!is_array($parameter) || isset($parameter['$ref']) || isset($parameter['content'])) {
+    if (! is_array($parameter) || isset($parameter['$ref']) || isset($parameter['content'])) {
         return;
     }
 
     $schema = $parameter['schema'] ?? null;
 
-    if (!is_array($schema)
+    if (! is_array($schema)
         || isset($schema['type'])
         || isset($schema['enum'])
         || isset($schema['$ref'])
@@ -90,7 +90,7 @@ $normalizeParameter = static function (mixed &$parameter) use ($document): void 
 $methods = ['get', 'put', 'post', 'delete', 'options', 'head', 'patch', 'trace'];
 
 foreach ($document['paths'] as &$pathItem) {
-    if (!is_array($pathItem)) {
+    if (! is_array($pathItem)) {
         continue;
     }
 
@@ -102,7 +102,7 @@ foreach ($document['paths'] as &$pathItem) {
     }
 
     foreach ($methods as $method) {
-        if (!isset($pathItem[$method]['parameters']) || !is_array($pathItem[$method]['parameters'])) {
+        if (! isset($pathItem[$method]['parameters']) || ! is_array($pathItem[$method]['parameters'])) {
             continue;
         }
 
@@ -130,12 +130,12 @@ if ($json === false) {
 
 $directory = dirname($destination);
 
-if (!is_dir($directory) && !mkdir($directory, 0777, true) && !is_dir($directory)) {
+if (! is_dir($directory) && ! mkdir($directory, 0777, true) && ! is_dir($directory)) {
     fwrite(STDERR, "Unable to create the build directory.\n");
     exit(1);
 }
 
-if (file_put_contents($destination, $json . "\n") === false) {
+if (file_put_contents($destination, $json."\n") === false) {
     fwrite(STDERR, "Unable to write the normalized OpenAPI schema to {$destination}.\n");
     exit(1);
 }

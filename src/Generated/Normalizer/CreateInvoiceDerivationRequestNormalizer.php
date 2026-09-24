@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\CreateInvoiceDerivationRequest;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class CreateInvoiceDerivationRequestNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class CreateInvoiceDerivationRequestNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\CreateInvoiceDerivationRequest::class;
+        return $type === CreateInvoiceDerivationRequest::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CreateInvoiceDerivationRequest::class;
+        return is_object($data) && get_class($data) === CreateInvoiceDerivationRequest::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\CreateInvoiceDerivationRequest();
-        if (null === $data || false === \is_array($data)) {
+        $object = new CreateInvoiceDerivationRequest;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -58,17 +63,19 @@ class CreateInvoiceDerivationRequestNormalizer implements DenormalizerInterface,
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['from_invoice_id'] = $data->getFromInvoiceId();
         $dataArray['mode'] = $data->getMode();
-        if ($data->isInitialized('seriesId') && null !== $data->getSeriesId()) {
+        if ($data->isInitialized('seriesId') && $data->getSeriesId() !== null) {
             $dataArray['series_id'] = $data->getSeriesId();
         }
-        if ($data->isInitialized('notes') && null !== $data->getNotes()) {
+        if ($data->isInitialized('notes') && $data->getNotes() !== null) {
             $dataArray['notes'] = $data->getNotes();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -76,10 +83,12 @@ class CreateInvoiceDerivationRequestNormalizer implements DenormalizerInterface,
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\CreateInvoiceDerivationRequest::class => false];
+        return [CreateInvoiceDerivationRequest::class => false];
     }
 }

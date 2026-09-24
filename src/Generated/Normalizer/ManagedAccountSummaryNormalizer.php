@@ -3,7 +3,11 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\ManagedAccountSummary;
+use Lenorix\BeelSdk\Generated\Model\ManagedAccountSummaryClaim;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
+use Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -11,27 +15,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class ManagedAccountSummaryNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class ManagedAccountSummaryNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\ManagedAccountSummary::class;
+        return $type === ManagedAccountSummary::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\ManagedAccountSummary::class;
+        return is_object($data) && get_class($data) === ManagedAccountSummary::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\ManagedAccountSummary();
-        if (null === $data || false === \is_array($data)) {
+        $object = new ManagedAccountSummary;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -61,14 +69,13 @@ class ManagedAccountSummaryNormalizer implements DenormalizerInterface, Normaliz
             unset($data['status']);
         }
         if (\array_key_exists('claim', $data)) {
-            $object->setClaim($this->denormalizer->denormalize($data['claim'], \Lenorix\BeelSdk\Generated\Model\ManagedAccountSummaryClaim::class, 'json', $context));
+            $object->setClaim($this->denormalizer->denormalize($data['claim'], ManagedAccountSummaryClaim::class, 'json', $context));
             unset($data['claim']);
         }
         if (\array_key_exists('company_id', $data) && $data['company_id'] !== null) {
             $object->setCompanyId($data['company_id']);
             unset($data['company_id']);
-        }
-        elseif (\array_key_exists('company_id', $data) && $data['company_id'] === null) {
+        } elseif (\array_key_exists('company_id', $data) && $data['company_id'] === null) {
             $object->setCompanyId(null);
             unset($data['company_id']);
         }
@@ -78,8 +85,8 @@ class ManagedAccountSummaryNormalizer implements DenormalizerInterface, Normaliz
         }
         if (\array_key_exists('created_at', $data)) {
             $date = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']);
-            if (false === $date) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['created_at'], 'Y-m-d\TH:i:sP');
+            if ($date === false) {
+                throw new InvalidDateException($data['created_at'], 'Y-m-d\TH:i:sP');
             }
             $object->setCreatedAt($date);
             unset($data['created_at']);
@@ -89,20 +96,22 @@ class ManagedAccountSummaryNormalizer implements DenormalizerInterface, Normaliz
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['account_id'] = $data->getAccountId();
         $dataArray['external_ref'] = $data->getExternalRef();
-        if ($data->isInitialized('displayName') && null !== $data->getDisplayName()) {
+        if ($data->isInitialized('displayName') && $data->getDisplayName() !== null) {
             $dataArray['display_name'] = $data->getDisplayName();
         }
         $dataArray['access_level'] = $data->getAccessLevel();
         $dataArray['status'] = $data->getStatus();
-        $dataArray['claim'] = $data->getClaim() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getClaim(), 'json', $context));
-        if ($data->isInitialized('companyId') && null !== $data->getCompanyId()) {
+        $dataArray['claim'] = $data->getClaim() === null ? null : new JsonObject($this->normalizer->normalize($data->getClaim(), 'json', $context));
+        if ($data->isInitialized('companyId') && $data->getCompanyId() !== null) {
             $dataArray['company_id'] = $data->getCompanyId();
         }
         $dataArray['representation_signed'] = $data->getRepresentationSigned();
@@ -112,10 +121,12 @@ class ManagedAccountSummaryNormalizer implements DenormalizerInterface, Normaliz
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\ManagedAccountSummary::class => false];
+        return [ManagedAccountSummary::class => false];
     }
 }

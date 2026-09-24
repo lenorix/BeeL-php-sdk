@@ -2,7 +2,25 @@
 
 namespace Lenorix\BeelSdk\Generated\Endpoint;
 
-class ImportCustomersCsvPreview extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint implements \Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint
+use Http\Message\MultipartStream\MultipartStreamBuilder;
+use Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewBadRequestException;
+use Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewForbiddenException;
+use Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewInternalServerErrorException;
+use Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewRequestEntityTooLargeException;
+use Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewTooManyRequestsException;
+use Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewUnauthorizedException;
+use Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewUnprocessableEntityException;
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Generated\Model\V1CustomersImportCsvPreviewPostBody;
+use Lenorix\BeelSdk\Generated\Model\V1CustomersImportCsvPreviewPostResponse200;
+use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class ImportCustomersCsvPreview extends BaseEndpoint implements Endpoint
 {
     /**
      * Parses a CSV of customers and returns every row with its validation outcome, the
@@ -22,26 +40,28 @@ class ImportCustomersCsvPreview extends \Lenorix\BeelSdk\Generated\Runtime\Clien
      *   valid customers.
      *
      * **Retires on 9 December 2026.** See the [migration guide](https://docs.beel.es/changelog/resources-under-the-nif) for what moved where and what changes when you switch.
-     *
-     * @param \Lenorix\BeelSdk\Generated\Model\V1CustomersImportCsvPreviewPostBody $requestBody
      */
-    public function __construct(\Lenorix\BeelSdk\Generated\Model\V1CustomersImportCsvPreviewPostBody $requestBody)
+    public function __construct(V1CustomersImportCsvPreviewPostBody $requestBody)
     {
         $this->body = $requestBody;
     }
-    use \Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+
+    use EndpointTrait;
+
     public function getMethod(): string
     {
         return 'POST';
     }
+
     public function getUri(): string
     {
         return '/v1/customers/import-csv-preview';
     }
-    public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer, $streamFactory = null): array
+
+    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
-        if ($this->body instanceof \Lenorix\BeelSdk\Generated\Model\V1CustomersImportCsvPreviewPostBody) {
-            $bodyBuilder = new \Http\Message\MultipartStream\MultipartStreamBuilder($streamFactory);
+        if ($this->body instanceof V1CustomersImportCsvPreviewPostBody) {
+            $bodyBuilder = new MultipartStreamBuilder($streamFactory);
             $formParameters = $serializer->normalize($this->body, 'json');
             $partOptions = ['file' => ['filename' => 'file']];
             foreach ($formParameters as $key => $value) {
@@ -53,7 +73,7 @@ class ImportCustomersCsvPreview extends \Lenorix\BeelSdk\Generated\Runtime\Clien
                 $resourceOptions = $partOptions[$key] ?? [];
                 if (isset($resourceOptions['filename'])) {
                     $uri = null;
-                    if ($value instanceof \Psr\Http\Message\StreamInterface) {
+                    if ($value instanceof StreamInterface) {
                         $uri = $value->getMetadata('uri');
                     } elseif (is_resource($value)) {
                         $uri = stream_get_meta_data($value)['uri'] ?? null;
@@ -64,59 +84,65 @@ class ImportCustomersCsvPreview extends \Lenorix\BeelSdk\Generated\Runtime\Clien
                 }
                 $bodyBuilder->addResource($key, $value, $resourceOptions);
             }
-            return [['Content-Type' => ['multipart/form-data; boundary="' . ($bodyBuilder->getBoundary() . '"')]], $bodyBuilder->build()];
+
+            return [['Content-Type' => ['multipart/form-data; boundary="'.($bodyBuilder->getBoundary().'"')]], $bodyBuilder->build()];
         }
+
         return [[], null];
     }
+
     public function getExtraHeaders(): array
     {
         return ['Accept' => ['application/json']];
     }
+
     /**
      * {@inheritdoc}
      *
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewBadRequestException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewUnauthorizedException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewForbiddenException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewRequestEntityTooLargeException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewUnprocessableEntityException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewTooManyRequestsException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewInternalServerErrorException
      *
-     * @return null|\Lenorix\BeelSdk\Generated\Model\V1CustomersImportCsvPreviewPostResponse200|\Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @return null|V1CustomersImportCsvPreviewPostResponse200|ErrorResponse
+     *
+     * @throws ImportCustomersCsvPreviewBadRequestException
+     * @throws ImportCustomersCsvPreviewUnauthorizedException
+     * @throws ImportCustomersCsvPreviewForbiddenException
+     * @throws ImportCustomersCsvPreviewRequestEntityTooLargeException
+     * @throws ImportCustomersCsvPreviewUnprocessableEntityException
+     * @throws ImportCustomersCsvPreviewTooManyRequestsException
+     * @throws ImportCustomersCsvPreviewInternalServerErrorException
      */
-    protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (is_null($contentType) === false && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+        if (is_null($contentType) === false && ($status === 200 && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\V1CustomersImportCsvPreviewPostResponse200', 'json');
         }
-        if (is_null($contentType) === false && (400 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 400 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ImportCustomersCsvPreviewBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (401 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 401 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ImportCustomersCsvPreviewUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (403 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 403 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ImportCustomersCsvPreviewForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (413 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewRequestEntityTooLargeException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 413 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ImportCustomersCsvPreviewRequestEntityTooLargeException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (422 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 422 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ImportCustomersCsvPreviewUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (429 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 429 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ImportCustomersCsvPreviewTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (500 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ImportCustomersCsvPreviewInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
         if (stripos(strtolower($contentType), 'application/json') !== false) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
+
     public function getAuthenticationScopes(): array
     {
         return ['ApiKeyAuth'];

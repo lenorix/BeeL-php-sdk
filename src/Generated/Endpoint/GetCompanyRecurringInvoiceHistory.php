@@ -2,10 +2,27 @@
 
 namespace Lenorix\BeelSdk\Generated\Endpoint;
 
-class GetCompanyRecurringInvoiceHistory extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint implements \Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint
+use Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryBadRequestException;
+use Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryForbiddenException;
+use Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryInternalServerErrorException;
+use Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryNotFoundException;
+use Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryTooManyRequestsException;
+use Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryUnauthorizedException;
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdHistoryGetResponse200;
+use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class GetCompanyRecurringInvoiceHistory extends BaseEndpoint implements Endpoint
 {
     protected $company_id;
+
     protected $recurring_invoice_id;
+
     /**
      * Returns the invoices previously generated from this recurring template, including their
      * status and generation dates, newest first.
@@ -18,8 +35,7 @@ class GetCompanyRecurringInvoiceHistory extends \Lenorix\BeelSdk\Generated\Runti
      * **not** paginate: it is frozen as it shipped until its `Sunset` date, and returns the whole
      * history with no `pagination`. Only this route pages.
      *
-     * @param string $companyId Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
-     * @param string $recurringInvoiceId
+     * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param array{
      *    "page"?: int, //Page number, starting at 1. The response echoes it back as `pagination.current_page`.
      *    "limit"?: int, //How many items to return per page. The response echoes it back as `pagination.items_per_page`.
@@ -31,24 +47,30 @@ class GetCompanyRecurringInvoiceHistory extends \Lenorix\BeelSdk\Generated\Runti
         $this->recurring_invoice_id = $recurringInvoiceId;
         $this->queryParameters = $queryParameters;
     }
-    use \Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+
+    use EndpointTrait;
+
     public function getMethod(): string
     {
         return 'GET';
     }
+
     public function getUri(): string
     {
         return str_replace(['{company_id}', '{recurring_invoice_id}'], [rawurlencode($this->company_id), rawurlencode($this->recurring_invoice_id)], '/v1/companies/{company_id}/recurring-invoices/{recurring_invoice_id}/history');
     }
-    public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer, $streamFactory = null): array
+
+    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
         return [[], null];
     }
+
     public function getExtraHeaders(): array
     {
         return ['Accept' => ['application/json']];
     }
-    protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
+
+    protected function getQueryOptionsResolver(): OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
         $optionsResolver->setDefined(['page', 'limit']);
@@ -56,49 +78,53 @@ class GetCompanyRecurringInvoiceHistory extends \Lenorix\BeelSdk\Generated\Runti
         $optionsResolver->setDefaults(['page' => 1, 'limit' => 20]);
         $optionsResolver->addAllowedTypes('page', ['int']);
         $optionsResolver->addAllowedTypes('limit', ['int']);
+
         return $optionsResolver;
     }
+
     /**
      * {@inheritdoc}
      *
-     * @throws \Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryBadRequestException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryUnauthorizedException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryForbiddenException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryNotFoundException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryTooManyRequestsException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryInternalServerErrorException
      *
-     * @return null|\Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdHistoryGetResponse200|\Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @return null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdHistoryGetResponse200|ErrorResponse
+     *
+     * @throws GetCompanyRecurringInvoiceHistoryBadRequestException
+     * @throws GetCompanyRecurringInvoiceHistoryUnauthorizedException
+     * @throws GetCompanyRecurringInvoiceHistoryForbiddenException
+     * @throws GetCompanyRecurringInvoiceHistoryNotFoundException
+     * @throws GetCompanyRecurringInvoiceHistoryTooManyRequestsException
+     * @throws GetCompanyRecurringInvoiceHistoryInternalServerErrorException
      */
-    protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (is_null($contentType) === false && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+        if (is_null($contentType) === false && ($status === 200 && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdHistoryGetResponse200', 'json');
         }
-        if (is_null($contentType) === false && (400 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 400 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new GetCompanyRecurringInvoiceHistoryBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (401 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 401 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new GetCompanyRecurringInvoiceHistoryUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (403 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 403 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new GetCompanyRecurringInvoiceHistoryForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (404 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryNotFoundException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 404 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new GetCompanyRecurringInvoiceHistoryNotFoundException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (429 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 429 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new GetCompanyRecurringInvoiceHistoryTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (500 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceHistoryInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new GetCompanyRecurringInvoiceHistoryInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
         if (stripos(strtolower($contentType), 'application/json') !== false) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
+
     public function getAuthenticationScopes(): array
     {
         return ['ApiKeyAuth'];

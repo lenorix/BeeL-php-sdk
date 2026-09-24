@@ -2,19 +2,26 @@
 
 namespace Lenorix\BeelSdk\Generated\Authentication;
 
-class ApiKeyAuthAuthentication implements \Jane\Component\OpenApiRuntime\Client\AuthenticationPlugin
+use Jane\Component\OpenApiRuntime\Client\AuthenticationPlugin;
+use Psr\Http\Message\RequestInterface;
+
+class ApiKeyAuthAuthentication implements AuthenticationPlugin
 {
     private $token;
+
     public function __construct(string $token)
     {
         $this->{'token'} = $token;
     }
-    public function authentication(\Psr\Http\Message\RequestInterface $request): \Psr\Http\Message\RequestInterface
+
+    public function authentication(RequestInterface $request): RequestInterface
     {
         $header = sprintf('Bearer %s', $this->{'token'});
         $request = $request->withHeader('Authorization', $header);
+
         return $request;
     }
+
     public function getScope(): string
     {
         return 'ApiKeyAuth';

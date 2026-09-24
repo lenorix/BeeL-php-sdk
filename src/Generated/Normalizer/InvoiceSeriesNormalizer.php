@@ -3,7 +3,9 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\InvoiceSeries;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
+use Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -11,27 +13,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class InvoiceSeriesNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class InvoiceSeriesNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\InvoiceSeries::class;
+        return $type === InvoiceSeries::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\InvoiceSeries::class;
+        return is_object($data) && get_class($data) === InvoiceSeries::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\InvoiceSeries();
-        if (null === $data || false === \is_array($data)) {
+        $object = new InvoiceSeries;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -92,8 +98,8 @@ class InvoiceSeriesNormalizer implements DenormalizerInterface, NormalizerInterf
         }
         if (\array_key_exists('created_at', $data)) {
             $date = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']);
-            if (false === $date) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['created_at'], 'Y-m-d\TH:i:sP');
+            if ($date === false) {
+                throw new InvalidDateException($data['created_at'], 'Y-m-d\TH:i:sP');
             }
             $object->setCreatedAt($date);
             unset($data['created_at']);
@@ -104,8 +110,8 @@ class InvoiceSeriesNormalizer implements DenormalizerInterface, NormalizerInterf
         }
         if (\array_key_exists('updated_at', $data)) {
             $date_1 = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['updated_at']);
-            if (false === $date_1) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['updated_at'], 'Y-m-d\TH:i:sP');
+            if ($date_1 === false) {
+                throw new InvalidDateException($data['updated_at'], 'Y-m-d\TH:i:sP');
             }
             $object->setUpdatedAt($date_1);
             unset($data['updated_at']);
@@ -115,8 +121,10 @@ class InvoiceSeriesNormalizer implements DenormalizerInterface, NormalizerInterf
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -124,20 +132,20 @@ class InvoiceSeriesNormalizer implements DenormalizerInterface, NormalizerInterf
         $dataArray['document_type'] = $data->getDocumentType();
         $dataArray['name'] = $data->getName();
         $dataArray['code'] = $data->getCode();
-        if ($data->isInitialized('description') && null !== $data->getDescription()) {
+        if ($data->isInitialized('description') && $data->getDescription() !== null) {
             $dataArray['description'] = $data->getDescription();
         }
         $dataArray['format'] = $data->getFormat();
         $dataArray['counter_reset'] = $data->getCounterReset();
-        if ($data->isInitialized('initialNumber') && null !== $data->getInitialNumber()) {
+        if ($data->isInitialized('initialNumber') && $data->getInitialNumber() !== null) {
             $dataArray['initial_number'] = $data->getInitialNumber();
         }
         $dataArray['active'] = $data->getActive();
         $dataArray['default_series'] = $data->getDefaultSeries();
-        if ($data->isInitialized('createdAt') && null !== $data->getCreatedAt()) {
+        if ($data->isInitialized('createdAt') && $data->getCreatedAt() !== null) {
             $dataArray['created_at'] = $data->getCreatedAt()->format('Y-m-d\TH:i:sP');
         }
-        if ($data->isInitialized('updatedAt') && null !== $data->getUpdatedAt()) {
+        if ($data->isInitialized('updatedAt') && $data->getUpdatedAt() !== null) {
             $dataArray['updated_at'] = $data->getUpdatedAt()->format('Y-m-d\TH:i:sP');
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -145,10 +153,12 @@ class InvoiceSeriesNormalizer implements DenormalizerInterface, NormalizerInterf
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\InvoiceSeries::class => false];
+        return [InvoiceSeries::class => false];
     }
 }

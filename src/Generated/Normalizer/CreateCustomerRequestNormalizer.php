@@ -3,6 +3,11 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\Address;
+use Lenorix\BeelSdk\Generated\Model\AlternativeIdentifier;
+use Lenorix\BeelSdk\Generated\Model\CreateCustomerRequest;
+use Lenorix\BeelSdk\Generated\Model\PaymentInfo;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +16,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class CreateCustomerRequestNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class CreateCustomerRequestNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\CreateCustomerRequest::class;
+        return $type === CreateCustomerRequest::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CreateCustomerRequest::class;
+        return is_object($data) && get_class($data) === CreateCustomerRequest::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\CreateCustomerRequest();
-        if (null === $data || false === \is_array($data)) {
+        $object = new CreateCustomerRequest;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -47,8 +56,7 @@ class CreateCustomerRequestNormalizer implements DenormalizerInterface, Normaliz
         if (\array_key_exists('trade_name', $data) && $data['trade_name'] !== null) {
             $object->setTradeName($data['trade_name']);
             unset($data['trade_name']);
-        }
-        elseif (\array_key_exists('trade_name', $data) && $data['trade_name'] === null) {
+        } elseif (\array_key_exists('trade_name', $data) && $data['trade_name'] === null) {
             $object->setTradeName(null);
             unset($data['trade_name']);
         }
@@ -57,15 +65,14 @@ class CreateCustomerRequestNormalizer implements DenormalizerInterface, Normaliz
             unset($data['nif']);
         }
         if (\array_key_exists('alternative_id', $data) && $data['alternative_id'] !== null) {
-            $object->setAlternativeId($this->denormalizer->denormalize($data['alternative_id'], \Lenorix\BeelSdk\Generated\Model\AlternativeIdentifier::class, 'json', $context));
+            $object->setAlternativeId($this->denormalizer->denormalize($data['alternative_id'], AlternativeIdentifier::class, 'json', $context));
             unset($data['alternative_id']);
-        }
-        elseif (\array_key_exists('alternative_id', $data) && $data['alternative_id'] === null) {
+        } elseif (\array_key_exists('alternative_id', $data) && $data['alternative_id'] === null) {
             $object->setAlternativeId(null);
             unset($data['alternative_id']);
         }
         if (\array_key_exists('address', $data)) {
-            $object->setAddress($this->denormalizer->denormalize($data['address'], \Lenorix\BeelSdk\Generated\Model\Address::class, 'json', $context));
+            $object->setAddress($this->denormalizer->denormalize($data['address'], Address::class, 'json', $context));
             unset($data['address']);
         }
         if (\array_key_exists('phone', $data)) {
@@ -75,16 +82,14 @@ class CreateCustomerRequestNormalizer implements DenormalizerInterface, Normaliz
         if (\array_key_exists('email', $data) && $data['email'] !== null) {
             $object->setEmail($data['email']);
             unset($data['email']);
-        }
-        elseif (\array_key_exists('email', $data) && $data['email'] === null) {
+        } elseif (\array_key_exists('email', $data) && $data['email'] === null) {
             $object->setEmail(null);
             unset($data['email']);
         }
         if (\array_key_exists('website', $data) && $data['website'] !== null) {
             $object->setWebsite($data['website']);
             unset($data['website']);
-        }
-        elseif (\array_key_exists('website', $data) && $data['website'] === null) {
+        } elseif (\array_key_exists('website', $data) && $data['website'] === null) {
             $object->setWebsite(null);
             unset($data['website']);
         }
@@ -95,36 +100,32 @@ class CreateCustomerRequestNormalizer implements DenormalizerInterface, Normaliz
             }
             $object->setBillingEmails($values);
             unset($data['billing_emails']);
-        }
-        elseif (\array_key_exists('billing_emails', $data) && $data['billing_emails'] === null) {
+        } elseif (\array_key_exists('billing_emails', $data) && $data['billing_emails'] === null) {
             $object->setBillingEmails(null);
             unset($data['billing_emails']);
         }
         if (\array_key_exists('contact_person', $data) && $data['contact_person'] !== null) {
             $object->setContactPerson($data['contact_person']);
             unset($data['contact_person']);
-        }
-        elseif (\array_key_exists('contact_person', $data) && $data['contact_person'] === null) {
+        } elseif (\array_key_exists('contact_person', $data) && $data['contact_person'] === null) {
             $object->setContactPerson(null);
             unset($data['contact_person']);
         }
         if (\array_key_exists('notes', $data) && $data['notes'] !== null) {
             $object->setNotes($data['notes']);
             unset($data['notes']);
-        }
-        elseif (\array_key_exists('notes', $data) && $data['notes'] === null) {
+        } elseif (\array_key_exists('notes', $data) && $data['notes'] === null) {
             $object->setNotes(null);
             unset($data['notes']);
         }
         if (\array_key_exists('preferred_payment_method', $data)) {
-            $object->setPreferredPaymentMethod($this->denormalizer->denormalize($data['preferred_payment_method'], \Lenorix\BeelSdk\Generated\Model\PaymentInfo::class, 'json', $context));
+            $object->setPreferredPaymentMethod($this->denormalizer->denormalize($data['preferred_payment_method'], PaymentInfo::class, 'json', $context));
             unset($data['preferred_payment_method']);
         }
         if (\array_key_exists('general_discount', $data) && $data['general_discount'] !== null) {
             $object->setGeneralDiscount($data['general_discount']);
             unset($data['general_discount']);
-        }
-        elseif (\array_key_exists('general_discount', $data) && $data['general_discount'] === null) {
+        } elseif (\array_key_exists('general_discount', $data) && $data['general_discount'] === null) {
             $object->setGeneralDiscount(null);
             unset($data['general_discount']);
         }
@@ -133,48 +134,50 @@ class CreateCustomerRequestNormalizer implements DenormalizerInterface, Normaliz
                 $object[$key] = $value_1;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['legal_name'] = $data->getLegalName();
-        if ($data->isInitialized('tradeName') && null !== $data->getTradeName()) {
+        if ($data->isInitialized('tradeName') && $data->getTradeName() !== null) {
             $dataArray['trade_name'] = $data->getTradeName();
         }
-        if ($data->isInitialized('nif') && null !== $data->getNif()) {
+        if ($data->isInitialized('nif') && $data->getNif() !== null) {
             $dataArray['nif'] = $data->getNif();
         }
-        if ($data->isInitialized('alternativeId') && null !== $data->getAlternativeId()) {
-            $dataArray['alternative_id'] = $data->getAlternativeId() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getAlternativeId(), 'json', $context));
+        if ($data->isInitialized('alternativeId') && $data->getAlternativeId() !== null) {
+            $dataArray['alternative_id'] = $data->getAlternativeId() === null ? null : new JsonObject($this->normalizer->normalize($data->getAlternativeId(), 'json', $context));
         }
-        $dataArray['address'] = $data->getAddress() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getAddress(), 'json', $context));
-        if ($data->isInitialized('phone') && null !== $data->getPhone()) {
+        $dataArray['address'] = $data->getAddress() === null ? null : new JsonObject($this->normalizer->normalize($data->getAddress(), 'json', $context));
+        if ($data->isInitialized('phone') && $data->getPhone() !== null) {
             $dataArray['phone'] = $data->getPhone();
         }
-        if ($data->isInitialized('email') && null !== $data->getEmail()) {
+        if ($data->isInitialized('email') && $data->getEmail() !== null) {
             $dataArray['email'] = $data->getEmail();
         }
-        if ($data->isInitialized('website') && null !== $data->getWebsite()) {
+        if ($data->isInitialized('website') && $data->getWebsite() !== null) {
             $dataArray['website'] = $data->getWebsite();
         }
-        if ($data->isInitialized('billingEmails') && null !== $data->getBillingEmails()) {
+        if ($data->isInitialized('billingEmails') && $data->getBillingEmails() !== null) {
             $values = [];
             foreach ($data->getBillingEmails() as $value) {
                 $values[] = $value;
             }
             $dataArray['billing_emails'] = $values;
         }
-        if ($data->isInitialized('contactPerson') && null !== $data->getContactPerson()) {
+        if ($data->isInitialized('contactPerson') && $data->getContactPerson() !== null) {
             $dataArray['contact_person'] = $data->getContactPerson();
         }
-        if ($data->isInitialized('notes') && null !== $data->getNotes()) {
+        if ($data->isInitialized('notes') && $data->getNotes() !== null) {
             $dataArray['notes'] = $data->getNotes();
         }
-        if ($data->isInitialized('preferredPaymentMethod') && null !== $data->getPreferredPaymentMethod()) {
-            $dataArray['preferred_payment_method'] = $data->getPreferredPaymentMethod() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getPreferredPaymentMethod(), 'json', $context));
+        if ($data->isInitialized('preferredPaymentMethod') && $data->getPreferredPaymentMethod() !== null) {
+            $dataArray['preferred_payment_method'] = $data->getPreferredPaymentMethod() === null ? null : new JsonObject($this->normalizer->normalize($data->getPreferredPaymentMethod(), 'json', $context));
         }
-        if ($data->isInitialized('generalDiscount') && null !== $data->getGeneralDiscount()) {
+        if ($data->isInitialized('generalDiscount') && $data->getGeneralDiscount() !== null) {
             $dataArray['general_discount'] = $data->getGeneralDiscount();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value_1) {
@@ -182,10 +185,12 @@ class CreateCustomerRequestNormalizer implements DenormalizerInterface, Normaliz
                 $dataArray[$key] = $value_1;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\CreateCustomerRequest::class => false];
+        return [CreateCustomerRequest::class => false];
     }
 }

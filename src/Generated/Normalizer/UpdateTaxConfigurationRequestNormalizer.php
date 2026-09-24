@@ -3,6 +3,9 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\UpdateTaxConfigurationRequest;
+use Lenorix\BeelSdk\Generated\Model\UpdateTaxConfigurationRequestDefaultMainTax;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +14,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class UpdateTaxConfigurationRequestNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class UpdateTaxConfigurationRequestNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\UpdateTaxConfigurationRequest::class;
+        return $type === UpdateTaxConfigurationRequest::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\UpdateTaxConfigurationRequest::class;
+        return is_object($data) && get_class($data) === UpdateTaxConfigurationRequest::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\UpdateTaxConfigurationRequest();
-        if (null === $data || false === \is_array($data)) {
+        $object = new UpdateTaxConfigurationRequest;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -50,7 +57,7 @@ class UpdateTaxConfigurationRequestNormalizer implements DenormalizerInterface, 
             $data['irpf_exempt'] = (bool) $data['irpf_exempt'];
         }
         if (\array_key_exists('default_main_tax', $data)) {
-            $object->setDefaultMainTax($this->denormalizer->denormalize($data['default_main_tax'], \Lenorix\BeelSdk\Generated\Model\UpdateTaxConfigurationRequestDefaultMainTax::class, 'json', $context));
+            $object->setDefaultMainTax($this->denormalizer->denormalize($data['default_main_tax'], UpdateTaxConfigurationRequestDefaultMainTax::class, 'json', $context));
             unset($data['default_main_tax']);
         }
         if (\array_key_exists('default_exemption_reason', $data)) {
@@ -60,8 +67,7 @@ class UpdateTaxConfigurationRequestNormalizer implements DenormalizerInterface, 
         if (\array_key_exists('default_exemption_reason_text', $data) && $data['default_exemption_reason_text'] !== null) {
             $object->setDefaultExemptionReasonText($data['default_exemption_reason_text']);
             unset($data['default_exemption_reason_text']);
-        }
-        elseif (\array_key_exists('default_exemption_reason_text', $data) && $data['default_exemption_reason_text'] === null) {
+        } elseif (\array_key_exists('default_exemption_reason_text', $data) && $data['default_exemption_reason_text'] === null) {
             $object->setDefaultExemptionReasonText(null);
             unset($data['default_exemption_reason_text']);
         }
@@ -88,24 +94,21 @@ class UpdateTaxConfigurationRequestNormalizer implements DenormalizerInterface, 
         if (\array_key_exists('default_payment_method', $data) && $data['default_payment_method'] !== null) {
             $object->setDefaultPaymentMethod($data['default_payment_method']);
             unset($data['default_payment_method']);
-        }
-        elseif (\array_key_exists('default_payment_method', $data) && $data['default_payment_method'] === null) {
+        } elseif (\array_key_exists('default_payment_method', $data) && $data['default_payment_method'] === null) {
             $object->setDefaultPaymentMethod(null);
             unset($data['default_payment_method']);
         }
         if (\array_key_exists('payment_term_days', $data) && $data['payment_term_days'] !== null) {
             $object->setPaymentTermDays($data['payment_term_days']);
             unset($data['payment_term_days']);
-        }
-        elseif (\array_key_exists('payment_term_days', $data) && $data['payment_term_days'] === null) {
+        } elseif (\array_key_exists('payment_term_days', $data) && $data['payment_term_days'] === null) {
             $object->setPaymentTermDays(null);
             unset($data['payment_term_days']);
         }
         if (\array_key_exists('proforma_validity_days', $data) && $data['proforma_validity_days'] !== null) {
             $object->setProformaValidityDays($data['proforma_validity_days']);
             unset($data['proforma_validity_days']);
-        }
-        elseif (\array_key_exists('proforma_validity_days', $data) && $data['proforma_validity_days'] === null) {
+        } elseif (\array_key_exists('proforma_validity_days', $data) && $data['proforma_validity_days'] === null) {
             $object->setProformaValidityDays(null);
             unset($data['proforma_validity_days']);
         }
@@ -114,42 +117,44 @@ class UpdateTaxConfigurationRequestNormalizer implements DenormalizerInterface, 
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('defaultMainTax') && null !== $data->getDefaultMainTax()) {
-            $dataArray['default_main_tax'] = $data->getDefaultMainTax() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getDefaultMainTax(), 'json', $context));
+        if ($data->isInitialized('defaultMainTax') && $data->getDefaultMainTax() !== null) {
+            $dataArray['default_main_tax'] = $data->getDefaultMainTax() === null ? null : new JsonObject($this->normalizer->normalize($data->getDefaultMainTax(), 'json', $context));
         }
-        if ($data->isInitialized('defaultExemptionReason') && null !== $data->getDefaultExemptionReason()) {
+        if ($data->isInitialized('defaultExemptionReason') && $data->getDefaultExemptionReason() !== null) {
             $dataArray['default_exemption_reason'] = $data->getDefaultExemptionReason();
         }
-        if ($data->isInitialized('defaultExemptionReasonText') && null !== $data->getDefaultExemptionReasonText()) {
+        if ($data->isInitialized('defaultExemptionReasonText') && $data->getDefaultExemptionReasonText() !== null) {
             $dataArray['default_exemption_reason_text'] = $data->getDefaultExemptionReasonText();
         }
-        if ($data->isInitialized('applyEquivalenceSurcharge') && null !== $data->getApplyEquivalenceSurcharge()) {
+        if ($data->isInitialized('applyEquivalenceSurcharge') && $data->getApplyEquivalenceSurcharge() !== null) {
             $dataArray['apply_equivalence_surcharge'] = $data->getApplyEquivalenceSurcharge();
         }
-        if ($data->isInitialized('defaultEquivalenceSurcharge') && null !== $data->getDefaultEquivalenceSurcharge()) {
+        if ($data->isInitialized('defaultEquivalenceSurcharge') && $data->getDefaultEquivalenceSurcharge() !== null) {
             $dataArray['default_equivalence_surcharge'] = $data->getDefaultEquivalenceSurcharge();
         }
-        if ($data->isInitialized('applyIrpf') && null !== $data->getApplyIrpf()) {
+        if ($data->isInitialized('applyIrpf') && $data->getApplyIrpf() !== null) {
             $dataArray['apply_irpf'] = $data->getApplyIrpf();
         }
-        if ($data->isInitialized('defaultIrpfRate') && null !== $data->getDefaultIrpfRate()) {
+        if ($data->isInitialized('defaultIrpfRate') && $data->getDefaultIrpfRate() !== null) {
             $dataArray['default_irpf_rate'] = $data->getDefaultIrpfRate();
         }
-        if ($data->isInitialized('irpfExempt') && null !== $data->getIrpfExempt()) {
+        if ($data->isInitialized('irpfExempt') && $data->getIrpfExempt() !== null) {
             $dataArray['irpf_exempt'] = $data->getIrpfExempt();
         }
-        if ($data->isInitialized('defaultPaymentMethod') && null !== $data->getDefaultPaymentMethod()) {
+        if ($data->isInitialized('defaultPaymentMethod') && $data->getDefaultPaymentMethod() !== null) {
             $dataArray['default_payment_method'] = $data->getDefaultPaymentMethod();
         }
-        if ($data->isInitialized('paymentTermDays') && null !== $data->getPaymentTermDays()) {
+        if ($data->isInitialized('paymentTermDays') && $data->getPaymentTermDays() !== null) {
             $dataArray['payment_term_days'] = $data->getPaymentTermDays();
         }
-        if ($data->isInitialized('proformaValidityDays') && null !== $data->getProformaValidityDays()) {
+        if ($data->isInitialized('proformaValidityDays') && $data->getProformaValidityDays() !== null) {
             $dataArray['proforma_validity_days'] = $data->getProformaValidityDays();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -157,10 +162,12 @@ class UpdateTaxConfigurationRequestNormalizer implements DenormalizerInterface, 
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\UpdateTaxConfigurationRequest::class => false];
+        return [UpdateTaxConfigurationRequest::class => false];
     }
 }

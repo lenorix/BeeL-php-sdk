@@ -2,7 +2,20 @@
 
 namespace Lenorix\BeelSdk\Generated\Endpoint;
 
-class GetEmailDeliveryIndicators extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint implements \Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint
+use Lenorix\BeelSdk\Generated\Exception\GetEmailDeliveryIndicatorsBadRequestException;
+use Lenorix\BeelSdk\Generated\Exception\GetEmailDeliveryIndicatorsForbiddenException;
+use Lenorix\BeelSdk\Generated\Exception\GetEmailDeliveryIndicatorsInternalServerErrorException;
+use Lenorix\BeelSdk\Generated\Exception\GetEmailDeliveryIndicatorsUnauthorizedException;
+use Lenorix\BeelSdk\Generated\Model\EmailDeliveryIndicatorListResponse;
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class GetEmailDeliveryIndicators extends BaseEndpoint implements Endpoint
 {
     /**
      * Returns, for each related entity id given, how many emails the history holds for it, the
@@ -27,69 +40,80 @@ class GetEmailDeliveryIndicators extends \Lenorix\BeelSdk\Generated\Runtime\Clie
     {
         $this->queryParameters = $queryParameters;
     }
-    use \Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+
+    use EndpointTrait;
+
     public function getMethod(): string
     {
         return 'GET';
     }
+
     public function getUri(): string
     {
         return '/v1/emails/indicators';
     }
-    public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer, $streamFactory = null): array
+
+    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
         return [[], null];
     }
+
     public function getExtraHeaders(): array
     {
         return ['Accept' => ['application/json']];
     }
-    protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
+
+    protected function getQueryOptionsResolver(): OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
         $optionsResolver->setDefined(['related_entity_ids']);
         $optionsResolver->setRequired(['related_entity_ids']);
         $optionsResolver->setDefaults([]);
         $optionsResolver->addAllowedTypes('related_entity_ids', ['array']);
+
         return $optionsResolver;
     }
+
     protected function getQueryStyles(): array
     {
         return ['related_entity_ids' => ['style' => 'form', 'explode' => false]];
     }
+
     /**
      * {@inheritdoc}
      *
-     * @throws \Lenorix\BeelSdk\Generated\Exception\GetEmailDeliveryIndicatorsBadRequestException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\GetEmailDeliveryIndicatorsUnauthorizedException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\GetEmailDeliveryIndicatorsForbiddenException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\GetEmailDeliveryIndicatorsInternalServerErrorException
      *
-     * @return null|\Lenorix\BeelSdk\Generated\Model\EmailDeliveryIndicatorListResponse|\Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @return null|EmailDeliveryIndicatorListResponse|ErrorResponse
+     *
+     * @throws GetEmailDeliveryIndicatorsBadRequestException
+     * @throws GetEmailDeliveryIndicatorsUnauthorizedException
+     * @throws GetEmailDeliveryIndicatorsForbiddenException
+     * @throws GetEmailDeliveryIndicatorsInternalServerErrorException
      */
-    protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (is_null($contentType) === false && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+        if (is_null($contentType) === false && ($status === 200 && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\EmailDeliveryIndicatorListResponse', 'json');
         }
-        if (is_null($contentType) === false && (400 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\GetEmailDeliveryIndicatorsBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 400 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new GetEmailDeliveryIndicatorsBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (401 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\GetEmailDeliveryIndicatorsUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 401 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new GetEmailDeliveryIndicatorsUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (403 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\GetEmailDeliveryIndicatorsForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 403 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new GetEmailDeliveryIndicatorsForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (500 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\GetEmailDeliveryIndicatorsInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new GetEmailDeliveryIndicatorsInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
         if (stripos(strtolower($contentType), 'application/json') !== false) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
+
     public function getAuthenticationScopes(): array
     {
         return ['ApiKeyAuth'];

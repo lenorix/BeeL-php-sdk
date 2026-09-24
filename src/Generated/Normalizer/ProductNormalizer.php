@@ -3,7 +3,11 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\Product;
+use Lenorix\BeelSdk\Generated\Model\TaxInfo;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
+use Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -11,27 +15,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class ProductNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class ProductNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\Product::class;
+        return $type === Product::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\Product::class;
+        return is_object($data) && get_class($data) === Product::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\Product();
-        if (null === $data || false === \is_array($data)) {
+        $object = new Product;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -56,8 +64,7 @@ class ProductNormalizer implements DenormalizerInterface, NormalizerInterface, D
         if (\array_key_exists('code', $data) && $data['code'] !== null) {
             $object->setCode($data['code']);
             unset($data['code']);
-        }
-        elseif (\array_key_exists('code', $data) && $data['code'] === null) {
+        } elseif (\array_key_exists('code', $data) && $data['code'] === null) {
             $object->setCode(null);
             unset($data['code']);
         }
@@ -82,7 +89,7 @@ class ProductNormalizer implements DenormalizerInterface, NormalizerInterface, D
             unset($data['unit']);
         }
         if (\array_key_exists('main_tax', $data)) {
-            $object->setMainTax($this->denormalizer->denormalize($data['main_tax'], \Lenorix\BeelSdk\Generated\Model\TaxInfo::class, 'json', $context));
+            $object->setMainTax($this->denormalizer->denormalize($data['main_tax'], TaxInfo::class, 'json', $context));
             unset($data['main_tax']);
         }
         if (\array_key_exists('equivalence_surcharge_rate', $data)) {
@@ -99,16 +106,16 @@ class ProductNormalizer implements DenormalizerInterface, NormalizerInterface, D
         }
         if (\array_key_exists('created_at', $data)) {
             $date = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['created_at']);
-            if (false === $date) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['created_at'], 'Y-m-d\TH:i:sP');
+            if ($date === false) {
+                throw new InvalidDateException($data['created_at'], 'Y-m-d\TH:i:sP');
             }
             $object->setCreatedAt($date);
             unset($data['created_at']);
         }
         if (\array_key_exists('updated_at', $data)) {
             $date_1 = \DateTime::createFromFormat('Y-m-d\TH:i:sP', $data['updated_at']);
-            if (false === $date_1) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['updated_at'], 'Y-m-d\TH:i:sP');
+            if ($date_1 === false) {
+                throw new InvalidDateException($data['updated_at'], 'Y-m-d\TH:i:sP');
             }
             $object->setUpdatedAt($date_1);
             unset($data['updated_at']);
@@ -118,31 +125,33 @@ class ProductNormalizer implements DenormalizerInterface, NormalizerInterface, D
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['id'] = $data->getId();
-        if ($data->isInitialized('code') && null !== $data->getCode()) {
+        if ($data->isInitialized('code') && $data->getCode() !== null) {
             $dataArray['code'] = $data->getCode();
         }
         $dataArray['name'] = $data->getName();
-        if ($data->isInitialized('description') && null !== $data->getDescription()) {
+        if ($data->isInitialized('description') && $data->getDescription() !== null) {
             $dataArray['description'] = $data->getDescription();
         }
         $dataArray['category'] = $data->getCategory();
-        if ($data->isInitialized('defaultPrice') && null !== $data->getDefaultPrice()) {
+        if ($data->isInitialized('defaultPrice') && $data->getDefaultPrice() !== null) {
             $dataArray['default_price'] = $data->getDefaultPrice();
         }
-        if ($data->isInitialized('unit') && null !== $data->getUnit()) {
+        if ($data->isInitialized('unit') && $data->getUnit() !== null) {
             $dataArray['unit'] = $data->getUnit();
         }
-        $dataArray['main_tax'] = $data->getMainTax() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getMainTax(), 'json', $context));
-        if ($data->isInitialized('equivalenceSurchargeRate') && null !== $data->getEquivalenceSurchargeRate()) {
+        $dataArray['main_tax'] = $data->getMainTax() === null ? null : new JsonObject($this->normalizer->normalize($data->getMainTax(), 'json', $context));
+        if ($data->isInitialized('equivalenceSurchargeRate') && $data->getEquivalenceSurchargeRate() !== null) {
             $dataArray['equivalence_surcharge_rate'] = $data->getEquivalenceSurchargeRate();
         }
-        if ($data->isInitialized('irpfRate') && null !== $data->getIrpfRate()) {
+        if ($data->isInitialized('irpfRate') && $data->getIrpfRate() !== null) {
             $dataArray['irpf_rate'] = $data->getIrpfRate();
         }
         $dataArray['active'] = $data->getActive();
@@ -153,10 +162,12 @@ class ProductNormalizer implements DenormalizerInterface, NormalizerInterface, D
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\Product::class => false];
+        return [Product::class => false];
     }
 }
