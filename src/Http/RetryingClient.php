@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Http;
 
+use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Client\ClientInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -49,7 +50,7 @@ final readonly class RetryingClient implements ClientInterface
                 $body->seek($position);
             }
 
-            $response = $this->client->sendRequest($request);
+            $response = $this->normalizeDateTimePrecision($this->client->sendRequest($request));
             $this->responseContext->capture($response);
             if ($attempt >= $this->maxRetries || ! $canReplayBody || ($response->getStatusCode() < 500 && $response->getStatusCode() !== 429)) {
                 return $response;
@@ -106,6 +107,30 @@ final readonly class RetryingClient implements ClientInterface
     private function boundedDelay(float $seconds): int
     {
         return (int) min(max(0, $seconds * 1_000), $this->maxRetryDelayMs);
+    }
+
+    /**
+     * Jane's generated date normalizer accepts second precision, while BeeL's
+     * JSON responses can include fractional seconds in ISO date-time values.
+     */
+    private function normalizeDateTimePrecision(ResponseInterface $response): ResponseInterface
+    {
+        if (! str_contains(strtolower($response->getHeaderLine('Content-Type')), 'application/json')) {
+            return $response;
+        }
+
+        $body = (string) $response->getBody();
+        $normalized = preg_replace_callback(
+            '/(")(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})(")/',
+            static fn (array $matches): string => $matches[1].$matches[2].($matches[3] === 'Z' ? '+00:00' : $matches[3]).$matches[4],
+            $body,
+        );
+
+        if ($normalized === null || $normalized === $body) {
+            return $response;
+        }
+
+        return $response->withBody(Utils::streamFor($normalized));
     }
 
     private function uuid(): string

@@ -137,6 +137,30 @@ it('keeps authentication isolated between client instances', function () {
         ->and($secondTransport->requests[0]->getHeaderLine('Authorization'))->toBe('Bearer beel_sk_test_second');
 });
 
+it('normalizes fractional metadata timestamps before Jane deserializes JSON responses', function () {
+    $transport = new RecordingPsrClient([
+        new Response(200, ['Content-Type' => 'application/json'], '{"success":true,"data":{"account_id":"account-1","email":"contact@example.com","language":"es"},"meta":{"timestamp":"2026-09-25T01:29:40.548233096Z","request_id":"req-test"}}'),
+    ]);
+    $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 0, httpClient: $transport);
+
+    $identity = $beel->raw->getMyIdentity()->getData();
+
+    expect($identity->getEmail())->toBe('contact@example.com')
+        ->and($transport->requests[0]->getHeaderLine('Authorization'))->toBe('Bearer beel_sk_test_key');
+});
+
+it('normalizes fractional validated-at timestamps from BeeL responses', function () {
+    $transport = new RecordingPsrClient([
+        new Response(200, ['Content-Type' => 'application/json'], '{"success":true,"data":{"valid":true,"status":"VALID","legal_name_verified":false,"census_status":"IDENTIFIED","message":"Valid","validated_at":"2026-09-25T01:34:34.856943341Z"},"meta":{"timestamp":"2026-09-25T01:34:34.856943341Z","request_id":"req-test"}}'),
+    ]);
+    $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 0, httpClient: $transport);
+
+    $result = $beel->nif->validate('B00000000');
+
+    expect($result)->toBeInstanceOf(ValidateNifResponse::class)
+        ->and($result->getValidatedAt())->toBeInstanceOf(DateTime::class);
+});
+
 it('delegates company invoice creation to Jane with auth, path and generated models', function () {
     $transport = new RecordingPsrClient([
         new Response(422, ['Content-Type' => 'application/json'], json_encode([
