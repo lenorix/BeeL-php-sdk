@@ -1,17 +1,12 @@
-# Security Policy
+# Security policy
 
-Security fixes are provided for the **1.x** release line.
+## Reporting a vulnerability
 
-## Report a vulnerability
+Please report security vulnerabilities through GitHub's private vulnerability
+reporting for this repository:
 
-Please report security issues privately. Use [GitHub's private vulnerability
-reporting](https://github.com/lenorix/filament-autosave/security/advisories/new),
-or email contact@lenorix.com if GitHub is not available. Do not use public
-issues or discussions.
+https://github.com/lenorix/BeeL-php-sdk/security/advisories/new
 
-Please include the package, Filament, and Laravel versions, plus the smallest
-reproduction you can provide.
-
-We acknowledge reports within one week. After we confirm a vulnerability, we
-publish a fix and a GitHub advisory. We will credit the reporter unless they
-request anonymity.
+Do not open a public issue for an unpatched vulnerability. Include the affected
+version, a clear description of the impact, and steps to reproduce it. The
+maintainers will acknowledge reports and coordinate a fix and disclosure.
