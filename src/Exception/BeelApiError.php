@@ -9,8 +9,18 @@ use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
+/** Base exception for BeeL API failures, with HTTP and BeeL error metadata. */
 class BeelApiError extends \RuntimeException
 {
+    /**
+     * @param  string  $message  Human-readable API error message.
+     * @param  int  $statusCode  HTTP status code returned by BeeL, or `0` when unavailable.
+     * @param  string|null  $apiCode  Stable BeeL error code, when present.
+     * @param  mixed  $details  Structured field or domain error details returned by BeeL.
+     * @param  string|null  $requestId  BeeL request ID to include when contacting support.
+     * @param  int|null  $retryAfter  Suggested delay in seconds for rate-limited requests.
+     * @param  Throwable|null  $previous  Underlying HTTP-client or Jane exception, when available.
+     */
     public function __construct(
         string $message,
         public readonly int $statusCode = 0,

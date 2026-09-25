@@ -6,8 +6,13 @@ namespace Lenorix\BeelSdk\Webhook;
 
 use Lenorix\BeelSdk\Exception\WebhookVerificationError;
 
+/** Verify signed BeeL webhook requests using the original JSON body. */
 final readonly class WebhookVerifier
 {
+    /**
+     * @param  string  $secret  Signing secret shown when the webhook subscription is created.
+     * @param  int  $toleranceSeconds  Maximum age difference allowed for the signed timestamp; defaults to 300 seconds.
+     */
     public function __construct(private string $secret, private int $toleranceSeconds = 300)
     {
         if (trim($secret) === '') {
@@ -21,7 +26,16 @@ final readonly class WebhookVerifier
     /**
      * Verify the raw request body and return its decoded event payload.
      *
+     * Pass the exact request body bytes as received; decoding and re-encoding JSON
+     * before verification changes the signed content. The signature header is
+     * `BeeL-Signature` (`t=timestamp,v1=signature`).
+     *
+     * @param  string  $payload  Unmodified UTF-8 request body.
+     * @param  string|null  $signatureHeader  Value of the `BeeL-Signature` header.
+     * @param  int|null  $now  Optional Unix timestamp for deterministic tests.
      * @return array<string, mixed>
+     *
+     * @throws WebhookVerificationError If the signature is missing, invalid, too old, or the body is not a JSON object.
      */
     public function verify(string $payload, ?string $signatureHeader = null, ?int $now = null): array
     {

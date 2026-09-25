@@ -25,14 +25,24 @@ use Lenorix\BeelSdk\Resource\ProductsResource;
 use Lenorix\BeelSdk\Resource\SeriesResource;
 use Psr\Http\Client\ClientInterface;
 
+/**
+ * Instance-based client for the BeeL API.
+ *
+ * Each instance keeps its own API key and HTTP transport. Use {@see self::company()}
+ * for company-owned data so every request names the NIF it operates on.
+ */
 final readonly class Beel
 {
+    /** The generated Jane client for calling any operation in the OpenAPI contract directly. */
     public JaneClient $raw;
 
+    /** Shared catalogs such as tax types and invoice customization options. */
     public CatalogsResource $catalogs;
 
+    /** AEAT NIF validation. */
     public NifResource $nif;
 
+    /** Account-wide operations and account scoping. */
     public AccountsResource $accounts;
 
     /** @deprecated Use company($companyId)->invoices instead. */
@@ -54,6 +64,17 @@ final readonly class Beel
 
     private ResponseContext $responseContext;
 
+    /**
+     * Create an authenticated BeeL API client.
+     *
+     * @param  string  $apiKey  BeeL API key. Test keys route requests to sandbox; live keys use production.
+     * @param  string  $baseUrl  API base URL. Defaults to `https://app.beel.es/api`.
+     * @param  int  $maxRetries  Maximum retries for HTTP 429 and 5xx responses. Defaults to 3.
+     * @param  int  $retryDelayMs  Initial retry delay in milliseconds; delays use exponential backoff.
+     * @param  int  $maxRetryDelayMs  Maximum retry delay in milliseconds.
+     * @param  bool  $autoIdempotencyKey  Add one stable `Idempotency-Key` to each POST request.
+     * @param  ClientInterface|null  $httpClient  Optional PSR-18 transport, useful for custom transports and tests.
+     */
     public function __construct(
         string $apiKey,
         string $baseUrl = 'https://app.beel.es/api',
@@ -89,18 +110,26 @@ final readonly class Beel
         $this->configuration = new ConfigurationResource($this->raw, $this->responseContext);
     }
 
+    /**
+     * Scope subsequent resource calls to one company (NIF).
+     *
+     * @param  string  $companyId  Company UUID returned by BeeL, not the company's NIF.
+     */
     public function company(string $companyId): CompanyScope
     {
         return new CompanyScope($this->raw, $companyId, $this->responseContext);
     }
 
+    /** Scope account-level resources to one account UUID. */
     public function account(string $accountId): AccountScope
     {
         return new AccountScope($this->raw, $accountId, $this->responseContext);
     }
 
     /**
-     * @deprecated Uses the legacy session-focus endpoint. Use company($id)->invoices->getPdf() and its download URL.
+     * Download an invoice PDF and return its binary contents and suggested filename.
+     *
+     * @deprecated Uses the legacy session-focus endpoint. Use `company($id)->invoices->getPdf()` and download its temporary URL.
      *
      * @return array{buffer: string, fileName: string}
      */

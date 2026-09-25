@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Exception;
 
+/** Rate limit was reached (HTTP 429); retry after the indicated delay. */
 final class BeelRateLimitError extends BeelApiError
 {
+    /** Retry delay in seconds, when BeeL supplied one. */
     public readonly ?int $retryAfterSeconds;
 
     public function __construct(

@@ -23,13 +23,26 @@ composer require lenorix/beel-sdk
 
 use Lenorix\BeelSdk\Beel;
 use Lenorix\BeelSdk\Builder\InvoiceBuilder;
+use Lenorix\BeelSdk\Generated\Model\CreateInvoiceRequestLinesItem;
+use Lenorix\BeelSdk\Generated\Model\CreateInvoiceRequestLinesItemMainTax;
 
 $beel = new Beel(apiKey: getenv('BEEL_API_KEY') ?: throw new RuntimeException('Set BEEL_API_KEY.'));
 $company = $beel->company('company-uuid');
 
+$line = (new CreateInvoiceRequestLinesItem())
+    ->setLineType('NORMAL')
+    ->setDescription('Consulting services')
+    ->setQuantity(1)
+    ->setUnitPrice(100)
+    ->setDiscountPercentage(0)
+    ->setMainTax((new CreateInvoiceRequestLinesItemMainTax())
+        ->setType('IVA')
+        ->setPercentage(21)
+        ->setRegimeKey('01'));
+
 $request = InvoiceBuilder::create()
     ->forCustomer('customer-uuid')
-    ->addLine('Consulting services', 1, 100)
+    ->addLineObject($line)
     ->build();
 
 $invoice = $company->invoices->create($request);
@@ -138,7 +151,7 @@ $customerRequest = CustomerBuilder::create()
 $customer = $company->customers->create($customerRequest);
 ```
 
-`InvoiceBuilder` supports `type()`, `forCustomer()`, `operationDate()`, `dueDate()`, `series()`, `externalRef()`, `metadata()`, `notes()`, `addLine()`, and `addLineObject()`. `CustomerBuilder` supports name, NIF, email, phone, notes, and address. Both check their required fields when `build()` is called.
+`InvoiceBuilder` supports `type()`, `forCustomer()`, `operationDate()`, `dueDate()`, `series()`, `externalRef()`, `metadata()`, `notes()`, `addLine()`, and `addLineObject()`. BeeL requires an explicit `main_tax` on every normal invoice line; `addLine()` is a convenience shortcut without tax fields, so use `addLineObject()` when building a valid taxable line. `CustomerBuilder` supports name, NIF, email, phone, notes, and address. Each builder checks its documented required fields when `build()` is called.
 
 ## Raw Jane client
 

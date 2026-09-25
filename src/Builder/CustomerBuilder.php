@@ -7,6 +7,7 @@ namespace Lenorix\BeelSdk\Builder;
 use Lenorix\BeelSdk\Generated\Model\Address;
 use Lenorix\BeelSdk\Generated\Model\CreateCustomerRequest;
 
+/** Build a Jane-generated customer creation request. */
 final class CustomerBuilder
 {
     private CreateCustomerRequest $request;
@@ -22,11 +23,13 @@ final class CustomerBuilder
         $this->request = new CreateCustomerRequest;
     }
 
+    /** Start an empty customer request builder. */
     public static function create(): self
     {
         return new self;
     }
 
+    /** Set the customer's legal name. */
     public function name(string $legalName): self
     {
         $this->name = $legalName;
@@ -35,6 +38,7 @@ final class CustomerBuilder
         return $this;
     }
 
+    /** Set the customer's Spanish NIF/CIF. */
     public function nif(string $nif): self
     {
         $this->nif = $nif;
@@ -43,6 +47,7 @@ final class CustomerBuilder
         return $this;
     }
 
+    /** Set the customer's billing email address. */
     public function email(string $email): self
     {
         $this->request->setEmail($email);
@@ -50,6 +55,7 @@ final class CustomerBuilder
         return $this;
     }
 
+    /** Set the customer's phone number. */
     public function phone(string $phone): self
     {
         $this->request->setPhone($phone);
@@ -57,6 +63,7 @@ final class CustomerBuilder
         return $this;
     }
 
+    /** Set internal notes for this customer. */
     public function notes(string $notes): self
     {
         $this->request->setNotes($notes);
@@ -64,6 +71,7 @@ final class CustomerBuilder
         return $this;
     }
 
+    /** Set the customer's postal address; `countryCode` defaults to Spain (`ES`). */
     public function address(string $street, string $number, string $postalCode, string $city, string $province, string $country, string $countryCode = 'ES'): self
     {
         $this->address = (new Address)->setStreet($street)->setNumber($number)->setPostalCode($postalCode)->setCity($city)->setProvince($province)->setCountry($country)->setCountryCode($countryCode);
@@ -71,6 +79,11 @@ final class CustomerBuilder
         return $this;
     }
 
+    /**
+     * Build the Jane-generated request model.
+     *
+     * @throws \LogicException If the legal name, NIF or postal address is missing.
+     */
     public function build(): CreateCustomerRequest
     {
         if ($this->name === null || trim($this->name) === '') {
