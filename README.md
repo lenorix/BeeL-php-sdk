@@ -6,7 +6,7 @@
 
 An instance-based PHP client for the [BeeL invoicing API](https://docs.beel.es), including company and account scoped resources, VeriFactu invoicing, retries, idempotency, PDF downloads, and webhook signature verification.
 
-> **Unofficial SDK, developed by [Lenorix](https://lenorix.com).** BeeL does not make or endorse this package. Lenorix develops it as an independent client for the BeeL API.
+> **Unofficial SDK, developed by [lenorix](https://lenorix.com).** BeeL does not make or endorse this package. Lenorix develops it as an independent client for the BeeL API.
 
 Requires **PHP 8.4+**. The HTTP API is backed by the JanePHP client generated from BeeL's OpenAPI contract.
 
