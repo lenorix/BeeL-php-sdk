@@ -205,5 +205,3 @@ The SDK retains the deprecated compatibility surface from the API, including `$b
 
 - [BeeL API documentation](https://docs.beel.es)
 - [OpenAPI specification](https://docs.beel.es/api/openapi)
-- [GitHub repository](https://github.com/lenorix/BeeL-php-sdk)
-- Support: [it@beel.es](mailto:it@beel.es)
