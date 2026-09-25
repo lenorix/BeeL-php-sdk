@@ -5,23 +5,21 @@ declare(strict_types=1);
 namespace Lenorix\BeelSdk\Resource;
 
 use Lenorix\BeelSdk\Generated\Client;
+use Lenorix\BeelSdk\Generated\Model\CreateProductRequest;
+use Lenorix\BeelSdk\Generated\Model\UpdateProductRequest;
+use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkDeleteBody;
+use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkDeleteResponse200Data;
+use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkPostBody;
+use Lenorix\BeelSdk\Http\ResponseContext;
 
 /**
  * @deprecated Use a company-scoped products resource.
- *
- * @method mixed list(array $query = [])
- * @method mixed create(\Lenorix\BeelSdk\Generated\Model\CreateProductRequest $request)
- * @method mixed get(string $productId)
- * @method mixed update(string $productId, \Lenorix\BeelSdk\Generated\Model\UpdateProductRequest $request)
- * @method void delete(string $productId)
- * @method mixed createBulk(\Lenorix\BeelSdk\Generated\Model\V1ProductsBulkPostBody $request)
- * @method mixed deleteBulk(array $query = [])
  */
 final readonly class ProductsResource extends GeneratedResource
 {
-    public function __construct(Client $client)
+    public function __construct(Client $client, ?ResponseContext $responseContext = null)
     {
-        parent::__construct($client, ['list' => 'listProducts', 'create' => 'createProduct', 'get' => 'getProduct', 'update' => 'updateProduct', 'delete' => 'deleteProduct', 'search' => 'searchProducts', 'createBulk' => 'createProductsBulk', 'deleteBulk' => 'deleteProductsBulk']);
+        parent::__construct($client, $responseContext);
     }
 
     /** Search the deprecated product-search route (the company list route is preferred). */
@@ -33,5 +31,43 @@ final readonly class ProductsResource extends GeneratedResource
         }
 
         return $this->execute(fn () => $this->client->searchProducts($parameters));
+    }
+
+    /**
+     * @param  array<string, mixed>  $query
+     */
+    public function list(array $query = []): mixed
+    {
+        return $this->execute(fn () => $this->client->listProducts($query));
+    }
+
+    public function create(CreateProductRequest $request): mixed
+    {
+        return $this->execute(fn () => $this->client->createProduct($request));
+    }
+
+    public function get(string $productId): mixed
+    {
+        return $this->execute(fn () => $this->client->getProduct($productId));
+    }
+
+    public function update(string $productId, UpdateProductRequest $request): mixed
+    {
+        return $this->execute(fn () => $this->client->updateProduct($productId, $request));
+    }
+
+    public function delete(string $productId): void
+    {
+        $this->execute(fn () => $this->client->deleteProduct($productId));
+    }
+
+    public function createBulk(V1ProductsBulkPostBody $request): mixed
+    {
+        return $this->execute(fn () => $this->client->createProductsBulk($request));
+    }
+
+    public function deleteBulk(V1ProductsBulkDeleteBody $request): V1ProductsBulkDeleteResponse200Data
+    {
+        return $this->execute(fn () => $this->client->deleteProductsBulk($request));
     }
 }

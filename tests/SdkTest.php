@@ -15,6 +15,7 @@ use Lenorix\BeelSdk\Exception\WebhookVerificationError;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateCustomerRequest;
 use Lenorix\BeelSdk\Generated\Model\CreateInvoiceRequest;
+use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkDeleteBody;
 use Lenorix\BeelSdk\Generated\Model\ValidateNifResponse;
 use Lenorix\BeelSdk\Generated\Model\VeriFactuConfiguration;
 use Lenorix\BeelSdk\Http\RetryingClient;
@@ -107,6 +108,22 @@ it('keeps the NPM NIF validation convenience call while using Jane request model
         ->and((string) $transport->requests[0]->getBody())->toContain('B12345678');
 });
 
+it('delegates legacy bulk product deletion with its generated request model', function () {
+    $transport = new RecordingPsrClient([
+        new Response(200, ['Content-Type' => 'application/json'], '{"success":true,"data":{"deleted_products":["product-1"],"errors":[],"summary":{"total_processed":1,"successful":1,"failed":0}}}'),
+    ]);
+    $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 0, httpClient: $transport);
+
+    $result = $beel->products->deleteBulk(
+        (new V1ProductsBulkDeleteBody)->setProductIds(['product-1']),
+    );
+
+    expect($result->getDeletedProducts())->toBe(['product-1'])
+        ->and($transport->requests[0]->getMethod())->toBe('DELETE')
+        ->and($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/products/bulk')
+        ->and(json_decode((string) $transport->requests[0]->getBody(), true))->toBe(['product_ids' => ['product-1']]);
+});
+
 it('keeps authentication isolated between client instances', function () {
     $firstTransport = new RecordingPsrClient([new Response(200, ['Content-Type' => 'application/json'], '{}')]);
     $secondTransport = new RecordingPsrClient([new Response(200, ['Content-Type' => 'application/json'], '{}')]);
@@ -145,6 +162,26 @@ it('delegates company invoice creation to Jane with auth, path and generated mod
         ->and($transport->requests[0]->getHeaderLine('Authorization'))->toBe('Bearer beel_sk_test_key')
         ->and($transport->requests[0]->getHeaderLine('Idempotency-Key'))->not->toBe('')
         ->and($transport->requests[0]->getHeaderLine('Content-Type'))->toContain('application/json');
+});
+
+it('maps an undocumented gateway error response to a typed BeeL error', function () {
+    $transport = new RecordingPsrClient([
+        new Response(502, ['Content-Type' => 'application/json', 'Retry-After' => '0'], '{"success":false,"error":{"code":"TRANSIENT","message":"Try again"}}'),
+        new Response(502, ['Content-Type' => 'application/json', 'X-Request-Id' => 'req-gateway'], '{"success":false,"error":{"code":"UPSTREAM_UNAVAILABLE","message":"Bad gateway","details":{"retry_after":4}}}'),
+    ]);
+    $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 1, httpClient: $transport);
+
+    try {
+        $beel->company('company-1')->invoices->get('invoice-1');
+        test()->fail('Expected an API error for the gateway response.');
+    } catch (BeelApiError $exception) {
+        expect($exception->statusCode)->toBe(502)
+            ->and($exception->apiCode)->toBe('UPSTREAM_UNAVAILABLE')
+            ->and($exception->requestId)->toBe('req-gateway')
+            ->and($exception->retryAfter)->toBe(4);
+    }
+
+    expect(count($transport->requests))->toBe(2);
 });
 
 it('uses generated request models in the customer builder and matches required-field checks', function () {

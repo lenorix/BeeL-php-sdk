@@ -6,31 +6,35 @@ namespace Lenorix\BeelSdk\Resource;
 
 use Lenorix\BeelSdk\Exception\BeelApiError;
 use Lenorix\BeelSdk\Generated\Client;
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Http\ResponseContext;
 use Throwable;
 
-/** Maps ergonomic method names to existing operations on the generated Jane client. */
+/** Shared error mapping and response unwrapping for resources that call Jane directly. */
 abstract readonly class GeneratedResource
 {
-    /** @param array<string, string> $operations @param list<mixed> $prefixArguments */
-    public function __construct(protected Client $client, private array $operations, private array $prefixArguments = []) {}
-
-    public function __call(string $name, array $arguments): mixed
-    {
-        $operation = $this->operations[$name] ?? null;
-        if ($operation === null || ! method_exists($this->client, $operation)) {
-            throw new \BadMethodCallException(sprintf('Unknown %s operation: %s', static::class, $name));
-        }
-
-        return $this->execute(fn () => $this->client->{$operation}(...[...$this->prefixArguments, ...$arguments]));
-    }
+    public function __construct(
+        protected Client $client,
+        protected ?ResponseContext $responseContext = null,
+    ) {}
 
     /** Run one generated endpoint call and unwrap its generated response envelope. */
     protected function execute(callable $operation): mixed
     {
+        $this->responseContext?->reset();
+
         try {
             $response = $operation();
         } catch (Throwable $exception) {
             throw BeelApiError::fromGenerated($exception);
+        }
+
+        if ($response instanceof ErrorResponse) {
+            throw BeelApiError::fromErrorResponse(
+                $response,
+                $this->responseContext?->response(),
+                $this->responseContext?->body(),
+            );
         }
 
         return $this->unwrap($response);

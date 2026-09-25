@@ -6,6 +6,7 @@ namespace Lenorix\BeelSdk\Resource;
 
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\UpdateCompanyRequest;
+use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\Company\CompanyCustomersResource;
 use Lenorix\BeelSdk\Resource\Company\CompanyInvoicesResource;
 use Lenorix\BeelSdk\Resource\Company\CompanyPaymentConnectionsResource;
@@ -33,17 +34,17 @@ final readonly class CompanyScope extends GeneratedResource
 
     public CompanyVeriFactuConfigurationResource $verifactuConfiguration;
 
-    public function __construct(Client $client, public string $companyId)
+    public function __construct(Client $client, public string $companyId, ?ResponseContext $responseContext = null)
     {
-        parent::__construct($client, [], [$companyId]);
-        $this->invoices = new CompanyInvoicesResource($client, $companyId);
-        $this->customers = new CompanyCustomersResource($client, $companyId);
-        $this->products = new CompanyProductsResource($client, $companyId);
-        $this->series = new CompanySeriesResource($client, $companyId);
-        $this->recurringInvoices = new CompanyRecurringInvoicesResource($client, $companyId);
-        $this->paymentConnections = new CompanyPaymentConnectionsResource($client, $companyId);
-        $this->taxConfiguration = new CompanyTaxConfigurationResource($client, $companyId);
-        $this->verifactuConfiguration = new CompanyVeriFactuConfigurationResource($client, $companyId);
+        parent::__construct($client, $responseContext);
+        $this->invoices = new CompanyInvoicesResource($client, $companyId, $this->responseContext);
+        $this->customers = new CompanyCustomersResource($client, $companyId, $this->responseContext);
+        $this->products = new CompanyProductsResource($client, $companyId, $this->responseContext);
+        $this->series = new CompanySeriesResource($client, $companyId, $this->responseContext);
+        $this->recurringInvoices = new CompanyRecurringInvoicesResource($client, $companyId, $this->responseContext);
+        $this->paymentConnections = new CompanyPaymentConnectionsResource($client, $companyId, $this->responseContext);
+        $this->taxConfiguration = new CompanyTaxConfigurationResource($client, $companyId, $this->responseContext);
+        $this->verifactuConfiguration = new CompanyVeriFactuConfigurationResource($client, $companyId, $this->responseContext);
     }
 
     public function get(): mixed
@@ -61,6 +62,9 @@ final readonly class CompanyScope extends GeneratedResource
         return $this->execute(fn () => $this->client->deleteCompanyById($this->companyId));
     }
 
+    /**
+     * @param  array<string, mixed>  $query
+     */
     public function fiscalSummary(array $query = []): mixed
     {
         return $this->execute(fn () => $this->client->getCompanyFiscalSummary($this->companyId, $query));

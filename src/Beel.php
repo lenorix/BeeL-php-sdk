@@ -11,6 +11,7 @@ use Http\Client\Common\Plugin\HeaderDefaultsPlugin;
 use Http\Discovery\Psr17FactoryDiscovery;
 use Lenorix\BeelSdk\Generated\Client as JaneClient;
 use Lenorix\BeelSdk\Generated\Model\InvoicePdfResponseData;
+use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Http\RetryingClient;
 use Lenorix\BeelSdk\Resource\AccountScope;
 use Lenorix\BeelSdk\Resource\AccountsResource;
@@ -51,6 +52,8 @@ final readonly class Beel
 
     private ClientInterface $transport;
 
+    private ResponseContext $responseContext;
+
     public function __construct(
         string $apiKey,
         string $baseUrl = 'https://app.beel.es/api',
@@ -68,31 +71,32 @@ final readonly class Beel
         }
 
         $uri = Psr17FactoryDiscovery::findUriFactory()->createUri(rtrim($baseUrl, '/'));
-        $this->transport = new RetryingClient($httpClient ?? new GuzzleClient, $maxRetries, $retryDelayMs, $maxRetryDelayMs, $autoIdempotencyKey);
+        $this->responseContext = new ResponseContext;
+        $this->transport = new RetryingClient($httpClient ?? new GuzzleClient, $maxRetries, $retryDelayMs, $maxRetryDelayMs, $autoIdempotencyKey, $this->responseContext);
         $this->raw = JaneClient::create($this->transport, [
             new AddHostPlugin($uri),
             new AddPathPlugin($uri),
             new HeaderDefaultsPlugin(['Authorization' => 'Bearer '.$apiKey]),
         ], applyServerPlugins: false);
 
-        $this->catalogs = new CatalogsResource($this->raw);
-        $this->nif = new NifResource($this->raw);
-        $this->accounts = new AccountsResource($this->raw);
-        $this->invoices = new InvoicesResource($this->raw);
-        $this->customers = new CustomersResource($this->raw);
-        $this->products = new ProductsResource($this->raw);
-        $this->series = new SeriesResource($this->raw);
-        $this->configuration = new ConfigurationResource($this->raw);
+        $this->catalogs = new CatalogsResource($this->raw, $this->responseContext);
+        $this->nif = new NifResource($this->raw, $this->responseContext);
+        $this->accounts = new AccountsResource($this->raw, $this->responseContext);
+        $this->invoices = new InvoicesResource($this->raw, $this->responseContext);
+        $this->customers = new CustomersResource($this->raw, $this->responseContext);
+        $this->products = new ProductsResource($this->raw, $this->responseContext);
+        $this->series = new SeriesResource($this->raw, $this->responseContext);
+        $this->configuration = new ConfigurationResource($this->raw, $this->responseContext);
     }
 
     public function company(string $companyId): CompanyScope
     {
-        return new CompanyScope($this->raw, $companyId);
+        return new CompanyScope($this->raw, $companyId, $this->responseContext);
     }
 
     public function account(string $accountId): AccountScope
     {
-        return new AccountScope($this->raw, $accountId);
+        return new AccountScope($this->raw, $accountId, $this->responseContext);
     }
 
     /**
@@ -105,7 +109,7 @@ final readonly class Beel
         /** @var InvoicePdfResponseData|null $pdf */
         $pdf = $this->invoices->getPdf($invoiceId);
         if (! $pdf instanceof InvoicePdfResponseData) {
-            throw new \RuntimeException('Invoice PDF is still being generated; retry the request later.');
+            throw new \RuntimeException('\Lenorix\BeelSdk\Generated\Model\Invoice PDF is still being generated; retry the request later.');
         }
 
         $request = Psr17FactoryDiscovery::findRequestFactory()->createRequest('GET', $pdf->getDownloadUrl());

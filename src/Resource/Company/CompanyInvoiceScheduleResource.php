@@ -6,13 +6,14 @@ namespace Lenorix\BeelSdk\Resource\Company;
 
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\SetInvoiceScheduleRequest;
+use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
 final readonly class CompanyInvoiceScheduleResource extends GeneratedResource
 {
-    public function __construct(Client $client, private string $companyId)
+    public function __construct(Client $client, private string $companyId, ?ResponseContext $responseContext = null)
     {
-        parent::__construct($client, ['get' => 'getCompanyInvoiceSchedule', 'set' => 'setCompanyInvoiceSchedule', 'clear' => 'deleteCompanyInvoiceSchedule'], [$companyId]);
+        parent::__construct($client, $responseContext);
     }
 
     public function get(string $invoiceId): mixed

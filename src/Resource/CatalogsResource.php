@@ -8,16 +8,27 @@ use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\InvoiceCustomizationOptionsResponse;
 use Lenorix\BeelSdk\Generated\Model\TaxTypesCatalogResponse;
 use Lenorix\BeelSdk\Generated\Model\UpdateMeRequest;
+use Lenorix\BeelSdk\Http\ResponseContext;
 
-/**
- * @method TaxTypesCatalogResponse taxTypes()
- * @method InvoiceCustomizationOptionsResponse invoiceCustomizationOptions()
- * @method mixed updateMe(UpdateMeRequest $request)
- */
 final readonly class CatalogsResource extends GeneratedResource
 {
-    public function __construct(Client $client)
+    public function __construct(Client $client, ?ResponseContext $responseContext = null)
     {
-        parent::__construct($client, ['taxTypes' => 'getTaxTypes', 'invoiceCustomizationOptions' => 'listInvoiceCustomizationOptions', 'updateMe' => 'updateMe']);
+        parent::__construct($client, $responseContext);
+    }
+
+    public function taxTypes(): TaxTypesCatalogResponse
+    {
+        return $this->execute(fn () => $this->client->getTaxTypes());
+    }
+
+    public function invoiceCustomizationOptions(): InvoiceCustomizationOptionsResponse
+    {
+        return $this->execute(fn () => $this->client->listInvoiceCustomizationOptions());
+    }
+
+    public function updateMe(UpdateMeRequest $request): mixed
+    {
+        return $this->execute(fn () => $this->client->updateMe($request));
     }
 }

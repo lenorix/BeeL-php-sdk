@@ -17,13 +17,18 @@ final readonly class RetryingClient implements ClientInterface
 
     public const DEFAULT_MAX_RETRY_DELAY_MS = 30_000;
 
+    private ResponseContext $responseContext;
+
     public function __construct(
         private ClientInterface $client,
         private int $maxRetries = self::DEFAULT_MAX_RETRIES,
         private int $retryDelayMs = self::DEFAULT_RETRY_DELAY_MS,
         private int $maxRetryDelayMs = self::DEFAULT_MAX_RETRY_DELAY_MS,
         private bool $autoIdempotencyKey = true,
+        ?ResponseContext $responseContext = null,
     ) {
+        $this->responseContext = $responseContext ?? new ResponseContext;
+
         if ($maxRetries < 0 || $retryDelayMs < 0 || $maxRetryDelayMs < 0) {
             throw new \InvalidArgumentException('Retry limits and delays must not be negative.');
         }
@@ -45,6 +50,7 @@ final readonly class RetryingClient implements ClientInterface
             }
 
             $response = $this->client->sendRequest($request);
+            $this->responseContext->capture($response);
             if ($attempt >= $this->maxRetries || ! $canReplayBody || ($response->getStatusCode() < 500 && $response->getStatusCode() !== 429)) {
                 return $response;
             }
@@ -56,14 +62,19 @@ final readonly class RetryingClient implements ClientInterface
         }
     }
 
+    public function responseContext(): ResponseContext
+    {
+        return $this->responseContext;
+    }
+
     private function retryDelay(ResponseInterface $response, int $attempt): int
     {
         $retryAfter = $response->getHeaderLine('Retry-After');
         if ($retryAfter !== '' && ctype_digit($retryAfter)) {
-            return (int) $retryAfter * 1_000;
+            return $this->boundedDelay((float) $retryAfter);
         }
         if ($retryAfter !== '' && ($retryAt = strtotime($retryAfter)) !== false) {
-            return max(0, ($retryAt - time()) * 1_000);
+            return $this->boundedDelay(max(0, $retryAt - time()));
         }
         $body = $response->getBody();
         if ($body->isSeekable()) {
@@ -72,7 +83,7 @@ final readonly class RetryingClient implements ClientInterface
                 $error = json_decode((string) $body, true);
                 $seconds = $error['error']['retry_after'] ?? $error['retry_after'] ?? null;
                 if (is_numeric($seconds)) {
-                    return max(0, (int) ((float) $seconds * 1_000));
+                    return $this->boundedDelay((float) $seconds);
                 }
             } finally {
                 $body->seek($position);
@@ -90,6 +101,11 @@ final readonly class RetryingClient implements ClientInterface
         }
 
         return random_int((int) ($base * 0.5), $base);
+    }
+
+    private function boundedDelay(float $seconds): int
+    {
+        return (int) min(max(0, $seconds * 1_000), $this->maxRetryDelayMs);
     }
 
     private function uuid(): string

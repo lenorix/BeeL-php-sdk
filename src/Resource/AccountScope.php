@@ -8,6 +8,7 @@ use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\ChangeAccessLevelRequest;
 use Lenorix\BeelSdk\Generated\Model\CreateClaimTokenRequest;
 use Lenorix\BeelSdk\Generated\Model\SetAccountOwnerRequest;
+use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\Account\AccountCompaniesResource;
 use Lenorix\BeelSdk\Resource\Account\AccountEmailsResource;
 use Lenorix\BeelSdk\Resource\Account\AccountInvitationsResource;
@@ -26,14 +27,14 @@ final readonly class AccountScope extends GeneratedResource
 
     public AccountEmailsResource $emails;
 
-    public function __construct(Client $client, public string $accountId)
+    public function __construct(Client $client, public string $accountId, ?ResponseContext $responseContext = null)
     {
-        parent::__construct($client, [], [$accountId]);
-        $this->companies = new AccountCompaniesResource($client, $accountId);
-        $this->members = new AccountMembersResource($client, $accountId);
-        $this->invitations = new AccountInvitationsResource($client, $accountId);
-        $this->webhooks = new AccountWebhooksResource($client, $accountId);
-        $this->emails = new AccountEmailsResource($client, $accountId);
+        parent::__construct($client, $responseContext);
+        $this->companies = new AccountCompaniesResource($client, $accountId, $this->responseContext);
+        $this->members = new AccountMembersResource($client, $accountId, $this->responseContext);
+        $this->invitations = new AccountInvitationsResource($client, $accountId, $this->responseContext);
+        $this->webhooks = new AccountWebhooksResource($client, $accountId, $this->responseContext);
+        $this->emails = new AccountEmailsResource($client, $accountId, $this->responseContext);
     }
 
     public function get(): mixed

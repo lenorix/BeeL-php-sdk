@@ -18,7 +18,11 @@ final readonly class WebhookVerifier
         }
     }
 
-    /** Verify the raw request body and return its decoded event payload. */
+    /**
+     * Verify the raw request body and return its decoded event payload.
+     *
+     * @return array<string, mixed>
+     */
     public function verify(string $payload, ?string $signatureHeader = null, ?int $now = null): array
     {
         if ($signatureHeader === null || trim($signatureHeader) === '') {

@@ -1,7 +1,7 @@
 {
     "name": "lenorix/beel-sdk",
     "type": "library",
-    "description": "Official PHP SDK for the BeeL invoicing API",
+    "description": "Unofficial community PHP SDK for the BeeL invoicing API",
     "keywords": [
         "api-client",
         "beel",
@@ -35,6 +35,7 @@
     "require-dev": {
         "jane-php/open-api-3": "^7.14",
         "laravel/pint": "^1.0",
+        "phpstan/phpstan": "^2.1",
         "pestphp/pest": "^4.0"
     },
     "autoload": {
@@ -50,7 +51,9 @@
     "scripts": {
         "test": "php -d memory_limit=512M vendor/bin/pest --no-coverage",
         "test-coverage": "vendor/bin/pest --coverage",
-        "format": "vendor/bin/pint",
+        "pint": "vendor/bin/pint src/Beel.php src/Builder src/Exception src/Http src/Resource src/Webhook tests",
+        "format": "vendor/bin/pint src/Beel.php src/Builder src/Exception src/Http src/Resource src/Webhook tests",
+        "phpstan": "vendor/bin/phpstan analyse --configuration=phpstan.neon.dist --memory-limit=512M",
         "generate": "@php bin/prepare-openapi.php && php -d memory_limit=256M vendor/bin/jane-openapi generate"
     },
     "config": {

@@ -6,6 +6,8 @@
 
 An instance-based PHP client for the [BeeL invoicing API](https://docs.beel.es), including company and account scoped resources, VeriFactu invoicing, retries, idempotency, PDF downloads, and webhook signature verification.
 
+> **Unofficial community SDK.** BeeL does not make, maintain, or endorse this package. It is a community-made client for the BeeL API.
+
 Requires **PHP 8.4+**. The HTTP API is backed by the JanePHP client generated from BeeL's OpenAPI contract.
 
 ## Installation
@@ -53,7 +55,7 @@ $beel = new Beel(
 
 Use a test key (`beel_sk_test_...`) while developing and a live key (`beel_sk_live_...`) in production. The key selects the environment; the base URL stays the same.
 
-`maxRetries` is the maximum number of retries after the first attempt. The SDK retries `429` and `5xx` responses with exponential backoff, honors `Retry-After` when provided, and uses the same idempotency key for every retry of a POST. It does not retry other client errors.
+`maxRetries` is the maximum number of retries after the first attempt. The SDK retries `429` and `5xx` responses with exponential backoff, honors `Retry-After` when provided up to `maxRetryDelayMs`, and uses the same idempotency key for every retry of a POST. It does not retry other client errors.
 
 The client is instance-based. Each `Beel` instance has its own API key and transport; there is no global configuration or shared authentication state.
 

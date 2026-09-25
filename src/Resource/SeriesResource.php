@@ -7,23 +7,16 @@ namespace Lenorix\BeelSdk\Resource;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateSeriesRequest;
 use Lenorix\BeelSdk\Generated\Model\UpdateSeriesRequest;
+use Lenorix\BeelSdk\Http\ResponseContext;
 
 /**
  * @deprecated Use a company-scoped series resource.
- *
- * @method mixed setDefault(string $seriesId)
  */
 final readonly class SeriesResource extends GeneratedResource
 {
-    public function __construct(Client $client)
+    public function __construct(Client $client, ?ResponseContext $responseContext = null)
     {
-        parent::__construct($client, [
-            'list' => 'listSeries',
-            'create' => 'createSeries',
-            'update' => 'updateSeries',
-            'delete' => 'deleteSeries',
-            'setDefault' => 'setDefaultSeries',
-        ]);
+        parent::__construct($client, $responseContext);
     }
 
     public function list(?bool $active = null): mixed
@@ -41,5 +34,15 @@ final readonly class SeriesResource extends GeneratedResource
     public function update(string $seriesId, UpdateSeriesRequest $request): mixed
     {
         return $this->execute(fn () => $this->client->updateSeries($seriesId, $request));
+    }
+
+    public function delete(string $seriesId): mixed
+    {
+        return $this->execute(fn () => $this->client->deleteSeries($seriesId));
+    }
+
+    public function setDefault(string $seriesId): mixed
+    {
+        return $this->execute(fn () => $this->client->setDefaultSeries($seriesId));
     }
 }
