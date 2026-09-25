@@ -3,12 +3,14 @@
     "type": "library",
     "description": "Unofficial community PHP SDK for the BeeL invoicing API",
     "keywords": [
+        "api",
         "api-client",
         "beel",
         "lenorix",
         "beel-sdk",
         "invoicing",
-        "php-sdk",
+        "payment",
+        "sdk",
         "verifactu"
     ],
     "homepage": "https://github.com/lenorix/BeeL-php-sdk",
