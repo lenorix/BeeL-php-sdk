@@ -10,8 +10,10 @@ enum WebhookEventType: string
     case VERIFACTU_STATUS_UPDATED = 'verifactu.status.updated';
     case INVOICE_ISSUED = 'invoice.issued';
     case INVOICE_EMAIL_SENT = 'invoice.email.sent';
+    case INVOICE_PDF_GENERATED = 'invoice.pdf.generated';
     case INVOICE_VOIDED = 'invoice.voided';
     case RECURRING_INVOICE_PAUSED = 'recurring_invoice.paused';
+    case INVOICE_SCHEDULE_FAILED = 'invoice.schedule_failed';
     case ACCOUNT_CLAIMED = 'account.claimed';
     case COMPANY_CREATED = 'company.created';
     case REPRESENTATION_SIGNED = 'representation.signed';

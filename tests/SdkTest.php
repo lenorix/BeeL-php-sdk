@@ -19,7 +19,16 @@ use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkDeleteBody;
 use Lenorix\BeelSdk\Generated\Model\ValidateNifResponse;
 use Lenorix\BeelSdk\Generated\Model\VeriFactuConfiguration;
 use Lenorix\BeelSdk\Generated\Model\WebhookEvent;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataAccountClaimed;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataCompanyCreated;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceEmailSent;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceIssued;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoicePdfGenerated;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceScheduleFailed;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceVoided;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataRecurringInvoicePaused;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataRepresentationSigned;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataVeriFactuStatusUpdated;
 use Lenorix\BeelSdk\Http\RetryingClient;
 use Lenorix\BeelSdk\Resource\Account\AccountCompaniesResource;
 use Lenorix\BeelSdk\Resource\Account\AccountInvitationsResource;
@@ -286,7 +295,9 @@ it('verifies webhook HMAC signatures and rejects stale timestamps', function () 
         ->toBe(['type' => 'invoice.issued', 'data' => []]);
     expect(fn () => $verifier->verify($body, "t={$timestamp},v1={$signature}", $timestamp + 301))
         ->toThrow(WebhookVerificationError::class);
-    expect(WebhookEventType::INVOICE_ISSUED->value)->toBe('invoice.issued');
+    expect(WebhookEventType::INVOICE_ISSUED->value)->toBe('invoice.issued')
+        ->and(WebhookEventType::INVOICE_PDF_GENERATED->value)->toBe('invoice.pdf.generated')
+        ->and(WebhookEventType::INVOICE_SCHEDULE_FAILED->value)->toBe('invoice.schedule_failed');
 });
 
 it('verifies webhooks into Jane generated event models', function () {
@@ -320,6 +331,80 @@ it('verifies webhooks into Jane generated event models', function () {
     expect(fn () => (new WebhookVerifier($secret))->verifyEvent($body, 't='.$timestamp.',v1=invalid', $timestamp))
         ->toThrow(WebhookVerificationError::class);
 });
+
+it('uses webhook event type to select the correct generated data model', function (string $type, array $data, string $expectedModel) {
+    $secret = 'whsec_test';
+    $timestamp = 1_800_000_000;
+    $body = json_encode([
+        'id' => 'evt-123',
+        'type' => $type,
+        'created_at' => '2026-09-25T12:00:00Z',
+        'api_version' => '2026-09-01',
+        'data' => $data,
+    ], JSON_THROW_ON_ERROR);
+    $signature = hash_hmac('sha256', $timestamp.'.'.$body, $secret);
+
+    $event = (new WebhookVerifier($secret))->verifyEvent($body, "t={$timestamp},v1={$signature}", $timestamp);
+
+    expect($event->getData())->toBeInstanceOf($expectedModel);
+})->with([
+    'issued invoice' => [
+        'invoice.issued',
+        ['invoice_id' => 'invoice-123', 'invoice_number' => 'A-1'],
+        WebhookEventDataInvoiceIssued::class,
+    ],
+    'sent invoice' => [
+        'invoice.email.sent',
+        ['invoice_id' => 'invoice-123', 'all_recipients' => ['customer@example.test'], 'sent_at' => '2026-09-25T12:00:00.123Z'],
+        WebhookEventDataInvoiceEmailSent::class,
+    ],
+    'generated invoice PDF' => [
+        'invoice.pdf.generated',
+        ['invoice_id' => 'invoice-123'],
+        WebhookEventDataInvoicePdfGenerated::class,
+    ],
+    'voided invoice shares fields with issued invoice' => [
+        'invoice.voided',
+        ['invoice_id' => 'invoice-123', 'invoice_number' => 'A-1', 'cancellation_reason' => 'Correction'],
+        WebhookEventDataInvoiceVoided::class,
+    ],
+    'paused recurring invoice' => [
+        'recurring_invoice.paused',
+        ['recurring_invoice_id' => 'recurring-123', 'reason' => 'DOWNGRADE', 'since' => '2026-09-25T12:00:00.123Z'],
+        WebhookEventDataRecurringInvoicePaused::class,
+    ],
+    'failed schedule shares invoice id with PDF generated' => [
+        'invoice.schedule_failed',
+        ['invoice_id' => 'invoice-123'],
+        WebhookEventDataInvoiceScheduleFailed::class,
+    ],
+    'updated VeriFactu status' => [
+        'verifactu.status.updated',
+        ['invoice_id' => 'invoice-123', 'verifactu_registration_id' => 'registration-123', 'previous_status' => 'PENDING', 'new_status' => 'ACCEPTED'],
+        WebhookEventDataVeriFactuStatusUpdated::class,
+    ],
+    'claimed account' => [
+        'account.claimed',
+        ['account_id' => 'account-123', 'external_ref' => 'client-123'],
+        WebhookEventDataAccountClaimed::class,
+    ],
+    'created company shares account fields with claimed account' => [
+        'company.created',
+        ['account_id' => 'account-123', 'external_ref' => 'client-123', 'nif' => 'B12345678'],
+        WebhookEventDataCompanyCreated::class,
+    ],
+    'signed representation shares fields with account events' => [
+        'representation.signed',
+        [
+            'account_id' => 'account-123',
+            'external_ref' => 'client-123',
+            'company_id' => 'company-123',
+            'nif' => 'B12345678',
+            'signed_at' => '2026-09-25T12:00:00.123Z',
+        ],
+        WebhookEventDataRepresentationSigned::class,
+    ],
+]);
 
 it('downloads the PDF from its signed URL without forwarding the API key', function () {
     $transport = new RecordingPsrClient([

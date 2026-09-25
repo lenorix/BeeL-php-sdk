@@ -6,6 +6,16 @@ namespace Lenorix\BeelSdk\Webhook;
 
 use Lenorix\BeelSdk\Exception\WebhookVerificationError;
 use Lenorix\BeelSdk\Generated\Model\WebhookEvent;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataAccountClaimed;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataCompanyCreated;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceEmailSent;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceIssued;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoicePdfGenerated;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceScheduleFailed;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceVoided;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataRecurringInvoicePaused;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataRepresentationSigned;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataVeriFactuStatusUpdated;
 use Lenorix\BeelSdk\Generated\Normalizer\JaneObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -13,6 +23,22 @@ use Symfony\Component\Serializer\SerializerInterface;
 /** Verify signed BeeL webhook requests using the original JSON body. */
 final readonly class WebhookVerifier
 {
+    // The generated oneOf normalizer guesses from overlapping data fields; the outer type is the actual discriminator.
+    // Keep this map in sync with WebhookEventType and the OpenAPI WebhookEvent.data schema.
+    /** @var array<string, class-string> */
+    private const EVENT_DATA_MODELS = [
+        'invoice.issued' => WebhookEventDataInvoiceIssued::class,
+        'invoice.email.sent' => WebhookEventDataInvoiceEmailSent::class,
+        'invoice.pdf.generated' => WebhookEventDataInvoicePdfGenerated::class,
+        'invoice.voided' => WebhookEventDataInvoiceVoided::class,
+        'recurring_invoice.paused' => WebhookEventDataRecurringInvoicePaused::class,
+        'invoice.schedule_failed' => WebhookEventDataInvoiceScheduleFailed::class,
+        'verifactu.status.updated' => WebhookEventDataVeriFactuStatusUpdated::class,
+        'account.claimed' => WebhookEventDataAccountClaimed::class,
+        'company.created' => WebhookEventDataCompanyCreated::class,
+        'representation.signed' => WebhookEventDataRepresentationSigned::class,
+    ];
+
     private SerializerInterface $serializer;
 
     /**
@@ -102,9 +128,15 @@ final readonly class WebhookVerifier
     public function verifyEvent(string $payload, ?string $signatureHeader = null, ?int $now = null): WebhookEvent
     {
         $event = $this->verify($payload, $signatureHeader, $now);
-        $event = $this->normalizeCreatedAt($event);
+        $event = $this->normalizeDateTimeValues($event);
 
         try {
+            $eventType = $event['type'] ?? null;
+            $eventData = $event['data'] ?? null;
+            if (is_string($eventType) && is_array($eventData) && isset(self::EVENT_DATA_MODELS[$eventType])) {
+                $event['data'] = $this->serializer->denormalize($eventData, self::EVENT_DATA_MODELS[$eventType], 'json');
+            }
+
             $model = $this->serializer->denormalize($event, WebhookEvent::class, 'json');
         } catch (\Throwable $exception) {
             throw new WebhookVerificationError('Webhook payload does not match the BeeL event schema.', previous: $exception);
@@ -116,21 +148,28 @@ final readonly class WebhookVerifier
     /** @param array<string, mixed> $event
      * @return array<string, mixed>
      */
-    private function normalizeCreatedAt(array $event): array
+    private function normalizeDateTimeValues(array $event): array
     {
-        $createdAt = $event['created_at'] ?? null;
-        if (! is_string($createdAt)) {
-            return $event;
-        }
+        foreach ($event as $key => $value) {
+            if (is_array($value)) {
+                $event[$key] = $this->normalizeDateTimeValues($value);
 
-        $normalized = preg_replace_callback(
-            '/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$/',
-            static fn (array $matches): string => $matches[1].($matches[2] === 'Z' ? '+00:00' : $matches[2]),
-            $createdAt,
-        );
+                continue;
+            }
 
-        if ($normalized !== null) {
-            $event['created_at'] = $normalized;
+            if (! is_string($value)) {
+                continue;
+            }
+
+            $normalized = preg_replace_callback(
+                '/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$/',
+                static fn (array $matches): string => $matches[1].($matches[2] === 'Z' ? '+00:00' : $matches[2]),
+                $value,
+            );
+
+            if ($normalized !== null) {
+                $event[$key] = $normalized;
+            }
         }
 
         return $event;
