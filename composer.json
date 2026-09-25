@@ -30,7 +30,8 @@
         "php": "^8.4",
         "php-http/client-common": "^2.0",
         "php-http/discovery": "^1.6",
-        "psr/http-client": "^1.0"
+        "psr/http-client": "^1.0",
+        "symfony/serializer": "^5.4 || ^6.4 || ^7.0 || ^8.0"
     },
     "require-dev": {
         "jane-php/open-api-3": "^7.14",

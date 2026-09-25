@@ -173,19 +173,22 @@ Verify the raw request body before processing an event. The verifier checks the 
 
 ```php
 use Lenorix\BeelSdk\Webhook\WebhookVerifier;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceIssued;
 
 $verifier = new WebhookVerifier($_ENV['BEEL_WEBHOOK_SECRET']);
-$event = $verifier->verify(
+$event = $verifier->verifyEvent(
     payload: $rawRequestBody,
     signatureHeader: $signatureHeader, // BeeL-Signature request header
 );
 
-if ($event['type'] === 'verifactu.status.updated') {
-    // Handle the event.
+if ($event->getType() === 'invoice.issued'
+    && $event->getData() instanceof WebhookEventDataInvoiceIssued) {
+    $invoiceId = $event->getData()->getInvoiceId();
+    $invoiceNumber = $event->getData()->getInvoiceNumber();
 }
 ```
 
-The event names represented by the SDK are also available as `WebhookEventType` enum cases, for example `WebhookEventType::INVOICE_ISSUED->value`.
+`verifyEvent()` returns Jane's generated `WebhookEvent` model, with `data` denormalized to the generated model for its event type. This is useful when dispatching typed framework events, such as Laravel events. `verify()` remains available when you prefer the decoded payload as an array. Event names are also available as `WebhookEventType` enum cases, for example `WebhookEventType::INVOICE_ISSUED->value`.
 
 ## Errors
 

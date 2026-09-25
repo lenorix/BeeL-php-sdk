@@ -18,6 +18,8 @@ use Lenorix\BeelSdk\Generated\Model\CreateInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkDeleteBody;
 use Lenorix\BeelSdk\Generated\Model\ValidateNifResponse;
 use Lenorix\BeelSdk\Generated\Model\VeriFactuConfiguration;
+use Lenorix\BeelSdk\Generated\Model\WebhookEvent;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceIssued;
 use Lenorix\BeelSdk\Http\RetryingClient;
 use Lenorix\BeelSdk\Resource\Account\AccountCompaniesResource;
 use Lenorix\BeelSdk\Resource\Account\AccountInvitationsResource;
@@ -285,6 +287,38 @@ it('verifies webhook HMAC signatures and rejects stale timestamps', function () 
     expect(fn () => $verifier->verify($body, "t={$timestamp},v1={$signature}", $timestamp + 301))
         ->toThrow(WebhookVerificationError::class);
     expect(WebhookEventType::INVOICE_ISSUED->value)->toBe('invoice.issued');
+});
+
+it('verifies webhooks into Jane generated event models', function () {
+    $secret = 'whsec_test';
+    $timestamp = 1_800_000_000;
+    $body = json_encode([
+        'id' => 'evt-123',
+        'type' => 'invoice.issued',
+        'created_at' => '2026-09-25T12:00:00.123Z',
+        'api_version' => '2026-09-01',
+        'company_id' => 'company-123',
+        'data' => [
+            'invoice_id' => 'invoice-123',
+            'invoice_number' => 'A-2026/0001',
+            'customer_email' => 'customer@example.test',
+            'customer_name' => 'Example Customer',
+        ],
+    ], JSON_THROW_ON_ERROR);
+    $signature = hash_hmac('sha256', $timestamp.'.'.$body, $secret);
+
+    $event = (new WebhookVerifier($secret))->verifyEvent($body, "t={$timestamp},v1={$signature}", $timestamp);
+
+    expect($event)->toBeInstanceOf(WebhookEvent::class)
+        ->and($event->getId())->toBe('evt-123')
+        ->and($event->getType())->toBe('invoice.issued')
+        ->and($event->getCompanyId())->toBe('company-123')
+        ->and($event->getData())->toBeInstanceOf(WebhookEventDataInvoiceIssued::class)
+        ->and($event->getData()->getInvoiceId())->toBe('invoice-123')
+        ->and($event->getData()->getInvoiceNumber())->toBe('A-2026/0001');
+
+    expect(fn () => (new WebhookVerifier($secret))->verifyEvent($body, 't='.$timestamp.',v1=invalid', $timestamp))
+        ->toThrow(WebhookVerificationError::class);
 });
 
 it('downloads the PDF from its signed URL without forwarding the API key', function () {
