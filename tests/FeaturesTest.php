@@ -401,8 +401,8 @@ it('builds the typed event from an already verified payload', function () {
 
 // Retries and date-time normalization
 
-it('retries a failed request only when repeating it cannot duplicate a write', function (string $method, array $headers, bool $autoKey, int $expectedAttempts) {
-    $transport = new RecordingPsrClient([new Response(500), new Response(200)]);
+it('retries a failed request only when repeating it cannot duplicate a write', function (string $method, array $headers, bool $autoKey, int $expectedAttempts, int $status = 500) {
+    $transport = new RecordingPsrClient([new Response($status), new Response(200)]);
     $client = new RetryingClient($transport, maxRetries: 1, retryDelayMs: 0, maxRetryDelayMs: 0, autoIdempotencyKey: $autoKey);
 
     $client->sendRequest(new Request($method, 'https://example.test/v1/invoices', $headers, '{}'));
@@ -417,6 +417,8 @@ it('retries a failed request only when repeating it cannot duplicate a write', f
     'GET' => ['GET', [], false, 2],
     'PUT' => ['PUT', [], false, 2],
     'DELETE' => ['DELETE', [], false, 2],
+    'POST without key rate limited' => ['POST', [], false, 2, 429],
+    'PATCH without key rate limited' => ['PATCH', [], true, 2, 429],
 ]);
 
 it('normalizes only date-time fields and leaves look-alike text untouched', function () {
@@ -448,10 +450,15 @@ it('keeps free-text response values that look like dates as BeeL sent them', fun
 
 it('lists every field the generated normalizers parse as date-time', function () {
     $names = [];
+    $parses = 0;
     foreach (glob(__DIR__.'/../src/Generated/Normalizer/*.php') ?: [] as $file) {
-        preg_match_all("/createFromFormat\\('Y-m-d\\\\TH:i:sP', \\\$data\\['([A-Za-z0-9_]+)'\\]/", (string) file_get_contents($file), $matches);
+        $code = (string) file_get_contents($file);
+        $parses += substr_count($code, "createFromFormat('Y-m-d\\TH:i:sP'");
+        preg_match_all("/createFromFormat\\('Y-m-d\\\\TH:i:sP', \\\$data\\['([A-Za-z0-9_]+)'\\]/", $code, $matches);
         array_push($names, ...$matches[1]);
     }
+    // Every date-time parse must read a named field; any other form would escape the list.
+    expect(count($names))->toBe($parses);
     $names = array_values(array_unique($names));
     sort($names);
     $listed = DateTimeFields::NAMES;

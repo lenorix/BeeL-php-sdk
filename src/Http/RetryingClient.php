@@ -49,7 +49,7 @@ final readonly class RetryingClient implements ClientInterface
         $body = $request->getBody();
         $position = $body->isSeekable() ? $body->tell() : null;
         $canReplayBody = $position !== null || $body->getSize() === 0;
-        // A failed POST or PATCH may already have been applied; repeat it only when BeeL can deduplicate it.
+        // A POST or PATCH that failed with a 5xx may already have been applied; repeat it only when BeeL can deduplicate it.
         $canRetry = in_array($request->getMethod(), self::IDEMPOTENT_METHODS, true) || $request->hasHeader('Idempotency-Key');
 
         for ($attempt = 0; ; $attempt++) {
@@ -59,7 +59,10 @@ final readonly class RetryingClient implements ClientInterface
 
             $response = $this->normalizeDateTimePrecision($this->client->sendRequest($request));
             $this->responseContext->capture($response);
-            if ($attempt >= $this->maxRetries || ! $canReplayBody || ! $canRetry || ($response->getStatusCode() < 500 && $response->getStatusCode() !== 429)) {
+            // BeeL rejects a 429 without applying it; a 5xx may have been applied, so it needs $canRetry.
+            $status = $response->getStatusCode();
+            $retryable = $status === 429 || ($status >= 500 && $canRetry);
+            if ($attempt >= $this->maxRetries || ! $canReplayBody || ! $retryable) {
                 return $response;
             }
 

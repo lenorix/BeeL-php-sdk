@@ -6,8 +6,8 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 ### Fixed
 
-- A POST or PATCH without an `Idempotency-Key` is no longer retried after a `5xx` or `429`, since BeeL may already have applied it. This affected clients created with `autoIdempotencyKey: false` and PATCH requests without a key.
-- Date-time normalization for Jane now rewrites only the fields Jane parses as `date-time`. Before, any string value that looked like a date, such as a note or a metadata value, lost its fractional seconds and had `Z` replaced with `+00:00`.
+- A POST or PATCH without an `Idempotency-Key` is no longer retried after a `5xx`, since BeeL may already have applied it. PATCH requests get no automatic key, so they no longer retry on `5xx` unless you pass an `Idempotency-Key`, for example with `withOptions()`. POST requests without a key only happen with `autoIdempotencyKey: false`. A `429` is still retried for every method.
+- Date-time normalization for Jane now rewrites only the fields Jane parses as `date-time`. Before, values in other fields that looked like a date, such as notes, lost their fractional seconds and had `Z` replaced with `+00:00`.
 
 ### Changed
 
