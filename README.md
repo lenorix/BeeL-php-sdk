@@ -287,7 +287,7 @@ API errors are mapped to semantic exception classes. All extend `BeelApiError`:
 | `BeelRateLimitError` | 429 | `statusCode`, `retryAfter`, `retryAfterSeconds` |
 | `BeelApiError` | Other API errors | `statusCode`, `apiCode`, `details`, `requestId` |
 
-`$exception->context()` returns these fields as an array, ready for a PSR-3 logging context.
+`$exception->context()` returns `statusCode`, `apiCode`, `requestId` and `retryAfter` as an array, ready for a PSR-3 logging context. It leaves out `details`, because validation errors echo submitted values such as NIFs or amounts; read `$exception->details` explicitly when you need them.
 
 ```php
 use Lenorix\BeelSdk\Exception\BeelNotFoundError;

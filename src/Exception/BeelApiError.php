@@ -36,7 +36,10 @@ class BeelApiError extends \RuntimeException
     /**
      * Structured error data for logging, such as a PSR-3 context array.
      *
-     * @return array{status_code: int, api_code: string|null, request_id: string|null, retry_after: int|null, details: mixed}
+     * Leaves out `details`: validation errors echo submitted values, such as NIFs or
+     * amounts, which should not reach logs by default. Read `$details` explicitly when needed.
+     *
+     * @return array{status_code: int, api_code: string|null, request_id: string|null, retry_after: int|null}
      */
     public function context(): array
     {
@@ -45,7 +48,6 @@ class BeelApiError extends \RuntimeException
             'api_code' => $this->apiCode,
             'request_id' => $this->requestId,
             'retry_after' => $this->retryAfter,
-            'details' => $this->details,
         ];
     }
 

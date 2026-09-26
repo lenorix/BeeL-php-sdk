@@ -371,15 +371,15 @@ it('applies the not-ready behavior to the legacy PDF endpoint', function () {
 
 // Error context and verified webhook models
 
-it('exposes API error data as a logging context', function () {
+it('exposes API error data as a logging context without submitted values', function () {
     $transport = new RecordingPsrClient([new Response(422, ['Content-Type' => 'application/json', 'X-Request-Id' => 'req-9'], '{"success":false,"error":{"code":"INVALID","message":"Bad","details":{"field":"x"}}}')]);
 
     try {
         testClient($transport)->company('c')->invoices->get('inv-1');
         test()->fail('Expected a validation error.');
     } catch (BeelValidationError $exception) {
-        expect($exception->context())->toMatchArray(['status_code' => 422, 'api_code' => 'INVALID', 'request_id' => 'req-9', 'retry_after' => null])
-            ->and($exception->context())->toHaveKey('details');
+        expect($exception->context())->toBe(['status_code' => 422, 'api_code' => 'INVALID', 'request_id' => 'req-9', 'retry_after' => null])
+            ->and($exception->details['field'])->toBe('x');
     }
 });
 

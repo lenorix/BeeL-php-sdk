@@ -2,6 +2,12 @@
 
 All notable changes to `BeeL-php-sdk` will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+- `BeelApiError::context()` no longer includes `details`. Validation errors echo submitted values, such as NIFs or amounts, and frameworks that log exception context would write them to logs. `$exception->details` is still available.
+
 ## v0.4.0 - 2026-09-26
 
 ### Changed
