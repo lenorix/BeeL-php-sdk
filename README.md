@@ -79,7 +79,7 @@ Address the company explicitly so one client can work with multiple NIFs:
 ```php
 $company = $beel->company('company-uuid');
 
-$invoices = $company->invoices->list(['status' => 'ISSUED']);
+$invoices = $company->invoices->list(['status' => ['ISSUED']]);
 $invoice = $company->invoices->get('invoice-uuid');
 $company->invoices->issue($invoice->getId());
 $company->invoices->void(
@@ -107,6 +107,46 @@ $company->recurringInvoices->setStatus(
     'recurring-invoice-uuid',
     (new SetRecurringInvoiceStatusRequest())->setStatus('PAUSED'),
 );
+```
+
+## Iterating over every page
+
+List operations return one page. Their `all()` counterparts return a lazy generator that fetches the next page only when iteration reaches it:
+
+```php
+foreach ($company->invoices->all(['status' => ['ISSUED'], 'limit' => 100]) as $invoice) {
+    // Each item is a generated Invoice model.
+}
+```
+
+Filters and `limit` apply to every page, and `page` sets the first page to read. Iterators are available for company invoices, customers, products, series, recurring invoices (`all()` and `allHistory()`), payment events, and for account companies, members (`all()` and `allGrants()`), invitations, webhooks (`all()` and `allDeliveries()`), emails, and `$beel->accounts->all()`, which follows BeeL's `next_cursor`.
+
+## Per-call options
+
+`withOptions()` returns a copy of any resource that sends extra headers, an `Idempotency-Key`, or both, on each request it makes. The original resource is unchanged:
+
+```php
+use Lenorix\BeelSdk\Http\RequestOptions;
+
+$invoice = $company->invoices
+    ->withOptions(new RequestOptions(idempotencyKey: 'order-42'))
+    ->create($request);
+
+$traced = $beel->company('company-uuid')->withOptions(new RequestOptions(headers: ['X-Trace-Id' => $traceId]));
+$traced->invoices->get('invoice-uuid'); // child resources use the same options
+```
+
+The options are added by the SDK's transport, so they work for every operation, including those whose generated endpoint declares no header parameters. A stable idempotency key lets you retry a write safely after a timeout or a crash: BeeL returns the stored response instead of repeating the operation. The same key is sent on every request made through the copy, so scope a copy with an idempotency key to one write. Options take precedence over headers passed as method arguments. `Authorization`, `Host`, `Content-Type` and `Content-Length` cannot be set per call: the API key belongs to the `Beel` instance, so use one instance per credential.
+
+## Identity
+
+`$beel->me->identity()` returns the account the API key belongs to and describes the key itself, including its environment and scopes. It needs no scope, so it also works as a credentials check:
+
+```php
+$identity = $beel->me->identity();
+$identity->getAccountId();
+$identity->getCredential()->getEnvironment();
+$identity->getCredential()->getScopes();
 ```
 
 ## Accounts and payment connections
@@ -186,6 +226,33 @@ if ($event->getType() === 'invoice.issued'
     $invoiceId = $event->getData()->getInvoiceId();
     $invoiceNumber = $event->getData()->getInvoiceNumber();
 }
+```
+
+Each failure has its own exception, and all of them extend `WebhookVerificationError`:
+
+| Exception | Cause |
+|---|---|
+| `WebhookHeaderError` | The `BeeL-Signature` header is missing or malformed. |
+| `WebhookTimestampError` | The signed timestamp is outside the replay window. It exposes `timestamp`, `now` and `toleranceSeconds`. |
+| `WebhookSignatureError` | No signature matches the body: the secret is wrong or was rotated, or the body changed. |
+| `WebhookPayloadError` | The signature is valid, but the body is not a JSON object or does not match the event schema. |
+
+To reject malformed or stale requests before computing the HMAC, parse the header and check its timestamp first:
+
+```php
+use Lenorix\BeelSdk\Webhook\WebhookSignatureHeader;
+
+$header = WebhookSignatureHeader::parse($signatureHeader); // WebhookHeaderError
+$verifier->checkTimestamp($header);                        // WebhookTimestampError
+$verifier->checkSignature($rawRequestBody, $header);       // WebhookSignatureError
+```
+
+`WebhookSigner` signs bodies the same way BeeL does, which is useful for tests and local development:
+
+```php
+use Lenorix\BeelSdk\Webhook\WebhookSigner;
+
+$signatureHeader = (new WebhookSigner($secret))->sign($body); // "t=...,v1=..."
 ```
 
 `verifyEvent()` returns Jane's generated `WebhookEvent` model, with `data` denormalized to the generated model for its event type. This is useful when dispatching typed framework events, such as Laravel events. `verify()` remains available when you prefer the decoded payload as an array. Event names are also available as `WebhookEventType` enum cases, for example `WebhookEventType::INVOICE_ISSUED->value`.

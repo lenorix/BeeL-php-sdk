@@ -19,7 +19,7 @@ final readonly class CompanyPaymentConnectionsResource extends GeneratedResource
 
     public function events(string $connectionId): CompanyPaymentEventsResource
     {
-        return new CompanyPaymentEventsResource($this->client, $this->companyId, $connectionId, $this->responseContext);
+        return $this->inheritOptions(new CompanyPaymentEventsResource($this->client, $this->companyId, $connectionId, $this->responseContext));
     }
 
     public function list(): mixed

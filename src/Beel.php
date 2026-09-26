@@ -20,6 +20,7 @@ use Lenorix\BeelSdk\Resource\CompanyScope;
 use Lenorix\BeelSdk\Resource\ConfigurationResource;
 use Lenorix\BeelSdk\Resource\CustomersResource;
 use Lenorix\BeelSdk\Resource\InvoicesResource;
+use Lenorix\BeelSdk\Resource\MeResource;
 use Lenorix\BeelSdk\Resource\NifResource;
 use Lenorix\BeelSdk\Resource\ProductsResource;
 use Lenorix\BeelSdk\Resource\SeriesResource;
@@ -41,6 +42,9 @@ final readonly class Beel
 
     /** AEAT NIF validation. */
     public NifResource $nif;
+
+    /** The authenticated principal: its account, environment and scopes. */
+    public MeResource $me;
 
     /** Account-wide operations and account scoping. */
     public AccountsResource $accounts;
@@ -102,6 +106,7 @@ final readonly class Beel
 
         $this->catalogs = new CatalogsResource($this->raw, $this->responseContext);
         $this->nif = new NifResource($this->raw, $this->responseContext);
+        $this->me = new MeResource($this->raw, $this->responseContext);
         $this->accounts = new AccountsResource($this->raw, $this->responseContext);
         $this->invoices = new InvoicesResource($this->raw, $this->responseContext);
         $this->customers = new CustomersResource($this->raw, $this->responseContext);

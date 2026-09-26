@@ -56,6 +56,24 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
     }
 
     /**
+     * Iterate over all of this company's invoices, across every page.
+     *
+     * Pages are fetched lazily while you iterate. Filters and `limit` apply to every
+     * page; `page` sets the first page to read.
+     *
+     * @param  array<string, mixed>  $query  The same filters as `list()`.
+     * @return \Generator<int, Invoice>
+     */
+    public function all(array $query = []): \Generator
+    {
+        return $this->paginate(
+            fn (array $query): V1CompaniesCompanyIdInvoicesGetResponse200Data => $this->list($query),
+            static fn (V1CompaniesCompanyIdInvoicesGetResponse200Data $page): array => $page->getInvoices(),
+            $query,
+        );
+    }
+
+    /**
      * Create an invoice for this company.
      *
      * BeeL creates a draft unless `options.issue_directly` is true. With VeriFactu

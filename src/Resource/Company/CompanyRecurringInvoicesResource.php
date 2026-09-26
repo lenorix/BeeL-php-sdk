@@ -7,8 +7,12 @@ namespace Lenorix\BeelSdk\Resource\Company;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateRecurringInvoiceDerivationRequest;
 use Lenorix\BeelSdk\Generated\Model\CreateRecurringInvoiceRequest;
+use Lenorix\BeelSdk\Generated\Model\GenerationHistoryResponse;
 use Lenorix\BeelSdk\Generated\Model\PatchRecurringInvoiceRequest;
+use Lenorix\BeelSdk\Generated\Model\RecurringInvoiceResponse;
 use Lenorix\BeelSdk\Generated\Model\SetRecurringInvoiceStatusRequest;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesGetResponse200Data;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdHistoryGetResponse200Data;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -28,6 +32,24 @@ final readonly class CompanyRecurringInvoicesResource extends GeneratedResource
     public function list(array $query = []): mixed
     {
         return $this->execute(fn () => $this->client->listCompanyRecurringInvoices($this->companyId, $query));
+    }
+
+    /**
+     * Iterate over all of this company's recurring invoices, across every page.
+     *
+     * Pages are fetched lazily while you iterate. Filters and `limit` apply to every
+     * page; `page` sets the first page to read.
+     *
+     * @param  array<string, mixed>  $query  The same filters as `list()`.
+     * @return \Generator<int, RecurringInvoiceResponse>
+     */
+    public function all(array $query = []): \Generator
+    {
+        return $this->paginate(
+            fn (array $query): V1CompaniesCompanyIdRecurringInvoicesGetResponse200Data => $this->list($query),
+            static fn (V1CompaniesCompanyIdRecurringInvoicesGetResponse200Data $page): array => $page->getRecurringInvoices(),
+            $query,
+        );
     }
 
     /** Create a recurring invoice template. */
@@ -80,6 +102,24 @@ final readonly class CompanyRecurringInvoicesResource extends GeneratedResource
     public function history(string $recurringInvoiceId, array $query = []): mixed
     {
         return $this->execute(fn () => $this->client->getCompanyRecurringInvoiceHistory($this->companyId, $recurringInvoiceId, $query));
+    }
+
+    /**
+     * Iterate over a recurring invoice's whole generation history, across every page.
+     *
+     * Pages are fetched lazily while you iterate. Filters and `limit` apply to every
+     * page; `page` sets the first page to read.
+     *
+     * @param  array<string, mixed>  $query  The same filters as `history()`.
+     * @return \Generator<int, GenerationHistoryResponse>
+     */
+    public function allHistory(string $recurringInvoiceId, array $query = []): \Generator
+    {
+        return $this->paginate(
+            fn (array $query): V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdHistoryGetResponse200Data => $this->history($recurringInvoiceId, $query),
+            static fn (V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdHistoryGetResponse200Data $page): array => $page->getHistory(),
+            $query,
+        );
     }
 
     /** Create a recurring template derived from an existing invoice. */

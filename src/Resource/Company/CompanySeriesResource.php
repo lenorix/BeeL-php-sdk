@@ -6,7 +6,9 @@ namespace Lenorix\BeelSdk\Resource\Company;
 
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateSeriesRequest;
+use Lenorix\BeelSdk\Generated\Model\InvoiceSeries;
 use Lenorix\BeelSdk\Generated\Model\PatchSeriesRequest;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdSeriesGetResponse200Data;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -26,6 +28,24 @@ final readonly class CompanySeriesResource extends GeneratedResource
     public function list(array $query = []): mixed
     {
         return $this->execute(fn () => $this->client->listCompanySeries($this->companyId, $query));
+    }
+
+    /**
+     * Iterate over all of this company's invoice series, across every page.
+     *
+     * Pages are fetched lazily while you iterate. Filters and `limit` apply to every
+     * page; `page` sets the first page to read.
+     *
+     * @param  array<string, mixed>  $query  The same filters as `list()`.
+     * @return \Generator<int, InvoiceSeries>
+     */
+    public function all(array $query = []): \Generator
+    {
+        return $this->paginate(
+            fn (array $query): V1CompaniesCompanyIdSeriesGetResponse200Data => $this->list($query),
+            static fn (V1CompaniesCompanyIdSeriesGetResponse200Data $page): array => $page->getSeries(),
+            $query,
+        );
     }
 
     /**

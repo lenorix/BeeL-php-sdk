@@ -30,6 +30,24 @@ final readonly class CompanyCustomersResource extends GeneratedResource
     }
 
     /**
+     * Iterate over all of this company's customers, across every page.
+     *
+     * Pages are fetched lazily while you iterate. Filters and `limit` apply to every
+     * page; `page` sets the first page to read.
+     *
+     * @param  array<string, mixed>  $query  The same filters as `list()`.
+     * @return \Generator<int, Customer>
+     */
+    public function all(array $query = []): \Generator
+    {
+        return $this->paginate(
+            fn (array $query): V1CompaniesCompanyIdCustomersGetResponse200Data => $this->list($query),
+            static fn (V1CompaniesCompanyIdCustomersGetResponse200Data $page): array => $page->getCustomers(),
+            $query,
+        );
+    }
+
+    /**
      * Create a customer under this company.
      *
      * @param  array<string, mixed>  $headers  Optional request headers.

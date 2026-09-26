@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Webhook;
 
+use Lenorix\BeelSdk\Exception\WebhookHeaderError;
+use Lenorix\BeelSdk\Exception\WebhookPayloadError;
+use Lenorix\BeelSdk\Exception\WebhookSignatureError;
+use Lenorix\BeelSdk\Exception\WebhookTimestampError;
 use Lenorix\BeelSdk\Exception\WebhookVerificationError;
 use Lenorix\BeelSdk\Generated\Model\WebhookEvent;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataAccountClaimed;
@@ -41,11 +45,13 @@ final readonly class WebhookVerifier
 
     private DenormalizerInterface $serializer;
 
+    private WebhookSigner $signer;
+
     /**
      * @param  string  $secret  Signing secret shown when the webhook subscription is created.
      * @param  int  $toleranceSeconds  Maximum age difference allowed for the signed timestamp; defaults to 300 seconds.
      */
-    public function __construct(private string $secret, private int $toleranceSeconds = 300)
+    public function __construct(string $secret, private int $toleranceSeconds = 300)
     {
         if (trim($secret) === '') {
             throw new \InvalidArgumentException('Webhook secret must not be empty.');
@@ -54,6 +60,7 @@ final readonly class WebhookVerifier
             throw new \InvalidArgumentException('Webhook timestamp tolerance must not be negative.');
         }
 
+        $this->signer = new WebhookSigner($secret);
         $this->serializer = new Serializer([new JaneObjectNormalizer]);
     }
 
@@ -69,52 +76,62 @@ final readonly class WebhookVerifier
      * @param  int|null  $now  Optional Unix timestamp for deterministic tests.
      * @return array<string, mixed>
      *
-     * @throws WebhookVerificationError If the signature is missing, invalid, too old, or the body is not a JSON object.
+     * @throws WebhookHeaderError If the signature header is missing or malformed.
+     * @throws WebhookTimestampError If the signed timestamp is outside the replay window.
+     * @throws WebhookSignatureError If no signature matches the body.
+     * @throws WebhookPayloadError If the body is not a JSON object.
      */
     public function verify(string $payload, ?string $signatureHeader = null, ?int $now = null): array
     {
-        if ($signatureHeader === null || trim($signatureHeader) === '') {
-            throw new WebhookVerificationError('Missing BeeL-Signature header.');
-        }
-
-        $timestamp = null;
-        $signatures = [];
-        foreach (explode(',', $signatureHeader) as $part) {
-            [$key, $value] = array_pad(explode('=', trim($part), 2), 2, null);
-            if ($key === 't' && $value !== null && ctype_digit($value)) {
-                $timestamp = (int) $value;
-            }
-            if ($key === 'v1' && $value !== null && $value !== '') {
-                $signatures[] = $value;
-            }
-        }
-
-        if ($timestamp === null || $signatures === []) {
-            throw new WebhookVerificationError('Invalid signature header format (expected: t=timestamp,v1=signature).');
-        }
-        if (abs(($now ?? time()) - $timestamp) > $this->toleranceSeconds) {
-            throw new WebhookVerificationError('Webhook timestamp is outside the allowed replay window.');
-        }
-
-        $expected = hash_hmac('sha256', $timestamp.'.'.$payload, $this->secret);
-        $valid = false;
-        foreach ($signatures as $signature) {
-            $valid = hash_equals($expected, $signature) || $valid;
-        }
-        if (! $valid) {
-            throw new WebhookVerificationError('Invalid BeeL webhook signature.');
-        }
+        $header = WebhookSignatureHeader::parse($signatureHeader);
+        $this->checkTimestamp($header, $now);
+        $this->checkSignature($payload, $header);
 
         try {
             $event = json_decode($payload, true, flags: JSON_THROW_ON_ERROR);
         } catch (\JsonException $exception) {
-            throw new WebhookVerificationError('Invalid JSON in webhook body.', previous: $exception);
+            throw new WebhookPayloadError('Invalid JSON in webhook body.', previous: $exception);
         }
         if (! is_array($event)) {
-            throw new WebhookVerificationError('BeeL webhook payload must be a JSON object.');
+            throw new WebhookPayloadError('BeeL webhook payload must be a JSON object.');
         }
 
         return $event;
+    }
+
+    /**
+     * Check that a parsed header's timestamp is inside the replay window.
+     *
+     * This needs no HMAC, so a receiver can reject stale or malformed requests
+     * before reading the full body: parse with {@see WebhookSignatureHeader::parse()} first.
+     *
+     * @param  int|null  $now  Optional Unix timestamp for deterministic tests.
+     *
+     * @throws WebhookTimestampError If the timestamp is outside the replay window.
+     */
+    public function checkTimestamp(WebhookSignatureHeader $header, ?int $now = null): void
+    {
+        $now ??= time();
+        if (abs($now - $header->timestamp) > $this->toleranceSeconds) {
+            throw new WebhookTimestampError($header->timestamp, $now, $this->toleranceSeconds);
+        }
+    }
+
+    /**
+     * Check that one of the header's signatures matches the raw body, without checking the timestamp.
+     *
+     * @throws WebhookSignatureError If no signature matches.
+     */
+    public function checkSignature(string $payload, WebhookSignatureHeader $header): void
+    {
+        $expected = $this->signer->signature($payload, $header->timestamp);
+        $valid = false;
+        foreach ($header->signatures as $signature) {
+            $valid = hash_equals($expected, $signature) || $valid;
+        }
+        if (! $valid) {
+            throw new WebhookSignatureError('Invalid BeeL webhook signature.');
+        }
     }
 
     /**
@@ -123,7 +140,8 @@ final readonly class WebhookVerifier
      * The signature is checked against the original, unmodified body before the
      * timestamp is normalized for Jane's generated date-time normalizer.
      *
-     * @throws WebhookVerificationError If the signature is invalid or the event cannot be parsed.
+     * @throws WebhookVerificationError If verification fails; see {@see self::verify()} for the subclasses.
+     * @throws WebhookPayloadError If the event does not match the BeeL event schema.
      */
     public function verifyEvent(string $payload, ?string $signatureHeader = null, ?int $now = null): WebhookEvent
     {
@@ -139,7 +157,7 @@ final readonly class WebhookVerifier
 
             $model = $this->serializer->denormalize($event, WebhookEvent::class, 'json');
         } catch (\Throwable $exception) {
-            throw new WebhookVerificationError('Webhook payload does not match the BeeL event schema.', previous: $exception);
+            throw new WebhookPayloadError('Webhook payload does not match the BeeL event schema.', previous: $exception);
         }
 
         return $model;

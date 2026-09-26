@@ -37,6 +37,9 @@ final readonly class RetryingClient implements ClientInterface
 
     public function sendRequest(RequestInterface $request): ResponseInterface
     {
+        foreach ($this->responseContext->requestOptions()?->allHeaders() ?? [] as $name => $value) {
+            $request = $request->withHeader($name, $value);
+        }
         if ($request->getMethod() === 'POST' && $this->autoIdempotencyKey && ! $request->hasHeader('Idempotency-Key')) {
             $request = $request->withHeader('Idempotency-Key', $this->uuid());
         }

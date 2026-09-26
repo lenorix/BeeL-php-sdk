@@ -44,36 +44,9 @@ use Lenorix\BeelSdk\Resource\InvoicesResource;
 use Lenorix\BeelSdk\Resource\NifResource;
 use Lenorix\BeelSdk\Resource\ProductsResource;
 use Lenorix\BeelSdk\Resource\SeriesResource;
+use Lenorix\BeelSdk\Tests\Support\RecordingPsrClient;
 use Lenorix\BeelSdk\Webhook\WebhookEventType;
 use Lenorix\BeelSdk\Webhook\WebhookVerifier;
-use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
-
-final class RecordingPsrClient implements ClientInterface
-{
-    /** @var list<RequestInterface> */
-    public array $requests = [];
-
-    /** @param list<ResponseInterface> $responses */
-    public function __construct(private array $responses) {}
-
-    public function sendRequest(RequestInterface $request): ResponseInterface
-    {
-        $this->requests[] = $request;
-
-        $response = array_shift($this->responses);
-        if ($response === null) {
-            throw new LogicException(sprintf(
-                'Unexpected HTTP request in test: %s %s',
-                $request->getMethod(),
-                (string) $request->getUri(),
-            ));
-        }
-
-        return $response;
-    }
-}
 
 it('constructs the public client, exposes scoped resources and Jane raw client', function () {
     $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 0, httpClient: new RecordingPsrClient([]));

@@ -7,6 +7,10 @@ namespace Lenorix\BeelSdk\Resource\Account;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateWebhookSubscriptionRequest;
 use Lenorix\BeelSdk\Generated\Model\UpdateWebhookSubscriptionRequest;
+use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdWebhooksGetResponse200Data;
+use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdWebhooksWebhookIdDeliveriesGetResponse200Data;
+use Lenorix\BeelSdk\Generated\Model\WebhookDeliveryLog;
+use Lenorix\BeelSdk\Generated\Model\WebhookSubscription;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -23,6 +27,24 @@ final readonly class AccountWebhooksResource extends GeneratedResource
     public function list(array $query = []): mixed
     {
         return $this->execute(fn () => $this->client->listAccountWebhookSubscriptions($this->accountId, $query));
+    }
+
+    /**
+     * Iterate over all of this account's webhook subscriptions, across every page.
+     *
+     * Pages are fetched lazily while you iterate. Filters and `limit` apply to every
+     * page; `page` sets the first page to read.
+     *
+     * @param  array<string, mixed>  $query  The same filters as `list()`.
+     * @return \Generator<int, WebhookSubscription>
+     */
+    public function all(array $query = []): \Generator
+    {
+        return $this->paginate(
+            fn (array $query): V1AccountsAccountIdWebhooksGetResponse200Data => $this->list($query),
+            static fn (V1AccountsAccountIdWebhooksGetResponse200Data $page): array => $page->getWebhooks(),
+            $query,
+        );
     }
 
     public function create(CreateWebhookSubscriptionRequest $request): mixed
@@ -61,6 +83,24 @@ final readonly class AccountWebhooksResource extends GeneratedResource
     public function listDeliveries(string $webhookId, array $query = []): mixed
     {
         return $this->execute(fn () => $this->client->listAccountWebhookDeliveries($this->accountId, $webhookId, $query));
+    }
+
+    /**
+     * Iterate over all of a webhook subscription's deliveries, across every page.
+     *
+     * Pages are fetched lazily while you iterate. Filters and `limit` apply to every
+     * page; `page` sets the first page to read.
+     *
+     * @param  array<string, mixed>  $query  The same filters as `listDeliveries()`.
+     * @return \Generator<int, WebhookDeliveryLog>
+     */
+    public function allDeliveries(string $webhookId, array $query = []): \Generator
+    {
+        return $this->paginate(
+            fn (array $query): V1AccountsAccountIdWebhooksWebhookIdDeliveriesGetResponse200Data => $this->listDeliveries($webhookId, $query),
+            static fn (V1AccountsAccountIdWebhooksWebhookIdDeliveriesGetResponse200Data $page): array => $page->getDeliveries(),
+            $query,
+        );
     }
 
     public function retryDelivery(string $webhookId, string $deliveryId): mixed

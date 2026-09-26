@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Lenorix\BeelSdk\Resource\Company;
 
 use Lenorix\BeelSdk\Generated\Client;
+use Lenorix\BeelSdk\Generated\Model\ListManagedPaymentEventsResponseData;
+use Lenorix\BeelSdk\Generated\Model\ManagedPaymentEvent;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -24,6 +26,24 @@ final readonly class CompanyPaymentEventsResource extends GeneratedResource
     public function list(array $query = []): mixed
     {
         return $this->execute(fn () => $this->client->listCompanyPaymentEvents($this->companyId, $this->connectionId, $query));
+    }
+
+    /**
+     * Iterate over all of this connection's payment events, across every page.
+     *
+     * Pages are fetched lazily while you iterate. Filters and `limit` apply to every
+     * page; `page` sets the first page to read.
+     *
+     * @param  array<string, mixed>  $query  The same filters as `list()`.
+     * @return \Generator<int, ManagedPaymentEvent>
+     */
+    public function all(array $query = []): \Generator
+    {
+        return $this->paginate(
+            fn (array $query): ListManagedPaymentEventsResponseData => $this->list($query),
+            static fn (ListManagedPaymentEventsResponseData $page): array => $page->getEvents(),
+            $query,
+        );
     }
 
     /** Retrieve one payment event and its processing details. */

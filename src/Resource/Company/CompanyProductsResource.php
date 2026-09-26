@@ -32,6 +32,24 @@ final readonly class CompanyProductsResource extends GeneratedResource
     }
 
     /**
+     * Iterate over all of this company's products, across every page.
+     *
+     * Pages are fetched lazily while you iterate. Filters and `limit` apply to every
+     * page; `page` sets the first page to read.
+     *
+     * @param  array<string, mixed>  $query  The same filters as `list()`.
+     * @return \Generator<int, Product>
+     */
+    public function all(array $query = []): \Generator
+    {
+        return $this->paginate(
+            fn (array $query): V1CompaniesCompanyIdProductsGetResponse200Data => $this->list($query),
+            static fn (V1CompaniesCompanyIdProductsGetResponse200Data $page): array => $page->getProducts(),
+            $query,
+        );
+    }
+
+    /**
      * Create a product in this company's catalog.
      *
      * @param  array<string, mixed>  $headers  Optional request headers.
