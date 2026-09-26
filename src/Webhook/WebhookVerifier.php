@@ -145,7 +145,21 @@ final readonly class WebhookVerifier
      */
     public function verifyEvent(string $payload, ?string $signatureHeader = null, ?int $now = null): WebhookEvent
     {
-        $event = $this->verify($payload, $signatureHeader, $now);
+        return $this->toEvent($this->verify($payload, $signatureHeader, $now));
+    }
+
+    /**
+     * Build Jane's generated webhook model from a payload that {@see self::verify()} already returned.
+     *
+     * Use it to get the typed event later without verifying the signature again. It does
+     * not check any signature itself, so only pass payloads that were verified.
+     *
+     * @param  array<string, mixed>  $event  Decoded payload returned by `verify()`.
+     *
+     * @throws WebhookPayloadError If the event does not match the BeeL event schema.
+     */
+    public function toEvent(array $event): WebhookEvent
+    {
         $event = $this->normalizeDateTimeValues($event);
 
         try {

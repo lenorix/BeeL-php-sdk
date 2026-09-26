@@ -9,8 +9,8 @@ use Http\Client\Common\Plugin\AddHostPlugin;
 use Http\Client\Common\Plugin\AddPathPlugin;
 use Http\Client\Common\Plugin\HeaderDefaultsPlugin;
 use Http\Discovery\Psr17FactoryDiscovery;
+use Lenorix\BeelSdk\Exception\BeelNotReadyError;
 use Lenorix\BeelSdk\Generated\Client as JaneClient;
-use Lenorix\BeelSdk\Generated\Model\InvoicePdfResponseData;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Http\RetryingClient;
 use Lenorix\BeelSdk\Resource\AccountScope;
@@ -137,14 +137,12 @@ final readonly class Beel
      * @deprecated Uses the legacy session-focus endpoint. Use `company($id)->invoices->getPdf()` and download its temporary URL.
      *
      * @return array{buffer: string, fileName: string}
+     *
+     * @throws BeelNotReadyError If the PDF is still being generated (HTTP 202).
      */
     public function downloadPdf(string $invoiceId): array
     {
-        /** @var InvoicePdfResponseData|null $pdf */
         $pdf = $this->invoices->getPdf($invoiceId);
-        if (! $pdf instanceof InvoicePdfResponseData) {
-            throw new \RuntimeException('\Lenorix\BeelSdk\Generated\Model\Invoice PDF is still being generated; retry the request later.');
-        }
 
         $request = Psr17FactoryDiscovery::findRequestFactory()->createRequest('GET', $pdf->getDownloadUrl());
         $response = $this->transport->sendRequest($request);

@@ -33,6 +33,22 @@ class BeelApiError extends \RuntimeException
         parent::__construct($message, $statusCode, $previous);
     }
 
+    /**
+     * Structured error data for logging, such as a PSR-3 context array.
+     *
+     * @return array{status_code: int, api_code: string|null, request_id: string|null, retry_after: int|null, details: mixed}
+     */
+    public function context(): array
+    {
+        return [
+            'status_code' => $this->statusCode,
+            'api_code' => $this->apiCode,
+            'request_id' => $this->requestId,
+            'retry_after' => $this->retryAfter,
+            'details' => $this->details,
+        ];
+    }
+
     public static function fromGenerated(Throwable $exception): self
     {
         if (! method_exists($exception, 'getResponse')) {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource\Company;
 
+use Lenorix\BeelSdk\Exception\BeelNotReadyError;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\BulkOperationResult;
 use Lenorix\BeelSdk\Generated\Model\ConvertProformaToInvoiceRequest;
@@ -162,15 +163,24 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
     /**
      * Get a temporary download URL for an issued invoice's PDF.
      *
-     * Returns PDF metadata and a pre-signed URL, not PDF bytes. BeeL waits briefly
-     * for asynchronous generation; the URL expires after five minutes. Draft invoices
-     * have no fiscal PDF; use `preview()` to render a draft preview.
+     * Returns PDF metadata and a pre-signed URL, not PDF bytes. BeeL waits for asynchronous
+     * generation (ten seconds by default); the URL expires after five minutes. Draft invoices
+     * have no fiscal PDF and fail with `INVOICE_NOT_ISSUED_NO_PDF`; use `preview()` to render
+     * a draft preview.
+     *
+     * @param  int|null  $waitSeconds  Maximum seconds BeeL waits for the PDF, sent as `Prefer: wait=N`.
+     *                                 `0` answers at once; null keeps BeeL's default.
+     *
+     * @throws BeelNotReadyError If the PDF is still being generated (HTTP 202); see its `retryAfter`.
      *
      * @see https://docs.beel.es/invoices/getCompanyInvoicePdf
      */
-    public function getPdf(string $invoiceId): ?InvoicePdfResponseData
+    public function getPdf(string $invoiceId, ?int $waitSeconds = null): InvoicePdfResponseData
     {
-        return $this->execute(fn () => $this->client->getCompanyInvoicePdf($this->companyId, $invoiceId));
+        return $this->executeReady(
+            fn () => $this->client->getCompanyInvoicePdf($this->companyId, $invoiceId, $this->preferWait($waitSeconds)),
+            'Invoice PDF is still being generated; retry the request later.',
+        );
     }
 
     /**

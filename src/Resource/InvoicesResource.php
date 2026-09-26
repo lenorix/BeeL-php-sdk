@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource;
 
+use Lenorix\BeelSdk\Exception\BeelNotReadyError;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateCorrectiveInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\CreateInvoiceRequest;
+use Lenorix\BeelSdk\Generated\Model\InvoicePdfResponseData;
 use Lenorix\BeelSdk\Generated\Model\SendEmailRequest;
 use Lenorix\BeelSdk\Generated\Model\UpdateInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdDuplicatePostBody;
@@ -108,9 +110,21 @@ final readonly class InvoicesResource extends GeneratedResource
         return $this->execute(fn () => $this->client->rescheduleInvoice($invoiceId, $request));
     }
 
-    public function getPdf(string $invoiceId): mixed
+    /**
+     * Get a temporary download URL for an invoice's PDF.
+     *
+     * Returns PDF metadata and a pre-signed download URL.
+     *
+     * @param  int|null  $waitSeconds  Maximum seconds BeeL waits for the PDF, sent as `Prefer: wait=N`.
+     *
+     * @throws BeelNotReadyError If the PDF is still being generated (HTTP 202); see its `retryAfter`.
+     */
+    public function getPdf(string $invoiceId, ?int $waitSeconds = null): InvoicePdfResponseData
     {
-        return $this->execute(fn () => $this->client->generateInvoicePdf($invoiceId));
+        return $this->executeReady(
+            fn () => $this->client->generateInvoicePdf($invoiceId, $this->preferWait($waitSeconds)),
+            'Invoice PDF is still being generated; retry the request later.',
+        );
     }
 
     public function sendEmail(string $invoiceId, ?SendEmailRequest $request = null): mixed

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Lenorix\BeelSdk\Resource;
 
 use Lenorix\BeelSdk\Exception\BeelApiError;
+use Lenorix\BeelSdk\Exception\BeelNotReadyError;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Http\RequestOptions;
@@ -159,6 +160,46 @@ abstract readonly class GeneratedResource
         }
 
         return $this->unwrap($response);
+    }
+
+    /**
+     * Run an operation that BeeL may answer with `202` while the result is still being generated.
+     *
+     * @throws BeelNotReadyError If BeeL answers `202`, with its `Retry-After` in seconds.
+     */
+    protected function executeReady(callable $operation, string $notReadyMessage): mixed
+    {
+        $result = $this->execute($operation);
+        $response = $this->responseContext?->response();
+        if ($response === null || $response->getStatusCode() !== 202) {
+            return $result;
+        }
+
+        $retryAfter = trim($response->getHeaderLine('Retry-After'));
+        $seconds = match (true) {
+            ctype_digit($retryAfter) => (int) $retryAfter,
+            $retryAfter !== '' && ($retryAt = strtotime($retryAfter)) !== false => max(0, $retryAt - time()),
+            default => null,
+        };
+
+        throw new BeelNotReadyError($notReadyMessage, $seconds, $response->getHeaderLine('X-Request-Id') ?: null);
+    }
+
+    /**
+     * Headers for BeeL's `Prefer: wait=N`, which bounds how long a request waits for an asynchronous result.
+     *
+     * @return array<string, string>
+     */
+    protected function preferWait(?int $waitSeconds): array
+    {
+        if ($waitSeconds === null) {
+            return [];
+        }
+        if ($waitSeconds < 0) {
+            throw new \InvalidArgumentException('Wait seconds must not be negative.');
+        }
+
+        return ['Prefer' => 'wait='.$waitSeconds];
     }
 
     private function applyOptions(RequestOptions $options): void

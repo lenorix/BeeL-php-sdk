@@ -2,6 +2,19 @@
 
 All notable changes to `BeeL-php-sdk` will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+- **Breaking:** `getPdf()` on company and legacy invoices no longer returns `null` while BeeL is still generating the PDF (HTTP 202). It throws `BeelNotReadyError`, which carries the `Retry-After` delay in seconds. Code that checked for `null` must catch the exception instead. `Beel::downloadPdf()` throws it too.
+
+### Added
+
+- `BeelNotReadyError` for `202` responses. It does not extend `BeelApiError`.
+- `getPdf($invoiceId, waitSeconds: N)` sends `Prefer: wait=N` to bound how long BeeL waits for the PDF.
+- `BeelApiError::context()` and `BeelNotReadyError::context()` return error data for logging.
+- `WebhookVerifier::toEvent()` builds the typed event from a payload already returned by `verify()`, without verifying it again.
+
 ## v0.3.0 - 2026-09-26
 
 ### Added

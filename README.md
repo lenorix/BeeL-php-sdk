@@ -206,7 +206,21 @@ New operations become available there after the OpenAPI client is regenerated. G
 
 ## PDF downloads
 
-`$company->invoices->getPdf($invoiceId)` returns the generated PDF response model, including its signed download URL. The legacy convenience method `$beel->downloadPdf($invoiceId)` returns `['buffer' => ..., 'fileName' => ...]`; it uses the deprecated session-focus invoice route. Prefer the company-scoped route for new integrations.
+`$company->invoices->getPdf($invoiceId)` returns the generated PDF response model, including its signed download URL. BeeL waits for PDF generation (ten seconds by default). `waitSeconds` bounds that wait with `Prefer: wait=N`; `0` answers at once.
+
+If the PDF is still being generated, BeeL answers `202` and `getPdf()` throws `BeelNotReadyError`, with BeeL's `Retry-After` in seconds (or `null` when absent). It does not extend `BeelApiError`, so a generic API error handler does not log it as a failure:
+
+```php
+use Lenorix\BeelSdk\Exception\BeelNotReadyError;
+
+try {
+    $pdf = $company->invoices->getPdf($invoiceId, waitSeconds: 0);
+} catch (BeelNotReadyError $exception) {
+    $retryInSeconds = $exception->retryAfter ?? 5;
+}
+```
+
+The legacy convenience method `$beel->downloadPdf($invoiceId)` returns `['buffer' => ..., 'fileName' => ...]`; it uses the deprecated session-focus invoice route. Prefer the company-scoped route for new integrations.
 
 ## Webhooks
 
@@ -256,6 +270,8 @@ use Lenorix\BeelSdk\Webhook\WebhookSigner;
 $signatureHeader = (new WebhookSigner($secret))->sign($body); // "t=...,v1=..."
 ```
 
+`$verifier->toEvent($payload)` builds the typed model from a payload that `verify()` already returned, without checking the signature again. Only pass it verified payloads.
+
 `verifyEvent()` returns Jane's generated `WebhookEvent` model, with `data` denormalized to the generated model for its event type. This is useful when dispatching typed framework events, such as Laravel events. `verify()` remains available when you prefer the decoded payload as an array. Event names are also available as `WebhookEventType` enum cases, for example `WebhookEventType::INVOICE_ISSUED->value`.
 
 ## Errors
@@ -270,6 +286,8 @@ API errors are mapped to semantic exception classes. All extend `BeelApiError`:
 | `BeelValidationError` | 422 | `statusCode`, `apiCode`, `details`, `requestId` |
 | `BeelRateLimitError` | 429 | `statusCode`, `retryAfter`, `retryAfterSeconds` |
 | `BeelApiError` | Other API errors | `statusCode`, `apiCode`, `details`, `requestId` |
+
+`$exception->context()` returns these fields as an array, ready for a PSR-3 logging context.
 
 ```php
 use Lenorix\BeelSdk\Exception\BeelNotFoundError;

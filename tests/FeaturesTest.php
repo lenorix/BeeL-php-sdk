@@ -5,7 +5,10 @@ declare(strict_types=1);
 use GuzzleHttp\Psr7\Response;
 use Lenorix\BeelSdk\Beel;
 use Lenorix\BeelSdk\Builder\InvoiceBuilder;
+use Lenorix\BeelSdk\Exception\BeelApiError;
 use Lenorix\BeelSdk\Exception\BeelAuthError;
+use Lenorix\BeelSdk\Exception\BeelNotReadyError;
+use Lenorix\BeelSdk\Exception\BeelValidationError;
 use Lenorix\BeelSdk\Exception\WebhookHeaderError;
 use Lenorix\BeelSdk\Exception\WebhookPayloadError;
 use Lenorix\BeelSdk\Exception\WebhookSignatureError;
@@ -19,6 +22,7 @@ use Lenorix\BeelSdk\Generated\Model\GenerationHistoryResponse;
 use Lenorix\BeelSdk\Generated\Model\GrantAssignment;
 use Lenorix\BeelSdk\Generated\Model\InvitationSummary;
 use Lenorix\BeelSdk\Generated\Model\Invoice;
+use Lenorix\BeelSdk\Generated\Model\InvoicePdfResponseData;
 use Lenorix\BeelSdk\Generated\Model\InvoiceSeries;
 use Lenorix\BeelSdk\Generated\Model\ManagedAccountSummary;
 use Lenorix\BeelSdk\Generated\Model\ManagedPaymentEvent;
@@ -26,6 +30,8 @@ use Lenorix\BeelSdk\Generated\Model\MyIdentity;
 use Lenorix\BeelSdk\Generated\Model\Product;
 use Lenorix\BeelSdk\Generated\Model\RecurringInvoiceResponse;
 use Lenorix\BeelSdk\Generated\Model\WebhookDeliveryLog;
+use Lenorix\BeelSdk\Generated\Model\WebhookEvent;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceIssued;
 use Lenorix\BeelSdk\Generated\Model\WebhookSubscription;
 use Lenorix\BeelSdk\Http\RequestOptions;
 use Lenorix\BeelSdk\Tests\Support\RecordingPsrClient;
@@ -293,4 +299,99 @@ it('returns the identity of the API key', function () {
         ->and($identity->getAccountId())->toBe('acc-1')
         ->and($identity->getCredential()->getScopes())->toBe(['invoices:read'])
         ->and($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/me/identity');
+});
+
+// Asynchronous PDFs
+
+function pdfNotReady(Response $response): BeelNotReadyError
+{
+    try {
+        testClient(new RecordingPsrClient([$response]))->company('c')->invoices->getPdf('inv-1');
+    } catch (BeelNotReadyError $exception) {
+        return $exception;
+    }
+
+    throw new LogicException('Expected BeelNotReadyError.');
+}
+
+it('reports a 202 PDF as not ready with its Retry-After', function () {
+    $exception = pdfNotReady(new Response(202, ['Retry-After' => '3', 'X-Request-Id' => 'req-1']));
+
+    expect($exception->retryAfter)->toBe(3)
+        ->and($exception->requestId)->toBe('req-1')
+        ->and($exception)->not->toBeInstanceOf(BeelApiError::class)
+        ->and($exception->context())->toBe(['status_code' => 202, 'retry_after' => 3, 'request_id' => 'req-1']);
+});
+
+it('reports a 202 PDF without Retry-After with a null delay', function () {
+    expect(pdfNotReady(new Response(202))->retryAfter)->toBeNull()
+        ->and(pdfNotReady(new Response(202, ['Retry-After' => 'soon']))->retryAfter)->toBeNull();
+});
+
+it('sends the PDF wait preference and still returns the ready PDF', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['download_url' => 'https://signed.example.test/a.pdf', 'file_name' => 'a.pdf', 'expires_in_seconds' => 300]]),
+        jsonResponse(['success' => true, 'data' => ['download_url' => 'https://signed.example.test/a.pdf', 'file_name' => 'a.pdf', 'expires_in_seconds' => 300]]),
+    ]);
+    $invoices = testClient($transport)->company('c')->invoices;
+
+    $pdf = $invoices->getPdf('inv-1', waitSeconds: 0);
+    $invoices->getPdf('inv-1');
+
+    expect($pdf)->toBeInstanceOf(InvoicePdfResponseData::class)
+        ->and($pdf->getFileName())->toBe('a.pdf')
+        ->and($transport->requests[0]->getHeaderLine('Prefer'))->toBe('wait=0')
+        ->and($transport->requests[1]->hasHeader('Prefer'))->toBeFalse()
+        ->and(fn () => $invoices->getPdf('inv-1', waitSeconds: -1))->toThrow(InvalidArgumentException::class);
+});
+
+it('keeps mapping PDF API errors to BeelApiError', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => false, 'error' => ['code' => 'INVOICE_NOT_ISSUED_NO_PDF', 'message' => 'Draft']], 400)]);
+
+    try {
+        testClient($transport)->company('c')->invoices->getPdf('inv-1');
+        test()->fail('Expected an API error.');
+    } catch (BeelApiError $exception) {
+        expect($exception->apiCode)->toBe('INVOICE_NOT_ISSUED_NO_PDF')
+            ->and($exception->statusCode)->toBe(400);
+    }
+});
+
+it('applies the not-ready behavior to the legacy PDF endpoint', function () {
+    $transport = new RecordingPsrClient([new Response(202, ['Retry-After' => '7'])]);
+
+    try {
+        testClient($transport)->invoices->getPdf('inv-1', waitSeconds: 2);
+        test()->fail('Expected BeelNotReadyError.');
+    } catch (BeelNotReadyError $exception) {
+        expect($exception->retryAfter)->toBe(7)
+            ->and($transport->requests[0]->getHeaderLine('Prefer'))->toBe('wait=2');
+    }
+});
+
+// Error context and verified webhook models
+
+it('exposes API error data as a logging context', function () {
+    $transport = new RecordingPsrClient([new Response(422, ['Content-Type' => 'application/json', 'X-Request-Id' => 'req-9'], '{"success":false,"error":{"code":"INVALID","message":"Bad","details":{"field":"x"}}}')]);
+
+    try {
+        testClient($transport)->company('c')->invoices->get('inv-1');
+        test()->fail('Expected a validation error.');
+    } catch (BeelValidationError $exception) {
+        expect($exception->context())->toMatchArray(['status_code' => 422, 'api_code' => 'INVALID', 'request_id' => 'req-9', 'retry_after' => null])
+            ->and($exception->context())->toHaveKey('details');
+    }
+});
+
+it('builds the typed event from an already verified payload', function () {
+    $verifier = new WebhookVerifier('whsec_test');
+    $body = json_encode(['id' => 'evt-1', 'type' => 'invoice.issued', 'created_at' => '2026-09-25T12:00:00.123Z', 'api_version' => '2026-09-01', 'company_id' => 'c', 'data' => ['invoice_id' => 'inv-1', 'invoice_number' => 'A-1']], JSON_THROW_ON_ERROR);
+    $payload = $verifier->verify($body, (new WebhookSigner('whsec_test'))->sign($body, 1_800_000_000), 1_800_000_000);
+
+    $event = $verifier->toEvent($payload);
+
+    expect($event)->toBeInstanceOf(WebhookEvent::class)
+        ->and($event->getData())->toBeInstanceOf(WebhookEventDataInvoiceIssued::class)
+        ->and($event->getData()->getInvoiceId())->toBe('inv-1')
+        ->and(fn () => $verifier->toEvent(['type' => 'invoice.issued', 'data' => ['invoice_id' => []]]))->toThrow(WebhookPayloadError::class);
 });
