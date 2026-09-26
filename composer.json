@@ -38,7 +38,7 @@
     "require-dev": {
         "jane-php/open-api-3": "^7.14",
         "laravel/pint": "^1.0",
-        "phpstan/phpstan": "^2.1",
+        "phpstan/phpstan": "^2.2.2",
         "pestphp/pest": "^4.0"
     },
     "autoload": {

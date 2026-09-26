@@ -17,8 +17,8 @@ use Lenorix\BeelSdk\Generated\Model\WebhookEventDataRecurringInvoicePaused;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataRepresentationSigned;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataVeriFactuStatusUpdated;
 use Lenorix\BeelSdk\Generated\Normalizer\JaneObjectNormalizer;
+use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
-use Symfony\Component\Serializer\SerializerInterface;
 
 /** Verify signed BeeL webhook requests using the original JSON body. */
 final readonly class WebhookVerifier
@@ -39,7 +39,7 @@ final readonly class WebhookVerifier
         'representation.signed' => WebhookEventDataRepresentationSigned::class,
     ];
 
-    private SerializerInterface $serializer;
+    private DenormalizerInterface $serializer;
 
     /**
      * @param  string  $secret  Signing secret shown when the webhook subscription is created.
