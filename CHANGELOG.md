@@ -2,6 +2,12 @@
 
 All notable changes to `BeeL-php-sdk` will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+- The package is now released under The Unlicense instead of the MIT License. Earlier versions remain available under MIT.
+
 ## v0.4.1 - 2026-09-26
 
 ### Changed

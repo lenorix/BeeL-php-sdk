@@ -14,7 +14,7 @@
         "verifactu"
     ],
     "homepage": "https://github.com/lenorix/BeeL-php-sdk",
-    "license": "MIT",
+    "license": "Unlicense",
     "support": {
         "issues": "https://github.com/lenorix/BeeL-php-sdk/issues",
         "source": "https://github.com/lenorix/BeeL-php-sdk"
