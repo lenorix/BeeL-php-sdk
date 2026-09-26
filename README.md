@@ -3,6 +3,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/lenorix/beel-sdk.svg?style=flat-square)](https://packagist.org/packages/lenorix/beel-sdk)
 [![Tests](https://github.com/lenorix/BeeL-php-sdk/actions/workflows/run-tests.yml/badge.svg)](https://github.com/lenorix/BeeL-php-sdk/actions/workflows/run-tests.yml)
 [![Total Downloads](https://img.shields.io/packagist/dt/lenorix/beel-sdk.svg?style=flat-square)](https://packagist.org/packages/lenorix/beel-sdk)
+[![Plumb score](https://plumbphp.dev/badges/lenorix/beel-sdk/composite.svg)](https://plumbphp.dev/lenorix/beel-sdk)
 
 An instance-based PHP client for the [BeeL invoicing API](https://docs.beel.es), including company and account scoped resources, VeriFactu invoicing, retries, idempotency, PDF downloads, and webhook signature verification.
 
