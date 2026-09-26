@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use Lenorix\BeelSdk\Beel;
 use Lenorix\BeelSdk\Builder\InvoiceBuilder;
@@ -33,7 +34,9 @@ use Lenorix\BeelSdk\Generated\Model\WebhookDeliveryLog;
 use Lenorix\BeelSdk\Generated\Model\WebhookEvent;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceIssued;
 use Lenorix\BeelSdk\Generated\Model\WebhookSubscription;
+use Lenorix\BeelSdk\Http\DateTimeFields;
 use Lenorix\BeelSdk\Http\RequestOptions;
+use Lenorix\BeelSdk\Http\RetryingClient;
 use Lenorix\BeelSdk\Tests\Support\RecordingPsrClient;
 use Lenorix\BeelSdk\Webhook\WebhookEventType;
 use Lenorix\BeelSdk\Webhook\WebhookSignatureHeader;
@@ -394,4 +397,66 @@ it('builds the typed event from an already verified payload', function () {
         ->and($event->getData())->toBeInstanceOf(WebhookEventDataInvoiceIssued::class)
         ->and($event->getData()->getInvoiceId())->toBe('inv-1')
         ->and(fn () => $verifier->toEvent(['type' => 'invoice.issued', 'data' => ['invoice_id' => []]]))->toThrow(WebhookPayloadError::class);
+});
+
+// Retries and date-time normalization
+
+it('retries a failed request only when repeating it cannot duplicate a write', function (string $method, array $headers, bool $autoKey, int $expectedAttempts) {
+    $transport = new RecordingPsrClient([new Response(500), new Response(200)]);
+    $client = new RetryingClient($transport, maxRetries: 1, retryDelayMs: 0, maxRetryDelayMs: 0, autoIdempotencyKey: $autoKey);
+
+    $client->sendRequest(new Request($method, 'https://example.test/v1/invoices', $headers, '{}'));
+
+    expect($transport->requests)->toHaveCount($expectedAttempts);
+})->with([
+    'POST with automatic key' => ['POST', [], true, 2],
+    'POST with own key' => ['POST', ['Idempotency-Key' => 'order-42'], false, 2],
+    'POST without key' => ['POST', [], false, 1],
+    'PATCH without key' => ['PATCH', [], true, 1],
+    'PATCH with key' => ['PATCH', ['Idempotency-Key' => 'edit-1'], true, 2],
+    'GET' => ['GET', [], false, 2],
+    'PUT' => ['PUT', [], false, 2],
+    'DELETE' => ['DELETE', [], false, 2],
+]);
+
+it('normalizes only date-time fields and leaves look-alike text untouched', function () {
+    $json = '{"created_at":"2026-09-25T12:00:00.123Z","notes":"2026-09-25T12:00:00.123Z",'
+        .'"metadata":{"due":"2026-01-01T00:00:00.5+02:00"},"quoted":"\\"sent_at\\":\\"2026-09-25T12:00:00.1Z\\"","sent_at" : "2026-09-25T12:00:00-03:00"}';
+
+    expect(json_decode(DateTimeFields::normalizeJson($json), true))->toBe([
+        'created_at' => '2026-09-25T12:00:00+00:00',
+        'notes' => '2026-09-25T12:00:00.123Z',
+        'metadata' => ['due' => '2026-01-01T00:00:00.5+02:00'],
+        'quoted' => '"sent_at":"2026-09-25T12:00:00.1Z"',
+        'sent_at' => '2026-09-25T12:00:00-03:00',
+    ])->and(DateTimeFields::normalizeArray(['paid_at' => '2026-09-25T12:00:00.9Z', 'data' => ['note' => '2026-09-25T12:00:00.9Z', 'at' => '2026-09-25T12:00:00.9Z']]))
+        ->toBe(['paid_at' => '2026-09-25T12:00:00+00:00', 'data' => ['note' => '2026-09-25T12:00:00.9Z', 'at' => '2026-09-25T12:00:00+00:00']]);
+});
+
+it('keeps free-text response values that look like dates as BeeL sent them', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => [
+        'id' => 'inv-1',
+        'notes' => '2026-09-25T12:00:00.123Z',
+        'created_at' => '2026-09-25T12:00:00.123Z',
+    ]])]);
+
+    $invoice = testClient($transport)->company('c')->invoices->get('inv-1');
+
+    expect($invoice->getNotes())->toBe('2026-09-25T12:00:00.123Z')
+        ->and($invoice->getCreatedAt()?->format(DATE_ATOM))->toBe('2026-09-25T12:00:00+00:00');
+});
+
+it('lists every field the generated normalizers parse as date-time', function () {
+    $names = [];
+    foreach (glob(__DIR__.'/../src/Generated/Normalizer/*.php') ?: [] as $file) {
+        preg_match_all("/createFromFormat\\('Y-m-d\\\\TH:i:sP', \\\$data\\['([A-Za-z0-9_]+)'\\]/", (string) file_get_contents($file), $matches);
+        array_push($names, ...$matches[1]);
+    }
+    $names = array_values(array_unique($names));
+    sort($names);
+    $listed = DateTimeFields::NAMES;
+    sort($listed);
+
+    expect($names)->not->toBeEmpty()
+        ->and($listed)->toBe($names);
 });

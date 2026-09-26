@@ -18,6 +18,8 @@ final readonly class RetryingClient implements ClientInterface
 
     public const DEFAULT_MAX_RETRY_DELAY_MS = 30_000;
 
+    private const IDEMPOTENT_METHODS = ['GET', 'HEAD', 'OPTIONS', 'PUT', 'DELETE'];
+
     private ResponseContext $responseContext;
 
     public function __construct(
@@ -47,6 +49,8 @@ final readonly class RetryingClient implements ClientInterface
         $body = $request->getBody();
         $position = $body->isSeekable() ? $body->tell() : null;
         $canReplayBody = $position !== null || $body->getSize() === 0;
+        // A failed POST or PATCH may already have been applied; repeat it only when BeeL can deduplicate it.
+        $canRetry = in_array($request->getMethod(), self::IDEMPOTENT_METHODS, true) || $request->hasHeader('Idempotency-Key');
 
         for ($attempt = 0; ; $attempt++) {
             if ($attempt > 0 && $position !== null) {
@@ -55,7 +59,7 @@ final readonly class RetryingClient implements ClientInterface
 
             $response = $this->normalizeDateTimePrecision($this->client->sendRequest($request));
             $this->responseContext->capture($response);
-            if ($attempt >= $this->maxRetries || ! $canReplayBody || ($response->getStatusCode() < 500 && $response->getStatusCode() !== 429)) {
+            if ($attempt >= $this->maxRetries || ! $canReplayBody || ! $canRetry || ($response->getStatusCode() < 500 && $response->getStatusCode() !== 429)) {
                 return $response;
             }
 
@@ -115,6 +119,7 @@ final readonly class RetryingClient implements ClientInterface
     /**
      * Jane's generated date normalizer accepts second precision, while BeeL's
      * JSON responses can include fractional seconds in ISO date-time values.
+     * Only fields Jane parses as `date-time` are rewritten.
      */
     private function normalizeDateTimePrecision(ResponseInterface $response): ResponseInterface
     {
@@ -123,13 +128,9 @@ final readonly class RetryingClient implements ClientInterface
         }
 
         $body = (string) $response->getBody();
-        $normalized = preg_replace_callback(
-            '/(")(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})(")/',
-            static fn (array $matches): string => $matches[1].$matches[2].($matches[3] === 'Z' ? '+00:00' : $matches[3]).$matches[4],
-            $body,
-        );
+        $normalized = DateTimeFields::normalizeJson($body);
 
-        if ($normalized === null || $normalized === $body) {
+        if ($normalized === $body) {
             return $response;
         }
 

@@ -21,6 +21,7 @@ use Lenorix\BeelSdk\Generated\Model\WebhookEventDataRecurringInvoicePaused;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataRepresentationSigned;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataVeriFactuStatusUpdated;
 use Lenorix\BeelSdk\Generated\Normalizer\JaneObjectNormalizer;
+use Lenorix\BeelSdk\Http\DateTimeFields;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
 
@@ -160,7 +161,7 @@ final readonly class WebhookVerifier
      */
     public function toEvent(array $event): WebhookEvent
     {
-        $event = $this->normalizeDateTimeValues($event);
+        $event = DateTimeFields::normalizeArray($event);
 
         try {
             $eventType = $event['type'] ?? null;
@@ -175,35 +176,5 @@ final readonly class WebhookVerifier
         }
 
         return $model;
-    }
-
-    /** @param array<string, mixed> $event
-     * @return array<string, mixed>
-     */
-    private function normalizeDateTimeValues(array $event): array
-    {
-        foreach ($event as $key => $value) {
-            if (is_array($value)) {
-                $event[$key] = $this->normalizeDateTimeValues($value);
-
-                continue;
-            }
-
-            if (! is_string($value)) {
-                continue;
-            }
-
-            $normalized = preg_replace_callback(
-                '/^(\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2})(?:\.\d+)?(Z|[+-]\d{2}:\d{2})$/',
-                static fn (array $matches): string => $matches[1].($matches[2] === 'Z' ? '+00:00' : $matches[2]),
-                $value,
-            );
-
-            if ($normalized !== null) {
-                $event[$key] = $normalized;
-            }
-        }
-
-        return $event;
     }
 }

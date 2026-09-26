@@ -69,7 +69,7 @@ $beel = new Beel(
 
 Use a test key (`beel_sk_test_...`) while developing and a live key (`beel_sk_live_...`) in production. The key selects the environment; the base URL stays the same.
 
-`maxRetries` is the maximum number of retries after the first attempt. The SDK retries `429` and `5xx` responses with exponential backoff, honors `Retry-After` when provided up to `maxRetryDelayMs`, and uses the same idempotency key for every retry of a POST. It does not retry other client errors.
+`maxRetries` is the maximum number of retries after the first attempt. The SDK retries `429` and `5xx` responses with exponential backoff, honors `Retry-After` when provided up to `maxRetryDelayMs`, and uses the same idempotency key for every retry of a POST. It does not retry other client errors. A POST or PATCH without an `Idempotency-Key` is never retried, because BeeL may already have applied it; this only happens when you disable `autoIdempotencyKey` or send a PATCH without a key.
 
 The client is instance-based. Each `Beel` instance has its own API key and transport; there is no global configuration or shared authentication state.
 
