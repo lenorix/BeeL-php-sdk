@@ -60,7 +60,12 @@ final readonly class RetryingClient implements ClientInterface
                 $body->seek($position);
             }
 
-            $response = $this->normalizeDateTimePrecision($this->client->sendRequest($request));
+            $response = $this->client->sendRequest($request);
+            // Jane's generated error handling assumes a Content-Type; proxies often omit it on errors.
+            if ($response->getStatusCode() >= 400 && ! $response->hasHeader('Content-Type')) {
+                $response = $response->withHeader('Content-Type', 'application/octet-stream');
+            }
+            $response = $this->normalizeDateTimePrecision($response);
             $this->responseContext->capture($response);
             // BeeL rejects a 429 without applying it; a 5xx may have been applied, so it needs $canRetry.
             $status = $response->getStatusCode();

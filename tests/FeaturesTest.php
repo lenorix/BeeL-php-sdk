@@ -582,6 +582,24 @@ it('limits retries per call with maxRetries', function () {
         ->and(fn () => new RequestOptions(maxRetries: -1))->toThrow(InvalidArgumentException::class);
 });
 
+it('maps an empty error response without Content-Type to BeelApiError', function () {
+    $deprecations = [];
+    set_error_handler(static function (int $level, string $message) use (&$deprecations): bool {
+        $deprecations[] = $message;
+
+        return true;
+    }, E_DEPRECATED | E_USER_DEPRECATED);
+
+    try {
+        expect(fn () => testClient(new RecordingPsrClient([new Response(503)]))->company('c')->invoices->get('inv-1'))
+            ->toThrow(BeelApiError::class, 'HTTP 503');
+    } finally {
+        restore_error_handler();
+    }
+
+    expect($deprecations)->toBe([]);
+});
+
 it('parses JSON from a transport that streams non-seekable bodies', function () {
     $transport = new RecordingPsrClient([new Response(200, ['Content-Type' => 'application/json'], new NoSeekStream(Utils::streamFor('{"success":true,"data":{"id":"inv-1","created_at":"2026-09-25T12:00:00.123Z"}}')))]);
 
