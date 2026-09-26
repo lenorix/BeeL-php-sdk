@@ -137,7 +137,7 @@ $traced = $beel->company('company-uuid')->withOptions(new RequestOptions(headers
 $traced->invoices->get('invoice-uuid'); // child resources use the same options
 ```
 
-The options are added by the SDK's transport, so they work for every operation, including those whose generated endpoint declares no header parameters. A stable idempotency key lets you retry a write safely after a timeout or a crash: BeeL returns the stored response instead of repeating the operation. The same key is sent on every request made through the copy, so scope a copy with an idempotency key to one write. Options take precedence over headers passed as method arguments. `Authorization`, `Host`, `Content-Type` and `Content-Length` cannot be set per call: the API key belongs to the `Beel` instance, so use one instance per credential.
+The options are added by the SDK's transport, so they work for every operation, including those whose generated endpoint declares no header parameters. A stable idempotency key lets you retry a write safely after a timeout or a crash: BeeL returns the stored response instead of repeating the operation. The same key is sent on every request made through the copy, so scope a copy with an idempotency key to one write. Options take precedence over headers passed as method arguments. `maxRetries` overrides the client's retry limit for these requests (`0` disables retries, useful inside queue workers that retry on their own), and `retryServerErrors` decides whether a `5xx` may be retried. `Authorization`, `Host`, `Content-Type` and `Content-Length` cannot be set per call: the API key belongs to the `Beel` instance, so use one instance per credential.
 
 ## Identity
 
@@ -148,6 +148,18 @@ $identity = $beel->me->identity();
 $identity->getAccountId();
 $identity->getCredential()->getEnvironment();
 $identity->getCredential()->getScopes();
+```
+
+## Representation
+
+The representation is the AEAT authorization a company signs so BeeL can submit its invoices in production:
+
+```php
+$company->representation->generate();
+$link = $company->representation->documentLink(); // download_url, expires_in_seconds
+$company->representation->submit($signedDocument);
+$status = $company->representation->get();
+$company->representation->cancel();
 ```
 
 ## Accounts and payment connections
@@ -219,6 +231,30 @@ try {
     $retryInSeconds = $exception->retryAfter ?? 5;
 }
 ```
+
+### ZIP archives and spreadsheet exports
+
+`createPdfArchive()` and `export()` return a `BinaryDownload`. Its `body` is the response stream, which the SDK never reads into memory:
+
+```php
+use Lenorix\BeelSdk\Generated\Model\CreateInvoicePdfArchiveRequest;
+
+$download = $company->invoices->createPdfArchive(
+    (new CreateInvoicePdfArchiveRequest())->setInvoiceIds($invoiceIds),
+);
+
+$file = fopen('/path/to/'.($download->fileName ?? 'invoices.zip'), 'wb');
+while (! $download->body->eof()) {
+    fwrite($file, $download->body->read(1_048_576));
+}
+fclose($file);
+
+$download->counts; // ['total' => 10, 'successful' => 9, 'failed' => 1]
+```
+
+`fileName` comes from `Content-Disposition` and is reduced to a base name, so it never contains a path. The archive's `counts` has `total`, `successful` and `failed`; the export's has `total`. Errors such as `EXPORT_SELECTION_REQUIRED` or `EXPORT_LIMIT_EXCEEDED` throw `BeelApiError`. Neither operation retries a `5xx` by default, because each attempt builds the file again.
+
+With the default Guzzle client, the body is downloaded to a temporary stream (in memory up to 2 MB, then on disk) before the call returns. For true network streaming, pass a client created with `new \GuzzleHttp\Client(['stream' => true])`; the body can then be read only once.
 
 The legacy convenience method `$beel->downloadPdf($invoiceId)` returns `['buffer' => ..., 'fileName' => ...]`; it uses the deprecated session-focus invoice route. Prefer the company-scoped route for new integrations.
 

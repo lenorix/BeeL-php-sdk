@@ -4,8 +4,12 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource\Company;
 
+use Lenorix\BeelSdk\Exception\BeelApiError;
 use Lenorix\BeelSdk\Exception\BeelNotReadyError;
+use Lenorix\BeelSdk\Exception\BeelValidationError;
 use Lenorix\BeelSdk\Generated\Client;
+use Lenorix\BeelSdk\Generated\Endpoint\CreateCompanyInvoiceExport;
+use Lenorix\BeelSdk\Generated\Endpoint\CreateCompanyInvoicePdfArchive;
 use Lenorix\BeelSdk\Generated\Model\BulkOperationResult;
 use Lenorix\BeelSdk\Generated\Model\ConvertProformaToInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\CreateCorrectiveInvoiceRequest;
@@ -27,6 +31,7 @@ use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesDeliveriesPostRe
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\VoidInvoiceRequest;
+use Lenorix\BeelSdk\Http\BinaryDownload;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -208,10 +213,24 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
         return $this->execute(fn () => $this->client->createCompanyInvoiceBatch($this->companyId, $request, $headers));
     }
 
-    /** Create a ZIP archive with the available PDFs for the requested invoices. */
-    public function createPdfArchive(CreateInvoicePdfArchiveRequest $request): mixed
+    /**
+     * Download a ZIP with the available PDFs of up to 500 of this company's invoices.
+     *
+     * The body is returned as a stream and never read into memory. Invoices without an
+     * available PDF are left out; `counts` reports `total`, `successful` and `failed`.
+     * A `5xx` is not retried by default, since each attempt builds the archive again;
+     * pass `RequestOptions(retryServerErrors: true)` to change that.
+     *
+     * @throws BeelApiError If BeeL rejects the request, for example when no PDF is available.
+     *
+     * @see https://docs.beel.es/invoices/createCompanyInvoicePdfArchive
+     */
+    public function createPdfArchive(CreateInvoicePdfArchiveRequest $request): BinaryDownload
     {
-        return $this->execute(fn () => $this->client->createCompanyInvoicePdfArchive($this->companyId, $request));
+        return BinaryDownload::fromResponse(
+            $this->executeRaw(new CreateCompanyInvoicePdfArchive($this->companyId, $request), retryServerErrors: false),
+            ['total' => 'X-Bulk-Total', 'successful' => 'X-Bulk-Successful', 'failed' => 'X-Bulk-Failed'],
+        );
     }
 
     /**
@@ -227,10 +246,24 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
         return $this->execute(fn () => $this->client->createCompanyInvoiceDelivery($this->companyId, $request, $headers));
     }
 
-    /** Export this company's invoices using the requested format and filters. */
-    public function export(CreateInvoiceExportRequest $request): mixed
+    /**
+     * Export this company's invoices to a spreadsheet (`.xlsx`).
+     *
+     * Selects the invoices in `invoice_ids`, or those matching `filters`; up to 50,000 per export.
+     * The body is returned as a stream and never read into memory, and `counts` reports `total`.
+     * A `5xx` is not retried by default, since each attempt builds the file again.
+     *
+     * @throws BeelApiError If BeeL rejects the request, for example `EXPORT_SELECTION_REQUIRED` or
+     *                      `EXPORT_LIMIT_EXCEEDED` (a {@see BeelValidationError}).
+     *
+     * @see https://docs.beel.es/invoices/createCompanyInvoiceExport
+     */
+    public function export(CreateInvoiceExportRequest $request): BinaryDownload
     {
-        return $this->execute(fn () => $this->client->createCompanyInvoiceExport($this->companyId, $request));
+        return BinaryDownload::fromResponse(
+            $this->executeRaw(new CreateCompanyInvoiceExport($this->companyId, $request), retryServerErrors: false),
+            ['total' => 'X-Total-Invoices'],
+        );
     }
 
     /** Delete a draft invoice. Issued invoices must be corrected or voided instead. */

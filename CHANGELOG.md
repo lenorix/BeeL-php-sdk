@@ -2,6 +2,20 @@
 
 All notable changes to `BeeL-php-sdk` will be documented in this file.
 
+## Unreleased
+
+### Added
+
+- `createPdfArchive()` and `export()` on company invoices return a `BinaryDownload` with the response stream, file name, content type, length and invoice counts. They used to return `null`, as the generated client discards file bodies. The body is never read into memory, and neither operation retries a `5xx` by default.
+- `$company->representation` with `get()`, `generate()`, `documentLink()`, `submit()` and `cancel()`. Errors carry their real HTTP status.
+- `RequestOptions(maxRetries: …, retryServerErrors: …)` control retries per call.
+
+### Fixed
+
+- Transports that return non-seekable bodies, such as Guzzle with `'stream' => true`, no longer break JSON responses.
+- The SDK no longer copies successful non-JSON response bodies into memory. `Beel::downloadPdf()` now holds the PDF once instead of twice.
+- An error status without a JSON body, such as an empty `503` from a proxy, now throws `BeelApiError` instead of a `TypeError`.
+
 ## v0.4.2 - 2026-09-27
 
 ### Fixed

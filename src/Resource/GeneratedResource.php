@@ -8,9 +8,11 @@ use Lenorix\BeelSdk\Exception\BeelApiError;
 use Lenorix\BeelSdk\Exception\BeelNotReadyError;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Http\RequestOptions;
 use Lenorix\BeelSdk\Http\RequestOptionsSlot;
 use Lenorix\BeelSdk\Http\ResponseContext;
+use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 /** Shared error mapping and response unwrapping for resources that call Jane directly. */
@@ -151,15 +153,50 @@ abstract readonly class GeneratedResource
             throw BeelApiError::fromGenerated($exception);
         }
 
-        if ($response instanceof ErrorResponse) {
+        $httpResponse = $this->responseContext?->response();
+        // An error status Jane has no model for (such as an empty 503 from a proxy) comes back as null.
+        if ($response instanceof ErrorResponse || ($httpResponse !== null && $httpResponse->getStatusCode() >= 400)) {
             throw BeelApiError::fromErrorResponse(
-                $response,
-                $this->responseContext?->response(),
+                $response instanceof ErrorResponse ? $response : new ErrorResponse,
+                $httpResponse,
                 $this->responseContext?->body(),
             );
         }
 
         return $this->unwrap($response);
+    }
+
+    /**
+     * Run an endpoint and return its HTTP response without letting Jane read the body.
+     *
+     * Use it for operations that return a file: the successful body is left unread for the
+     * caller to stream. Responses outside `2xx` are mapped to {@see BeelApiError}.
+     *
+     * @param  bool|null  $retryServerErrors  Default for {@see RequestOptions::$retryServerErrors} when the caller sets none.
+     *
+     * @throws BeelApiError If BeeL answers outside `2xx`.
+     */
+    protected function executeRaw(Endpoint $endpoint, ?bool $retryServerErrors = null): ResponseInterface
+    {
+        if ($this->responseContext === null) {
+            throw new \LogicException('Raw responses need a resource created by a Beel client.');
+        }
+        $this->responseContext->reset();
+        $options = ($this->options() ?? new RequestOptions)->withDefaults($retryServerErrors);
+
+        try {
+            $response = $this->responseContext->withRequestOptions($options, fn (): ResponseInterface => $this->client->executeRawEndpoint($endpoint));
+        } catch (Throwable $exception) {
+            throw BeelApiError::fromGenerated($exception);
+        }
+
+        $status = $response->getStatusCode();
+        if ($status >= 200 && $status < 300) {
+            return $response;
+        }
+
+        // Error bodies are small JSON documents; read them from the response, which may not be seekable.
+        throw BeelApiError::fromErrorResponse(new ErrorResponse, $response, (string) $response->getBody());
     }
 
     /**

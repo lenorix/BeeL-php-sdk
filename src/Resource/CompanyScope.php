@@ -15,6 +15,7 @@ use Lenorix\BeelSdk\Resource\Company\CompanyInvoicesResource;
 use Lenorix\BeelSdk\Resource\Company\CompanyPaymentConnectionsResource;
 use Lenorix\BeelSdk\Resource\Company\CompanyProductsResource;
 use Lenorix\BeelSdk\Resource\Company\CompanyRecurringInvoicesResource;
+use Lenorix\BeelSdk\Resource\Company\CompanyRepresentationResource;
 use Lenorix\BeelSdk\Resource\Company\CompanySeriesResource;
 use Lenorix\BeelSdk\Resource\Company\CompanyTaxConfigurationResource;
 use Lenorix\BeelSdk\Resource\Company\CompanyVeriFactuConfigurationResource;
@@ -51,6 +52,9 @@ final readonly class CompanyScope extends GeneratedResource
     /** VeriFactu configuration for this company's fiscal profile. */
     public CompanyVeriFactuConfigurationResource $verifactuConfiguration;
 
+    /** The AEAT representation this company signs to invoice in production. */
+    public CompanyRepresentationResource $representation;
+
     /**
      * @param  string  $companyId  Company UUID, not its NIF or legal name.
      */
@@ -65,6 +69,7 @@ final readonly class CompanyScope extends GeneratedResource
         $this->paymentConnections = new CompanyPaymentConnectionsResource($client, $companyId, $this->responseContext);
         $this->taxConfiguration = new CompanyTaxConfigurationResource($client, $companyId, $this->responseContext);
         $this->verifactuConfiguration = new CompanyVeriFactuConfigurationResource($client, $companyId, $this->responseContext);
+        $this->representation = new CompanyRepresentationResource($client, $companyId, $this->responseContext);
     }
 
     /**

@@ -2,12 +2,16 @@
 
 declare(strict_types=1);
 
+use GuzzleHttp\Psr7\NoSeekStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Psr7\Utils;
 use Lenorix\BeelSdk\Beel;
 use Lenorix\BeelSdk\Builder\InvoiceBuilder;
 use Lenorix\BeelSdk\Exception\BeelApiError;
 use Lenorix\BeelSdk\Exception\BeelAuthError;
+use Lenorix\BeelSdk\Exception\BeelConflictError;
+use Lenorix\BeelSdk\Exception\BeelNotFoundError;
 use Lenorix\BeelSdk\Exception\BeelNotReadyError;
 use Lenorix\BeelSdk\Exception\BeelValidationError;
 use Lenorix\BeelSdk\Exception\WebhookHeaderError;
@@ -17,6 +21,8 @@ use Lenorix\BeelSdk\Exception\WebhookTimestampError;
 use Lenorix\BeelSdk\Exception\WebhookVerificationError;
 use Lenorix\BeelSdk\Generated\Model\AccountMember;
 use Lenorix\BeelSdk\Generated\Model\CompanyData;
+use Lenorix\BeelSdk\Generated\Model\CreateInvoiceExportRequest;
+use Lenorix\BeelSdk\Generated\Model\CreateInvoicePdfArchiveRequest;
 use Lenorix\BeelSdk\Generated\Model\Customer;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryResponse;
 use Lenorix\BeelSdk\Generated\Model\GenerationHistoryResponse;
@@ -30,14 +36,19 @@ use Lenorix\BeelSdk\Generated\Model\ManagedPaymentEvent;
 use Lenorix\BeelSdk\Generated\Model\MyIdentity;
 use Lenorix\BeelSdk\Generated\Model\Product;
 use Lenorix\BeelSdk\Generated\Model\RecurringInvoiceResponse;
+use Lenorix\BeelSdk\Generated\Model\RepresentationStatusResponseData;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRepresentationSubmitPostBody;
 use Lenorix\BeelSdk\Generated\Model\WebhookDeliveryLog;
 use Lenorix\BeelSdk\Generated\Model\WebhookEvent;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceIssued;
 use Lenorix\BeelSdk\Generated\Model\WebhookSubscription;
+use Lenorix\BeelSdk\Http\BinaryDownload;
 use Lenorix\BeelSdk\Http\DateTimeFields;
 use Lenorix\BeelSdk\Http\RequestOptions;
 use Lenorix\BeelSdk\Http\RetryingClient;
+use Lenorix\BeelSdk\Resource\Company\CompanyRepresentationResource;
 use Lenorix\BeelSdk\Tests\Support\RecordingPsrClient;
+use Lenorix\BeelSdk\Tests\Support\TripwireStream;
 use Lenorix\BeelSdk\Webhook\WebhookEventType;
 use Lenorix\BeelSdk\Webhook\WebhookSignatureHeader;
 use Lenorix\BeelSdk\Webhook\WebhookSigner;
@@ -466,4 +477,170 @@ it('lists every field the generated normalizers parse as date-time', function ()
 
     expect($names)->not->toBeEmpty()
         ->and($listed)->toBe($names);
+});
+
+// File downloads
+
+function archiveRequest(): CreateInvoicePdfArchiveRequest
+{
+    return (new CreateInvoicePdfArchiveRequest)->setInvoiceIds(['inv-1', 'inv-2']);
+}
+
+it('returns the PDF archive as the untouched response stream', function (bool $seekable) {
+    $body = new TripwireStream("PK\x03\x04zip-bytes", $seekable);
+    $transport = new RecordingPsrClient([new Response(200, [
+        'Content-Type' => 'application/zip',
+        'Content-Disposition' => 'attachment; filename="facturas.zip"',
+        'X-Bulk-Total' => '2',
+        'X-Bulk-Successful' => '1',
+        'X-Bulk-Failed' => '1',
+    ], $body)]);
+
+    $download = testClient($transport)->company('c')->invoices->createPdfArchive(archiveRequest());
+
+    expect($download)->toBeInstanceOf(BinaryDownload::class)
+        ->and($download->body)->toBe($body)
+        ->and($body->reads)->toBe(0)
+        ->and($download->fileName)->toBe('facturas.zip')
+        ->and($download->contentType)->toBe('application/zip')
+        ->and($download->contentLength)->toBe(13)
+        ->and($download->counts)->toBe(['total' => 2, 'successful' => 1, 'failed' => 1])
+        ->and($download->body->read(2))->toBe('PK')
+        ->and($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/companies/c/invoices/pdf-archive')
+        ->and($transport->requests[0]->getHeaderLine('Accept'))->toContain('application/zip');
+})->with(['seekable' => [true], 'non-seekable' => [false]]);
+
+it('returns the export spreadsheet with its file name and invoice count', function () {
+    $transport = new RecordingPsrClient([new Response(200, [
+        'Content-Type' => 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'Content-Disposition' => "attachment; filename=\"fallback.xlsx\"; filename*=UTF-8''facturas%20a%C3%B1o_2025.xlsx",
+        'Content-Length' => '42',
+        'X-Total-Invoices' => '17',
+    ], new TripwireStream('PK-xlsx'))]);
+
+    $download = testClient($transport)->company('c')->invoices
+        ->withOptions(new RequestOptions(headers: ['X-Trace-Id' => 'trace-1']))
+        ->export(new CreateInvoiceExportRequest);
+
+    expect($download->fileName)->toBe('facturas año_2025.xlsx')
+        ->and($download->contentLength)->toBe(42)
+        ->and($download->counts)->toBe(['total' => 17])
+        ->and($transport->requests[0]->getHeaderLine('X-Trace-Id'))->toBe('trace-1');
+});
+
+it('reduces download file names to a safe base name', function (string $disposition, ?string $expected) {
+    $transport = new RecordingPsrClient([new Response(200, ['Content-Type' => 'application/zip', 'Content-Disposition' => $disposition], 'PK')]);
+
+    expect(testClient($transport)->company('c')->invoices->createPdfArchive(archiveRequest())->fileName)->toBe($expected);
+})->with([
+    'path traversal' => ['attachment; filename="../../etc/passwd"', 'passwd'],
+    'encoded traversal' => ["attachment; filename*=UTF-8''..%2F..%2Fsecret.zip", 'secret.zip'],
+    'windows path' => ['attachment; filename="C:\\\\temp\\\\a.zip"', 'a.zip'],
+    'only dots' => ['attachment; filename=".."', null],
+    'token form' => ['attachment; filename=archive.zip', 'archive.zip'],
+    'no file name' => ['attachment', null],
+]);
+
+it('maps export errors to BeelApiError with their BeeL code', function () {
+    $selection = new RecordingPsrClient([jsonResponse(['success' => false, 'error' => ['code' => 'EXPORT_SELECTION_REQUIRED', 'message' => 'Select invoices']], 400)]);
+    $limit = new RecordingPsrClient([jsonResponse(['success' => false, 'error' => ['code' => 'EXPORT_LIMIT_EXCEEDED', 'message' => 'Too many']], 422)]);
+    $gateway = new RecordingPsrClient([new Response(502, ['Content-Type' => 'text/html'], '<html>Bad gateway</html>')]);
+
+    foreach ([[$selection, BeelApiError::class, 400, 'EXPORT_SELECTION_REQUIRED'], [$limit, BeelValidationError::class, 422, 'EXPORT_LIMIT_EXCEEDED'], [$gateway, BeelApiError::class, 502, null]] as [$transport, $class, $status, $code]) {
+        try {
+            testClient($transport)->company('c')->invoices->export(new CreateInvoiceExportRequest);
+            test()->fail('Expected an API error.');
+        } catch (BeelApiError $exception) {
+            expect($exception)->toBeInstanceOf($class)
+                ->and($exception->statusCode)->toBe($status)
+                ->and($exception->apiCode)->toBe($code);
+        }
+    }
+});
+
+it('does not retry a failed file download on 5xx unless asked, but retries a 429', function () {
+    $noRetry = new RecordingPsrClient([new Response(503), new Response(200, ['Content-Type' => 'application/zip'], 'PK')]);
+    $optIn = new RecordingPsrClient([new Response(503), new Response(200, ['Content-Type' => 'application/zip'], 'PK')]);
+    $rateLimited = new RecordingPsrClient([new Response(429), new Response(200, ['Content-Type' => 'application/zip'], 'PK')]);
+
+    expect(fn () => testClient($noRetry, maxRetries: 1)->company('c')->invoices->createPdfArchive(archiveRequest()))->toThrow(BeelApiError::class);
+    testClient($optIn, maxRetries: 1)->company('c')->invoices->withOptions(new RequestOptions(retryServerErrors: true))->createPdfArchive(archiveRequest());
+    testClient($rateLimited, maxRetries: 1)->company('c')->invoices->createPdfArchive(archiveRequest());
+
+    expect($noRetry->requests)->toHaveCount(1)
+        ->and($optIn->requests)->toHaveCount(2)
+        ->and($rateLimited->requests)->toHaveCount(2);
+});
+
+it('limits retries per call with maxRetries', function () {
+    $unavailable = static fn (): Response => new Response(503, ['Content-Type' => 'text/plain'], 'Service Unavailable');
+    $transport = new RecordingPsrClient([$unavailable(), $unavailable(), jsonResponse(['success' => true, 'data' => ['id' => 'inv-1']])]);
+    $invoices = testClient($transport, maxRetries: 2)->company('c')->invoices;
+
+    expect(fn () => $invoices->withOptions(new RequestOptions(maxRetries: 0))->get('inv-1'))->toThrow(BeelApiError::class, 'HTTP 503')
+        ->and($transport->requests)->toHaveCount(1)
+        ->and(fn () => new RequestOptions(maxRetries: -1))->toThrow(InvalidArgumentException::class);
+});
+
+it('parses JSON from a transport that streams non-seekable bodies', function () {
+    $transport = new RecordingPsrClient([new Response(200, ['Content-Type' => 'application/json'], new NoSeekStream(Utils::streamFor('{"success":true,"data":{"id":"inv-1","created_at":"2026-09-25T12:00:00.123Z"}}')))]);
+
+    $invoice = testClient($transport)->company('c')->invoices->get('inv-1');
+
+    expect($invoice->getId())->toBe('inv-1')
+        ->and($invoice->getCreatedAt()->format(DATE_ATOM))->toBe('2026-09-25T12:00:00+00:00');
+});
+
+it('keeps a non-seekable JSON body readable when nothing needs normalizing', function () {
+    $transport = new RecordingPsrClient([new Response(200, ['Content-Type' => 'application/json'], new NoSeekStream(Utils::streamFor('{"success":true,"data":{"id":"inv-1"}}')))]);
+
+    expect(testClient($transport)->company('c')->invoices->get('inv-1')->getId())->toBe('inv-1');
+});
+
+// Representation
+
+it('exposes the company representation flow with real HTTP statuses', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['status' => 'PENDING_SIGNATURE', 'message' => 'Sign it']]),
+        jsonResponse(['success' => true, 'data' => ['download_url' => 'https://signed.example.test/r.pdf', 'expires_in_seconds' => 300]]),
+        jsonResponse(['success' => false, 'error' => ['code' => 'REPRESENTATION_NOT_FOUND', 'message' => 'None']], 404),
+        jsonResponse(['success' => false, 'error' => ['code' => 'REPRESENTATION_IN_PROGRESS', 'message' => 'Busy']], 409),
+        new Response(204),
+    ]);
+    $representation = testClient($transport)->company('c')->withOptions(new RequestOptions(headers: ['X-Tenant' => 't-1']))->representation;
+
+    expect($representation)->toBeInstanceOf(CompanyRepresentationResource::class)
+        ->and($representation->get())->toBeInstanceOf(RepresentationStatusResponseData::class)
+        ->and($representation->documentLink()->getDownloadUrl())->toBe('https://signed.example.test/r.pdf');
+
+    try {
+        $representation->documentLink();
+        test()->fail('Expected a not found error.');
+    } catch (BeelNotFoundError $exception) {
+        expect($exception->statusCode)->toBe(404)->and($exception->apiCode)->toBe('REPRESENTATION_NOT_FOUND');
+    }
+    try {
+        $representation->generate();
+        test()->fail('Expected a conflict error.');
+    } catch (BeelConflictError $exception) {
+        expect($exception->statusCode)->toBe(409)->and($exception->apiCode)->toBe('REPRESENTATION_IN_PROGRESS');
+    }
+    $representation->cancel();
+
+    expect($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/companies/c/representation')
+        ->and($transport->requests[1]->getUri()->getPath())->toBe('/api/v1/companies/c/representation/document')
+        ->and($transport->requests[4]->getMethod())->toBe('DELETE')
+        ->and(array_map(static fn ($request): string => $request->getHeaderLine('X-Tenant'), $transport->requests))->toBe(array_fill(0, 5, 't-1'));
+});
+
+it('uploads the signed representation as a replayable multipart body', function () {
+    $transport = new RecordingPsrClient([new Response(503), jsonResponse(['success' => true, 'data' => ['status' => 'VALIDATING', 'message' => 'Queued']])]);
+    $representation = testClient($transport, maxRetries: 1)->company('c')->representation;
+
+    $representation->submit((new V1CompaniesCompanyIdRepresentationSubmitPostBody)->setFile('%PDF-signed'), ['Idempotency-Key' => 'sign-1']);
+
+    expect($transport->requests)->toHaveCount(2)
+        ->and($transport->requests[0]->getHeaderLine('Content-Type'))->toStartWith('multipart/form-data')
+        ->and((string) $transport->requests[1]->getBody())->toContain('%PDF-signed')
+        ->and($transport->requests[1]->getHeaderLine('Idempotency-Key'))->toBe('sign-1');
 });

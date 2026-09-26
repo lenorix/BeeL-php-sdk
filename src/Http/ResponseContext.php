@@ -55,8 +55,10 @@ final class ResponseContext
         $this->response = $response;
         $this->body = null;
 
+        // Keep a copy for error mapping only; a successful file download must not be read into memory.
+        $isJson = str_contains(strtolower($response->getHeaderLine('Content-Type')), 'json');
         $body = $response->getBody();
-        if (! $body->isSeekable()) {
+        if (! $body->isSeekable() || (! $isJson && $response->getStatusCode() < 400)) {
             return;
         }
 

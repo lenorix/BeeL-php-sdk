@@ -49,8 +49,11 @@ final readonly class RetryingClient implements ClientInterface
         $body = $request->getBody();
         $position = $body->isSeekable() ? $body->tell() : null;
         $canReplayBody = $position !== null || $body->getSize() === 0;
+        $options = $this->responseContext->requestOptions();
+        $maxRetries = $options->maxRetries ?? $this->maxRetries;
         // A POST or PATCH that failed with a 5xx may already have been applied; repeat it only when BeeL can deduplicate it.
-        $canRetry = in_array($request->getMethod(), self::IDEMPOTENT_METHODS, true) || $request->hasHeader('Idempotency-Key');
+        $canRetry = ($options->retryServerErrors ?? true)
+            && (in_array($request->getMethod(), self::IDEMPOTENT_METHODS, true) || $request->hasHeader('Idempotency-Key'));
 
         for ($attempt = 0; ; $attempt++) {
             if ($attempt > 0 && $position !== null) {
@@ -62,7 +65,7 @@ final readonly class RetryingClient implements ClientInterface
             // BeeL rejects a 429 without applying it; a 5xx may have been applied, so it needs $canRetry.
             $status = $response->getStatusCode();
             $retryable = $status === 429 || ($status >= 500 && $canRetry);
-            if ($attempt >= $this->maxRetries || ! $canReplayBody || ! $retryable) {
+            if ($attempt >= $maxRetries || ! $canReplayBody || ! $retryable) {
                 return $response;
             }
 
@@ -130,10 +133,15 @@ final readonly class RetryingClient implements ClientInterface
             return $response;
         }
 
-        $body = (string) $response->getBody();
+        $stream = $response->getBody();
+        $position = $stream->isSeekable() ? $stream->tell() : null;
+        $body = (string) $stream;
         $normalized = DateTimeFields::normalizeJson($body);
 
-        if ($normalized === $body) {
+        // A non-seekable body is consumed by the read above, so it must be replaced even when unchanged.
+        if ($normalized === $body && $position !== null) {
+            $stream->seek($position);
+
             return $response;
         }
 

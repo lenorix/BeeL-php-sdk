@@ -24,11 +24,20 @@ final readonly class RequestOptions
      *                                       BeeL accepts letters, digits, `_` and `-`, up to 255 characters.
      * @param  array<array-key, mixed>  $headers  Extra request headers, as `name => value` or `name => list of values`.
      *                                            `Authorization`, `Host`, `Content-Type` and `Content-Length` are rejected.
+     * @param  int|null  $maxRetries  Retries after the first attempt for these requests; null keeps the client's `maxRetries`.
+     *                                `0` disables retries, for example inside queue workers that retry on their own.
+     * @param  bool|null  $retryServerErrors  Whether a `5xx` may be retried. A `429` is always retryable, because BeeL
+     *                                        rejects it without applying the request. Null keeps the operation's default.
      */
     public function __construct(
         public ?string $idempotencyKey = null,
         array $headers = [],
+        public ?int $maxRetries = null,
+        public ?bool $retryServerErrors = null,
     ) {
+        if ($maxRetries !== null && $maxRetries < 0) {
+            throw new \InvalidArgumentException('Max retries must not be negative.');
+        }
         if ($idempotencyKey !== null && preg_match('/^[A-Za-z0-9_-]{1,255}$/', $idempotencyKey) !== 1) {
             throw new \InvalidArgumentException('Idempotency key must contain only letters, digits, "_" or "-" and be at most 255 characters.');
         }
@@ -59,6 +68,16 @@ final readonly class RequestOptions
             $normalized[$name] = $values;
         }
         $this->headers = $normalized;
+    }
+
+    /**
+     * Fill options the caller left unset with an operation's defaults.
+     *
+     * @internal
+     */
+    public function withDefaults(?bool $retryServerErrors = null): self
+    {
+        return new self($this->idempotencyKey, $this->headers, $this->maxRetries, $this->retryServerErrors ?? $retryServerErrors);
     }
 
     /**
