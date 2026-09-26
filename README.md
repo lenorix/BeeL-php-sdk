@@ -120,7 +120,7 @@ foreach ($company->invoices->all(['status' => ['ISSUED'], 'limit' => 100]) as $i
 }
 ```
 
-Filters and `limit` apply to every page, and `page` sets the first page to read. Iterators are available for company invoices, customers, products, series, recurring invoices (`all()` and `allHistory()`), payment events, and for account companies, members (`all()` and `allGrants()`), invitations, webhooks (`all()` and `allDeliveries()`), emails, and `$beel->accounts->all()`, which follows BeeL's `next_cursor`.
+Filters and `limit` apply to every page, and `page` sets the first page to read. Iteration stops on the last page, on an empty page, or if BeeL answers a different page than the one requested. Iterators are available for company invoices, customers, products, series, recurring invoices (`all()` and `allHistory()`), payment events, and for account companies, members (`all()` and `allGrants()`), invitations, webhooks (`all()` and `allDeliveries()`), emails, and `$beel->accounts->all()`, which follows BeeL's `next_cursor`.
 
 ## Per-call options
 
@@ -155,12 +155,20 @@ $identity->getCredential()->getScopes();
 The representation is the AEAT authorization a company signs so BeeL can submit its invoices in production:
 
 ```php
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRepresentationSubmitPostBody;
+
 $company->representation->generate();
-$link = $company->representation->documentLink(); // download_url, expires_in_seconds
-$company->representation->submit($signedDocument);
-$status = $company->representation->get();
+$link = $company->representation->documentLink(); // getDownloadUrl(), getExpiresInSeconds()
+
+$signed = (new V1CompaniesCompanyIdRepresentationSubmitPostBody())
+    ->setFile(fopen('/path/to/signed.pdf', 'rb'));
+$company->representation->submit($signed); // accepted for validation
+
+$status = $company->representation->get()->getStatus();
 $company->representation->cancel();
 ```
+
+`submit()` uploads the signed document as `multipart/form-data`. BeeL validates the signature asynchronously, so poll `get()` for the outcome. Errors carry their real HTTP status, for example `BeelNotFoundError` or `BeelConflictError`.
 
 ## Accounts and payment connections
 
@@ -323,7 +331,9 @@ API errors are mapped to semantic exception classes. All extend `BeelApiError`:
 | `BeelRateLimitError` | 429 | `statusCode`, `retryAfter`, `retryAfterSeconds` |
 | `BeelApiError` | Other API errors | `statusCode`, `apiCode`, `details`, `requestId` |
 
-`$exception->context()` returns `statusCode`, `apiCode`, `requestId` and `retryAfter` as an array, ready for a PSR-3 logging context. It leaves out `details`, because validation errors echo submitted values such as NIFs or amounts; read `$exception->details` explicitly when you need them.
+An error without a JSON body, such as an HTML `502` or an empty `503` from a proxy, is mapped the same way, with its real `statusCode`. `BeelNotReadyError` (HTTP `202`, see [PDF downloads](#pdf-downloads)) does not extend `BeelApiError`, because it is not an error.
+
+`$exception->context()` returns `status_code`, `api_code`, `request_id` and `retry_after` as an array, ready for a PSR-3 logging context. It leaves out `details`, because validation errors echo submitted values such as NIFs or amounts; read `$exception->details` explicitly when you need them.
 
 ```php
 use Lenorix\BeelSdk\Exception\BeelNotFoundError;

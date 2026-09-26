@@ -283,6 +283,29 @@ it('falls back to page counts when has_next is absent and stops on an empty page
         ->and($transport->requests)->toHaveCount(2);
 });
 
+it('stops instead of looping when BeeL ignores the requested page', function () {
+    $transport = new RecordingPsrClient([
+        invoicePage(['a'], 1, 3, hasNext: true),
+        invoicePage(['a'], 1, 3, hasNext: true),
+    ]);
+
+    $ids = array_map(static fn (Invoice $invoice): string => $invoice->getId(), iterator_to_array(testClient($transport)->company('c')->invoices->all()));
+
+    expect($ids)->toBe(['a', 'a'])
+        ->and($transport->requests)->toHaveCount(2);
+});
+
+it('keeps paginating when BeeL does not report the current page', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['invoices' => [['id' => 'a']], 'pagination' => ['has_next' => true]]]),
+        jsonResponse(['success' => true, 'data' => ['invoices' => [['id' => 'b']], 'pagination' => ['has_next' => false]]]),
+    ]);
+
+    $ids = array_map(static fn (Invoice $invoice): string => $invoice->getId(), iterator_to_array(testClient($transport)->company('c')->invoices->all()));
+
+    expect($ids)->toBe(['a', 'b']);
+});
+
 it('follows next_cursor for cursor-paginated lists', function () {
     $transport = new RecordingPsrClient([
         jsonResponse(['success' => true, 'data' => ['accounts' => [['id' => 'acc-1']], 'next_cursor' => 'cur-2']]),

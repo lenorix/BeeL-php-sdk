@@ -104,7 +104,8 @@ abstract readonly class GeneratedResource
                 yield $item;
             }
 
-            if ($batch === [] || ! $this->hasNextPage($response)) {
+            $reportedPage = $this->reportedPage($response);
+            if ($batch === [] || ! $this->hasNextPage($response) || ($reportedPage !== null && $reportedPage !== $page)) {
                 return;
             }
             $page++;
@@ -247,6 +248,23 @@ abstract readonly class GeneratedResource
                 $value->applyOptions($options);
             }
         }
+    }
+
+    /**
+     * The page number BeeL says it answered, or null when it does not say.
+     *
+     * A server that ignored `page` would keep answering the same page with `has_next`;
+     * comparing the two stops the iteration instead of looping forever.
+     */
+    private function reportedPage(object $response): ?int
+    {
+        if (! method_exists($response, 'isInitialized') || ! method_exists($response, 'getPagination') || ! $response->isInitialized('pagination')) {
+            return null;
+        }
+        $pagination = $response->getPagination();
+
+        return is_object($pagination) && method_exists($pagination, 'isInitialized') && method_exists($pagination, 'getCurrentPage')
+            && $pagination->isInitialized('currentPage') ? (int) $pagination->getCurrentPage() : null;
     }
 
     /**

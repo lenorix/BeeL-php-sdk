@@ -15,6 +15,8 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 - Transports that return non-seekable bodies, such as Guzzle with `'stream' => true`, no longer break JSON responses.
 - The SDK no longer copies successful non-JSON response bodies into memory. `Beel::downloadPdf()` now holds the PDF once instead of twice.
 - An error status without a JSON body, such as an empty `503` from a proxy, now throws `BeelApiError` instead of a `TypeError`.
+- Error responses without a `Content-Type` no longer trigger a PHP deprecation in the generated client before reaching `BeelApiError`.
+- `all()` stops if BeeL answers a different page than the one requested, instead of looping forever on the same page.
 
 ## v0.4.2 - 2026-09-27
 
