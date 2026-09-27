@@ -7,6 +7,7 @@ namespace Lenorix\BeelSdk\Resource\Company;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\ListManagedPaymentEventsResponseData;
 use Lenorix\BeelSdk\Generated\Model\ManagedPaymentEvent;
+use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -25,7 +26,7 @@ final readonly class CompanyPaymentEventsResource extends GeneratedResource
      */
     public function list(array $query = []): mixed
     {
-        return $this->execute(fn () => $this->client->listCompanyPaymentEvents($this->companyId, $this->connectionId, $query));
+        return $this->execute(fn () => $this->client->listCompanyPaymentEvents($this->companyId, $this->connectionId, QueryParameters::lists($query)));
     }
 
     /**

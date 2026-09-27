@@ -8,9 +8,13 @@ use GuzzleHttp\Client as GuzzleClient;
 use Http\Client\Common\Plugin\AddHostPlugin;
 use Http\Client\Common\Plugin\AddPathPlugin;
 use Http\Client\Common\Plugin\HeaderDefaultsPlugin;
+use Http\Client\Common\PluginClient;
 use Http\Discovery\Psr17FactoryDiscovery;
+use Lenorix\BeelSdk\Exception\BeelApiError;
 use Lenorix\BeelSdk\Exception\BeelNotReadyError;
 use Lenorix\BeelSdk\Generated\Client as JaneClient;
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Http\RequestOptions;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Http\RetryingClient;
 use Lenorix\BeelSdk\Resource\AccountScope;
@@ -66,6 +70,9 @@ final readonly class Beel
 
     private ClientInterface $transport;
 
+    /** The transport with the API host, base path and authentication applied, for {@see self::request()}. */
+    private ClientInterface $api;
+
     private ResponseContext $responseContext;
 
     /**
@@ -98,11 +105,13 @@ final readonly class Beel
         $uri = Psr17FactoryDiscovery::findUriFactory()->createUri(rtrim($baseUrl, '/'));
         $this->responseContext = new ResponseContext;
         $this->transport = new RetryingClient($httpClient ?? new GuzzleClient, $maxRetries, $retryDelayMs, $maxRetryDelayMs, $autoIdempotencyKey, $this->responseContext);
-        $this->raw = JaneClient::create($this->transport, [
+        $plugins = [
             new AddHostPlugin($uri),
             new AddPathPlugin($uri),
             new HeaderDefaultsPlugin(['Authorization' => 'Bearer '.$apiKey]),
-        ], applyServerPlugins: false);
+        ];
+        $this->raw = JaneClient::create($this->transport, $plugins, applyServerPlugins: false);
+        $this->api = new PluginClient($this->transport, $plugins);
 
         $this->catalogs = new CatalogsResource($this->raw, $this->responseContext);
         $this->nif = new NifResource($this->raw, $this->responseContext);
@@ -113,6 +122,52 @@ final readonly class Beel
         $this->products = new ProductsResource($this->raw, $this->responseContext);
         $this->series = new SeriesResource($this->raw, $this->responseContext);
         $this->configuration = new ConfigurationResource($this->raw, $this->responseContext);
+    }
+
+    /**
+     * Call any API path, like the official Node.js SDK's `beel.raw.GET(...)`.
+     *
+     * Use it for operations without a convenience method. It shares the client's
+     * authentication, retries and idempotency keys, and maps errors to {@see BeelApiError}
+     * like every resource method. `{name}` placeholders in the path are filled from
+     * `$pathParams`. In the query, booleans are sent as `true`/`false`, lists as a
+     * comma-separated value, and maps as `name[key]=value`.
+     *
+     * @param  string  $method  HTTP method, such as `GET` or `POST`.
+     * @param  string  $path  API path, such as `/v1/companies/{company_id}/logo`.
+     * @param  array<string, string>  $pathParams  Values for the `{name}` placeholders.
+     * @param  array<string, mixed>  $query  Query parameters.
+     * @param  mixed  $body  JSON body: an array, a JSON-serializable object, or null for none.
+     * @return mixed The decoded JSON response, including BeeL's envelope, or null for an empty body.
+     *
+     * @throws BeelApiError If BeeL answers outside `2xx`.
+     */
+    public function request(string $method, string $path, array $pathParams = [], array $query = [], mixed $body = null, ?RequestOptions $options = null): mixed
+    {
+        $path = (string) preg_replace_callback('/\{([A-Za-z0-9_]+)\}/', static function (array $matches) use ($pathParams): string {
+            if (! isset($pathParams[$matches[1]])) {
+                throw new \InvalidArgumentException(sprintf('Missing path parameter "%s".', $matches[1]));
+            }
+
+            return rawurlencode($pathParams[$matches[1]]);
+        }, $path);
+        $queryString = self::queryString($query);
+
+        $request = Psr17FactoryDiscovery::findRequestFactory()->createRequest(strtoupper($method), $path.($queryString === '' ? '' : '?'.$queryString))
+            ->withHeader('Accept', 'application/json');
+        if ($body !== null) {
+            $request = $request->withHeader('Content-Type', 'application/json')
+                ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode($body, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION)));
+        }
+
+        $this->responseContext->reset();
+        $response = $this->responseContext->withRequestOptions($options, fn () => $this->api->sendRequest($request));
+        $contents = (string) $response->getBody();
+        if ($response->getStatusCode() >= 400) {
+            throw BeelApiError::fromErrorResponse(new ErrorResponse, $response, $contents);
+        }
+
+        return $contents === '' ? null : json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
     }
 
     /**
@@ -151,5 +206,33 @@ final readonly class Beel
         }
 
         return ['buffer' => (string) $response->getBody(), 'fileName' => $pdf->getFileName()];
+    }
+
+    /**
+     * @param  array<array-key, mixed>  $query
+     */
+    private static function queryString(array $query, ?string $prefix = null): string
+    {
+        $pairs = [];
+        foreach ($query as $key => $value) {
+            $name = $prefix === null ? (string) $key : $prefix.'['.$key.']';
+            if ($value === null) {
+                continue;
+            }
+            if (is_array($value) && ! array_is_list($value)) {
+                $nested = self::queryString($value, $name);
+                if ($nested !== '') {
+                    $pairs[] = $nested;
+                }
+
+                continue;
+            }
+            $value = is_array($value)
+                ? implode(',', array_map(static fn (mixed $item): string => is_bool($item) ? ($item ? 'true' : 'false') : (string) $item, $value))
+                : (is_bool($value) ? ($value ? 'true' : 'false') : (string) $value);
+            $pairs[] = rawurlencode($name).'='.rawurlencode($value);
+        }
+
+        return implode('&', $pairs);
     }
 }

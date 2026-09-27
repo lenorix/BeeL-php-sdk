@@ -93,7 +93,7 @@ final readonly class WebhookVerifier
         } catch (\JsonException $exception) {
             throw new WebhookPayloadError('Invalid JSON in webhook body.', previous: $exception);
         }
-        if (! is_array($event)) {
+        if (! is_array($event) || ($event !== [] && array_is_list($event))) {
             throw new WebhookPayloadError('BeeL webhook payload must be a JSON object.');
         }
 

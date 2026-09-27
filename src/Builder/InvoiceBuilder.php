@@ -139,8 +139,8 @@ final class InvoiceBuilder
         if ($this->lines === []) {
             throw new \LogicException('At least one invoice line is required');
         }
-        $this->request->setLines($this->lines);
 
-        return $this->request;
+        // A fresh model on every call, like the Node.js SDK: later builder calls never change it.
+        return (clone $this->request)->setLines(array_map(static fn (object $line): object => clone $line, $this->lines));
     }
 }

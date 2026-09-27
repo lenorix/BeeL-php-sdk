@@ -233,9 +233,25 @@ $customer = $company->customers->create($customerRequest);
 
 `InvoiceBuilder` supports `type()`, `forCustomer()`, `operationDate()`, `dueDate()`, `series()`, `externalRef()`, `metadata()`, `notes()`, `addLine()`, and `addLineObject()`. BeeL requires an explicit `main_tax` on every normal invoice line; `addLine()` is a convenience shortcut without tax fields, so use `addLineObject()` when building a valid taxable line. `CustomerBuilder` supports name, NIF, email, phone, notes, and address. Each builder checks its documented required fields when `build()` is called.
 
-## Raw Jane client
+## Any endpoint
 
-`$beel->raw` exposes the generated Jane client for operations without a handwritten convenience wrapper. It uses the same configured authentication and transport:
+`$beel->request()` calls any API path, like the official Node.js SDK's `beel.raw.GET(...)`. It uses the client's authentication, retries and idempotency keys, and maps errors to `BeelApiError` like every resource method. It returns the decoded JSON response, including BeeL's envelope:
+
+```php
+use Lenorix\BeelSdk\Http\RequestOptions;
+
+$response = $beel->request('GET', '/v1/companies/{company_id}/series/defaults', ['company_id' => 'company-uuid']);
+$defaults = $response['data'];
+
+$beel->request('PUT', '/v1/companies/{company_id}/series/defaults', ['company_id' => 'company-uuid'], options: new RequestOptions(idempotencyKey: 'seed-defaults'));
+$beel->request('DELETE', '/v1/companies/{company_id}/logo', ['company_id' => 'company-uuid']);
+```
+
+In the query, booleans are sent as `true`/`false`, lists as a comma-separated value and maps as `name[key]=value`; `null` values are left out.
+
+### Raw Jane client
+
+`$beel->raw` exposes the generated Jane client, with typed models for every operation in the contract. It uses the same authentication and transport, but it returns Jane's `ErrorResponse` models or exceptions instead of `BeelApiError`:
 
 ```php
 $identity = $beel->raw->getMyIdentity();
@@ -372,15 +388,18 @@ The SDK retains the deprecated compatibility surface from the API, including `$b
 
 ## Differences from the official Node.js SDK
 
-The SDK follows the official [`@beel_es/sdk`](https://www.npmjs.com/package/@beel_es/sdk): the same client options and defaults, resources and method names, error classes, enums, builder methods and messages, and fallback error codes. When porting code, note these differences:
+The SDK follows the official [`@beel_es/sdk`](https://www.npmjs.com/package/@beel_es/sdk): the same client options and defaults, resources and method names, error classes, builder methods and messages, and fallback error codes. Its enums are covered too, with every value in the OpenAPI contract, and some the Node.js SDK only declares as types are available here at runtime. When porting code, note these differences:
 
 - **Names:** classes use `Beel` casing (`Beel`, `BeelApiError`, `BeelRateLimitError`…), not `BeeL`. The BeeL error code is `apiCode`, because PHP's `Exception::$code` holds the HTTP status.
 - **Error data:** every error keeps the code and `details` BeeL sent. The Node.js SDK replaces the code of 401, 403, 404, 409, 422 and 429 errors with a fixed one, and drops `details` on all of them except 422, so a check such as `apiCode === 'UNPROCESSABLE_ENTITY'` only matches when BeeL sent no code.
 - **Arguments and return values:** requests can be arrays in API format, like the Node.js SDK's plain objects, or Jane models. Methods return Jane models (objects with getters), not plain JSON, and list methods return the whole page with its pagination.
-- **Retries:** `429` and `5xx` responses are retried with the same `Idempotency-Key` on every attempt, and `autoIdempotencyKey: false` is honored.
-- **Webhooks:** every `v1` signature in the header is checked, so a secret rotation does not break verification. `verify()` returns an array and `verifyEvent()` a typed model; failures use the subclasses of `WebhookVerificationError`.
+- **Retries:** `429` responses are always retried. A `5xx` is retried for GET, PUT and DELETE, and for POST or PATCH only when the request carries an `Idempotency-Key` (POST requests get one automatically unless `autoIdempotencyKey` is `false`). The key stays the same on every attempt. File downloads (`createPdfArchive()`, `export()`) do not retry a `5xx` by default.
+- **Webhooks:** every `v1` signature in the header is checked, so a secret rotation does not break verification. The body must be a string with the exact bytes received. `verify()` returns an array and `verifyEvent()` a typed model; failures use the subclasses of `WebhookVerificationError`.
+- **Query parameters:** list filters such as `status` accept a single value or a list and are sent as a comma-separated value (`status=DRAFT,ISSUED`), as the OpenAPI contract describes; the Node.js SDK repeats the parameter instead. Booleans are sent as `true`/`false`, like in the Node.js SDK.
+- **Request IDs:** `requestId` comes from the `X-Request-Id` header when present, then from `meta.request_id` in the body; the Node.js SDK reads only the body.
+- **Any endpoint:** `$beel->request()` is the equivalent of `beel.raw.GET(...)`. `$beel->raw` is the generated Jane client, which does not map errors to `BeelApiError`.
 - **Writes without a body:** they are sent as `{}` like in the Node.js SDK, but an existing `Content-Type`, such as a multipart upload, is never replaced.
-- **Extras:** `all()` iterators, per-call `withOptions()`, `BinaryDownload` for archives and exports, `$company->representation`, `BeelNotReadyError` with `Retry-After` for PDFs, `WebhookSigner`, and `$beel->me`.
+- **Extras:** `$beel->request()` for any path, `all()` iterators, per-call `withOptions()`, `BinaryDownload` for archives and exports, `$company->representation`, `BeelNotReadyError` with `Retry-After` for PDFs, `WebhookSigner`, and `$beel->me`.
 
 ## Documentation and support
 

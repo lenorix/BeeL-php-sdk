@@ -17,6 +17,7 @@ use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdMarkSentPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdReschedulePatchBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSchedulePostBody;
 use Lenorix\BeelSdk\Generated\Model\VoidInvoiceRequest;
+use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
@@ -35,7 +36,7 @@ final readonly class InvoicesResource extends GeneratedResource
      */
     public function list(array $query = []): mixed
     {
-        return $this->execute(fn () => $this->client->listInvoices($query));
+        return $this->execute(fn () => $this->client->listInvoices(QueryParameters::lists($query)));
     }
 
     /**

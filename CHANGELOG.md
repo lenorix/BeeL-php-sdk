@@ -8,9 +8,11 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 - `createPdfArchive()` and `export()` on company invoices return a `BinaryDownload` with the response stream, file name, content type, length and invoice counts. They used to return `null`, as the generated client discards file bodies. The body is never read into memory, and neither operation retries a `5xx` by default.
 - `$company->representation` with `get()`, `generate()`, `documentLink()`, `submit()` and `cancel()`. Errors carry their real HTTP status.
+- `$beel->request()` calls any API path with the client's authentication, retries, per-call options and error mapping, like the Node.js SDK's `beel.raw.GET(...)`.
+- List filters such as `status`, `event_kind` or `related_entity_ids` accept a single value as well as a list.
 - Every method that takes a request model also accepts an array in API format, like the Node.js SDK's plain objects. Invalid arrays and missing required fields throw `InvalidArgumentException` before sending.
 - `RequestOptions(maxRetries: …, retryServerErrors: …)` control retries per call.
-- Enums matching the official Node.js SDK, with every value in the OpenAPI contract: `VeriFactuSubmissionStatus`, `RecurringInvoicePauseReason` and `WebhookAccountRelationship`.
+- Enums covering those of the official Node.js SDK, with every value in the OpenAPI contract: `VeriFactuSubmissionStatus`, `RecurringInvoicePauseReason` and `WebhookAccountRelationship`.
 - The legacy `markSent()` accepts an optional body with `sent_at`, as in the Node.js SDK.
 
 ### Changed
@@ -18,7 +20,10 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 - When BeeL sends no error code, `apiCode` falls back to the Node.js SDK codes (`UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `CONFLICT`, `UNPROCESSABLE_ENTITY`, `RATE_LIMIT_EXCEEDED`, `UNKNOWN`) instead of `null`.
 - `BeelRateLimitError::$retryAfterSeconds` is `60` when BeeL gives no delay, as in the Node.js SDK, and is now typed `int`.
 - A POST, PUT or PATCH without a body is sent as `{}` with `Content-Type: application/json`, as the Node.js SDK does.
-- Builder error messages match the Node.js SDK.
+- Builder error messages match the Node.js SDK, and `build()` returns a fresh model on every call, so later builder calls never change a model already returned.
+- Boolean query parameters are sent as `true`/`false`, like in the Node.js SDK, instead of the generated client's `1`/`0`.
+- A rate limit reads `retry_after` from the error body as well, like the Node.js SDK.
+- Webhook verification rejects a JSON list body; the payload must be an object.
 - The README documents the differences from the official Node.js SDK.
 - `.jane-openapi` sets `date-input-format` so a regenerated client parses date-time values with `new \DateTime()`, keeping microseconds. It changes nothing until the client is regenerated, and the regeneration must also remove `DateTimeFields` (used by the transport and `WebhookVerifier::toEvent()`), which would otherwise still cut the fraction; a test fails until it is removed. After regenerating, an empty date-time string would become the current time instead of throwing `InvalidDateException`.
 

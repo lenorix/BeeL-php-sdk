@@ -51,6 +51,7 @@ use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceIssued;
 use Lenorix\BeelSdk\Generated\Model\WebhookSubscription;
 use Lenorix\BeelSdk\Http\BinaryDownload;
 use Lenorix\BeelSdk\Http\DateTimeFields;
+use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\RequestOptions;
 use Lenorix\BeelSdk\Http\RetryingClient;
@@ -925,4 +926,122 @@ it('uploads the signed representation from an array', function () {
     testClient($transport)->company('c')->representation->submit(['file' => '%PDF-array']);
 
     expect((string) $transport->requests[0]->getBody())->toContain('%PDF-array');
+});
+
+// Second parity round
+
+it('sends boolean query parameters as true and false', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['id' => 'inv-1']], 201),
+        jsonResponse(['success' => true, 'data' => ['events' => [], 'pagination' => ['current_page' => 1, 'total_pages' => 1, 'total_items' => 0, 'items_per_page' => 20]]]),
+    ]);
+    $company = testClient($transport)->company('c');
+
+    $company->invoices->create(InvoiceBuilder::create()->forCustomer('customer-1')->addLine('Consulting', 1, 100)->build(), ['wait_for_pdf' => true]);
+    $company->paymentConnections->events('p')->list(['needs_action' => false, 'page' => 1]);
+
+    expect($transport->requests[0]->getUri()->getQuery())->toBe('wait_for_pdf=true')
+        ->and($transport->requests[1]->getUri()->getQuery())->toContain('needs_action=false')
+        ->and($transport->requests[1]->getUri()->getQuery())->toContain('page=1');
+});
+
+it('accepts a single value for list filters such as status', function () {
+    $transport = new RecordingPsrClient([
+        invoicePage([], 1, 1, hasNext: false),
+        invoicePage([], 1, 1, hasNext: false),
+    ]);
+    $invoices = testClient($transport)->company('c')->invoices;
+
+    $invoices->list(['status' => 'ISSUED']);
+    $invoices->list(['status' => ['DRAFT', 'ISSUED']]);
+
+    parse_str($transport->requests[0]->getUri()->getQuery(), $single);
+    parse_str($transport->requests[1]->getUri()->getQuery(), $several);
+
+    expect($single['status'])->toBe('ISSUED')
+        ->and($single['fiscal_only'])->toBe('false')
+        ->and($several['status'])->toBe('DRAFT,ISSUED');
+});
+
+it('reads retry_after from the error body like the Node.js SDK', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => false, 'error' => ['code' => 'RATE_LIMITED', 'message' => 'Slow', 'retry_after' => 30]], 429)]);
+
+    try {
+        testClient($transport)->company('c')->invoices->get('inv-1');
+        test()->fail('Expected a rate limit error.');
+    } catch (BeelRateLimitError $exception) {
+        expect($exception->retryAfter)->toBe(30)
+            ->and($exception->retryAfterSeconds)->toBe(30);
+    }
+});
+
+it('rejects a webhook body that is a JSON list but accepts an empty object', function () {
+    $signer = new WebhookSigner('whsec_test');
+    $verifier = new WebhookVerifier('whsec_test');
+
+    expect(fn () => $verifier->verify('[1,2]', $signer->sign('[1,2]', 1_000), 1_000))->toThrow(WebhookPayloadError::class)
+        ->and($verifier->verify('{}', $signer->sign('{}', 1_000), 1_000))->toBe([]);
+});
+
+it('builds a fresh model on every build() call', function () {
+    $builder = InvoiceBuilder::create()->forCustomer('customer-1')->addLine('First', 1, 10);
+    $first = $builder->build();
+    $builder->addLine('Second', 1, 20);
+    $customers = CustomerBuilder::create()->name('Acme')->nif('B1')->address('Calle', '1', '28001', 'Madrid', 'Madrid', 'Spain');
+    $customer = $customers->build();
+    $customers->name('Other');
+
+    expect($first)->not->toBe($builder->build())
+        ->and($first->getLines())->toHaveCount(1)
+        ->and($builder->build()->getLines())->toHaveCount(2)
+        ->and($customer->getLegalName())->toBe('Acme');
+});
+
+it('calls any API path with the client authentication and error mapping', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['url' => 'https://cdn.example.test/logo.png']]),
+        jsonResponse(['success' => true, 'data' => ['ok' => true]], 201),
+        jsonResponse(['success' => false, 'error' => ['code' => 'LOGO_NOT_FOUND', 'message' => 'No logo']], 404),
+    ]);
+    $beel = testClient($transport);
+
+    $logo = $beel->request('GET', '/v1/companies/{company_id}/logo', ['company_id' => 'c 1'], ['fiscal_only' => true, 'status' => ['DRAFT', 'ISSUED'], 'metadata' => ['tenant' => 'acme'], 'skip' => null]);
+    $created = $beel->request('POST', '/v1/things', body: ['name' => 'x', 'amount' => 1.0], options: new RequestOptions(idempotencyKey: 'thing-1'));
+
+    expect($logo['data']['url'])->toBe('https://cdn.example.test/logo.png')
+        ->and($created['data']['ok'])->toBeTrue()
+        ->and($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/companies/c%201/logo')
+        ->and(urldecode($transport->requests[0]->getUri()->getQuery()))->toBe('fiscal_only=true&status=DRAFT,ISSUED&metadata[tenant]=acme')
+        ->and($transport->requests[0]->getHeaderLine('Authorization'))->toBe('Bearer beel_sk_test_key')
+        ->and((string) $transport->requests[1]->getBody())->toBe('{"name":"x","amount":1.0}')
+        ->and($transport->requests[1]->getHeaderLine('Idempotency-Key'))->toBe('thing-1');
+
+    try {
+        $beel->request('GET', '/v1/companies/{company_id}/logo', ['company_id' => 'c']);
+        test()->fail('Expected a not found error.');
+    } catch (BeelNotFoundError $exception) {
+        expect($exception->apiCode)->toBe('LOGO_NOT_FOUND');
+    }
+    expect(fn () => $beel->request('GET', '/v1/companies/{company_id}'))->toThrow(InvalidArgumentException::class, 'company_id');
+});
+
+it('lists every boolean and list query parameter of the generated endpoints', function () {
+    $booleans = [];
+    $lists = [];
+    foreach (glob(__DIR__.'/../src/Generated/Endpoint/*.php') ?: [] as $file) {
+        if (preg_match('/function getQueryOptionsResolver\(\).*?\n    \}\n/s', (string) file_get_contents($file), $resolver) !== 1) {
+            continue;
+        }
+        preg_match_all("/addAllowedTypes\\('([a-z_]+)', \\['bool'\\]\\)/", $resolver[0], $matches);
+        array_push($booleans, ...$matches[1]);
+        preg_match_all("/addAllowedTypes\\('([a-z_]+)', \\['array'\\]\\)/", $resolver[0], $matches);
+        array_push($lists, ...$matches[1]);
+    }
+    $booleans = array_values(array_unique($booleans));
+    $lists = array_values(array_diff(array_unique($lists), ['metadata']));
+    sort($booleans);
+    sort($lists);
+
+    expect(QueryParameters::BOOLEANS)->toBe($booleans)
+        ->and(QueryParameters::LISTS)->toBe($lists);
 });

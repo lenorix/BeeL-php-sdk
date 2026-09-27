@@ -32,6 +32,7 @@ use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesGetResponse200Da
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\VoidInvoiceRequest;
 use Lenorix\BeelSdk\Http\BinaryDownload;
+use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
@@ -59,7 +60,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function list(array $query = []): V1CompaniesCompanyIdInvoicesGetResponse200Data
     {
-        return $this->execute(fn () => $this->client->listCompanyInvoices($this->companyId, $query));
+        return $this->execute(fn () => $this->client->listCompanyInvoices($this->companyId, QueryParameters::lists($query)));
     }
 
     /**

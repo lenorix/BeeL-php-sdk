@@ -113,6 +113,12 @@ class BeelApiError extends \RuntimeException
         $retryAfterHeader = $response?->getHeaderLine('Retry-After') ?? '';
         $retryAfter = ctype_digit($retryAfterHeader) ? (int) $retryAfterHeader : null;
         $retryAfter ??= self::retryAfterFromDetails($details);
+        // The official Node.js SDK reads `error.retry_after` from the body.
+        if ($retryAfter === null && $body !== null) {
+            $data = json_decode($body, true);
+            $bodyRetryAfter = is_array($data) ? ($data['error']['retry_after'] ?? $data['retry_after'] ?? null) : null;
+            $retryAfter = is_numeric($bodyRetryAfter) ? (int) $bodyRetryAfter : null;
+        }
 
         return self::forStatus(
             $status,

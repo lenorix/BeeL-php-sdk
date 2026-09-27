@@ -96,6 +96,7 @@ final class CustomerBuilder
             throw new \LogicException('Address is required');
         }
 
-        return $this->request->setAddress($this->address);
+        // A fresh model on every call, like the Node.js SDK: later builder calls never change it.
+        return (clone $this->request)->setAddress(clone $this->address);
     }
 }
