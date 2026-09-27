@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\InvoiceBaseEmailConfig;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class InvoiceBaseEmailConfigNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class InvoiceBaseEmailConfigNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === InvoiceBaseEmailConfig::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\InvoiceBaseEmailConfig::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === InvoiceBaseEmailConfig::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\InvoiceBaseEmailConfig::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new InvoiceBaseEmailConfig;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\InvoiceBaseEmailConfig();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -71,10 +66,8 @@ class InvoiceBaseEmailConfigNormalizer implements DenormalizerAwareInterface, De
                 $object[$key] = $value_2;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -83,17 +76,17 @@ class InvoiceBaseEmailConfigNormalizer implements DenormalizerAwareInterface, De
             $values[] = $value;
         }
         $dataArray['recipients'] = $values;
-        if ($data->isInitialized('cc') && $data->getCc() !== null) {
+        if ($data->isInitialized('cc') && null !== $data->getCc()) {
             $values_1 = [];
             foreach ($data->getCc() as $value_1) {
                 $values_1[] = $value_1;
             }
             $dataArray['cc'] = $values_1;
         }
-        if ($data->isInitialized('subject') && $data->getSubject() !== null) {
+        if ($data->isInitialized('subject') && null !== $data->getSubject()) {
             $dataArray['subject'] = $data->getSubject();
         }
-        if ($data->isInitialized('message') && $data->getMessage() !== null) {
+        if ($data->isInitialized('message') && null !== $data->getMessage()) {
             $dataArray['message'] = $data->getMessage();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value_2) {
@@ -101,12 +94,10 @@ class InvoiceBaseEmailConfigNormalizer implements DenormalizerAwareInterface, De
                 $dataArray[$key] = $value_2;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [InvoiceBaseEmailConfig::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\InvoiceBaseEmailConfig::class => false];
     }
 }

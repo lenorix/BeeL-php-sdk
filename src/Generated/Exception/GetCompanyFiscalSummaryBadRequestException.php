@@ -2,22 +2,17 @@
 
 namespace Lenorix\BeelSdk\Generated\Exception;
 
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
-use Psr\Http\Message\ResponseInterface;
-
 class GetCompanyFiscalSummaryBadRequestException extends BadRequestException
 {
     /**
-     * @var ErrorResponse
+     * @var \Lenorix\BeelSdk\Generated\Model\ErrorResponse
      */
     private $errorResponse;
-
     /**
-     * @var ResponseInterface
+     * @var \Psr\Http\Message\ResponseInterface
      */
     private $response;
-
-    public function __construct(ErrorResponse $errorResponse, ResponseInterface $response)
+    public function __construct(\Lenorix\BeelSdk\Generated\Model\ErrorResponse $errorResponse, \Psr\Http\Message\ResponseInterface $response)
     {
         parent::__construct('The request target is malformed: a date that is not `YYYY-MM-DD`, or a range that is
 not a period. A range fault names itself in `details.reason`:
@@ -31,13 +26,11 @@ parameters, so the fault is in the request target and the status is `400`, not `
         $this->errorResponse = $errorResponse;
         $this->response = $response;
     }
-
-    public function getErrorResponse(): ErrorResponse
+    public function getErrorResponse(): \Lenorix\BeelSdk\Generated\Model\ErrorResponse
     {
         return $this->errorResponse;
     }
-
-    public function getResponse(): ResponseInterface
+    public function getResponse(): \Psr\Http\Message\ResponseInterface
     {
         return $this->response;
     }

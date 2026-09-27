@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\AccountImportMetadata;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class AccountImportMetadataNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class AccountImportMetadataNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === AccountImportMetadata::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\AccountImportMetadata::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === AccountImportMetadata::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\AccountImportMetadata::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new AccountImportMetadata;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\AccountImportMetadata();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -60,14 +55,16 @@ class AccountImportMetadataNormalizer implements DenormalizerAwareInterface, Den
         if (\array_key_exists('accounts_filename', $data) && $data['accounts_filename'] !== null) {
             $object->setAccountsFilename($data['accounts_filename']);
             unset($data['accounts_filename']);
-        } elseif (\array_key_exists('accounts_filename', $data) && $data['accounts_filename'] === null) {
+        }
+        elseif (\array_key_exists('accounts_filename', $data) && $data['accounts_filename'] === null) {
             $object->setAccountsFilename(null);
             unset($data['accounts_filename']);
         }
         if (\array_key_exists('customers_filename', $data) && $data['customers_filename'] !== null) {
             $object->setCustomersFilename($data['customers_filename']);
             unset($data['customers_filename']);
-        } elseif (\array_key_exists('customers_filename', $data) && $data['customers_filename'] === null) {
+        }
+        elseif (\array_key_exists('customers_filename', $data) && $data['customers_filename'] === null) {
             $object->setCustomersFilename(null);
             unset($data['customers_filename']);
         }
@@ -80,20 +77,18 @@ class AccountImportMetadataNormalizer implements DenormalizerAwareInterface, Den
                 $object[$key] = $value;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['is_dry_run'] = $data->getIsDryRun();
         $dataArray['total_rows'] = $data->getTotalRows();
         $dataArray['processing_time_ms'] = $data->getProcessingTimeMs();
-        if ($data->isInitialized('accountsFilename') && $data->getAccountsFilename() !== null) {
+        if ($data->isInitialized('accountsFilename') && null !== $data->getAccountsFilename()) {
             $dataArray['accounts_filename'] = $data->getAccountsFilename();
         }
-        if ($data->isInitialized('customersFilename') && $data->getCustomersFilename() !== null) {
+        if ($data->isInitialized('customersFilename') && null !== $data->getCustomersFilename()) {
             $dataArray['customers_filename'] = $data->getCustomersFilename();
         }
         $dataArray['environment'] = $data->getEnvironment();
@@ -102,12 +97,10 @@ class AccountImportMetadataNormalizer implements DenormalizerAwareInterface, Den
                 $dataArray[$key] = $value;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [AccountImportMetadata::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\AccountImportMetadata::class => false];
     }
 }

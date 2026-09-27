@@ -72,7 +72,6 @@ final readonly class RetryingClient implements ClientInterface
             if ($response->getStatusCode() >= 400 && ! $response->hasHeader('Content-Type')) {
                 $response = $response->withHeader('Content-Type', 'application/octet-stream');
             }
-            $response = $this->normalizeDateTimePrecision($response);
             $this->responseContext->capture($response);
             // BeeL rejects a 429 without applying it; a 5xx may have been applied, so it needs $canRetry.
             $status = $response->getStatusCode();
@@ -132,32 +131,6 @@ final readonly class RetryingClient implements ClientInterface
     private function boundedDelay(float $seconds): int
     {
         return (int) min(max(0, $seconds * 1_000), $this->maxRetryDelayMs);
-    }
-
-    /**
-     * Jane's generated date normalizer accepts second precision, while BeeL's
-     * JSON responses can include fractional seconds in ISO date-time values.
-     * Only fields Jane parses as `date-time` are rewritten.
-     */
-    private function normalizeDateTimePrecision(ResponseInterface $response): ResponseInterface
-    {
-        if (! str_contains(strtolower($response->getHeaderLine('Content-Type')), 'application/json')) {
-            return $response;
-        }
-
-        $stream = $response->getBody();
-        $position = $stream->isSeekable() ? $stream->tell() : null;
-        $body = (string) $stream;
-        $normalized = DateTimeFields::normalizeJson($body);
-
-        // A non-seekable body is consumed by the read above, so it must be replaced even when unchanged.
-        if ($normalized === $body && $position !== null) {
-            $stream->seek($position);
-
-            return $response;
-        }
-
-        return $response->withBody(Utils::streamFor($normalized));
     }
 
     private function uuid(): string

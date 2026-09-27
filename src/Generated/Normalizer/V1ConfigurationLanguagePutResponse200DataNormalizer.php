@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\V1ConfigurationLanguagePutResponse200Data;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class V1ConfigurationLanguagePutResponse200DataNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class V1ConfigurationLanguagePutResponse200DataNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === V1ConfigurationLanguagePutResponse200Data::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\V1ConfigurationLanguagePutResponse200Data::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === V1ConfigurationLanguagePutResponse200Data::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\V1ConfigurationLanguagePutResponse200Data::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new V1ConfigurationLanguagePutResponse200Data;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\V1ConfigurationLanguagePutResponse200Data();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -51,14 +46,12 @@ class V1ConfigurationLanguagePutResponse200DataNormalizer implements Denormalize
                 $object[$key] = $value;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('language') && $data->getLanguage() !== null) {
+        if ($data->isInitialized('language') && null !== $data->getLanguage()) {
             $dataArray['language'] = $data->getLanguage();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -66,12 +59,10 @@ class V1ConfigurationLanguagePutResponse200DataNormalizer implements Denormalize
                 $dataArray[$key] = $value;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [V1ConfigurationLanguagePutResponse200Data::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\V1ConfigurationLanguagePutResponse200Data::class => false];
     }
 }

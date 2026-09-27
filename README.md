@@ -71,7 +71,7 @@ $company->invoices->void($invoice->getId(), ['reason' => 'Billing error']);
 
 An array that does not match the model, or lacks a required field, throws `InvalidArgumentException` naming the problem before anything is sent.
 
-Create the invoice first and issue it when it is ready. The generated Jane model returned by the SDK is available directly, so its getters and the complete BeeL response remain accessible. Date-time fields become `DateTime` objects with second precision, as the generated models require; every other value, including anything in `metadata`, keeps exactly what BeeL sent.
+Create the invoice first and issue it when it is ready. The generated Jane model returned by the SDK is available directly, so its getters and the complete BeeL response remain accessible. Date-time fields become `DateTime` objects that keep microseconds, the most PHP's `DateTime` can hold (BeeL sends nanoseconds), and date-times you send go out with microseconds too. Every other value, including anything in `metadata`, keeps exactly what BeeL sent.
 
 ## Client options
 

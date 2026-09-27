@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\InvoiceAttachment;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class InvoiceAttachmentNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class InvoiceAttachmentNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === InvoiceAttachment::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\InvoiceAttachment::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === InvoiceAttachment::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\InvoiceAttachment::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new InvoiceAttachment;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\InvoiceAttachment();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -63,23 +58,21 @@ class InvoiceAttachmentNormalizer implements DenormalizerAwareInterface, Denorma
                 $object[$key] = $value;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('id') && $data->getId() !== null) {
+        if ($data->isInitialized('id') && null !== $data->getId()) {
             $dataArray['id'] = $data->getId();
         }
-        if ($data->isInitialized('name') && $data->getName() !== null) {
+        if ($data->isInitialized('name') && null !== $data->getName()) {
             $dataArray['name'] = $data->getName();
         }
-        if ($data->isInitialized('url') && $data->getUrl() !== null) {
+        if ($data->isInitialized('url') && null !== $data->getUrl()) {
             $dataArray['url'] = $data->getUrl();
         }
-        if ($data->isInitialized('type') && $data->getType() !== null) {
+        if ($data->isInitialized('type') && null !== $data->getType()) {
             $dataArray['type'] = $data->getType();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -87,12 +80,10 @@ class InvoiceAttachmentNormalizer implements DenormalizerAwareInterface, Denorma
                 $dataArray[$key] = $value;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [InvoiceAttachment::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\InvoiceAttachment::class => false];
     }
 }

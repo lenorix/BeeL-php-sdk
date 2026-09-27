@@ -6,6 +6,7 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 ### Upgrading from 0.4
 
+- `DateTime` values from BeeL now carry microseconds, and date-times sent to BeeL include them (`2026-09-25T12:00:00.123456+00:00`); comparisons that assumed whole seconds may need adjusting.
 - `BeelApiError::$apiCode` is never `null`: without a BeeL code it falls back to `UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `CONFLICT`, `UNPROCESSABLE_ENTITY`, `RATE_LIMIT_EXCEEDED` or `UNKNOWN`.
 - `BeelRateLimitError::$retryAfterSeconds` is an `int` and defaults to `60`.
 - `$company->invoices->createPdfArchive()` and `export()` return a `BinaryDownload` instead of `null`.
@@ -43,7 +44,6 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 - A rate limit reads `retry_after` from the error body as well, like the Node.js SDK.
 - Webhook verification rejects a JSON list body; the payload must be an object.
 - The README documents the differences from the official Node.js SDK.
-- `.jane-openapi` sets `date-input-format` so a regenerated client parses date-time values with `new \DateTime()`, keeping microseconds, and `date-format` so it also sends them with microseconds. It changes nothing until the client is regenerated, and the regeneration must also remove `DateTimeFields` (used by the transport and `WebhookVerifier::toEvent()`), which would otherwise still cut the fraction; a test fails until it is removed. After regenerating, an empty date-time string would become the current time instead of throwing `InvalidDateException`.
 
 ### Fixed
 
@@ -54,7 +54,7 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 - An error status without a JSON body, such as an empty `503` from a proxy, now throws `BeelApiError` instead of a `TypeError`.
 - Error responses without a `Content-Type` no longer trigger a PHP deprecation in the generated client before reaching `BeelApiError`.
 - `all()` stops if BeeL answers a different page than the one requested, instead of looping forever on the same page.
-- Values inside free-form maps, such as `metadata`, `details` or request headers, are never rewritten, even when a key inside them matches a date-time field name. Before, `metadata.created_at` lost its fractional seconds. Response data now keeps the values BeeL sent, like the official Node.js SDK.
+- Date-times keep their fractional seconds. Responses and webhooks used to lose them, because the generated client parsed date-times with second precision and the SDK rewrote every response to fit; values in free-form maps such as `metadata` could be rewritten too. The client is now generated to parse date-times with `new \DateTime()` (microseconds, the most PHP holds) and to send them with microseconds, and the SDK no longer rewrites any response or webhook payload.
 
 ## v0.4.2 - 2026-09-27
 

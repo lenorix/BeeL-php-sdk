@@ -2,35 +2,28 @@
 
 namespace Lenorix\BeelSdk\Generated\Exception;
 
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
-use Psr\Http\Message\ResponseInterface;
-
 class DeleteCompanyByIdBadRequestException extends BadRequestException
 {
     /**
-     * @var ErrorResponse
+     * @var \Lenorix\BeelSdk\Generated\Model\ErrorResponse
      */
     private $errorResponse;
-
     /**
-     * @var ResponseInterface
+     * @var \Psr\Http\Message\ResponseInterface
      */
     private $response;
-
-    public function __construct(ErrorResponse $errorResponse, ResponseInterface $response)
+    public function __construct(\Lenorix\BeelSdk\Generated\Model\ErrorResponse $errorResponse, \Psr\Http\Message\ResponseInterface $response)
     {
         parent::__construct('The NIF is the primary company of the account (`CANNOT_DELETE_PRIMARY`).
 ');
         $this->errorResponse = $errorResponse;
         $this->response = $response;
     }
-
-    public function getErrorResponse(): ErrorResponse
+    public function getErrorResponse(): \Lenorix\BeelSdk\Generated\Model\ErrorResponse
     {
         return $this->errorResponse;
     }
-
-    public function getResponse(): ResponseInterface
+    public function getResponse(): \Psr\Http\Message\ResponseInterface
     {
         return $this->response;
     }

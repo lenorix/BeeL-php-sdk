@@ -55,7 +55,6 @@ use Lenorix\BeelSdk\Generated\Model\WebhookEvent;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceIssued;
 use Lenorix\BeelSdk\Generated\Model\WebhookSubscription;
 use Lenorix\BeelSdk\Http\BinaryDownload;
-use Lenorix\BeelSdk\Http\DateTimeFields;
 use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\RequestOptions;
@@ -469,20 +468,6 @@ it('retries a failed request only when repeating it cannot duplicate a write', f
     'PATCH without key rate limited' => ['PATCH', [], true, 2, 429],
 ]);
 
-it('normalizes only date-time fields and leaves look-alike text untouched', function () {
-    $json = '{"created_at":"2026-09-25T12:00:00.123Z","notes":"2026-09-25T12:00:00.123Z",'
-        .'"metadata":{"due":"2026-01-01T00:00:00.5+02:00"},"quoted":"\\"sent_at\\":\\"2026-09-25T12:00:00.1Z\\"","sent_at" : "2026-09-25T12:00:00-03:00"}';
-
-    expect(json_decode(DateTimeFields::normalizeJson($json), true))->toBe([
-        'created_at' => '2026-09-25T12:00:00+00:00',
-        'notes' => '2026-09-25T12:00:00.123Z',
-        'metadata' => ['due' => '2026-01-01T00:00:00.5+02:00'],
-        'quoted' => '"sent_at":"2026-09-25T12:00:00.1Z"',
-        'sent_at' => '2026-09-25T12:00:00-03:00',
-    ])->and(DateTimeFields::normalizeArray(['paid_at' => '2026-09-25T12:00:00.9Z', 'data' => ['note' => '2026-09-25T12:00:00.9Z', 'at' => '2026-09-25T12:00:00.9Z']]))
-        ->toBe(['paid_at' => '2026-09-25T12:00:00+00:00', 'data' => ['note' => '2026-09-25T12:00:00.9Z', 'at' => '2026-09-25T12:00:00+00:00']]);
-});
-
 it('keeps free-text response values that look like dates as BeeL sent them', function () {
     $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => [
         'id' => 'inv-1',
@@ -507,89 +492,7 @@ it('never rewrites values inside free-form maps such as metadata', function () {
 
     expect($invoice->getCreatedAt()->format(DATE_ATOM))->toBe('2026-09-25T12:00:00+00:00')
         ->and($invoice->getMetadata()['created_at'])->toBe('2026-09-25T12:00:00.123Z')
-        ->and($invoice->getMetadata()['nested'])->toBe(['paid_at' => '2026-01-01T00:00:00.5Z'])
-        ->and(DateTimeFields::normalizeArray(['type' => 'x', 'data' => ['metadata' => ['sent_at' => '2026-09-25T12:00:00.1Z'], 'sent_at' => '2026-09-25T12:00:00.1Z']]))
-        ->toBe(['type' => 'x', 'data' => ['metadata' => ['sent_at' => '2026-09-25T12:00:00.1Z'], 'sent_at' => '2026-09-25T12:00:00+00:00']]);
-});
-
-it('keeps numbers, text and empty objects intact when it rewrites a document', function () {
-    $json = '{"created_at":"2026-09-25T12:00:00.1Z","amount":100.0,"count":3,"ratio":0.1,"name":"Añó / \\u00e9","empty":{},"list":[],"big":12345678901234}';
-
-    $normalized = DateTimeFields::normalizeJson($json);
-
-    expect(json_decode($normalized, false))->toEqual(json_decode(str_replace('12:00:00.1Z', '12:00:00+00:00', $json), false))
-        ->and($normalized)->toContain('"amount":100.0')
-        ->and($normalized)->toContain('"empty":{}')
-        ->and(DateTimeFields::normalizeJson('{"notes":"2026-09-25T12:00:00.1Z", "x" : 1}'))->toBe('{"notes":"2026-09-25T12:00:00.1Z", "x" : 1}');
-});
-
-it('lists every free-form map the generated normalizers copy without parsing', function () {
-    $names = [];
-    foreach (glob(__DIR__.'/../src/Generated/Normalizer/*.php') ?: [] as $file) {
-        preg_match_all("/new (?:\\\\[A-Za-z\\\\]+\\\\)?JsonObject(?:\\(\\))?;\\s*foreach \\(\\\$data\\['([A-Za-z0-9_]+)'\\]/", (string) file_get_contents($file), $matches);
-        array_push($names, ...$matches[1]);
-    }
-    $names = array_values(array_unique($names));
-    sort($names);
-    $listed = DateTimeFields::FREE_FORM_NAMES;
-    sort($listed);
-
-    expect($names)->not->toBeEmpty()
-        ->and($listed)->toBe($names);
-});
-
-it('never skips date-time fields of a model that shares a free-form map name', function () {
-    $normalizers = __DIR__.'/../src/Generated/Normalizer/';
-    $dateTimeFields = static function (string $model, array &$seen) use (&$dateTimeFields, $normalizers): array {
-        $file = $normalizers.$model.'Normalizer.php';
-        if (isset($seen[$model]) || ! is_file($file)) {
-            return [];
-        }
-        $seen[$model] = true;
-        $code = (string) file_get_contents($file);
-        preg_match_all("/createFromFormat\\('Y-m-d\\\\TH:i:sP'|new \\\\DateTime\\(/", $code, $dates);
-        $found = $dates[0] === [] ? [] : [$model];
-        preg_match_all('/([A-Za-z0-9]+)::class/', $code, $children);
-        foreach (array_unique($children[1]) as $child) {
-            array_push($found, ...$dateTimeFields($child, $seen));
-        }
-
-        return $found;
-    };
-
-    $collisions = [];
-    foreach (glob($normalizers.'*.php') ?: [] as $file) {
-        foreach (DateTimeFields::FREE_FORM_NAMES as $name) {
-            preg_match_all("/denormalize\\(\\\$data\\['".$name."'\\], \\\\?(?:[A-Za-z\\\\]+\\\\)?([A-Za-z0-9]+)::class/", (string) file_get_contents($file), $matches);
-            foreach ($matches[1] as $model) {
-                $seen = [];
-                array_push($collisions, ...$dateTimeFields($model, $seen));
-            }
-        }
-    }
-
-    // A model under one of these names with date-time fields would be skipped by DateTimeFields.
-    expect($collisions)->toBe([]);
-});
-
-it('lists every field the generated normalizers parse as date-time', function () {
-    $names = [];
-    $parses = 0;
-    foreach (glob(__DIR__.'/../src/Generated/Normalizer/*.php') ?: [] as $file) {
-        $code = (string) file_get_contents($file);
-        $parses += substr_count($code, "createFromFormat('Y-m-d\\TH:i:sP'");
-        preg_match_all("/createFromFormat\\('Y-m-d\\\\TH:i:sP', \\\$data\\['([A-Za-z0-9_]+)'\\]/", $code, $matches);
-        array_push($names, ...$matches[1]);
-    }
-    // Every date-time parse must read a named field; any other form would escape the list.
-    expect(count($names))->toBe($parses);
-    $names = array_values(array_unique($names));
-    sort($names);
-    $listed = DateTimeFields::NAMES;
-    sort($listed);
-
-    expect($names)->not->toBeEmpty()
-        ->and($listed)->toBe($names);
+        ->and($invoice->getMetadata()['nested'])->toBe(['paid_at' => '2026-01-01T00:00:00.5Z']);
 });
 
 // File downloads
@@ -840,7 +743,7 @@ it('marks a legacy invoice as sent with an optional sent_at', function () {
 
     testClient($transport)->invoices->markSent('inv-1', (new V1InvoicesInvoiceIdMarkSentPostBody)->setSentAt(new DateTime('2026-09-25T12:00:00+00:00')));
 
-    expect(json_decode((string) $transport->requests[0]->getBody(), true))->toBe(['sent_at' => '2026-09-25T12:00:00+00:00']);
+    expect(json_decode((string) $transport->requests[0]->getBody(), true))->toBe(['sent_at' => '2026-09-25T12:00:00.000000+00:00']);
 });
 
 it('exposes the Node.js SDK enums with every value in the OpenAPI contract', function () {
@@ -1286,3 +1189,40 @@ it('uses the Node.js SDK fallback message when BeeL sends none', function (Respo
     'undeclared HTML error' => [new Response(502, ['Content-Type' => 'text/html'], '<html>Bad gateway</html>'), 'API error 502'],
     'JSON error with message' => [new Response(409, ['Content-Type' => 'application/json'], '{"success":false,"error":{"code":"X","message":"Already issued"}}'), 'Already issued'],
 ]);
+
+// Date-time precision
+
+it('keeps the microseconds of API date-times, the most PHP DateTime can hold', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => [
+        'id' => 'inv-1',
+        'created_at' => '2026-09-25T01:29:40.548233096Z',
+        'updated_at' => '2026-09-25T12:00:00.123+02:00',
+    ]])]);
+
+    $invoice = testClient($transport)->company('c')->invoices->get('inv-1');
+
+    expect($invoice->getCreatedAt()->format('Y-m-d\TH:i:s.uP'))->toBe('2026-09-25T01:29:40.548233+00:00')
+        ->and($invoice->getUpdatedAt()->format('Y-m-d\TH:i:s.uP'))->toBe('2026-09-25T12:00:00.123000+02:00');
+});
+
+it('keeps the microseconds of webhook date-times', function () {
+    $body = '{"id":"evt-1","type":"invoice.issued","created_at":"2026-09-25T01:29:40.548233096Z","api_version":"2026-09-01","livemode":false,"data":{"invoice_id":"inv-1"}}';
+
+    $event = (new WebhookVerifier('whsec_test'))->verifyEvent($body, (new WebhookSigner('whsec_test'))->sign($body, 1_000), 1_000);
+
+    expect($event->getCreatedAt()->format('Y-m-d\TH:i:s.uP'))->toBe('2026-09-25T01:29:40.548233+00:00');
+});
+
+it('sends date-times with microseconds', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['id' => 'inv-1']]),
+        jsonResponse(['success' => true, 'data' => ['id' => 'inv-1']]),
+    ]);
+    $invoices = testClient($transport)->invoices;
+
+    $invoices->markSent('inv-1', ['sent_at' => '2026-09-25T12:00:00.123456Z']);
+    $invoices->markSent('inv-1', (new V1InvoicesInvoiceIdMarkSentPostBody)->setSentAt(new DateTime('2026-09-25T12:00:00.5+02:00')));
+
+    expect(json_decode((string) $transport->requests[0]->getBody(), true))->toBe(['sent_at' => '2026-09-25T12:00:00.123456+00:00'])
+        ->and(json_decode((string) $transport->requests[1]->getBody(), true))->toBe(['sent_at' => '2026-09-25T12:00:00.500000+02:00']);
+});

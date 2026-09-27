@@ -42,7 +42,7 @@ final class RequestModels
 
         $serializer = self::$serializer ??= new Serializer([new JaneObjectNormalizer]);
         try {
-            $model = $serializer->denormalize(DateTimeFields::normalizeArray($value), $class, 'json');
+            $model = $serializer->denormalize($value, $class, 'json');
         } catch (\Throwable $exception) {
             throw new \InvalidArgumentException(sprintf('The array does not match %s: %s', $class, $exception->getMessage()), previous: $exception);
         }

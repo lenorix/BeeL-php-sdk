@@ -3,9 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\CreateInvoiceExportRequest;
-use Lenorix\BeelSdk\Generated\Model\InvoiceExportFilters;
-use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -14,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class CreateInvoiceExportRequestNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class CreateInvoiceExportRequestNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === CreateInvoiceExportRequest::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\CreateInvoiceExportRequest::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === CreateInvoiceExportRequest::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CreateInvoiceExportRequest::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new CreateInvoiceExportRequest;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\CreateInvoiceExportRequest();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -57,7 +50,7 @@ class CreateInvoiceExportRequestNormalizer implements DenormalizerAwareInterface
             unset($data['invoice_ids']);
         }
         if (\array_key_exists('filters', $data)) {
-            $object->setFilters($this->denormalizer->denormalize($data['filters'], InvoiceExportFilters::class, 'json', $context));
+            $object->setFilters($this->denormalizer->denormalize($data['filters'], \Lenorix\BeelSdk\Generated\Model\InvoiceExportFilters::class, 'json', $context));
             unset($data['filters']);
         }
         foreach ($data as $key => $value_1) {
@@ -65,37 +58,33 @@ class CreateInvoiceExportRequestNormalizer implements DenormalizerAwareInterface
                 $object[$key] = $value_1;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('format') && $data->getFormat() !== null) {
+        if ($data->isInitialized('format') && null !== $data->getFormat()) {
             $dataArray['format'] = $data->getFormat();
         }
-        if ($data->isInitialized('invoiceIds') && $data->getInvoiceIds() !== null) {
+        if ($data->isInitialized('invoiceIds') && null !== $data->getInvoiceIds()) {
             $values = [];
             foreach ($data->getInvoiceIds() as $value) {
                 $values[] = $value;
             }
             $dataArray['invoice_ids'] = $values;
         }
-        if ($data->isInitialized('filters') && $data->getFilters() !== null) {
-            $dataArray['filters'] = $data->getFilters() === null ? null : new JsonObject($this->normalizer->normalize($data->getFilters(), 'json', $context));
+        if ($data->isInitialized('filters') && null !== $data->getFilters()) {
+            $dataArray['filters'] = $data->getFilters() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getFilters(), 'json', $context));
         }
         foreach ($data->additionalPropertyEntries() as $key => $value_1) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value_1;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [CreateInvoiceExportRequest::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\CreateInvoiceExportRequest::class => false];
     }
 }

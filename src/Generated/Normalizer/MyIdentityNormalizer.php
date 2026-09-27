@@ -3,9 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\MyCredential;
-use Lenorix\BeelSdk\Generated\Model\MyIdentity;
-use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -14,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class MyIdentityNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class MyIdentityNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === MyIdentity::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\MyIdentity::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === MyIdentity::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\MyIdentity::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new MyIdentity;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\MyIdentity();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -51,7 +44,8 @@ class MyIdentityNormalizer implements DenormalizerAwareInterface, DenormalizerIn
         if (\array_key_exists('name', $data) && $data['name'] !== null) {
             $object->setName($data['name']);
             unset($data['name']);
-        } elseif (\array_key_exists('name', $data) && $data['name'] === null) {
+        }
+        elseif (\array_key_exists('name', $data) && $data['name'] === null) {
             $object->setName(null);
             unset($data['name']);
         }
@@ -62,7 +56,8 @@ class MyIdentityNormalizer implements DenormalizerAwareInterface, DenormalizerIn
         if (\array_key_exists('logo_url', $data) && $data['logo_url'] !== null) {
             $object->setLogoUrl($data['logo_url']);
             unset($data['logo_url']);
-        } elseif (\array_key_exists('logo_url', $data) && $data['logo_url'] === null) {
+        }
+        elseif (\array_key_exists('logo_url', $data) && $data['logo_url'] === null) {
             $object->setLogoUrl(null);
             unset($data['logo_url']);
         }
@@ -71,7 +66,7 @@ class MyIdentityNormalizer implements DenormalizerAwareInterface, DenormalizerIn
             unset($data['language']);
         }
         if (\array_key_exists('credential', $data)) {
-            $object->setCredential($this->denormalizer->denormalize($data['credential'], MyCredential::class, 'json', $context));
+            $object->setCredential($this->denormalizer->denormalize($data['credential'], \Lenorix\BeelSdk\Generated\Model\MyCredential::class, 'json', $context));
             unset($data['credential']);
         }
         foreach ($data as $key => $value) {
@@ -79,38 +74,34 @@ class MyIdentityNormalizer implements DenormalizerAwareInterface, DenormalizerIn
                 $object[$key] = $value;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['account_id'] = $data->getAccountId();
-        if ($data->isInitialized('name') && $data->getName() !== null) {
+        if ($data->isInitialized('name') && null !== $data->getName()) {
             $dataArray['name'] = $data->getName();
         }
         $dataArray['email'] = $data->getEmail();
-        if ($data->isInitialized('logoUrl') && $data->getLogoUrl() !== null) {
+        if ($data->isInitialized('logoUrl') && null !== $data->getLogoUrl()) {
             $dataArray['logo_url'] = $data->getLogoUrl();
         }
-        if ($data->isInitialized('language') && $data->getLanguage() !== null) {
+        if ($data->isInitialized('language') && null !== $data->getLanguage()) {
             $dataArray['language'] = $data->getLanguage();
         }
-        if ($data->isInitialized('credential') && $data->getCredential() !== null) {
-            $dataArray['credential'] = $data->getCredential() === null ? null : new JsonObject($this->normalizer->normalize($data->getCredential(), 'json', $context));
+        if ($data->isInitialized('credential') && null !== $data->getCredential()) {
+            $dataArray['credential'] = $data->getCredential() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getCredential(), 'json', $context));
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [MyIdentity::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\MyIdentity::class => false];
     }
 }

@@ -21,7 +21,6 @@ use Lenorix\BeelSdk\Generated\Model\WebhookEventDataRecurringInvoicePaused;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataRepresentationSigned;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataVeriFactuStatusUpdated;
 use Lenorix\BeelSdk\Generated\Normalizer\JaneObjectNormalizer;
-use Lenorix\BeelSdk\Http\DateTimeFields;
 use Symfony\Component\Serializer\Serializer;
 
 /** Verify signed BeeL webhook requests using the original JSON body. */
@@ -172,7 +171,6 @@ final readonly class WebhookVerifier
      */
     public static function eventFromPayload(array $event): WebhookEvent
     {
-        $event = DateTimeFields::normalizeArray($event);
         $serializer = new Serializer([new JaneObjectNormalizer]);
 
         try {
