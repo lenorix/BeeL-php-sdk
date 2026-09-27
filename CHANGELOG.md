@@ -4,6 +4,17 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 ## Unreleased
 
+### Upgrading from 0.4
+
+- `BeelApiError::$apiCode` is never `null`: without a BeeL code it falls back to `UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `CONFLICT`, `UNPROCESSABLE_ENTITY`, `RATE_LIMIT_EXCEEDED` or `UNKNOWN`.
+- `BeelRateLimitError::$retryAfterSeconds` is an `int` and defaults to `60`.
+- `$company->invoices->createPdfArchive()` and `export()` return a `BinaryDownload` instead of `null`.
+- `$beel->catalogs->taxTypes()` returns `TaxTypesCatalog`; it threw a `TypeError` on every call before.
+- Resource methods declare concrete return types; ten operations answered with `204 No Content` now return `void`.
+- Boolean query parameters are sent as `true`/`false` instead of `1`/`0`.
+- `InvoiceBuilder::build()` and `CustomerBuilder::build()` return a new model on every call.
+- A POST or PATCH without an `Idempotency-Key` is no longer retried after a `5xx`.
+
 ### Added
 
 - `createPdfArchive()` and `export()` on company invoices return a `BinaryDownload` with the response stream, file name, content type, length and invoice counts. They used to return `null`, as the generated client discards file bodies. The body is never read into memory, and neither operation retries a `5xx` by default.

@@ -1086,12 +1086,18 @@ it('lists every boolean and list query parameter of the generated endpoints', fu
 it('declares every resource return type as the generated client actually returns it', function () {
     $root = __DIR__.'/../';
     $mismatches = [];
+    $checked = [];
+    $callers = [];
     foreach (array_merge(glob($root.'src/Resource/*.php') ?: [], glob($root.'src/Resource/*/*.php') ?: []) as $file) {
         preg_match_all('/public function (\w+)\(([^)]*)\): ([^\n{]+)\n    \{\n(.*?)\n    \}\n/s', (string) file_get_contents($file), $methods, PREG_SET_ORDER);
         foreach ($methods as [, $name, , $declared, $body]) {
+            if (str_contains($body, '$this->client->')) {
+                $callers[] = basename($file, '.php').'::'.$name;
+            }
             if (preg_match('/\$this->(execute(?:Ready)?)\(\s*fn \(\) => \$this->client->(\w+)\(/', $body, $call) !== 1) {
                 continue;
             }
+            $checked[] = basename($file, '.php').'::'.$name;
             preg_match('/protected function transformResponseBody.*?\n    \}\n/s', (string) file_get_contents($root.'src/Generated/Endpoint/'.ucfirst($call[2]).'.php'), $transform);
             preg_match_all('/\$status === (2\d\d)[^\n]*\n\s*return \$serializer->deserialize\(\$body, \'([^\']+)\'/', $transform[0], $bodies, PREG_SET_ORDER);
             preg_match_all('/\$status === (2\d\d)/', $transform[0], $statuses);
@@ -1127,7 +1133,10 @@ it('declares every resource return type as the generated client actually returns
         }
     }
 
-    expect($mismatches)->toBe([]);
+    // Every method that calls the generated client must have been checked, or the patterns above have drifted.
+    expect($checked)->not->toBeEmpty()
+        ->and(array_values(array_diff($callers, $checked)))->toBe([])
+        ->and($mismatches)->toBe([]);
 });
 
 // Endpoints without a Node.js SDK method, named in its style
@@ -1166,6 +1175,7 @@ it('reads and updates the invoice customization and manages the logo', function 
         jsonResponse(['success' => true, 'data' => ['invoice_template_type' => 'PROFESSIONAL_SERVICE']]),
         jsonResponse(['success' => true, 'data' => ['url' => 'https://cdn.example.test/logo.png']]),
         jsonResponse(['success' => true, 'data' => ['url' => 'https://cdn.example.test/logo.png']]),
+        jsonResponse(['success' => true, 'data' => ['url' => 'https://cdn.example.test/logo.png']]),
         new Response(204),
     ]);
     $company = testClient($transport)->company('c');
@@ -1174,6 +1184,7 @@ it('reads and updates the invoice customization and manages the logo', function 
     $company->invoiceCustomization->update(['invoice_template_type' => 'PROFESSIONAL_SERVICE', 'invoice_accent_color' => '#fc481d']);
     $company->logo->upload($logo);
     $company->logo->upload('PNG-string');
+    $company->logo->upload(Utils::streamFor('PNG-stream'));
     $company->logo->delete();
 
     expect($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/companies/c/invoice-customization')
@@ -1182,8 +1193,9 @@ it('reads and updates the invoice customization and manages the logo', function 
         ->and($transport->requests[2]->getHeaderLine('Content-Type'))->toStartWith('multipart/form-data')
         ->and((string) $transport->requests[2]->getBody())->toContain('PNG-bytes')
         ->and((string) $transport->requests[3]->getBody())->toContain('PNG-string')
-        ->and($transport->requests[4]->getMethod())->toBe('DELETE')
-        ->and($transport->requests[4]->getUri()->getPath())->toBe('/api/v1/companies/c/logo')
+        ->and((string) $transport->requests[4]->getBody())->toContain('PNG-stream')
+        ->and($transport->requests[5]->getMethod())->toBe('DELETE')
+        ->and($transport->requests[5]->getUri()->getPath())->toBe('/api/v1/companies/c/logo')
         ->and(fn () => $company->logo->upload(42))->toThrow(InvalidArgumentException::class);
 });
 
