@@ -3,6 +3,9 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\CreateInvitationRequest;
+use Lenorix\BeelSdk\Generated\Model\GrantAssignment;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +14,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class CreateInvitationRequestNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class CreateInvitationRequestNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\CreateInvitationRequest::class;
+        return $type === CreateInvitationRequest::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CreateInvitationRequest::class;
+        return is_object($data) && get_class($data) === CreateInvitationRequest::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\CreateInvitationRequest();
-        if (null === $data || false === \is_array($data)) {
+        $object = new CreateInvitationRequest;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -55,7 +62,7 @@ class CreateInvitationRequestNormalizer implements DenormalizerInterface, Normal
         if (\array_key_exists('grants', $data)) {
             $values = [];
             foreach ($data['grants'] as $value) {
-                $values[] = $this->denormalizer->denormalize($value, \Lenorix\BeelSdk\Generated\Model\GrantAssignment::class, 'json', $context);
+                $values[] = $this->denormalizer->denormalize($value, GrantAssignment::class, 'json', $context);
             }
             $object->setGrants($values);
             unset($data['grants']);
@@ -65,19 +72,21 @@ class CreateInvitationRequestNormalizer implements DenormalizerInterface, Normal
                 $object[$key] = $value_1;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['invited_email'] = $data->getInvitedEmail();
         $dataArray['account_role'] = $data->getAccountRole();
-        if ($data->isInitialized('sendEmail') && null !== $data->getSendEmail()) {
+        if ($data->isInitialized('sendEmail') && $data->getSendEmail() !== null) {
             $dataArray['send_email'] = $data->getSendEmail();
         }
         $values = [];
         foreach ($data->getGrants() as $value) {
-            $values[] = $value === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($value, 'json', $context));
+            $values[] = $value === null ? null : new JsonObject($this->normalizer->normalize($value, 'json', $context));
         }
         $dataArray['grants'] = $values;
         foreach ($data->additionalPropertyEntries() as $key => $value_1) {
@@ -85,10 +94,12 @@ class CreateInvitationRequestNormalizer implements DenormalizerInterface, Normal
                 $dataArray[$key] = $value_1;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\CreateInvitationRequest::class => false];
+        return [CreateInvitationRequest::class => false];
     }
 }

@@ -3,6 +3,13 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\FiscalSummaryResponse;
+use Lenorix\BeelSdk\Generated\Model\InvoiceFiscalData;
+use Lenorix\BeelSdk\Generated\Model\IrpfBracket;
+use Lenorix\BeelSdk\Generated\Model\QueriedPeriod;
+use Lenorix\BeelSdk\Generated\Model\SurchargeBreakdownItem;
+use Lenorix\BeelSdk\Generated\Model\TaxBreakdownItem;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +18,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class FiscalSummaryResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class FiscalSummaryResponseNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\FiscalSummaryResponse::class;
+        return $type === FiscalSummaryResponse::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\FiscalSummaryResponse::class;
+        return is_object($data) && get_class($data) === FiscalSummaryResponse::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\FiscalSummaryResponse();
-        if (null === $data || false === \is_array($data)) {
+        $object = new FiscalSummaryResponse;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -62,7 +73,7 @@ class FiscalSummaryResponseNormalizer implements DenormalizerInterface, Normaliz
             $data['pending_annual_irpf'] = (float) $data['pending_annual_irpf'];
         }
         if (\array_key_exists('queried_period', $data)) {
-            $object->setQueriedPeriod($this->denormalizer->denormalize($data['queried_period'], \Lenorix\BeelSdk\Generated\Model\QueriedPeriod::class, 'json', $context));
+            $object->setQueriedPeriod($this->denormalizer->denormalize($data['queried_period'], QueriedPeriod::class, 'json', $context));
             unset($data['queried_period']);
         }
         if (\array_key_exists('total_taxable_base', $data)) {
@@ -76,13 +87,13 @@ class FiscalSummaryResponseNormalizer implements DenormalizerInterface, Normaliz
         if (\array_key_exists('tax_breakdown', $data)) {
             $values = [];
             foreach ($data['tax_breakdown'] as $value) {
-                $values[] = $this->denormalizer->denormalize($value, \Lenorix\BeelSdk\Generated\Model\TaxBreakdownItem::class, 'json', $context);
+                $values[] = $this->denormalizer->denormalize($value, TaxBreakdownItem::class, 'json', $context);
             }
             $object->setTaxBreakdown($values);
             unset($data['tax_breakdown']);
         }
         if (\array_key_exists('vat_breakdown_by_rate', $data)) {
-            $values_1 = new \Lenorix\BeelSdk\Generated\Runtime\JsonObject();
+            $values_1 = new JsonObject;
             foreach ($data['vat_breakdown_by_rate'] as $key => $value_1) {
                 $values_1[$key] = $value_1;
             }
@@ -92,7 +103,7 @@ class FiscalSummaryResponseNormalizer implements DenormalizerInterface, Normaliz
         if (\array_key_exists('surcharge_breakdown', $data)) {
             $values_2 = [];
             foreach ($data['surcharge_breakdown'] as $value_2) {
-                $values_2[] = $this->denormalizer->denormalize($value_2, \Lenorix\BeelSdk\Generated\Model\SurchargeBreakdownItem::class, 'json', $context);
+                $values_2[] = $this->denormalizer->denormalize($value_2, SurchargeBreakdownItem::class, 'json', $context);
             }
             $object->setSurchargeBreakdown($values_2);
             unset($data['surcharge_breakdown']);
@@ -124,7 +135,7 @@ class FiscalSummaryResponseNormalizer implements DenormalizerInterface, Normaliz
         if (\array_key_exists('bracket_details', $data)) {
             $values_3 = [];
             foreach ($data['bracket_details'] as $value_3) {
-                $values_3[] = $this->denormalizer->denormalize($value_3, \Lenorix\BeelSdk\Generated\Model\IrpfBracket::class, 'json', $context);
+                $values_3[] = $this->denormalizer->denormalize($value_3, IrpfBracket::class, 'json', $context);
             }
             $object->setBracketDetails($values_3);
             unset($data['bracket_details']);
@@ -132,7 +143,7 @@ class FiscalSummaryResponseNormalizer implements DenormalizerInterface, Normaliz
         if (\array_key_exists('invoices', $data)) {
             $values_4 = [];
             foreach ($data['invoices'] as $value_4) {
-                $values_4[] = $this->denormalizer->denormalize($value_4, \Lenorix\BeelSdk\Generated\Model\InvoiceFiscalData::class, 'json', $context);
+                $values_4[] = $this->denormalizer->denormalize($value_4, InvoiceFiscalData::class, 'json', $context);
             }
             $object->setInvoices($values_4);
             unset($data['invoices']);
@@ -146,36 +157,38 @@ class FiscalSummaryResponseNormalizer implements DenormalizerInterface, Normaliz
                 $object[$key_1] = $value_5;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        $dataArray['queried_period'] = $data->getQueriedPeriod() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getQueriedPeriod(), 'json', $context));
+        $dataArray['queried_period'] = $data->getQueriedPeriod() === null ? null : new JsonObject($this->normalizer->normalize($data->getQueriedPeriod(), 'json', $context));
         $dataArray['total_taxable_base'] = $data->getTotalTaxableBase();
         $dataArray['total_vat'] = $data->getTotalVat();
-        if ($data->isInitialized('taxBreakdown') && null !== $data->getTaxBreakdown()) {
+        if ($data->isInitialized('taxBreakdown') && $data->getTaxBreakdown() !== null) {
             $values = [];
             foreach ($data->getTaxBreakdown() as $value) {
-                $values[] = $value === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($value, 'json', $context));
+                $values[] = $value === null ? null : new JsonObject($this->normalizer->normalize($value, 'json', $context));
             }
             $dataArray['tax_breakdown'] = $values;
         }
-        if ($data->isInitialized('vatBreakdownByRate') && null !== $data->getVatBreakdownByRate()) {
-            $values_1 = new \Lenorix\BeelSdk\Generated\Runtime\JsonObject();
+        if ($data->isInitialized('vatBreakdownByRate') && $data->getVatBreakdownByRate() !== null) {
+            $values_1 = new JsonObject;
             foreach ($data->getVatBreakdownByRate() as $key => $value_1) {
                 $values_1[$key] = $value_1;
             }
             $dataArray['vat_breakdown_by_rate'] = $values_1;
         }
-        if ($data->isInitialized('surchargeBreakdown') && null !== $data->getSurchargeBreakdown()) {
+        if ($data->isInitialized('surchargeBreakdown') && $data->getSurchargeBreakdown() !== null) {
             $values_2 = [];
             foreach ($data->getSurchargeBreakdown() as $value_2) {
-                $values_2[] = $value_2 === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($value_2, 'json', $context));
+                $values_2[] = $value_2 === null ? null : new JsonObject($this->normalizer->normalize($value_2, 'json', $context));
             }
             $dataArray['surcharge_breakdown'] = $values_2;
         }
-        if ($data->isInitialized('totalEquivalenceSurcharge') && null !== $data->getTotalEquivalenceSurcharge()) {
+        if ($data->isInitialized('totalEquivalenceSurcharge') && $data->getTotalEquivalenceSurcharge() !== null) {
             $dataArray['total_equivalence_surcharge'] = $data->getTotalEquivalenceSurcharge();
         }
         $dataArray['total_irpf_withheld'] = $data->getTotalIrpfWithheld();
@@ -185,13 +198,13 @@ class FiscalSummaryResponseNormalizer implements DenormalizerInterface, Normaliz
         $dataArray['pending_annual_irpf'] = $data->getPendingAnnualIrpf();
         $values_3 = [];
         foreach ($data->getBracketDetails() as $value_3) {
-            $values_3[] = $value_3 === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($value_3, 'json', $context));
+            $values_3[] = $value_3 === null ? null : new JsonObject($this->normalizer->normalize($value_3, 'json', $context));
         }
         $dataArray['bracket_details'] = $values_3;
-        if ($data->isInitialized('invoices') && null !== $data->getInvoices()) {
+        if ($data->isInitialized('invoices') && $data->getInvoices() !== null) {
             $values_4 = [];
             foreach ($data->getInvoices() as $value_4) {
-                $values_4[] = $value_4 === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($value_4, 'json', $context));
+                $values_4[] = $value_4 === null ? null : new JsonObject($this->normalizer->normalize($value_4, 'json', $context));
             }
             $dataArray['invoices'] = $values_4;
         }
@@ -201,10 +214,12 @@ class FiscalSummaryResponseNormalizer implements DenormalizerInterface, Normaliz
                 $dataArray[$key_1] = $value_5;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\FiscalSummaryResponse::class => false];
+        return [FiscalSummaryResponse::class => false];
     }
 }

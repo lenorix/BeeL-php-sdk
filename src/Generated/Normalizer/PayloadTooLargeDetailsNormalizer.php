@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\PayloadTooLargeDetails;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class PayloadTooLargeDetailsNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class PayloadTooLargeDetailsNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\PayloadTooLargeDetails::class;
+        return $type === PayloadTooLargeDetails::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\PayloadTooLargeDetails::class;
+        return is_object($data) && get_class($data) === PayloadTooLargeDetails::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\PayloadTooLargeDetails();
-        if (null === $data || false === \is_array($data)) {
+        $object = new PayloadTooLargeDetails;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -54,16 +59,18 @@ class PayloadTooLargeDetailsNormalizer implements DenormalizerInterface, Normali
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('maxSizeBytes') && null !== $data->getMaxSizeBytes()) {
+        if ($data->isInitialized('maxSizeBytes') && $data->getMaxSizeBytes() !== null) {
             $dataArray['max_size_bytes'] = $data->getMaxSizeBytes();
         }
         $dataArray['max_size_formatted'] = $data->getMaxSizeFormatted();
-        if ($data->isInitialized('requestSizeBytes') && null !== $data->getRequestSizeBytes()) {
+        if ($data->isInitialized('requestSizeBytes') && $data->getRequestSizeBytes() !== null) {
             $dataArray['request_size_bytes'] = $data->getRequestSizeBytes();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -71,10 +78,12 @@ class PayloadTooLargeDetailsNormalizer implements DenormalizerInterface, Normali
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\PayloadTooLargeDetails::class => false];
+        return [PayloadTooLargeDetails::class => false];
     }
 }

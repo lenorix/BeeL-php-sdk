@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\WebhookEventDataRepresentationSigned;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class WebhookEventDataRepresentationSignedNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class WebhookEventDataRepresentationSignedNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\WebhookEventDataRepresentationSigned::class;
+        return $type === WebhookEventDataRepresentationSigned::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\WebhookEventDataRepresentationSigned::class;
+        return is_object($data) && get_class($data) === WebhookEventDataRepresentationSigned::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\WebhookEventDataRepresentationSigned();
-        if (null === $data || false === \is_array($data)) {
+        $object = new WebhookEventDataRepresentationSigned;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -52,8 +57,10 @@ class WebhookEventDataRepresentationSignedNormalizer implements DenormalizerInte
         if (\array_key_exists('signed_at', $data)) {
             $object->setSignedAt((new \DateTime($data['signed_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['signed_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['signed_at']));
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -62,10 +69,12 @@ class WebhookEventDataRepresentationSignedNormalizer implements DenormalizerInte
         $dataArray['company_id'] = $data->getCompanyId();
         $dataArray['nif'] = $data->getNif();
         $dataArray['signed_at'] = $data->getSignedAt()->format('Y-m-d\TH:i:s.uP');
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\WebhookEventDataRepresentationSigned::class => false];
+        return [WebhookEventDataRepresentationSigned::class => false];
     }
 }

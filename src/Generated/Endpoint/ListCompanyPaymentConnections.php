@@ -2,9 +2,23 @@
 
 namespace Lenorix\BeelSdk\Generated\Endpoint;
 
-class ListCompanyPaymentConnections extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint implements \Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint
+use Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsBadRequestException;
+use Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsForbiddenException;
+use Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsInternalServerErrorException;
+use Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsTooManyRequestsException;
+use Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsUnauthorizedException;
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Generated\Model\ListManagedPaymentConnectionsResponse;
+use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class ListCompanyPaymentConnections extends BaseEndpoint implements Endpoint
 {
     protected $company_id;
+
     /**
      * Returns the payment provider connections of a company your account **owns or
      * manages**, with the provider-side account each one points at and its `status`. Use it to
@@ -21,66 +35,74 @@ class ListCompanyPaymentConnections extends \Lenorix\BeelSdk\Generated\Runtime\C
      * `pagination` and takes no `page`/`limit`, and every response holds the whole set for the
      * environment of the key you ask with.
      *
-     * @param string $companyId Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
+     * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      */
     public function __construct(string $companyId)
     {
         $this->company_id = $companyId;
     }
-    use \Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+
+    use EndpointTrait;
+
     public function getMethod(): string
     {
         return 'GET';
     }
+
     public function getUri(): string
     {
         return str_replace(['{company_id}'], [rawurlencode($this->company_id)], '/v1/companies/{company_id}/payment-connections');
     }
-    public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer, $streamFactory = null): array
+
+    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
         return [[], null];
     }
+
     public function getExtraHeaders(): array
     {
         return ['Accept' => ['application/json']];
     }
+
     /**
      * {@inheritdoc}
      *
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsBadRequestException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsUnauthorizedException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsForbiddenException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsTooManyRequestsException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsInternalServerErrorException
      *
-     * @return null|\Lenorix\BeelSdk\Generated\Model\ListManagedPaymentConnectionsResponse|\Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @return null|ListManagedPaymentConnectionsResponse|ErrorResponse
+     *
+     * @throws ListCompanyPaymentConnectionsBadRequestException
+     * @throws ListCompanyPaymentConnectionsUnauthorizedException
+     * @throws ListCompanyPaymentConnectionsForbiddenException
+     * @throws ListCompanyPaymentConnectionsTooManyRequestsException
+     * @throws ListCompanyPaymentConnectionsInternalServerErrorException
      */
-    protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (is_null($contentType) === false && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+        if (is_null($contentType) === false && ($status === 200 && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ListManagedPaymentConnectionsResponse', 'json');
         }
-        if (is_null($contentType) === false && (400 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 400 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ListCompanyPaymentConnectionsBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (401 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 401 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ListCompanyPaymentConnectionsUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (403 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 403 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ListCompanyPaymentConnectionsForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (429 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 429 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ListCompanyPaymentConnectionsTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (500 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new ListCompanyPaymentConnectionsInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
         if (stripos(strtolower($contentType), 'application/json') !== false) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
+
     public function getAuthenticationScopes(): array
     {
         return ['ApiKeyAuth'];

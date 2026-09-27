@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\WebhookTestResult;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class WebhookTestResultNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class WebhookTestResultNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\WebhookTestResult::class;
+        return $type === WebhookTestResult::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\WebhookTestResult::class;
+        return is_object($data) && get_class($data) === WebhookTestResult::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\WebhookTestResult();
-        if (null === $data || false === \is_array($data)) {
+        $object = new WebhookTestResult;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -47,8 +52,7 @@ class WebhookTestResultNormalizer implements DenormalizerInterface, NormalizerIn
         if (\array_key_exists('http_status', $data) && $data['http_status'] !== null) {
             $object->setHttpStatus($data['http_status']);
             unset($data['http_status']);
-        }
-        elseif (\array_key_exists('http_status', $data) && $data['http_status'] === null) {
+        } elseif (\array_key_exists('http_status', $data) && $data['http_status'] === null) {
             $object->setHttpStatus(null);
             unset($data['http_status']);
         }
@@ -59,8 +63,7 @@ class WebhookTestResultNormalizer implements DenormalizerInterface, NormalizerIn
         if (\array_key_exists('error', $data) && $data['error'] !== null) {
             $object->setError($data['error']);
             unset($data['error']);
-        }
-        elseif (\array_key_exists('error', $data) && $data['error'] === null) {
+        } elseif (\array_key_exists('error', $data) && $data['error'] === null) {
             $object->setError(null);
             unset($data['error']);
         }
@@ -73,24 +76,26 @@ class WebhookTestResultNormalizer implements DenormalizerInterface, NormalizerIn
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('deliverySuccess') && null !== $data->getDeliverySuccess()) {
+        if ($data->isInitialized('deliverySuccess') && $data->getDeliverySuccess() !== null) {
             $dataArray['delivery_success'] = $data->getDeliverySuccess();
         }
-        if ($data->isInitialized('httpStatus') && null !== $data->getHttpStatus()) {
+        if ($data->isInitialized('httpStatus') && $data->getHttpStatus() !== null) {
             $dataArray['http_status'] = $data->getHttpStatus();
         }
-        if ($data->isInitialized('durationMs') && null !== $data->getDurationMs()) {
+        if ($data->isInitialized('durationMs') && $data->getDurationMs() !== null) {
             $dataArray['duration_ms'] = $data->getDurationMs();
         }
-        if ($data->isInitialized('error') && null !== $data->getError()) {
+        if ($data->isInitialized('error') && $data->getError() !== null) {
             $dataArray['error'] = $data->getError();
         }
-        if ($data->isInitialized('failureCause') && null !== $data->getFailureCause()) {
+        if ($data->isInitialized('failureCause') && $data->getFailureCause() !== null) {
             $dataArray['failure_cause'] = $data->getFailureCause();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -98,10 +103,12 @@ class WebhookTestResultNormalizer implements DenormalizerInterface, NormalizerIn
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\WebhookTestResult::class => false];
+        return [WebhookTestResult::class => false];
     }
 }

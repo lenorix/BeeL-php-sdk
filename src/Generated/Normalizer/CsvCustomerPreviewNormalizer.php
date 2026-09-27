@@ -3,6 +3,9 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\CsvCustomerPreview;
+use Lenorix\BeelSdk\Generated\Model\CsvValidationError;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +14,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class CsvCustomerPreviewNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class CsvCustomerPreviewNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\CsvCustomerPreview::class;
+        return $type === CsvCustomerPreview::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CsvCustomerPreview::class;
+        return is_object($data) && get_class($data) === CsvCustomerPreview::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\CsvCustomerPreview();
-        if (null === $data || false === \is_array($data)) {
+        $object = new CsvCustomerPreview;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -42,14 +49,13 @@ class CsvCustomerPreviewNormalizer implements DenormalizerInterface, NormalizerI
             unset($data['row_number']);
         }
         if (\array_key_exists('customer', $data) && $data['customer'] !== null) {
-            $values = new \Lenorix\BeelSdk\Generated\Runtime\JsonObject();
+            $values = new JsonObject;
             foreach ($data['customer'] as $key => $value) {
                 $values[$key] = $value;
             }
             $object->setCustomer($values);
             unset($data['customer']);
-        }
-        elseif (\array_key_exists('customer', $data) && $data['customer'] === null) {
+        } elseif (\array_key_exists('customer', $data) && $data['customer'] === null) {
             $object->setCustomer(null);
             unset($data['customer']);
         }
@@ -60,7 +66,7 @@ class CsvCustomerPreviewNormalizer implements DenormalizerInterface, NormalizerI
         if (\array_key_exists('errors', $data)) {
             $values_1 = [];
             foreach ($data['errors'] as $value_1) {
-                $values_1[] = $this->denormalizer->denormalize($value_1, \Lenorix\BeelSdk\Generated\Model\CsvValidationError::class, 'json', $context);
+                $values_1[] = $this->denormalizer->denormalize($value_1, CsvValidationError::class, 'json', $context);
             }
             $object->setErrors($values_1);
             unset($data['errors']);
@@ -78,13 +84,15 @@ class CsvCustomerPreviewNormalizer implements DenormalizerInterface, NormalizerI
                 $object[$key_1] = $value_3;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['row_number'] = $data->getRowNumber();
-        $values = new \Lenorix\BeelSdk\Generated\Runtime\JsonObject();
+        $values = new JsonObject;
         foreach ($data->getCustomer() as $key => $value) {
             $values[$key] = $value;
         }
@@ -92,7 +100,7 @@ class CsvCustomerPreviewNormalizer implements DenormalizerInterface, NormalizerI
         $dataArray['status'] = $data->getStatus();
         $values_1 = [];
         foreach ($data->getErrors() as $value_1) {
-            $values_1[] = $value_1 === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($value_1, 'json', $context));
+            $values_1[] = $value_1 === null ? null : new JsonObject($this->normalizer->normalize($value_1, 'json', $context));
         }
         $dataArray['errors'] = $values_1;
         $values_2 = [];
@@ -105,10 +113,12 @@ class CsvCustomerPreviewNormalizer implements DenormalizerInterface, NormalizerI
                 $dataArray[$key_1] = $value_3;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\CsvCustomerPreview::class => false];
+        return [CsvCustomerPreview::class => false];
     }
 }

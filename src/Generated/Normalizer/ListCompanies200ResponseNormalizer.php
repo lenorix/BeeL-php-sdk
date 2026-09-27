@@ -3,6 +3,10 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\ListCompanies200Response;
+use Lenorix\BeelSdk\Generated\Model\ListCompanies200ResponseData;
+use Lenorix\BeelSdk\Generated\Model\ResponseMeta;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +15,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class ListCompanies200ResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class ListCompanies200ResponseNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\ListCompanies200Response::class;
+        return $type === ListCompanies200Response::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\ListCompanies200Response::class;
+        return is_object($data) && get_class($data) === ListCompanies200Response::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\ListCompanies200Response();
-        if (null === $data || false === \is_array($data)) {
+        $object = new ListCompanies200Response;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -45,11 +53,11 @@ class ListCompanies200ResponseNormalizer implements DenormalizerInterface, Norma
             unset($data['success']);
         }
         if (\array_key_exists('data', $data)) {
-            $object->setData($this->denormalizer->denormalize($data['data'], \Lenorix\BeelSdk\Generated\Model\ListCompanies200ResponseData::class, 'json', $context));
+            $object->setData($this->denormalizer->denormalize($data['data'], ListCompanies200ResponseData::class, 'json', $context));
             unset($data['data']);
         }
         if (\array_key_exists('meta', $data)) {
-            $object->setMeta($this->denormalizer->denormalize($data['meta'], \Lenorix\BeelSdk\Generated\Model\ResponseMeta::class, 'json', $context));
+            $object->setMeta($this->denormalizer->denormalize($data['meta'], ResponseMeta::class, 'json', $context));
             unset($data['meta']);
         }
         foreach ($data as $key => $value) {
@@ -57,29 +65,33 @@ class ListCompanies200ResponseNormalizer implements DenormalizerInterface, Norma
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('success') && null !== $data->getSuccess()) {
+        if ($data->isInitialized('success') && $data->getSuccess() !== null) {
             $dataArray['success'] = $data->getSuccess();
         }
-        if ($data->isInitialized('data') && null !== $data->getData()) {
-            $dataArray['data'] = $data->getData() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getData(), 'json', $context));
+        if ($data->isInitialized('data') && $data->getData() !== null) {
+            $dataArray['data'] = $data->getData() === null ? null : new JsonObject($this->normalizer->normalize($data->getData(), 'json', $context));
         }
-        if ($data->isInitialized('meta') && null !== $data->getMeta()) {
-            $dataArray['meta'] = $data->getMeta() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getMeta(), 'json', $context));
+        if ($data->isInitialized('meta') && $data->getMeta() !== null) {
+            $dataArray['meta'] = $data->getMeta() === null ? null : new JsonObject($this->normalizer->normalize($data->getMeta(), 'json', $context));
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\ListCompanies200Response::class => false];
+        return [ListCompanies200Response::class => false];
     }
 }

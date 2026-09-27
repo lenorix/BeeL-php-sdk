@@ -2,7 +2,26 @@
 
 namespace Lenorix\BeelSdk\Generated\Endpoint;
 
-class PreviewAccountImport extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint implements \Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint
+use Http\Message\MultipartStream\MultipartStreamBuilder;
+use Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportBadRequestException;
+use Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportForbiddenException;
+use Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportInternalServerErrorException;
+use Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportPaymentRequiredException;
+use Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportRequestEntityTooLargeException;
+use Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportTooManyRequestsException;
+use Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportUnauthorizedException;
+use Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportUnprocessableEntityException;
+use Lenorix\BeelSdk\Generated\Model\AccountImportUpload;
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Generated\Model\V1AccountsImportsPreviewPostResponse200;
+use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\StreamInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class PreviewAccountImport extends BaseEndpoint implements Endpoint
 {
     /**
      * Reads the same files as `POST /v1/accounts/imports` and answers the same shape without
@@ -20,26 +39,28 @@ class PreviewAccountImport extends \Lenorix\BeelSdk\Generated\Runtime\Client\Bas
      *   before it is charged.
      * - **The customers file** is checked once for the whole import: whether a customer is new to
      *   a given account depends on the account, and that only shows up when the import runs.
-     *
-     * @param \Lenorix\BeelSdk\Generated\Model\AccountImportUpload $requestBody
      */
-    public function __construct(\Lenorix\BeelSdk\Generated\Model\AccountImportUpload $requestBody)
+    public function __construct(AccountImportUpload $requestBody)
     {
         $this->body = $requestBody;
     }
-    use \Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+
+    use EndpointTrait;
+
     public function getMethod(): string
     {
         return 'POST';
     }
+
     public function getUri(): string
     {
         return '/v1/accounts/imports/preview';
     }
-    public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer, $streamFactory = null): array
+
+    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
-        if ($this->body instanceof \Lenorix\BeelSdk\Generated\Model\AccountImportUpload) {
-            $bodyBuilder = new \Http\Message\MultipartStream\MultipartStreamBuilder($streamFactory);
+        if ($this->body instanceof AccountImportUpload) {
+            $bodyBuilder = new MultipartStreamBuilder($streamFactory);
             $formParameters = $serializer->normalize($this->body, 'json');
             $partOptions = ['accounts_file' => ['filename' => 'accounts_file'], 'customers_file' => ['filename' => 'customers_file'], 'options' => ['headers' => ['Content-Type' => 'application/json']]];
             foreach ($formParameters as $key => $value) {
@@ -51,7 +72,7 @@ class PreviewAccountImport extends \Lenorix\BeelSdk\Generated\Runtime\Client\Bas
                 $resourceOptions = $partOptions[$key] ?? [];
                 if (isset($resourceOptions['filename'])) {
                     $uri = null;
-                    if ($value instanceof \Psr\Http\Message\StreamInterface) {
+                    if ($value instanceof StreamInterface) {
                         $uri = $value->getMetadata('uri');
                     } elseif (is_resource($value)) {
                         $uri = stream_get_meta_data($value)['uri'] ?? null;
@@ -62,63 +83,69 @@ class PreviewAccountImport extends \Lenorix\BeelSdk\Generated\Runtime\Client\Bas
                 }
                 $bodyBuilder->addResource($key, $value, $resourceOptions);
             }
-            return [['Content-Type' => ['multipart/form-data; boundary="' . ($bodyBuilder->getBoundary() . '"')]], $bodyBuilder->build()];
+
+            return [['Content-Type' => ['multipart/form-data; boundary="'.($bodyBuilder->getBoundary().'"')]], $bodyBuilder->build()];
         }
+
         return [[], null];
     }
+
     public function getExtraHeaders(): array
     {
         return ['Accept' => ['application/json']];
     }
+
     /**
      * {@inheritdoc}
      *
-     * @throws \Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportBadRequestException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportUnauthorizedException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportPaymentRequiredException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportForbiddenException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportRequestEntityTooLargeException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportUnprocessableEntityException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportTooManyRequestsException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportInternalServerErrorException
      *
-     * @return null|\Lenorix\BeelSdk\Generated\Model\V1AccountsImportsPreviewPostResponse200|\Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @return null|V1AccountsImportsPreviewPostResponse200|ErrorResponse
+     *
+     * @throws PreviewAccountImportBadRequestException
+     * @throws PreviewAccountImportUnauthorizedException
+     * @throws PreviewAccountImportPaymentRequiredException
+     * @throws PreviewAccountImportForbiddenException
+     * @throws PreviewAccountImportRequestEntityTooLargeException
+     * @throws PreviewAccountImportUnprocessableEntityException
+     * @throws PreviewAccountImportTooManyRequestsException
+     * @throws PreviewAccountImportInternalServerErrorException
      */
-    protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (is_null($contentType) === false && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+        if (is_null($contentType) === false && ($status === 200 && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\V1AccountsImportsPreviewPostResponse200', 'json');
         }
-        if (is_null($contentType) === false && (400 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 400 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new PreviewAccountImportBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (401 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 401 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new PreviewAccountImportUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (402 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportPaymentRequiredException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 402 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new PreviewAccountImportPaymentRequiredException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (403 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 403 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new PreviewAccountImportForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (413 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportRequestEntityTooLargeException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ResponsePayloadTooLarge', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 413 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new PreviewAccountImportRequestEntityTooLargeException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ResponsePayloadTooLarge', 'json'), $response);
         }
-        if (is_null($contentType) === false && (422 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 422 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new PreviewAccountImportUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (429 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 429 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new PreviewAccountImportTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (500 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new PreviewAccountImportInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
         if (stripos(strtolower($contentType), 'application/json') !== false) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
+
     public function getAuthenticationScopes(): array
     {
         return ['ApiKeyAuth'];

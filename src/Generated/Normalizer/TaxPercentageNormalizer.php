@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\TaxPercentage;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class TaxPercentageNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class TaxPercentageNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\TaxPercentage::class;
+        return $type === TaxPercentage::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\TaxPercentage::class;
+        return is_object($data) && get_class($data) === TaxPercentage::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\TaxPercentage();
-        if (null === $data || false === \is_array($data)) {
+        $object = new TaxPercentage;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -61,8 +66,7 @@ class TaxPercentageNormalizer implements DenormalizerInterface, NormalizerInterf
         if (\array_key_exists('associated_equivalence_surcharge', $data) && $data['associated_equivalence_surcharge'] !== null) {
             $object->setAssociatedEquivalenceSurcharge($data['associated_equivalence_surcharge']);
             unset($data['associated_equivalence_surcharge']);
-        }
-        elseif (\array_key_exists('associated_equivalence_surcharge', $data) && $data['associated_equivalence_surcharge'] === null) {
+        } elseif (\array_key_exists('associated_equivalence_surcharge', $data) && $data['associated_equivalence_surcharge'] === null) {
             $object->setAssociatedEquivalenceSurcharge(null);
             unset($data['associated_equivalence_surcharge']);
         }
@@ -71,15 +75,17 @@ class TaxPercentageNormalizer implements DenormalizerInterface, NormalizerInterf
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['percentage'] = $data->getPercentage();
         $dataArray['description'] = $data->getDescription();
         $dataArray['active'] = $data->getActive();
-        if ($data->isInitialized('associatedEquivalenceSurcharge') && null !== $data->getAssociatedEquivalenceSurcharge()) {
+        if ($data->isInitialized('associatedEquivalenceSurcharge') && $data->getAssociatedEquivalenceSurcharge() !== null) {
             $dataArray['associated_equivalence_surcharge'] = $data->getAssociatedEquivalenceSurcharge();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -87,10 +93,12 @@ class TaxPercentageNormalizer implements DenormalizerInterface, NormalizerInterf
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\TaxPercentage::class => false];
+        return [TaxPercentage::class => false];
     }
 }

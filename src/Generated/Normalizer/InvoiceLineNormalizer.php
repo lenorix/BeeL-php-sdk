@@ -3,6 +3,9 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\InvoiceLine;
+use Lenorix\BeelSdk\Generated\Model\TaxInfo;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +14,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class InvoiceLineNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class InvoiceLineNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\InvoiceLine::class;
+        return $type === InvoiceLine::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\InvoiceLine::class;
+        return is_object($data) && get_class($data) === InvoiceLine::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\InvoiceLine();
-        if (null === $data || false === \is_array($data)) {
+        $object = new InvoiceLine;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -82,7 +89,7 @@ class InvoiceLineNormalizer implements DenormalizerInterface, NormalizerInterfac
             unset($data['discount_percentage']);
         }
         if (\array_key_exists('main_tax', $data)) {
-            $object->setMainTax($this->denormalizer->denormalize($data['main_tax'], \Lenorix\BeelSdk\Generated\Model\TaxInfo::class, 'json', $context));
+            $object->setMainTax($this->denormalizer->denormalize($data['main_tax'], TaxInfo::class, 'json', $context));
             unset($data['main_tax']);
         }
         if (\array_key_exists('equivalence_surcharge_rate', $data)) {
@@ -100,8 +107,7 @@ class InvoiceLineNormalizer implements DenormalizerInterface, NormalizerInterfac
         if (\array_key_exists('exemption_reason_text', $data) && $data['exemption_reason_text'] !== null) {
             $object->setExemptionReasonText($data['exemption_reason_text']);
             unset($data['exemption_reason_text']);
-        }
-        elseif (\array_key_exists('exemption_reason_text', $data) && $data['exemption_reason_text'] === null) {
+        } elseif (\array_key_exists('exemption_reason_text', $data) && $data['exemption_reason_text'] === null) {
             $object->setExemptionReasonText(null);
             unset($data['exemption_reason_text']);
         }
@@ -132,8 +138,7 @@ class InvoiceLineNormalizer implements DenormalizerInterface, NormalizerInterfac
         if (\array_key_exists('source_invoice_reference', $data) && $data['source_invoice_reference'] !== null) {
             $object->setSourceInvoiceReference($data['source_invoice_reference']);
             unset($data['source_invoice_reference']);
-        }
-        elseif (\array_key_exists('source_invoice_reference', $data) && $data['source_invoice_reference'] === null) {
+        } elseif (\array_key_exists('source_invoice_reference', $data) && $data['source_invoice_reference'] === null) {
             $object->setSourceInvoiceReference(null);
             unset($data['source_invoice_reference']);
         }
@@ -150,57 +155,59 @@ class InvoiceLineNormalizer implements DenormalizerInterface, NormalizerInterfac
                 $object[$key] = $value_1;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('description') && null !== $data->getDescription()) {
+        if ($data->isInitialized('description') && $data->getDescription() !== null) {
             $dataArray['description'] = $data->getDescription();
         }
         $dataArray['quantity'] = $data->getQuantity();
-        if ($data->isInitialized('unit') && null !== $data->getUnit()) {
+        if ($data->isInitialized('unit') && $data->getUnit() !== null) {
             $dataArray['unit'] = $data->getUnit();
         }
         $dataArray['unit_price'] = $data->getUnitPrice();
-        if ($data->isInitialized('discountPercentage') && null !== $data->getDiscountPercentage()) {
+        if ($data->isInitialized('discountPercentage') && $data->getDiscountPercentage() !== null) {
             $dataArray['discount_percentage'] = $data->getDiscountPercentage();
         }
-        if ($data->isInitialized('mainTax') && null !== $data->getMainTax()) {
-            $dataArray['main_tax'] = $data->getMainTax() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getMainTax(), 'json', $context));
+        if ($data->isInitialized('mainTax') && $data->getMainTax() !== null) {
+            $dataArray['main_tax'] = $data->getMainTax() === null ? null : new JsonObject($this->normalizer->normalize($data->getMainTax(), 'json', $context));
         }
-        if ($data->isInitialized('equivalenceSurchargeRate') && null !== $data->getEquivalenceSurchargeRate()) {
+        if ($data->isInitialized('equivalenceSurchargeRate') && $data->getEquivalenceSurchargeRate() !== null) {
             $dataArray['equivalence_surcharge_rate'] = $data->getEquivalenceSurchargeRate();
         }
-        if ($data->isInitialized('irpfRate') && null !== $data->getIrpfRate()) {
+        if ($data->isInitialized('irpfRate') && $data->getIrpfRate() !== null) {
             $dataArray['irpf_rate'] = $data->getIrpfRate();
         }
-        if ($data->isInitialized('exemptionReason') && null !== $data->getExemptionReason()) {
+        if ($data->isInitialized('exemptionReason') && $data->getExemptionReason() !== null) {
             $dataArray['exemption_reason'] = $data->getExemptionReason();
         }
-        if ($data->isInitialized('exemptionReasonText') && null !== $data->getExemptionReasonText()) {
+        if ($data->isInitialized('exemptionReasonText') && $data->getExemptionReasonText() !== null) {
             $dataArray['exemption_reason_text'] = $data->getExemptionReasonText();
         }
-        if ($data->isInitialized('taxableBase') && null !== $data->getTaxableBase()) {
+        if ($data->isInitialized('taxableBase') && $data->getTaxableBase() !== null) {
             $dataArray['taxable_base'] = $data->getTaxableBase();
         }
         $dataArray['line_total'] = $data->getLineTotal();
-        if ($data->isInitialized('pricingMode') && null !== $data->getPricingMode()) {
+        if ($data->isInitialized('pricingMode') && $data->getPricingMode() !== null) {
             $dataArray['pricing_mode'] = $data->getPricingMode();
         }
-        if ($data->isInitialized('totalExcludingTax') && null !== $data->getTotalExcludingTax()) {
+        if ($data->isInitialized('totalExcludingTax') && $data->getTotalExcludingTax() !== null) {
             $dataArray['total_excluding_tax'] = $data->getTotalExcludingTax();
         }
-        if ($data->isInitialized('totalIncludingTax') && null !== $data->getTotalIncludingTax()) {
+        if ($data->isInitialized('totalIncludingTax') && $data->getTotalIncludingTax() !== null) {
             $dataArray['total_including_tax'] = $data->getTotalIncludingTax();
         }
-        if ($data->isInitialized('lineType') && null !== $data->getLineType()) {
+        if ($data->isInitialized('lineType') && $data->getLineType() !== null) {
             $dataArray['line_type'] = $data->getLineType();
         }
-        if ($data->isInitialized('sourceInvoiceReference') && null !== $data->getSourceInvoiceReference()) {
+        if ($data->isInitialized('sourceInvoiceReference') && $data->getSourceInvoiceReference() !== null) {
             $dataArray['source_invoice_reference'] = $data->getSourceInvoiceReference();
         }
-        if ($data->isInitialized('sourceInvoiceIds') && null !== $data->getSourceInvoiceIds()) {
+        if ($data->isInitialized('sourceInvoiceIds') && $data->getSourceInvoiceIds() !== null) {
             $values = [];
             foreach ($data->getSourceInvoiceIds() as $value) {
                 $values[] = $value;
@@ -212,10 +219,12 @@ class InvoiceLineNormalizer implements DenormalizerInterface, NormalizerInterfac
                 $dataArray[$key] = $value_1;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\InvoiceLine::class => false];
+        return [InvoiceLine::class => false];
     }
 }

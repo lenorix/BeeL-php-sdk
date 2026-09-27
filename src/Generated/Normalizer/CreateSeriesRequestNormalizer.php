@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\CreateSeriesRequest;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class CreateSeriesRequestNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class CreateSeriesRequestNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\CreateSeriesRequest::class;
+        return $type === CreateSeriesRequest::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CreateSeriesRequest::class;
+        return is_object($data) && get_class($data) === CreateSeriesRequest::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\CreateSeriesRequest();
-        if (null === $data || false === \is_array($data)) {
+        $object = new CreateSeriesRequest;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -58,8 +63,7 @@ class CreateSeriesRequestNormalizer implements DenormalizerInterface, Normalizer
         if (\array_key_exists('description', $data) && $data['description'] !== null) {
             $object->setDescription($data['description']);
             unset($data['description']);
-        }
-        elseif (\array_key_exists('description', $data) && $data['description'] === null) {
+        } elseif (\array_key_exists('description', $data) && $data['description'] === null) {
             $object->setDescription(null);
             unset($data['description']);
         }
@@ -88,30 +92,32 @@ class CreateSeriesRequestNormalizer implements DenormalizerInterface, Normalizer
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('documentType') && null !== $data->getDocumentType()) {
+        if ($data->isInitialized('documentType') && $data->getDocumentType() !== null) {
             $dataArray['document_type'] = $data->getDocumentType();
         }
         $dataArray['name'] = $data->getName();
         $dataArray['code'] = $data->getCode();
-        if ($data->isInitialized('description') && null !== $data->getDescription()) {
+        if ($data->isInitialized('description') && $data->getDescription() !== null) {
             $dataArray['description'] = $data->getDescription();
         }
         $dataArray['format'] = $data->getFormat();
-        if ($data->isInitialized('counterReset') && null !== $data->getCounterReset()) {
+        if ($data->isInitialized('counterReset') && $data->getCounterReset() !== null) {
             $dataArray['counter_reset'] = $data->getCounterReset();
         }
-        if ($data->isInitialized('initialNumber') && null !== $data->getInitialNumber()) {
+        if ($data->isInitialized('initialNumber') && $data->getInitialNumber() !== null) {
             $dataArray['initial_number'] = $data->getInitialNumber();
         }
-        if ($data->isInitialized('active') && null !== $data->getActive()) {
+        if ($data->isInitialized('active') && $data->getActive() !== null) {
             $dataArray['active'] = $data->getActive();
         }
-        if ($data->isInitialized('defaultSeries') && null !== $data->getDefaultSeries()) {
+        if ($data->isInitialized('defaultSeries') && $data->getDefaultSeries() !== null) {
             $dataArray['default_series'] = $data->getDefaultSeries();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -119,10 +125,12 @@ class CreateSeriesRequestNormalizer implements DenormalizerInterface, Normalizer
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\CreateSeriesRequest::class => false];
+        return [CreateSeriesRequest::class => false];
     }
 }

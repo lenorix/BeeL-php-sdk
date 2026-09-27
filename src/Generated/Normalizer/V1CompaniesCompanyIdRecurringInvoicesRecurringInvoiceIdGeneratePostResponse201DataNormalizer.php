@@ -3,7 +3,9 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201Data;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
+use Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -11,27 +13,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201DataNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201DataNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201Data::class;
+        return $type === V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201Data::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201Data::class;
+        return is_object($data) && get_class($data) === V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201Data::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201Data();
-        if (null === $data || false === \is_array($data)) {
+        $object = new V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201Data;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -43,13 +49,12 @@ class V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostRespons
         }
         if (\array_key_exists('next_generation', $data) && $data['next_generation'] !== null) {
             $date = \DateTime::createFromFormat('Y-m-d', $data['next_generation']);
-            if (false === $date) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['next_generation'], 'Y-m-d');
+            if ($date === false) {
+                throw new InvalidDateException($data['next_generation'], 'Y-m-d');
             }
             $object->setNextGeneration($date->setTime(0, 0, 0));
             unset($data['next_generation']);
-        }
-        elseif (\array_key_exists('next_generation', $data) && $data['next_generation'] === null) {
+        } elseif (\array_key_exists('next_generation', $data) && $data['next_generation'] === null) {
             $object->setNextGeneration(null);
             unset($data['next_generation']);
         }
@@ -58,15 +63,17 @@ class V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostRespons
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('invoiceId') && null !== $data->getInvoiceId()) {
+        if ($data->isInitialized('invoiceId') && $data->getInvoiceId() !== null) {
             $dataArray['invoice_id'] = $data->getInvoiceId();
         }
-        if ($data->isInitialized('nextGeneration') && null !== $data->getNextGeneration()) {
+        if ($data->isInitialized('nextGeneration') && $data->getNextGeneration() !== null) {
             $dataArray['next_generation'] = $data->getNextGeneration()?->format('Y-m-d');
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -74,10 +81,12 @@ class V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostRespons
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201Data::class => false];
+        return [V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201Data::class => false];
     }
 }

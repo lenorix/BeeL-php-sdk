@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\TaxBreakdownItem;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class TaxBreakdownItemNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class TaxBreakdownItemNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\TaxBreakdownItem::class;
+        return $type === TaxBreakdownItem::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\TaxBreakdownItem::class;
+        return is_object($data) && get_class($data) === TaxBreakdownItem::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\TaxBreakdownItem();
-        if (null === $data || false === \is_array($data)) {
+        $object = new TaxBreakdownItem;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -71,8 +76,10 @@ class TaxBreakdownItemNormalizer implements DenormalizerInterface, NormalizerInt
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -80,7 +87,7 @@ class TaxBreakdownItemNormalizer implements DenormalizerInterface, NormalizerInt
         $dataArray['percentage'] = $data->getPercentage();
         $dataArray['taxable_base'] = $data->getTaxableBase();
         $dataArray['tax_amount'] = $data->getTaxAmount();
-        if ($data->isInitialized('regimeKey') && null !== $data->getRegimeKey()) {
+        if ($data->isInitialized('regimeKey') && $data->getRegimeKey() !== null) {
             $dataArray['regime_key'] = $data->getRegimeKey();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -88,10 +95,12 @@ class TaxBreakdownItemNormalizer implements DenormalizerInterface, NormalizerInt
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\TaxBreakdownItem::class => false];
+        return [TaxBreakdownItem::class => false];
     }
 }

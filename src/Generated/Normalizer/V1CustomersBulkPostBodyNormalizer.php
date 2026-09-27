@@ -3,6 +3,9 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\CreateCustomerRequest;
+use Lenorix\BeelSdk\Generated\Model\V1CustomersBulkPostBody;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +14,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class V1CustomersBulkPostBodyNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class V1CustomersBulkPostBodyNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\V1CustomersBulkPostBody::class;
+        return $type === V1CustomersBulkPostBody::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\V1CustomersBulkPostBody::class;
+        return is_object($data) && get_class($data) === V1CustomersBulkPostBody::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\V1CustomersBulkPostBody();
-        if (null === $data || false === \is_array($data)) {
+        $object = new V1CustomersBulkPostBody;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -40,7 +47,7 @@ class V1CustomersBulkPostBodyNormalizer implements DenormalizerInterface, Normal
         if (\array_key_exists('customers', $data)) {
             $values = [];
             foreach ($data['customers'] as $value) {
-                $values[] = $this->denormalizer->denormalize($value, \Lenorix\BeelSdk\Generated\Model\CreateCustomerRequest::class, 'json', $context);
+                $values[] = $this->denormalizer->denormalize($value, CreateCustomerRequest::class, 'json', $context);
             }
             $object->setCustomers($values);
             unset($data['customers']);
@@ -50,14 +57,16 @@ class V1CustomersBulkPostBodyNormalizer implements DenormalizerInterface, Normal
                 $object[$key] = $value_1;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $values = [];
         foreach ($data->getCustomers() as $value) {
-            $values[] = $value === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($value, 'json', $context));
+            $values[] = $value === null ? null : new JsonObject($this->normalizer->normalize($value, 'json', $context));
         }
         $dataArray['customers'] = $values;
         foreach ($data->additionalPropertyEntries() as $key => $value_1) {
@@ -65,10 +74,12 @@ class V1CustomersBulkPostBodyNormalizer implements DenormalizerInterface, Normal
                 $dataArray[$key] = $value_1;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\V1CustomersBulkPostBody::class => false];
+        return [V1CustomersBulkPostBody::class => false];
     }
 }
