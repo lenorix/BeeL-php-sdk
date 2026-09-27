@@ -10,6 +10,7 @@ use Lenorix\BeelSdk\Exception\BeelValidationError;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Endpoint\CreateCompanyInvoiceExport;
 use Lenorix\BeelSdk\Generated\Endpoint\CreateCompanyInvoicePdfArchive;
+use Lenorix\BeelSdk\Generated\Endpoint\PreviewCompanyInvoicePdf;
 use Lenorix\BeelSdk\Generated\Model\BulkOperationResult;
 use Lenorix\BeelSdk\Generated\Model\ConvertProformaToInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\CreateCorrectiveInvoiceRequest;
@@ -275,6 +276,18 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
         $request = RequestModels::from($request, CreateInvoiceDeliveryRequest::class);
 
         return $this->execute(fn () => $this->client->createCompanyInvoiceDelivery($this->companyId, $request, $headers));
+    }
+
+    /**
+     * Download the PDF preview of a draft invoice as a stream; this does not issue or number it.
+     *
+     * @throws BeelApiError If BeeL cannot render the preview, for example for an unknown invoice.
+     *
+     * @see https://docs.beel.es/invoices/previewCompanyInvoicePdf
+     */
+    public function previewPdf(string $invoiceId): BinaryDownload
+    {
+        return BinaryDownload::fromResponse($this->executeRaw(new PreviewCompanyInvoicePdf($this->companyId, $invoiceId)));
     }
 
     /**

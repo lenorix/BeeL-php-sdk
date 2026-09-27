@@ -11,8 +11,11 @@ use Lenorix\BeelSdk\Generated\Model\IssuingReadinessData;
 use Lenorix\BeelSdk\Generated\Model\UpdateCompanyRequest;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
+use Lenorix\BeelSdk\Resource\Company\CompanyActivationsResource;
 use Lenorix\BeelSdk\Resource\Company\CompanyCustomersResource;
+use Lenorix\BeelSdk\Resource\Company\CompanyInvoiceCustomizationResource;
 use Lenorix\BeelSdk\Resource\Company\CompanyInvoicesResource;
+use Lenorix\BeelSdk\Resource\Company\CompanyLogoResource;
 use Lenorix\BeelSdk\Resource\Company\CompanyPaymentConnectionsResource;
 use Lenorix\BeelSdk\Resource\Company\CompanyProductsResource;
 use Lenorix\BeelSdk\Resource\Company\CompanyRecurringInvoicesResource;
@@ -56,6 +59,15 @@ final readonly class CompanyScope extends GeneratedResource
     /** The AEAT representation this company signs to invoice in production. */
     public CompanyRepresentationResource $representation;
 
+    /** Switch this company on or off in Test or Live. */
+    public CompanyActivationsResource $activations;
+
+    /** PDF template, colour and languages of this company's invoices. */
+    public CompanyInvoiceCustomizationResource $invoiceCustomization;
+
+    /** The logo printed on this company's invoices. */
+    public CompanyLogoResource $logo;
+
     /**
      * @param  string  $companyId  Company UUID, not its NIF or legal name.
      */
@@ -71,6 +83,9 @@ final readonly class CompanyScope extends GeneratedResource
         $this->taxConfiguration = new CompanyTaxConfigurationResource($client, $companyId, $this->responseContext);
         $this->verifactuConfiguration = new CompanyVeriFactuConfigurationResource($client, $companyId, $this->responseContext);
         $this->representation = new CompanyRepresentationResource($client, $companyId, $this->responseContext);
+        $this->activations = new CompanyActivationsResource($client, $companyId, $this->responseContext);
+        $this->invoiceCustomization = new CompanyInvoiceCustomizationResource($client, $companyId, $this->responseContext);
+        $this->logo = new CompanyLogoResource($client, $companyId, $this->responseContext);
     }
 
     /**

@@ -8,6 +8,11 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 - `createPdfArchive()` and `export()` on company invoices return a `BinaryDownload` with the response stream, file name, content type, length and invoice counts. They used to return `null`, as the generated client discards file bodies. The body is never read into memory, and neither operation retries a `5xx` by default.
 - `$company->representation` with `get()`, `generate()`, `documentLink()`, `submit()` and `cancel()`. Errors carry their real HTTP status.
+- Methods for every current endpoint without one, named in the Node.js SDK's style: `$company->activations` (`activate()`, `deactivate()`), `$company->invoiceCustomization` (`get()`, `update()`), `$company->logo` (`upload()`, `delete()`), `$company->invoices->previewPdf()`, `$account->requestLogs` (`list()`, `all()`, `get()`), `$beel->accounts->import()` and `previewImport()`, and `$beel->templates` (`accountImport()`, `customerImport()`).
+- `BeelPaymentRequiredError` for HTTP 402, with the `checkoutUrl` BeeL returns when a company is switched on in Live without a card on file.
+- The `Environment` enum (`TEST`, `PROD`).
+- `WebhookVerifier::eventFromPayload()` builds the typed event from a verified payload without a verifier or secret.
+- `WebhookEventType::isProvisionerOnly()`, `true` for the `account.*` events BeeL documents as delivered only to the provisioner.
 - `$beel->request()` calls any API path with the client's authentication, retries, per-call options and error mapping, like the Node.js SDK's `beel.raw.GET(...)`.
 - List filters such as `status`, `event_kind` or `related_entity_ids` accept a single value as well as a list.
 - Every method that takes a request model also accepts an array in API format, like the Node.js SDK's plain objects. Invalid arrays and missing required fields throw `InvalidArgumentException` before sending.

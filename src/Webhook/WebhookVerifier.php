@@ -22,7 +22,6 @@ use Lenorix\BeelSdk\Generated\Model\WebhookEventDataRepresentationSigned;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataVeriFactuStatusUpdated;
 use Lenorix\BeelSdk\Generated\Normalizer\JaneObjectNormalizer;
 use Lenorix\BeelSdk\Http\DateTimeFields;
-use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Serializer;
 
 /** Verify signed BeeL webhook requests using the original JSON body. */
@@ -44,8 +43,6 @@ final readonly class WebhookVerifier
         'representation.signed' => WebhookEventDataRepresentationSigned::class,
     ];
 
-    private DenormalizerInterface $serializer;
-
     private WebhookSigner $signer;
 
     /**
@@ -62,7 +59,6 @@ final readonly class WebhookVerifier
         }
 
         $this->signer = new WebhookSigner($secret);
-        $this->serializer = new Serializer([new JaneObjectNormalizer]);
     }
 
     /**
@@ -161,16 +157,32 @@ final readonly class WebhookVerifier
      */
     public function toEvent(array $event): WebhookEvent
     {
+        return self::eventFromPayload($event);
+    }
+
+    /**
+     * Build the typed event from a payload already returned by {@see self::verify()}, without a verifier.
+     *
+     * It needs no secret and checks no signature, so only pass payloads that were verified,
+     * for example when a queued job processes an event verified earlier by the controller.
+     *
+     * @param  array<string, mixed>  $event  Decoded payload returned by `verify()`.
+     *
+     * @throws WebhookPayloadError If the event does not match the BeeL event schema.
+     */
+    public static function eventFromPayload(array $event): WebhookEvent
+    {
         $event = DateTimeFields::normalizeArray($event);
+        $serializer = new Serializer([new JaneObjectNormalizer]);
 
         try {
             $eventType = $event['type'] ?? null;
             $eventData = $event['data'] ?? null;
             if (is_string($eventType) && is_array($eventData) && isset(self::EVENT_DATA_MODELS[$eventType])) {
-                $event['data'] = $this->serializer->denormalize($eventData, self::EVENT_DATA_MODELS[$eventType], 'json');
+                $event['data'] = $serializer->denormalize($eventData, self::EVENT_DATA_MODELS[$eventType], 'json');
             }
 
-            $model = $this->serializer->denormalize($event, WebhookEvent::class, 'json');
+            $model = $serializer->denormalize($event, WebhookEvent::class, 'json');
         } catch (\Throwable $exception) {
             throw new WebhookPayloadError('Webhook payload does not match the BeeL event schema.', previous: $exception);
         }

@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Lenorix\BeelSdk\Resource;
 
 use Lenorix\BeelSdk\Generated\Client;
+use Lenorix\BeelSdk\Generated\Model\AccountImportResult;
+use Lenorix\BeelSdk\Generated\Model\AccountImportUpload;
 use Lenorix\BeelSdk\Generated\Model\ManagedAccountSummary;
 use Lenorix\BeelSdk\Generated\Model\ProvisionAccountRequest;
 use Lenorix\BeelSdk\Generated\Model\ProvisionAccountResult;
@@ -64,5 +66,34 @@ final readonly class AccountsResource extends GeneratedResource
     public function get(string $accountId): ManagedAccountSummary
     {
         return $this->execute(fn () => $this->client->getAccount($accountId));
+    }
+
+    /**
+     * Import managed accounts in bulk from CSV files, sent as `multipart/form-data`.
+     *
+     * @param  AccountImportUpload|array<string, mixed>  $request  The request as a model or as an array in API format, with `accounts_file` and optionally `customers_file` and `options`.
+     * @param  array<string, mixed>  $headers  Request headers, including optional `Idempotency-Key`.
+     *
+     * @see https://docs.beel.es/accounts/createAccountImport
+     */
+    public function import(AccountImportUpload|array $request, array $headers = []): AccountImportResult
+    {
+        $request = RequestModels::from($request, AccountImportUpload::class);
+
+        return $this->execute(fn () => $this->client->createAccountImport($request, $headers));
+    }
+
+    /**
+     * Validate an account import without creating anything.
+     *
+     * @param  AccountImportUpload|array<string, mixed>  $request  The request as a model or as an array in API format.
+     *
+     * @see https://docs.beel.es/accounts/previewAccountImport
+     */
+    public function previewImport(AccountImportUpload|array $request): AccountImportResult
+    {
+        $request = RequestModels::from($request, AccountImportUpload::class);
+
+        return $this->execute(fn () => $this->client->previewAccountImport($request));
     }
 }

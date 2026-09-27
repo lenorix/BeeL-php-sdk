@@ -17,6 +17,7 @@ use Lenorix\BeelSdk\Resource\Account\AccountCompaniesResource;
 use Lenorix\BeelSdk\Resource\Account\AccountEmailsResource;
 use Lenorix\BeelSdk\Resource\Account\AccountInvitationsResource;
 use Lenorix\BeelSdk\Resource\Account\AccountMembersResource;
+use Lenorix\BeelSdk\Resource\Account\AccountRequestLogsResource;
 use Lenorix\BeelSdk\Resource\Account\AccountWebhooksResource;
 
 /** Account-level resources and operations for one BeeL account. */
@@ -37,6 +38,9 @@ final readonly class AccountScope extends GeneratedResource
     /** Email delivery history and account-level delivery indicators. */
     public AccountEmailsResource $emails;
 
+    /** History of the API requests made to this account, for debugging. */
+    public AccountRequestLogsResource $requestLogs;
+
     /** @param string $accountId Account UUID returned by BeeL. */
     public function __construct(Client $client, public string $accountId, ?ResponseContext $responseContext = null)
     {
@@ -46,6 +50,7 @@ final readonly class AccountScope extends GeneratedResource
         $this->invitations = new AccountInvitationsResource($client, $accountId, $this->responseContext);
         $this->webhooks = new AccountWebhooksResource($client, $accountId, $this->responseContext);
         $this->emails = new AccountEmailsResource($client, $accountId, $this->responseContext);
+        $this->requestLogs = new AccountRequestLogsResource($client, $accountId, $this->responseContext);
     }
 
     /**

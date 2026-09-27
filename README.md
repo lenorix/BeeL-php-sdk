@@ -116,7 +116,7 @@ $summary = $company->fiscalSummary(['year' => 2026]);
 $readiness = $company->issuingReadiness();
 ```
 
-The company scope exposes `invoices`, `customers`, `products`, `series`, `recurringInvoices`, `paymentConnections`, `taxConfiguration`, and `verifactuConfiguration`, along with company operations such as `get()`, `update()`, `delete()`, `fiscalSummary()`, and `issuingReadiness()`.
+The company scope exposes `invoices`, `customers`, `products`, `series`, `recurringInvoices`, `paymentConnections`, `taxConfiguration`, `verifactuConfiguration`, `invoiceCustomization`, `logo`, `activations` and `representation`, along with company operations such as `get()`, `update()`, `delete()`, `fiscalSummary()`, and `issuingReadiness()`.
 
 Recurring invoices, schedules, VeriFactu settings, and other request bodies use the corresponding generated models under `Lenorix\BeelSdk\Generated\Model`. For example:
 
@@ -169,6 +169,42 @@ $identity->getCredential()->getEnvironment();
 $identity->getCredential()->getScopes();
 ```
 
+## Switching a company on
+
+A company invoices only in the environments it is switched on in. `activations` switches it on or off in Test or Live:
+
+```php
+use Lenorix\BeelSdk\Enum\Environment;
+use Lenorix\BeelSdk\Exception\BeelPaymentRequiredError;
+
+$company->activations->activate(Environment::TEST);
+
+try {
+    $company->activations->activate(
+        Environment::PROD,
+        successUrl: 'https://your-app.example.com/billing/return?session={CHECKOUT_SESSION_ID}',
+        cancelUrl: 'https://your-app.example.com/billing',
+    );
+} catch (BeelPaymentRequiredError $exception) {
+    // CHECKOUT_REQUIRED: no card on file yet. Send the user to the checkout.
+    $checkoutUrl = $exception->checkoutUrl;
+}
+
+$deactivation = $company->activations->deactivate(Environment::PROD); // Live: effective at the end of the billing cycle
+```
+
+Test is immediate and free. Live is immediate when the account already has a card on file or an enterprise contract; otherwise BeeL answers `402` and `BeelPaymentRequiredError` carries the `checkoutUrl` when both return URLs are given. A `PAYMENT_REQUIRED` code means billing is past due.
+
+## Invoice customization and logo
+
+```php
+$customization = $company->invoiceCustomization->get();
+$company->invoiceCustomization->update(['template' => 'modern']);
+
+$company->logo->upload(fopen('/path/to/logo.png', 'rb')); // a file, a stream or the image contents
+$company->logo->delete();
+```
+
 ## Representation
 
 The representation is the AEAT authorization a company signs so BeeL can submit its invoices in production:
@@ -201,6 +237,20 @@ $companies = $account->companies->list();
 $members = $account->members->list();
 $invitations = $account->invitations->list();
 $webhooks = $account->webhooks->list();
+
+foreach ($account->requestLogs->all(['only_errors' => true]) as $log) {
+    // Every failed API request made to this account, newest first.
+}
+$detail = $account->requestLogs->get('request-id');
+```
+
+Integrators that provision accounts can import them in bulk from CSV, after validating the file:
+
+```php
+$preview = $beel->accounts->previewImport(['accounts_file' => fopen('/path/to/accounts.csv', 'rb')]);
+$result = $beel->accounts->import(['accounts_file' => fopen('/path/to/accounts.csv', 'rb')]);
+
+$template = $beel->templates->accountImport(); // BinaryDownload with the CSV template; also customerImport()
 ```
 
 Payment connections belong to a company. A connection is identified by its ID; its events resource is scoped to that connection:
@@ -275,7 +325,9 @@ try {
 }
 ```
 
-### ZIP archives and spreadsheet exports
+### Draft previews, ZIP archives and spreadsheet exports
+
+`$company->invoices->previewPdf($invoiceId)` renders a draft as a PDF without issuing or numbering it, and returns a `BinaryDownload`.
 
 `createPdfArchive()` and `export()` return a `BinaryDownload`. Its `body` is the response stream, which the SDK never reads into memory:
 
@@ -353,7 +405,9 @@ $signatureHeader = (new WebhookSigner($secret))->sign($body); // "t=...,v1=..."
 
 Event field values are also available as enums in `Lenorix\BeelSdk\Enum`: `VeriFactuSubmissionStatus`, `RecurringInvoicePauseReason` and `WebhookAccountRelationship`.
 
-`verifyEvent()` returns Jane's generated `WebhookEvent` model, with `data` denormalized to the generated model for its event type. This is useful when dispatching typed framework events, such as Laravel events. `verify()` remains available when you prefer the decoded payload as an array. Event names are also available as `WebhookEventType` enum cases, for example `WebhookEventType::INVOICE_ISSUED->value`.
+`verifyEvent()` returns Jane's generated `WebhookEvent` model, with `data` denormalized to the generated model for its event type. This is useful when dispatching typed framework events, such as Laravel events. `verify()` remains available when you prefer the decoded payload as an array. Event names are also available as `WebhookEventType` enum cases, for example `WebhookEventType::INVOICE_ISSUED->value`. `WebhookEventType::ACCOUNT_CLAIMED->isProvisionerOnly()` is `true` for the `account.*` events, which BeeL documents as delivered only to the provisioner that created the account.
+
+To build the typed event later from a payload already verified, for example in a queued job, use the static `WebhookVerifier::eventFromPayload($payload)`; it needs no secret and checks no signature, so pass only verified payloads.
 
 ## Errors
 
@@ -399,7 +453,7 @@ The SDK follows the official [`@beel_es/sdk`](https://www.npmjs.com/package/@bee
 - **Request IDs:** `requestId` comes from the `X-Request-Id` header when present, then from `meta.request_id` in the body; the Node.js SDK reads only the body.
 - **Any endpoint:** `$beel->request()` is the equivalent of `beel.raw.GET(...)`. `$beel->raw` is the generated Jane client, which does not map errors to `BeelApiError`.
 - **Writes without a body:** they are sent as `{}` like in the Node.js SDK, but an existing `Content-Type`, such as a multipart upload, is never replaced.
-- **Extras:** `$beel->request()` for any path, `all()` iterators, per-call `withOptions()`, `BinaryDownload` for archives and exports, `$company->representation`, `BeelNotReadyError` with `Retry-After` for PDFs, `WebhookSigner`, and `$beel->me`.
+- **Extras:** every current endpoint has a method, including those without one in the Node.js SDK (`activations`, `invoiceCustomization`, `logo`, `requestLogs`, account imports, `templates`, `previewPdf()`), named in its style. Also `$beel->request()` for any path, `all()` iterators, per-call `withOptions()`, `BinaryDownload` for archives and exports, `$company->representation`, `BeelNotReadyError` with `Retry-After` for PDFs, `WebhookSigner`, and `$beel->me`.
 
 ## Documentation and support
 

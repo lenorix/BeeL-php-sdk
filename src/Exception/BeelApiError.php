@@ -152,6 +152,7 @@ class BeelApiError extends \RuntimeException
 
         $class = match (true) {
             $status === 401 || $status === 403 => BeelAuthError::class,
+            $status === 402 => BeelPaymentRequiredError::class,
             $status === 404 => BeelNotFoundError::class,
             $status === 409 => BeelConflictError::class,
             $status === 422 => BeelValidationError::class,

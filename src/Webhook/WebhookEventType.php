@@ -17,4 +17,15 @@ enum WebhookEventType: string
     case ACCOUNT_CLAIMED = 'account.claimed';
     case COMPANY_CREATED = 'company.created';
     case REPRESENTATION_SIGNED = 'representation.signed';
+
+    /**
+     * Whether BeeL delivers this event only to the provisioner that created the account.
+     *
+     * BeeL documents that `account.*` events reach only the provisioner; a subscription on
+     * any other account never receives them. Other events are not documented as restricted.
+     */
+    public function isProvisionerOnly(): bool
+    {
+        return str_starts_with($this->value, 'account.');
+    }
 }

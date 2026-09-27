@@ -9,6 +9,7 @@ use GuzzleHttp\Psr7\Utils;
 use Lenorix\BeelSdk\Beel;
 use Lenorix\BeelSdk\Builder\CustomerBuilder;
 use Lenorix\BeelSdk\Builder\InvoiceBuilder;
+use Lenorix\BeelSdk\Enum\Environment;
 use Lenorix\BeelSdk\Enum\RecurringInvoicePauseReason;
 use Lenorix\BeelSdk\Enum\VeriFactuSubmissionStatus;
 use Lenorix\BeelSdk\Enum\WebhookAccountRelationship;
@@ -17,6 +18,7 @@ use Lenorix\BeelSdk\Exception\BeelAuthError;
 use Lenorix\BeelSdk\Exception\BeelConflictError;
 use Lenorix\BeelSdk\Exception\BeelNotFoundError;
 use Lenorix\BeelSdk\Exception\BeelNotReadyError;
+use Lenorix\BeelSdk\Exception\BeelPaymentRequiredError;
 use Lenorix\BeelSdk\Exception\BeelRateLimitError;
 use Lenorix\BeelSdk\Exception\BeelValidationError;
 use Lenorix\BeelSdk\Exception\WebhookHeaderError;
@@ -43,6 +45,9 @@ use Lenorix\BeelSdk\Generated\Model\MyIdentity;
 use Lenorix\BeelSdk\Generated\Model\Product;
 use Lenorix\BeelSdk\Generated\Model\RecurringInvoiceResponse;
 use Lenorix\BeelSdk\Generated\Model\RepresentationStatusResponseData;
+use Lenorix\BeelSdk\Generated\Model\RequestLogDetail;
+use Lenorix\BeelSdk\Generated\Model\RequestLogSummary;
+use Lenorix\BeelSdk\Generated\Model\TaxTypesCatalog;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRepresentationSubmitPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdMarkSentPostBody;
 use Lenorix\BeelSdk\Generated\Model\WebhookDeliveryLog;
@@ -1123,4 +1128,135 @@ it('declares every resource return type as the generated client actually returns
     }
 
     expect($mismatches)->toBe([]);
+});
+
+// Endpoints without a Node.js SDK method, named in its style
+
+it('switches a company on and off, exposing the Live checkout URL', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['environment' => 'TEST']], 201),
+        jsonResponse(['success' => false, 'error' => ['code' => 'CHECKOUT_REQUIRED', 'message' => 'Add a card', 'details' => ['checkout_url' => 'https://checkout.example.test/s/1']]], 402),
+        jsonResponse(['success' => true, 'data' => ['environment' => 'PROD', 'effective_at' => '2026-10-31T00:00:00Z']]),
+    ]);
+    $activations = testClient($transport)->company('c')->activations;
+
+    $activations->activate(Environment::TEST);
+    try {
+        $activations->activate('PROD', 'https://app.example.test/ok?s={CHECKOUT_SESSION_ID}', 'https://app.example.test/cancel');
+        test()->fail('Expected a payment required error.');
+    } catch (BeelPaymentRequiredError $exception) {
+        expect($exception->apiCode)->toBe('CHECKOUT_REQUIRED')
+            ->and($exception->checkoutUrl)->toBe('https://checkout.example.test/s/1');
+    }
+    $activations->deactivate(Environment::PROD);
+
+    expect($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/companies/c/activations')
+        ->and(json_decode((string) $transport->requests[0]->getBody(), true))->toBe(['environment' => 'TEST'])
+        ->and(json_decode((string) $transport->requests[1]->getBody(), true))->toBe(['environment' => 'PROD', 'success_url' => 'https://app.example.test/ok?s={CHECKOUT_SESSION_ID}', 'cancel_url' => 'https://app.example.test/cancel'])
+        ->and($transport->requests[2]->getMethod())->toBe('DELETE')
+        ->and($transport->requests[2]->getUri()->getQuery())->toBe('environment=PROD');
+});
+
+it('reads and updates the invoice customization and manages the logo', function () {
+    $logo = fopen('php://memory', 'r+');
+    fwrite($logo, 'PNG-bytes');
+    rewind($logo);
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['template' => 'classic']]),
+        jsonResponse(['success' => true, 'data' => ['template' => 'modern']]),
+        jsonResponse(['success' => true, 'data' => ['url' => 'https://cdn.example.test/logo.png']]),
+        jsonResponse(['success' => true, 'data' => ['url' => 'https://cdn.example.test/logo.png']]),
+        new Response(204),
+    ]);
+    $company = testClient($transport)->company('c');
+
+    $company->invoiceCustomization->get();
+    $company->invoiceCustomization->update(['template' => 'modern']);
+    $company->logo->upload($logo);
+    $company->logo->upload('PNG-string');
+    $company->logo->delete();
+
+    expect($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/companies/c/invoice-customization')
+        ->and($transport->requests[1]->getMethod())->toBe('PUT')
+        ->and(json_decode((string) $transport->requests[1]->getBody(), true))->toBe(['template' => 'modern'])
+        ->and($transport->requests[2]->getHeaderLine('Content-Type'))->toStartWith('multipart/form-data')
+        ->and((string) $transport->requests[2]->getBody())->toContain('PNG-bytes')
+        ->and((string) $transport->requests[3]->getBody())->toContain('PNG-string')
+        ->and($transport->requests[4]->getMethod())->toBe('DELETE')
+        ->and($transport->requests[4]->getUri()->getPath())->toBe('/api/v1/companies/c/logo')
+        ->and(fn () => $company->logo->upload(42))->toThrow(InvalidArgumentException::class);
+});
+
+it('downloads draft previews and import templates as streams', function () {
+    $pdf = new TripwireStream('%PDF-preview');
+    $transport = new RecordingPsrClient([
+        new Response(200, ['Content-Type' => 'application/pdf'], $pdf),
+        new Response(200, ['Content-Type' => 'text/csv', 'Content-Disposition' => 'attachment; filename="accounts.csv"'], "name,nif\n"),
+        new Response(200, ['Content-Type' => 'text/csv'], "legal_name,nif\n"),
+    ]);
+    $beel = testClient($transport);
+
+    $preview = $beel->company('c')->invoices->previewPdf('inv-1');
+    $accounts = $beel->templates->accountImport();
+    $customers = $beel->templates->customerImport();
+
+    expect($preview->body)->toBe($pdf)
+        ->and($preview->contentType)->toBe('application/pdf')
+        ->and($accounts->fileName)->toBe('accounts.csv')
+        ->and($customers->contentType)->toBe('text/csv')
+        ->and(array_map(static fn ($request): string => $request->getUri()->getPath(), $transport->requests))->toBe([
+            '/api/v1/companies/c/invoices/inv-1/pdf/preview',
+            '/api/v1/templates/account-import',
+            '/api/v1/templates/customer-import',
+        ]);
+});
+
+it('lists, iterates and reads account request logs', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['request_logs' => [['request_id' => 'r1']], 'pagination' => ['next_cursor' => 'c2', 'has_next' => true, 'has_previous' => false]]]),
+        jsonResponse(['success' => true, 'data' => ['request_logs' => [['request_id' => 'r2']], 'pagination' => ['next_cursor' => null, 'has_next' => false, 'has_previous' => true]]]),
+        jsonResponse(['success' => true, 'data' => ['request_id' => 'r1']]),
+    ]);
+    $logs = testClient($transport)->account('a')->requestLogs;
+
+    $all = iterator_to_array($logs->all(['only_errors' => true]));
+    $detail = $logs->get('r1');
+
+    parse_str($transport->requests[1]->getUri()->getQuery(), $second);
+    expect($all)->toHaveCount(2)
+        ->and($all[0])->toBeInstanceOf(RequestLogSummary::class)
+        ->and($second)->toMatchArray(['only_errors' => 'true', 'cursor' => 'c2'])
+        ->and($detail)->toBeInstanceOf(RequestLogDetail::class)
+        ->and($transport->requests[2]->getUri()->getPath())->toBe('/api/v1/accounts/a/request-logs/r1');
+});
+
+it('imports managed accounts from an array', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['metadata' => []]]),
+        jsonResponse(['success' => true, 'data' => ['metadata' => []]], 201),
+    ]);
+    $accounts = testClient($transport)->accounts;
+
+    $accounts->previewImport(['accounts_file' => "external_ref,nif\nclient-1,B1\n"]);
+    $accounts->import(['accounts_file' => "external_ref,nif\nclient-1,B1\n"], ['Idempotency-Key' => 'import-1']);
+
+    expect($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/accounts/imports/preview')
+        ->and((string) $transport->requests[0]->getBody())->toContain('client-1,B1')
+        ->and($transport->requests[1]->getHeaderLine('Idempotency-Key'))->toBe('import-1');
+});
+
+it('reads tax types from the canonical route', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => []])]);
+
+    expect(testClient($transport)->catalogs->taxTypes())->toBeInstanceOf(TaxTypesCatalog::class)
+        ->and($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/tax-types');
+});
+
+it('builds typed events without a verifier and flags provisioner-only events', function () {
+    $event = WebhookVerifier::eventFromPayload(['id' => 'evt-1', 'type' => 'invoice.issued', 'created_at' => '2026-09-25T12:00:00.5Z', 'api_version' => '2026-09-01', 'livemode' => false, 'data' => ['invoice_id' => 'inv-1']]);
+
+    expect($event->getData())->toBeInstanceOf(WebhookEventDataInvoiceIssued::class)
+        ->and(WebhookEventType::ACCOUNT_CLAIMED->isProvisionerOnly())->toBeTrue()
+        ->and(array_values(array_map(static fn (WebhookEventType $type): string => $type->value, array_filter(WebhookEventType::cases(), static fn (WebhookEventType $type): bool => $type->isProvisionerOnly()))))
+        ->toBe(['account.claimed']);
 });
