@@ -199,7 +199,7 @@ Test is immediate and free. Live is immediate when the account already has a car
 
 ```php
 $customization = $company->invoiceCustomization->get();
-$company->invoiceCustomization->update(['template' => 'modern']);
+$company->invoiceCustomization->update(['invoice_template_type' => 'PROFESSIONAL_SERVICE', 'invoice_accent_color' => '#fc481d']);
 
 $company->logo->upload(fopen('/path/to/logo.png', 'rb')); // a file, a stream or the image contents
 $company->logo->delete();

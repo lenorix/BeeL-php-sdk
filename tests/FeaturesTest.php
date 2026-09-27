@@ -1162,8 +1162,8 @@ it('reads and updates the invoice customization and manages the logo', function 
     fwrite($logo, 'PNG-bytes');
     rewind($logo);
     $transport = new RecordingPsrClient([
-        jsonResponse(['success' => true, 'data' => ['template' => 'classic']]),
-        jsonResponse(['success' => true, 'data' => ['template' => 'modern']]),
+        jsonResponse(['success' => true, 'data' => ['invoice_template_type' => 'MODERN_TABLE']]),
+        jsonResponse(['success' => true, 'data' => ['invoice_template_type' => 'PROFESSIONAL_SERVICE']]),
         jsonResponse(['success' => true, 'data' => ['url' => 'https://cdn.example.test/logo.png']]),
         jsonResponse(['success' => true, 'data' => ['url' => 'https://cdn.example.test/logo.png']]),
         new Response(204),
@@ -1171,14 +1171,14 @@ it('reads and updates the invoice customization and manages the logo', function 
     $company = testClient($transport)->company('c');
 
     $company->invoiceCustomization->get();
-    $company->invoiceCustomization->update(['template' => 'modern']);
+    $company->invoiceCustomization->update(['invoice_template_type' => 'PROFESSIONAL_SERVICE', 'invoice_accent_color' => '#fc481d']);
     $company->logo->upload($logo);
     $company->logo->upload('PNG-string');
     $company->logo->delete();
 
     expect($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/companies/c/invoice-customization')
         ->and($transport->requests[1]->getMethod())->toBe('PUT')
-        ->and(json_decode((string) $transport->requests[1]->getBody(), true))->toBe(['template' => 'modern'])
+        ->and(json_decode((string) $transport->requests[1]->getBody(), true))->toBe(['invoice_template_type' => 'PROFESSIONAL_SERVICE', 'invoice_accent_color' => '#fc481d'])
         ->and($transport->requests[2]->getHeaderLine('Content-Type'))->toStartWith('multipart/form-data')
         ->and((string) $transport->requests[2]->getBody())->toContain('PNG-bytes')
         ->and((string) $transport->requests[3]->getBody())->toContain('PNG-string')
