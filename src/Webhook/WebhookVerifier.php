@@ -21,6 +21,7 @@ use Lenorix\BeelSdk\Generated\Model\WebhookEventDataRecurringInvoicePaused;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataRepresentationSigned;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataVeriFactuStatusUpdated;
 use Lenorix\BeelSdk\Generated\Normalizer\JaneObjectNormalizer;
+use Lenorix\BeelSdk\Http\DateTimeValues;
 use Symfony\Component\Serializer\Serializer;
 
 /** Verify signed BeeL webhook requests using the original JSON body. */
@@ -174,6 +175,7 @@ final readonly class WebhookVerifier
         $serializer = new Serializer([new JaneObjectNormalizer]);
 
         try {
+            DateTimeValues::assert($event);
             $eventType = $event['type'] ?? null;
             $eventData = $event['data'] ?? null;
             if (is_string($eventType) && is_array($eventData) && isset(self::EVENT_DATA_MODELS[$eventType])) {

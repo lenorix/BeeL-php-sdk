@@ -54,7 +54,9 @@ use Lenorix\BeelSdk\Generated\Model\WebhookDeliveryLog;
 use Lenorix\BeelSdk\Generated\Model\WebhookEvent;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceIssued;
 use Lenorix\BeelSdk\Generated\Model\WebhookSubscription;
+use Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException;
 use Lenorix\BeelSdk\Http\BinaryDownload;
+use Lenorix\BeelSdk\Http\DateTimeValues;
 use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\RequestOptions;
@@ -1225,4 +1227,95 @@ it('sends date-times with microseconds', function () {
 
     expect(json_decode((string) $transport->requests[0]->getBody(), true))->toBe(['sent_at' => '2026-09-25T12:00:00.123456+00:00'])
         ->and(json_decode((string) $transport->requests[1]->getBody(), true))->toBe(['sent_at' => '2026-09-25T12:00:00.500000+02:00']);
+});
+
+// Strict date-time values
+
+it('rejects an empty or non-RFC 3339 date-time instead of reading it as now', function (mixed $value) {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => ['id' => 'inv-1', 'created_at' => $value]])]);
+
+    expect(fn () => testClient($transport)->company('c')->invoices->get('inv-1'))->toThrow(InvalidDateException::class);
+})->with(['empty' => [''], 'relative word' => ['tomorrow'], 'date only' => ['2026-09-25'], 'number' => [1_758_800_000]]);
+
+it('accepts null and every RFC 3339 form, and ignores free-form maps', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => [
+        'id' => 'inv-1',
+        'created_at' => '2026-09-25t12:00:00z',
+        'updated_at' => '2026-09-25T12:00:00+02:00',
+        'voided_at' => null,
+        'metadata' => ['created_at' => '', 'sent_at' => 'whenever'],
+    ]])]);
+
+    $invoice = testClient($transport)->company('c')->invoices->get('inv-1');
+
+    expect($invoice->getCreatedAt()->format(DATE_ATOM))->toBe('2026-09-25T12:00:00+00:00')
+        ->and($invoice->getVoidedAt())->toBeNull()
+        ->and($invoice->getMetadata()['created_at'])->toBe('');
+});
+
+it('rejects invalid date-times in webhooks and in request arrays', function () {
+    $body = '{"id":"evt-1","type":"invoice.issued","created_at":"","api_version":"2026-09-01","livemode":false,"data":{"invoice_id":"inv-1"}}';
+    $transport = new RecordingPsrClient([]);
+
+    expect(fn () => (new WebhookVerifier('whsec_test'))->verifyEvent($body, (new WebhookSigner('whsec_test'))->sign($body, 1_000), 1_000))
+        ->toThrow(WebhookPayloadError::class)
+        ->and(fn () => testClient($transport)->invoices->markSent('inv-1', ['sent_at' => '']))->toThrow(InvalidArgumentException::class)
+        ->and($transport->requests)->toBe([]);
+});
+
+it('lists every date-time field and free-form map of the generated normalizers', function () {
+    $dates = [];
+    $free = [];
+    foreach (glob(__DIR__.'/../src/Generated/Normalizer/*.php') ?: [] as $file) {
+        $code = (string) file_get_contents($file);
+        preg_match_all('/new \\\\DateTime\(\$data\[\'([a-z_]+)\'\]\)/', $code, $matches);
+        array_push($dates, ...$matches[1]);
+        // Raw Jane output writes `new \Lenorix\...\JsonObject()`; Pint rewrites it to `new JsonObject;`.
+        preg_match_all('/new (?:\\\\[A-Za-z\\\\]+\\\\)?JsonObject(?:\(\))?;\s*foreach \(\$data\[\'([A-Za-z0-9_]+)\'\]/', $code, $matches);
+        array_push($free, ...$matches[1]);
+    }
+    $dates = array_values(array_unique($dates));
+    $free = array_values(array_unique($free));
+    sort($dates);
+    sort($free);
+
+    expect($dates)->not->toBeEmpty()
+        ->and(DateTimeValues::NAMES)->toBe($dates)
+        ->and(DateTimeValues::FREE_FORM_NAMES)->toBe($free);
+});
+
+it('never skips date-time fields of a model that shares a free-form map name', function () {
+    $normalizers = __DIR__.'/../src/Generated/Normalizer/';
+    $withDates = static function (string $model, array &$seen) use (&$withDates, $normalizers): array {
+        $file = $normalizers.$model.'Normalizer.php';
+        if (isset($seen[$model]) || ! is_file($file)) {
+            return [];
+        }
+        $seen[$model] = true;
+        $code = (string) file_get_contents($file);
+        $found = str_contains($code, 'new \\DateTime($data') ? [$model] : [];
+        preg_match_all('/([A-Za-z0-9]+)::class/', $code, $children);
+        foreach (array_unique($children[1]) as $child) {
+            array_push($found, ...$withDates($child, $seen));
+        }
+
+        return $found;
+    };
+
+    $collisions = [];
+    $models = [];
+    foreach (glob($normalizers.'*.php') ?: [] as $file) {
+        foreach (DateTimeValues::FREE_FORM_NAMES as $name) {
+            preg_match_all('/denormalize\(\$data\[\''.$name.'\'\], \\\\?(?:[A-Za-z\\\\]+\\\\)?([A-Za-z0-9]+)::class/', (string) file_get_contents($file), $matches);
+            foreach ($matches[1] as $model) {
+                $models[] = $model;
+                $seen = [];
+                array_push($collisions, ...$withDates($model, $seen));
+            }
+        }
+    }
+
+    // DateTimeValues skips these names, so a model under one of them must have no date-time fields.
+    expect($models)->not->toBeEmpty()
+        ->and($collisions)->toBe([]);
 });

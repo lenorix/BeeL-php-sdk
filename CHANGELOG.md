@@ -54,7 +54,7 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 - An error status without a JSON body, such as an empty `503` from a proxy, now throws `BeelApiError` instead of a `TypeError`.
 - Error responses without a `Content-Type` no longer trigger a PHP deprecation in the generated client before reaching `BeelApiError`.
 - `all()` stops if BeeL answers a different page than the one requested, instead of looping forever on the same page.
-- Date-times keep their fractional seconds. Responses and webhooks used to lose them, because the generated client parsed date-times with second precision and the SDK rewrote every response to fit; values in free-form maps such as `metadata` could be rewritten too. The client is now generated to parse date-times with `new \DateTime()` (microseconds, the most PHP holds) and to send them with microseconds, and the SDK no longer rewrites any response or webhook payload.
+- Date-times keep their fractional seconds. Responses and webhooks used to lose them, because the generated client parsed date-times with second precision and the SDK rewrote every response to fit; values in free-form maps such as `metadata` could be rewritten too. The client is now generated to parse date-times with `new \DateTime()` (microseconds, the most PHP holds) and to send them with microseconds, and the SDK no longer rewrites any response or webhook payload. Date-time values are still checked strictly: anything other than `null` or an RFC 3339 date-time, such as `""` or `"tomorrow"`, throws `InvalidDateException` in responses, `WebhookPayloadError` in webhooks and `InvalidArgumentException` in request arrays, instead of silently becoming the current time.
 
 ## v0.4.2 - 2026-09-27
 
