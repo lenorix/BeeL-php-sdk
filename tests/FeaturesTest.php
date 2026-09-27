@@ -69,6 +69,12 @@ use Lenorix\BeelSdk\Webhook\WebhookSignatureHeader;
 use Lenorix\BeelSdk\Webhook\WebhookSigner;
 use Lenorix\BeelSdk\Webhook\WebhookVerifier;
 
+/** Read a source file with Unix line endings; Git checks files out with CRLF on Windows. */
+function sourceCode(string $file): string
+{
+    return str_replace("\r\n", "\n", (string) file_get_contents($file));
+}
+
 function jsonResponse(array $body, int $status = 200): Response
 {
     return new Response($status, ['Content-Type' => 'application/json'], json_encode($body, JSON_THROW_ON_ERROR));
@@ -955,7 +961,7 @@ it('lists every boolean and list query parameter of the generated endpoints', fu
     $booleans = [];
     $lists = [];
     foreach (glob(__DIR__.'/../src/Generated/Endpoint/*.php') ?: [] as $file) {
-        if (preg_match('/function getQueryOptionsResolver\(\).*?\n    \}\n/s', (string) file_get_contents($file), $resolver) !== 1) {
+        if (preg_match('/function getQueryOptionsResolver\(\).*?\n    \}\n/s', sourceCode($file), $resolver) !== 1) {
             continue;
         }
         preg_match_all("/addAllowedTypes\\('([a-z_]+)', \\['bool'\\]\\)/", $resolver[0], $matches);
@@ -970,7 +976,7 @@ it('lists every boolean and list query parameter of the generated endpoints', fu
 
     $otherTypes = [];
     foreach (glob(__DIR__.'/../src/Generated/Endpoint/*.php') ?: [] as $file) {
-        if (preg_match('/function getQueryOptionsResolver\\(\\).*?\\n    \\}\\n/s', (string) file_get_contents($file), $resolver) !== 1) {
+        if (preg_match('/function getQueryOptionsResolver\\(\\).*?\\n    \\}\\n/s', sourceCode($file), $resolver) !== 1) {
             continue;
         }
         foreach (QueryParameters::BOOLEANS as $name) {
@@ -994,7 +1000,7 @@ it('declares every resource return type as the generated client actually returns
     $checked = [];
     $callers = [];
     foreach (array_merge(glob($root.'src/Resource/*.php') ?: [], glob($root.'src/Resource/*/*.php') ?: []) as $file) {
-        preg_match_all('/public function (\w+)\(([^)]*)\): ([^\n{]+)\n    \{\n(.*?)\n    \}\n/s', (string) file_get_contents($file), $methods, PREG_SET_ORDER);
+        preg_match_all('/public function (\w+)\(([^)]*)\): ([^\n{]+)\n    \{\n(.*?)\n    \}\n/s', sourceCode($file), $methods, PREG_SET_ORDER);
         foreach ($methods as [, $name, , $declared, $body]) {
             if (str_contains($body, '$this->client->')) {
                 $callers[] = basename($file, '.php').'::'.$name;
@@ -1003,7 +1009,7 @@ it('declares every resource return type as the generated client actually returns
                 continue;
             }
             $checked[] = basename($file, '.php').'::'.$name;
-            preg_match('/protected function transformResponseBody.*?\n    \}\n/s', (string) file_get_contents($root.'src/Generated/Endpoint/'.ucfirst($call[2]).'.php'), $transform);
+            preg_match('/protected function transformResponseBody.*?\n    \}\n/s', sourceCode($root.'src/Generated/Endpoint/'.ucfirst($call[2]).'.php'), $transform);
             // Raw Jane output writes `200 === $status`; Pint rewrites it to `$status === 200`.
             preg_match_all('/(?|\$status === (2\d\d)|(2\d\d) === \$status)[^\n]*\n\s*return \$serializer->deserialize\(\$body, \'([^\']+)\'/', $transform[0], $bodies, PREG_SET_ORDER);
             preg_match_all('/(?|\$status === (2\d\d)|(2\d\d) === \$status)/', $transform[0], $statuses);
@@ -1267,7 +1273,7 @@ it('lists every date-time field and free-form map of the generated normalizers',
     $dates = [];
     $free = [];
     foreach (glob(__DIR__.'/../src/Generated/Normalizer/*.php') ?: [] as $file) {
-        $code = (string) file_get_contents($file);
+        $code = sourceCode($file);
         preg_match_all('/new \\\\DateTime\(\$data\[\'([a-z_]+)\'\]\)/', $code, $matches);
         array_push($dates, ...$matches[1]);
         // Raw Jane output writes `new \Lenorix\...\JsonObject()`; Pint rewrites it to `new JsonObject;`.
@@ -1292,7 +1298,7 @@ it('never skips date-time fields of a model that shares a free-form map name', f
             return [];
         }
         $seen[$model] = true;
-        $code = (string) file_get_contents($file);
+        $code = sourceCode($file);
         $found = str_contains($code, 'new \\DateTime($data') ? [$model] : [];
         preg_match_all('/([A-Za-z0-9]+)::class/', $code, $children);
         foreach (array_unique($children[1]) as $child) {
@@ -1306,7 +1312,7 @@ it('never skips date-time fields of a model that shares a free-form map name', f
     $models = [];
     foreach (glob($normalizers.'*.php') ?: [] as $file) {
         foreach (DateTimeValues::FREE_FORM_NAMES as $name) {
-            preg_match_all('/denormalize\(\$data\[\''.$name.'\'\], \\\\?(?:[A-Za-z\\\\]+\\\\)?([A-Za-z0-9]+)::class/', (string) file_get_contents($file), $matches);
+            preg_match_all('/denormalize\(\$data\[\''.$name.'\'\], \\\\?(?:[A-Za-z\\\\]+\\\\)?([A-Za-z0-9]+)::class/', sourceCode($file), $matches);
             foreach ($matches[1] as $model) {
                 $models[] = $model;
                 $seen = [];
