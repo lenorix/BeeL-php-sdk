@@ -1189,9 +1189,8 @@ it('builds typed events without a verifier and flags provisioner-only events', f
     $event = WebhookVerifier::eventFromPayload(['id' => 'evt-1', 'type' => 'invoice.issued', 'created_at' => '2026-09-25T12:00:00.5Z', 'api_version' => '2026-09-01', 'livemode' => false, 'data' => ['invoice_id' => 'inv-1']]);
 
     expect($event->getData())->toBeInstanceOf(WebhookEventDataInvoiceIssued::class)
-        ->and(WebhookEventType::ACCOUNT_CLAIMED->isProvisionerOnly())->toBeTrue()
         ->and(array_values(array_map(static fn (WebhookEventType $type): string => $type->value, array_filter(WebhookEventType::cases(), static fn (WebhookEventType $type): bool => $type->isProvisionerOnly()))))
-        ->toBe(['account.claimed']);
+        ->toBe(['account.claimed', 'company.created', 'representation.signed']);
 });
 
 it('uses the Node.js SDK fallback message when BeeL sends none', function (Response $response, string $message) {
@@ -1418,8 +1417,9 @@ it('does not wait less than BeeL asks: it returns the 429 with the requested del
 
 it('reports the requested delay on the exception when it does not wait', function (array|Closure $headers, string $body, int $expected) {
     $headers = $headers instanceof Closure ? $headers() : $headers;
+    // Only one response is queued: a wait followed by a retry would hit the transport's
+    // unexpected-request error, so one request proves the SDK did not wait, without timing it.
     $transport = new RecordingPsrClient([new Response(429, ['Content-Type' => 'application/json', ...$headers], $body)]);
-    $started = microtime(true);
 
     try {
         testClient($transport, maxRetries: 3)->company('c')->invoices->get('inv-1');
@@ -1427,7 +1427,6 @@ it('reports the requested delay on the exception when it does not wait', functio
     } catch (BeelRateLimitError $exception) {
         expect($exception->retryAfterSeconds)->toBeGreaterThanOrEqual($expected - 1)->toBeLessThanOrEqual($expected)
             ->and($exception->retryAfter)->toBe($exception->retryAfterSeconds)
-            ->and(microtime(true) - $started)->toBeLessThan(1.0)
             ->and($transport->requests)->toHaveCount(1);
     }
 })->with([

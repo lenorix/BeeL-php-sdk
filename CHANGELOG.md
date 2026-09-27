@@ -2,6 +2,12 @@
 
 All notable changes to `BeeL-php-sdk` will be documented in this file.
 
+## Unreleased
+
+### Fixed
+
+- `WebhookEventType::isProvisionerOnly()` returned `true` only for `account.claimed`. BeeL documents `company.created` and `representation.signed` as provisioner-only too, so they now return `true` as well.
+
 ## v0.6.0 - 2026-09-27
 
 ### Changed
