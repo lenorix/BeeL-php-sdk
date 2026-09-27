@@ -283,6 +283,20 @@ $customer = $company->customers->create($customerRequest);
 
 `InvoiceBuilder` supports `type()`, `forCustomer()`, `operationDate()`, `dueDate()`, `series()`, `externalRef()`, `metadata()`, `notes()`, `addLine()`, and `addLineObject()`. BeeL requires an explicit `main_tax` on every normal invoice line; `addLine()` is a convenience shortcut without tax fields, so use `addLineObject()` when building a valid taxable line. `CustomerBuilder` supports name, NIF, email, phone, notes, and address. Each builder checks its documented required fields when `build()` is called.
 
+## Last response
+
+`$beel->getLastResponse()` returns the PSR-7 response of the last call made through the client, like Stripe's `getLastResponse()`. It lets you read what BeeL sent exactly, such as headers or values that a PHP type cannot hold, without repeating the request:
+
+```php
+$invoice = $company->invoices->get($invoiceId);
+$invoice->getCreatedAt();   // \DateTime, with microseconds
+
+$raw = json_decode((string) $beel->getLastResponse()->getBody(), true);
+$raw['data']['created_at']; // "2026-09-25T01:29:40.548233096Z", with BeeL's nanoseconds
+```
+
+PHP's `DateTime` holds microseconds; BeeL sends nanoseconds. When you need them, read the value from the last response and parse it with a library such as `brick/date-time`. The JSON body is always readable from the start, even with a streaming transport. After a failed call, the last response is the error response; with retries, it is the last attempt. Read it right after the call it belongs to.
+
 ## Any endpoint
 
 `$beel->request()` calls any API path, like the official Node.js SDK's `beel.raw.GET(...)`. It uses the client's authentication, retries and idempotency keys, and maps errors to `BeelApiError` like every resource method. It is for JSON endpoints and returns the decoded response, including BeeL's envelope; for files use `createPdfArchive()`, `export()` or `getPdf()`:
@@ -453,7 +467,7 @@ The SDK follows the official [`@beel_es/sdk`](https://www.npmjs.com/package/@bee
 - **Request IDs:** `requestId` comes from the `X-Request-Id` header when present, then from `meta.request_id` in the body; the Node.js SDK reads only the body.
 - **Any endpoint:** `$beel->request()` is the equivalent of `beel.raw.GET(...)`. `$beel->raw` is the generated Jane client, which does not map errors to `BeelApiError`.
 - **Writes without a body:** they are sent as `{}` like in the Node.js SDK, but an existing `Content-Type`, such as a multipart upload, is never replaced.
-- **Extras:** every current endpoint has a method, including those without one in the Node.js SDK (`activations`, `invoiceCustomization`, `logo`, `requestLogs`, account imports, `templates`, `previewPdf()`), named in its style. Also `$beel->request()` for any path, `all()` iterators, per-call `withOptions()`, `BinaryDownload` for archives and exports, `$company->representation`, `BeelNotReadyError` with `Retry-After` for PDFs, `WebhookSigner`, and `$beel->me`.
+- **Extras:** `getLastResponse()` to read the exact response of the last call, every current endpoint has a method, including those without one in the Node.js SDK (`activations`, `invoiceCustomization`, `logo`, `requestLogs`, account imports, `templates`, `previewPdf()`), named in its style. Also `$beel->request()` for any path, `all()` iterators, per-call `withOptions()`, `BinaryDownload` for archives and exports, `$company->representation`, `BeelNotReadyError` with `Retry-After` for PDFs, `WebhookSigner`, and `$beel->me`.
 
 ## Documentation and support
 

@@ -25,6 +25,7 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 - The `Environment` enum (`TEST`, `PROD`).
 - `WebhookVerifier::eventFromPayload()` builds the typed event from a verified payload without a verifier or secret.
 - `WebhookEventType::isProvisionerOnly()`, `true` for the `account.*` events BeeL documents as delivered only to the provisioner.
+- `$beel->getLastResponse()` returns the PSR-7 response of the last call, like Stripe's `getLastResponse()`, so exact values such as nanosecond date-times can be read without repeating the request.
 - `$beel->request()` calls any API path with the client's authentication, retries, per-call options and error mapping, like the Node.js SDK's `beel.raw.GET(...)`.
 - List filters such as `status`, `event_kind` or `related_entity_ids` accept a single value as well as a list.
 - Every method that takes a request model also accepts an array in API format, like the Node.js SDK's plain objects. Invalid arrays and missing required fields throw `InvalidArgumentException` before sending.

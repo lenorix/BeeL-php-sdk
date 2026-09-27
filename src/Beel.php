@@ -32,6 +32,7 @@ use Lenorix\BeelSdk\Resource\ProductsResource;
 use Lenorix\BeelSdk\Resource\SeriesResource;
 use Lenorix\BeelSdk\Resource\TemplatesResource;
 use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  * Instance-based client for the BeeL API.
@@ -131,6 +132,25 @@ final readonly class Beel
         $this->products = new ProductsResource($this->raw, $this->responseContext);
         $this->series = new SeriesResource($this->raw, $this->responseContext);
         $this->configuration = new ConfigurationResource($this->raw, $this->responseContext);
+    }
+
+    /**
+     * The HTTP response of the last call made through this client, like Stripe's `getLastResponse()`.
+     *
+     * Useful to read what BeeL sent exactly, without repeating the request: headers, the status
+     * code, or the raw JSON body, where date-times keep the nanoseconds that PHP's `DateTime`
+     * cannot hold. JSON and error bodies are always readable from the start; the body of a
+     * successful file download is the same stream the call returned. After a failed call it is
+     * the error response; with retries, the last attempt.
+     */
+    public function getLastResponse(): ?ResponseInterface
+    {
+        $response = $this->responseContext->response();
+        $body = $this->responseContext->body();
+
+        return $response === null || $body === null
+            ? $response
+            : $response->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($body));
     }
 
     /**

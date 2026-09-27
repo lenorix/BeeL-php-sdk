@@ -1319,3 +1319,32 @@ it('never skips date-time fields of a model that shares a free-form map name', f
     expect($models)->not->toBeEmpty()
         ->and($collisions)->toBe([]);
 });
+
+// Last response
+
+it('exposes the last response so exact values can be read without repeating the call', function (bool $seekable) {
+    $json = '{"success":true,"data":{"id":"inv-1","created_at":"2026-09-25T01:29:40.548233096Z"}}';
+    $body = $seekable ? Utils::streamFor($json) : new NoSeekStream(Utils::streamFor($json));
+    $transport = new RecordingPsrClient([new Response(200, ['Content-Type' => 'application/json', 'X-Request-Id' => 'req-7'], $body)]);
+    $beel = testClient($transport);
+
+    expect($beel->getLastResponse())->toBeNull();
+
+    $invoice = $beel->company('c')->invoices->get('inv-1');
+    $last = $beel->getLastResponse();
+    $raw = json_decode((string) $last?->getBody(), true);
+
+    expect($invoice->getCreatedAt()->format('u'))->toBe('548233')
+        ->and($raw['data']['created_at'])->toBe('2026-09-25T01:29:40.548233096Z')
+        ->and($last?->getHeaderLine('X-Request-Id'))->toBe('req-7')
+        ->and((string) $beel->getLastResponse()?->getBody())->toBe($json);
+})->with(['seekable' => [true], 'streamed' => [false]]);
+
+it('keeps the error response as the last response after a failed call', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => false, 'error' => ['code' => 'NOT_FOUND', 'message' => 'Missing']], 404)]);
+    $beel = testClient($transport);
+
+    expect(fn () => $beel->company('c')->invoices->get('inv-1'))->toThrow(BeelNotFoundError::class)
+        ->and($beel->getLastResponse()?->getStatusCode())->toBe(404)
+        ->and(json_decode((string) $beel->getLastResponse()?->getBody(), true)['error']['code'])->toBe('NOT_FOUND');
+});

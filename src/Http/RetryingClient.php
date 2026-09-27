@@ -72,6 +72,12 @@ final readonly class RetryingClient implements ClientInterface
             if ($response->getStatusCode() >= 400 && ! $response->hasHeader('Content-Type')) {
                 $response = $response->withHeader('Content-Type', 'application/octet-stream');
             }
+            // JSON and error bodies are small: make them rereadable, so the SDK and getLastResponse()
+            // can read them even from a streaming transport. Successful file downloads stay streamed.
+            $isJson = str_contains(strtolower($response->getHeaderLine('Content-Type')), 'json');
+            if (($isJson || $response->getStatusCode() >= 400) && ! $response->getBody()->isSeekable()) {
+                $response = $response->withBody(Utils::streamFor((string) $response->getBody()));
+            }
             $this->responseContext->capture($response);
             // BeeL rejects a 429 without applying it; a 5xx may have been applied, so it needs $canRetry.
             $status = $response->getStatusCode();
