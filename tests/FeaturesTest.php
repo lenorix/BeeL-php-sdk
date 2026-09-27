@@ -612,8 +612,13 @@ it('limits retries per call with maxRetries', function () {
 
 it('maps an empty error response without Content-Type to BeelApiError', function () {
     $deprecations = [];
-    set_error_handler(static function (int $level, string $message) use (&$deprecations): bool {
-        $deprecations[] = $message;
+    $source = str_replace('\\', '/', (string) realpath(__DIR__.'/../src')).'/';
+    set_error_handler(static function (int $level, string $message, string $file) use (&$deprecations, $source): bool {
+        // Only the SDK's own code counts: with the lowest dependencies, third-party classes emit
+        // deprecations when first loaded, which can happen during this test.
+        if (str_starts_with(str_replace('\\', '/', $file), $source)) {
+            $deprecations[] = $message;
+        }
 
         return true;
     }, E_DEPRECATED | E_USER_DEPRECATED);
