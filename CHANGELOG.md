@@ -2,7 +2,7 @@
 
 All notable changes to `BeeL-php-sdk` will be documented in this file.
 
-## Unreleased
+## v0.5.0 - 2026-09-27
 
 ### Upgrading from 0.4
 
