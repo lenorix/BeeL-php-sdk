@@ -1411,7 +1411,8 @@ it('does not wait less than BeeL asks: it returns the 429 with the requested del
         ->and($transport->requests)->toHaveCount(1);
 });
 
-it('reports the requested delay on the exception when it does not wait', function (array $headers, string $body, int $expected) {
+it('reports the requested delay on the exception when it does not wait', function (array|Closure $headers, string $body, int $expected) {
+    $headers = $headers instanceof Closure ? $headers() : $headers;
     $transport = new RecordingPsrClient([new Response(429, ['Content-Type' => 'application/json', ...$headers], $body)]);
     $started = microtime(true);
 
@@ -1426,7 +1427,8 @@ it('reports the requested delay on the exception when it does not wait', functio
     }
 })->with([
     'seconds' => [['Retry-After' => '120'], '{"success":false}', 120],
-    'HTTP date' => [['Retry-After' => gmdate('D, d M Y H:i:s \G\M\T', time() + 120)], '{"success":false}', 120],
+    // A closure, so the date is built when the test runs rather than when the file loads.
+    'HTTP date' => [fn (): array => ['Retry-After' => gmdate('D, d M Y H:i:s \G\M\T', time() + 120)], '{"success":false}', 120],
     'error body' => [[], '{"success":false,"error":{"code":"RATE_LIMITED","message":"Slow","retry_after":90}}', 90],
 ]);
 
