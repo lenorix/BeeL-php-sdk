@@ -530,6 +530,40 @@ it('lists every free-form map the generated normalizers copy without parsing', f
         ->and($listed)->toBe($names);
 });
 
+it('never skips date-time fields of a model that shares a free-form map name', function () {
+    $normalizers = __DIR__.'/../src/Generated/Normalizer/';
+    $dateTimeFields = static function (string $model, array &$seen) use (&$dateTimeFields, $normalizers): array {
+        $file = $normalizers.$model.'Normalizer.php';
+        if (isset($seen[$model]) || ! is_file($file)) {
+            return [];
+        }
+        $seen[$model] = true;
+        $code = (string) file_get_contents($file);
+        preg_match_all("/createFromFormat\\('Y-m-d\\\\TH:i:sP'|new \\\\DateTime\\(/", $code, $dates);
+        $found = $dates[0] === [] ? [] : [$model];
+        preg_match_all('/([A-Za-z0-9]+)::class/', $code, $children);
+        foreach (array_unique($children[1]) as $child) {
+            array_push($found, ...$dateTimeFields($child, $seen));
+        }
+
+        return $found;
+    };
+
+    $collisions = [];
+    foreach (glob($normalizers.'*.php') ?: [] as $file) {
+        foreach (DateTimeFields::FREE_FORM_NAMES as $name) {
+            preg_match_all("/denormalize\\(\\\$data\\['".$name."'\\], \\\\?(?:[A-Za-z\\\\]+\\\\)?([A-Za-z0-9]+)::class/", (string) file_get_contents($file), $matches);
+            foreach ($matches[1] as $model) {
+                $seen = [];
+                array_push($collisions, ...$dateTimeFields($model, $seen));
+            }
+        }
+    }
+
+    // A model under one of these names with date-time fields would be skipped by DateTimeFields.
+    expect($collisions)->toBe([]);
+});
+
 it('lists every field the generated normalizers parse as date-time', function () {
     $names = [];
     $parses = 0;
@@ -789,6 +823,7 @@ it('sends an empty JSON object when a write has no body', function () {
 
     expect((string) $transport->requests[0]->getBody())->toBe('{}')
         ->and($transport->requests[0]->getHeaderLine('Content-Type'))->toBe('application/json')
+        ->and($transport->requests[0]->getHeaderLine('Content-Length'))->toBeIn(['', '2'])
         ->and($transport->requests[1]->getHeaderLine('Content-Type'))->toStartWith('multipart/form-data');
 });
 

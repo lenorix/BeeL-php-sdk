@@ -45,7 +45,9 @@ final readonly class RetryingClient implements ClientInterface
         // Like the official Node.js SDK, send an empty JSON object when a write has no body at all.
         if (in_array($request->getMethod(), ['POST', 'PUT', 'PATCH'], true)
             && ! $request->hasHeader('Content-Type') && $request->getBody()->getSize() === 0) {
-            $request = $request->withBody(Utils::streamFor('{}'))->withHeader('Content-Type', 'application/json');
+            $request = $request->withBody(Utils::streamFor('{}'))
+                ->withHeader('Content-Type', 'application/json')
+                ->withoutHeader('Content-Length');
         }
         if ($request->getMethod() === 'POST' && $this->autoIdempotencyKey && ! $request->hasHeader('Idempotency-Key')) {
             $request = $request->withHeader('Idempotency-Key', $this->uuid());

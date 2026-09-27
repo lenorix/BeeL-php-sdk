@@ -351,6 +351,18 @@ try {
 
 The SDK retains the deprecated compatibility surface from the API, including `$beel->invoices`, `$beel->customers`, `$beel->products`, `$beel->series`, and `$beel->configuration`. New integrations should use `$beel->company($companyId)` and its resources so the NIF is explicit in every operation. See the [Multi-NIF migration guide](https://docs.beel.es/changelog/resources-under-the-nif) for route changes and sunset details.
 
+## Differences from the official Node.js SDK
+
+The SDK follows the official [`@beel_es/sdk`](https://www.npmjs.com/package/@beel_es/sdk): the same client options and defaults, resources and method names, error classes, enums, builder methods and messages, and fallback error codes. When porting code, note these differences:
+
+- **Names:** classes use `Beel` casing (`Beel`, `BeelApiError`, `BeelRateLimitError`…), not `BeeL`. The BeeL error code is `apiCode`, because PHP's `Exception::$code` holds the HTTP status.
+- **Error data:** every error keeps the code and `details` BeeL sent. The Node.js SDK replaces the code of 401, 403, 404, 409, 422 and 429 errors with a fixed one and drops `details`, so a check such as `apiCode === 'UNPROCESSABLE_ENTITY'` only matches when BeeL sent no code.
+- **Return values:** methods return Jane models (objects with getters), not plain JSON, and list methods return the whole page with its pagination.
+- **Retries:** `429` and `5xx` responses are retried with the same `Idempotency-Key` on every attempt, and `autoIdempotencyKey: false` is honored.
+- **Webhooks:** every `v1` signature in the header is checked, so a secret rotation does not break verification. `verify()` returns an array and `verifyEvent()` a typed model; failures use the subclasses of `WebhookVerificationError`.
+- **Writes without a body:** they are sent as `{}` like in the Node.js SDK, but an existing `Content-Type`, such as a multipart upload, is never replaced.
+- **Extras:** `all()` iterators, per-call `withOptions()`, `BinaryDownload` for archives and exports, `$company->representation`, `BeelNotReadyError` with `Retry-After` for PDFs, `WebhookSigner`, and `$beel->me`.
+
 ## Documentation and support
 
 - [BeeL API documentation](https://docs.beel.es)
