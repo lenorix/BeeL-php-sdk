@@ -11,6 +11,7 @@ use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdWebhooksGetResponse200Dat
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdWebhooksWebhookIdDeliveriesGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\WebhookDeliveryLog;
 use Lenorix\BeelSdk\Generated\Model\WebhookSubscription;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -47,8 +48,13 @@ final readonly class AccountWebhooksResource extends GeneratedResource
         );
     }
 
-    public function create(CreateWebhookSubscriptionRequest $request): mixed
+    /**
+     * @param  CreateWebhookSubscriptionRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function create(CreateWebhookSubscriptionRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, CreateWebhookSubscriptionRequest::class);
+
         return $this->execute(fn () => $this->client->createAccountWebhookSubscription($this->accountId, $request));
     }
 
@@ -57,8 +63,13 @@ final readonly class AccountWebhooksResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getAccountWebhookSubscription($this->accountId, $webhookId));
     }
 
-    public function update(string $webhookId, UpdateWebhookSubscriptionRequest $request): mixed
+    /**
+     * @param  UpdateWebhookSubscriptionRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function update(string $webhookId, UpdateWebhookSubscriptionRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, UpdateWebhookSubscriptionRequest::class);
+
         return $this->execute(fn () => $this->client->patchAccountWebhookSubscription($this->accountId, $webhookId, $request));
     }
 

@@ -10,6 +10,7 @@ use Lenorix\BeelSdk\Generated\Model\PatchProductRequest;
 use Lenorix\BeelSdk\Generated\Model\Product;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsGetResponse200Data;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -52,10 +53,13 @@ final readonly class CompanyProductsResource extends GeneratedResource
     /**
      * Create a product in this company's catalog.
      *
+     * @param  CreateProductRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
      */
-    public function create(CreateProductRequest $request, array $headers = []): Product
+    public function create(CreateProductRequest|array $request, array $headers = []): Product
     {
+        $request = RequestModels::from($request, CreateProductRequest::class);
+
         return $this->execute(fn () => $this->client->createCompanyProduct($this->companyId, $request, $headers));
     }
 
@@ -65,9 +69,13 @@ final readonly class CompanyProductsResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getCompanyProduct($this->companyId, $productId));
     }
 
-    /** Partially update a product; omitted fields remain unchanged. */
-    public function update(string $productId, PatchProductRequest $request): Product
+    /** Partially update a product; omitted fields remain unchan     *
+     * @param  PatchProductRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function update(string $productId, PatchProductRequest|array $request): Product
     {
+        $request = RequestModels::from($request, PatchProductRequest::class);
+
         return $this->execute(fn () => $this->client->patchCompanyProduct($this->companyId, $productId, $request));
     }
 
@@ -80,10 +88,13 @@ final readonly class CompanyProductsResource extends GeneratedResource
     /**
      * Create several products in one request.
      *
+     * @param  V1CompaniesCompanyIdProductsBulkPostBody|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
      */
-    public function createBulk(V1CompaniesCompanyIdProductsBulkPostBody $request, array $headers = []): mixed
+    public function createBulk(V1CompaniesCompanyIdProductsBulkPostBody|array $request, array $headers = []): mixed
     {
+        $request = RequestModels::from($request, V1CompaniesCompanyIdProductsBulkPostBody::class);
+
         return $this->execute(fn () => $this->client->createCompanyProductsBulk($this->companyId, $request, $headers));
     }
 

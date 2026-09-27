@@ -32,6 +32,7 @@ use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesGetResponse200Da
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\VoidInvoiceRequest;
 use Lenorix\BeelSdk\Http\BinaryDownload;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -86,14 +87,17 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      * enabled, submission to AEAT completes asynchronously. Use `wait_for_pdf` when
      * the response must wait for PDF generation.
      *
+     * @param  CreateInvoiceRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $query  Query options such as `wait_for_pdf`.
      * @param  array<string, mixed>  $headers  Request headers, including optional `Idempotency-Key`.
      * @return Invoice The created invoice, unwrapped from BeeL's response envelope.
      *
      * @see https://docs.beel.es/invoices/createCompanyInvoice
      */
-    public function create(CreateInvoiceRequest $request, array $query = [], array $headers = []): Invoice
+    public function create(CreateInvoiceRequest|array $request, array $query = [], array $headers = []): Invoice
     {
+        $request = RequestModels::from($request, CreateInvoiceRequest::class);
+
         return $this->execute(fn () => $this->client->createCompanyInvoice($this->companyId, $request, $query, $headers));
     }
 
@@ -107,10 +111,14 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      * Update fields on a draft invoice; omitted fields keep their current values.
      * Issued invoices cannot be edited: create a corrective invoice or void them.
      *
+     * @param  UpdateInvoiceRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     *
      * @see https://docs.beel.es/invoices/patchCompanyInvoice
      */
-    public function update(string $invoiceId, UpdateInvoiceRequest $request): Invoice
+    public function update(string $invoiceId, UpdateInvoiceRequest|array $request): Invoice
     {
+        $request = RequestModels::from($request, UpdateInvoiceRequest::class);
+
         return $this->execute(fn () => $this->client->patchCompanyInvoice($this->companyId, $invoiceId, $request));
     }
 
@@ -132,36 +140,45 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
     /**
      * Void an issued invoice without reusing its number.
      *
+     * @param  VoidInvoiceRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
      *
      * @see https://docs.beel.es/invoices/voidCompanyInvoice
      */
-    public function void(string $invoiceId, VoidInvoiceRequest $request, array $headers = []): Invoice
+    public function void(string $invoiceId, VoidInvoiceRequest|array $request, array $headers = []): Invoice
     {
+        $request = RequestModels::from($request, VoidInvoiceRequest::class);
+
         return $this->execute(fn () => $this->client->voidCompanyInvoice($this->companyId, $invoiceId, $request, $headers));
     }
 
     /**
      * Create a corrective invoice linked to the invoice being corrected.
      *
+     * @param  CreateCorrectiveInvoiceRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
      *
      * @see https://docs.beel.es/invoices/createCompanyCorrectiveInvoice
      */
-    public function createCorrective(string $invoiceId, CreateCorrectiveInvoiceRequest $request, array $headers = []): Invoice
+    public function createCorrective(string $invoiceId, CreateCorrectiveInvoiceRequest|array $request, array $headers = []): Invoice
     {
+        $request = RequestModels::from($request, CreateCorrectiveInvoiceRequest::class);
+
         return $this->execute(fn () => $this->client->createCompanyCorrectiveInvoice($this->companyId, $invoiceId, $request, $headers));
     }
 
     /**
      * Change an invoice's status using the company-scoped status operation.
      *
+     * @param  SetInvoiceStatusRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
      *
      * @see https://docs.beel.es/invoices/setCompanyInvoiceStatus
      */
-    public function setStatus(string $invoiceId, SetInvoiceStatusRequest $request, array $headers = []): Invoice
+    public function setStatus(string $invoiceId, SetInvoiceStatusRequest|array $request, array $headers = []): Invoice
     {
+        $request = RequestModels::from($request, SetInvoiceStatusRequest::class);
+
         return $this->execute(fn () => $this->client->setCompanyInvoiceStatus($this->companyId, $invoiceId, $request, $headers));
     }
 
@@ -192,24 +209,30 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      * Create a new draft based on an existing invoice in this company.
      * The source stays unchanged; numbering, status, dates and VeriFactu data reset.
      *
+     * @param  CreateInvoiceDerivationRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
      * @return Invoice The new draft invoice.
      *
      * @see https://docs.beel.es/invoices/createCompanyInvoiceDerivation
      */
-    public function derive(CreateInvoiceDerivationRequest $request, array $headers = []): mixed
+    public function derive(CreateInvoiceDerivationRequest|array $request, array $headers = []): mixed
     {
+        $request = RequestModels::from($request, CreateInvoiceDerivationRequest::class);
+
         return $this->execute(fn () => $this->client->createCompanyInvoiceDerivation($this->companyId, $request, $headers));
     }
 
     /**
      * Apply one supported bulk operation to a set of this company's invoices.
      *
+     * @param  CreateInvoiceBatchRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
      * @return BulkOperationResult Per-invoice results and summary counts.
      */
-    public function createBatch(CreateInvoiceBatchRequest $request, array $headers = []): mixed
+    public function createBatch(CreateInvoiceBatchRequest|array $request, array $headers = []): mixed
     {
+        $request = RequestModels::from($request, CreateInvoiceBatchRequest::class);
+
         return $this->execute(fn () => $this->client->createCompanyInvoiceBatch($this->companyId, $request, $headers));
     }
 
@@ -221,12 +244,16 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      * A `5xx` is not retried by default, since each attempt builds the archive again;
      * pass `RequestOptions(retryServerErrors: true)` to change that.
      *
+     * @param  CreateInvoicePdfArchiveRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     *
      * @throws BeelApiError If BeeL rejects the request, for example when no PDF is available.
      *
      * @see https://docs.beel.es/invoices/createCompanyInvoicePdfArchive
      */
-    public function createPdfArchive(CreateInvoicePdfArchiveRequest $request): BinaryDownload
+    public function createPdfArchive(CreateInvoicePdfArchiveRequest|array $request): BinaryDownload
     {
+        $request = RequestModels::from($request, CreateInvoicePdfArchiveRequest::class);
+
         return BinaryDownload::fromResponse(
             $this->executeRaw(new CreateCompanyInvoicePdfArchive($this->companyId, $request), retryServerErrors: false),
             ['total' => 'X-Bulk-Total', 'successful' => 'X-Bulk-Successful', 'failed' => 'X-Bulk-Failed'],
@@ -236,13 +263,16 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
     /**
      * Email PDFs for several invoices together in one message.
      *
+     * @param  CreateInvoiceDeliveryRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
      * @return V1CompaniesCompanyIdInvoicesDeliveriesPostResponse200Data Delivery result and any per-invoice failures.
      *
      * @see https://docs.beel.es/invoices/createCompanyInvoiceDelivery
      */
-    public function deliver(CreateInvoiceDeliveryRequest $request, array $headers = []): mixed
+    public function deliver(CreateInvoiceDeliveryRequest|array $request, array $headers = []): mixed
     {
+        $request = RequestModels::from($request, CreateInvoiceDeliveryRequest::class);
+
         return $this->execute(fn () => $this->client->createCompanyInvoiceDelivery($this->companyId, $request, $headers));
     }
 
@@ -253,13 +283,17 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      * The body is returned as a stream and never read into memory, and `counts` reports `total`.
      * A `5xx` is not retried by default, since each attempt builds the file again.
      *
+     * @param  CreateInvoiceExportRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     *
      * @throws BeelApiError If BeeL rejects the request, for example `EXPORT_SELECTION_REQUIRED` or
      *                      `EXPORT_LIMIT_EXCEEDED` (a {@see BeelValidationError}).
      *
      * @see https://docs.beel.es/invoices/createCompanyInvoiceExport
      */
-    public function export(CreateInvoiceExportRequest $request): BinaryDownload
+    public function export(CreateInvoiceExportRequest|array $request): BinaryDownload
     {
+        $request = RequestModels::from($request, CreateInvoiceExportRequest::class);
+
         return BinaryDownload::fromResponse(
             $this->executeRaw(new CreateCompanyInvoiceExport($this->companyId, $request), retryServerErrors: false),
             ['total' => 'X-Total-Invoices'],
@@ -290,24 +324,30 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      * from account defaults, invoice settings and customer billing emails. Check
      * email delivery history for the final status.
      *
+     * @param  SendEmailRequest|array<string, mixed>|null  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
      * @return V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data Email delivery acceptance details.
      *
      * @see https://docs.beel.es/invoices/sendCompanyInvoice
      */
-    public function send(string $invoiceId, ?SendEmailRequest $request = null, array $headers = []): mixed
+    public function send(string $invoiceId, SendEmailRequest|array|null $request = null, array $headers = []): mixed
     {
+        $request = RequestModels::from($request, SendEmailRequest::class);
+
         return $this->execute(fn () => $this->client->sendCompanyInvoice($this->companyId, $invoiceId, $request, $headers));
     }
 
     /**
      * Convert a non-fiscal proforma into a fiscal invoice.
      *
+     * @param  ConvertProformaToInvoiceRequest|array<string, mixed>|null  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
      * @return Invoice The newly created fiscal invoice.
      */
-    public function convertToInvoice(string $invoiceId, ?ConvertProformaToInvoiceRequest $request = null, array $headers = []): mixed
+    public function convertToInvoice(string $invoiceId, ConvertProformaToInvoiceRequest|array|null $request = null, array $headers = []): mixed
     {
+        $request = RequestModels::from($request, ConvertProformaToInvoiceRequest::class);
+
         return $this->execute(fn () => $this->client->convertCompanyProformaToInvoice($this->companyId, $invoiceId, $request, $headers));
     }
 
@@ -324,10 +364,13 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
     /**
      * Set or move an invoice's scheduled issue date.
      *
+     * @param  SetInvoiceScheduleRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @return Invoice The updated invoice.
      */
-    public function setSchedule(string $invoiceId, SetInvoiceScheduleRequest $request): mixed
+    public function setSchedule(string $invoiceId, SetInvoiceScheduleRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, SetInvoiceScheduleRequest::class);
+
         return $this->execute(fn () => $this->client->setCompanyInvoiceSchedule($this->companyId, $invoiceId, $request));
     }
 

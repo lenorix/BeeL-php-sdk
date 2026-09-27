@@ -7,6 +7,7 @@ namespace Lenorix\BeelSdk\Resource\Company;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\InitiatePaymentConnectionRequest;
 use Lenorix\BeelSdk\Generated\Model\UpdateCompanyPaymentConnectionRequest;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -27,8 +28,13 @@ final readonly class CompanyPaymentConnectionsResource extends GeneratedResource
         return $this->execute(fn () => $this->client->listCompanyPaymentConnections($this->companyId));
     }
 
-    public function authorize(InitiatePaymentConnectionRequest $request): mixed
+    /**
+     * @param  InitiatePaymentConnectionRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function authorize(InitiatePaymentConnectionRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, InitiatePaymentConnectionRequest::class);
+
         return $this->execute(fn () => $this->client->initiatePaymentConnection($this->companyId, $request));
     }
 
@@ -37,8 +43,13 @@ final readonly class CompanyPaymentConnectionsResource extends GeneratedResource
         $this->execute(fn () => $this->client->disconnectCompanyPaymentConnection($this->companyId, $connectionId));
     }
 
-    public function update(string $connectionId, UpdateCompanyPaymentConnectionRequest $request): mixed
+    /**
+     * @param  UpdateCompanyPaymentConnectionRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function update(string $connectionId, UpdateCompanyPaymentConnectionRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, UpdateCompanyPaymentConnectionRequest::class);
+
         return $this->execute(fn () => $this->client->updateCompanyPaymentConnection($this->companyId, $connectionId, $request));
     }
 }

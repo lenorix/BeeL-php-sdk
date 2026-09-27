@@ -8,6 +8,7 @@ use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\InvoiceCustomizationOptionsResponse;
 use Lenorix\BeelSdk\Generated\Model\TaxTypesCatalogResponse;
 use Lenorix\BeelSdk\Generated\Model\UpdateMeRequest;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
 /** Read-only shared API catalogs and person-level preferences. */
@@ -30,9 +31,13 @@ final readonly class CatalogsResource extends GeneratedResource
         return $this->execute(fn () => $this->client->listInvoiceCustomizationOptions());
     }
 
-    /** Update preferences for the authenticated person, such as language. */
-    public function updateMe(UpdateMeRequest $request): mixed
+    /** Update preferences for the authenticated person, such as langu     *
+     * @param  UpdateMeRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function updateMe(UpdateMeRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, UpdateMeRequest::class);
+
         return $this->execute(fn () => $this->client->updateMe($request));
     }
 }

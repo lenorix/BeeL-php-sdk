@@ -12,6 +12,7 @@ use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersBulkPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersImportsPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersImportsPreviewPostBody;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -50,10 +51,13 @@ final readonly class CompanyCustomersResource extends GeneratedResource
     /**
      * Create a customer under this company.
      *
+     * @param  CreateCustomerRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
      */
-    public function create(CreateCustomerRequest $request, array $headers = []): Customer
+    public function create(CreateCustomerRequest|array $request, array $headers = []): Customer
     {
+        $request = RequestModels::from($request, CreateCustomerRequest::class);
+
         return $this->execute(fn () => $this->client->createCompanyCustomer($this->companyId, $request, $headers));
     }
 
@@ -63,9 +67,13 @@ final readonly class CompanyCustomersResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getCompanyCustomer($this->companyId, $customerId));
     }
 
-    /** Partially update a customer; omitted fields remain unchanged. */
-    public function update(string $customerId, PatchCustomerRequest $request): Customer
+    /** Partially update a customer; omitted fields remain unchan     *
+     * @param  PatchCustomerRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function update(string $customerId, PatchCustomerRequest|array $request): Customer
     {
+        $request = RequestModels::from($request, PatchCustomerRequest::class);
+
         return $this->execute(fn () => $this->client->patchCompanyCustomer($this->companyId, $customerId, $request));
     }
 
@@ -78,11 +86,14 @@ final readonly class CompanyCustomersResource extends GeneratedResource
     /**
      * Create several customers in one request.
      *
+     * @param  V1CompaniesCompanyIdCustomersBulkPostBody|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $query  Query options.
      * @param  array<string, mixed>  $headers  Optional request headers.
      */
-    public function createBulk(V1CompaniesCompanyIdCustomersBulkPostBody $request, array $query = [], array $headers = []): mixed
+    public function createBulk(V1CompaniesCompanyIdCustomersBulkPostBody|array $request, array $query = [], array $headers = []): mixed
     {
+        $request = RequestModels::from($request, V1CompaniesCompanyIdCustomersBulkPostBody::class);
+
         return $this->execute(fn () => $this->client->createCompanyCustomersBulk($this->companyId, $request, $query, $headers));
     }
 
@@ -99,16 +110,23 @@ final readonly class CompanyCustomersResource extends GeneratedResource
     /**
      * Start a customer import for this company.
      *
+     * @param  V1CompaniesCompanyIdCustomersImportsPostBody|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
      */
-    public function import(V1CompaniesCompanyIdCustomersImportsPostBody $request, array $headers = []): mixed
+    public function import(V1CompaniesCompanyIdCustomersImportsPostBody|array $request, array $headers = []): mixed
     {
+        $request = RequestModels::from($request, V1CompaniesCompanyIdCustomersImportsPostBody::class);
+
         return $this->execute(fn () => $this->client->createCompanyCustomerImport($this->companyId, $request, $headers));
     }
 
-    /** Validate an import payload and preview its results without importing customers. */
-    public function previewImport(V1CompaniesCompanyIdCustomersImportsPreviewPostBody $request): mixed
+    /** Validate an import payload and preview its results without importing custom     *
+     * @param  V1CompaniesCompanyIdCustomersImportsPreviewPostBody|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function previewImport(V1CompaniesCompanyIdCustomersImportsPreviewPostBody|array $request): mixed
     {
+        $request = RequestModels::from($request, V1CompaniesCompanyIdCustomersImportsPreviewPostBody::class);
+
         return $this->execute(fn () => $this->client->previewCompanyCustomerImport($this->companyId, $request));
     }
 }

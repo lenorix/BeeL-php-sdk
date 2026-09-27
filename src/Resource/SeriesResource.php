@@ -7,6 +7,7 @@ namespace Lenorix\BeelSdk\Resource;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateSeriesRequest;
 use Lenorix\BeelSdk\Generated\Model\UpdateSeriesRequest;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
 /**
@@ -26,13 +27,23 @@ final readonly class SeriesResource extends GeneratedResource
         return $this->execute(fn () => $this->client->listSeries($query));
     }
 
-    public function create(CreateSeriesRequest $request): mixed
+    /**
+     * @param  CreateSeriesRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function create(CreateSeriesRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, CreateSeriesRequest::class);
+
         return $this->execute(fn () => $this->client->createSeries($request));
     }
 
-    public function update(string $seriesId, UpdateSeriesRequest $request): mixed
+    /**
+     * @param  UpdateSeriesRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function update(string $seriesId, UpdateSeriesRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, UpdateSeriesRequest::class);
+
         return $this->execute(fn () => $this->client->updateSeries($seriesId, $request));
     }
 

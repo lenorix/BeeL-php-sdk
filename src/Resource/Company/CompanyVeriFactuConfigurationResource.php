@@ -6,6 +6,7 @@ namespace Lenorix\BeelSdk\Resource\Company;
 
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\UpdateVeriFactuConfigurationRequest;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -29,10 +30,14 @@ final readonly class CompanyVeriFactuConfigurationResource extends GeneratedReso
      * Sandbox companies always have VeriFactu enabled. In production, enabling it
      * requires a signed AEAT representation for the company.
      *
+     * @param  UpdateVeriFactuConfigurationRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     *
      * @see https://docs.beel.es/verifactu/getCompanyVeriFactuConfiguration
      */
-    public function update(UpdateVeriFactuConfigurationRequest $request): mixed
+    public function update(UpdateVeriFactuConfigurationRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, UpdateVeriFactuConfigurationRequest::class);
+
         return $this->execute(fn () => $this->client->updateCompanyVeriFactuConfiguration($this->companyId, $request));
     }
 }

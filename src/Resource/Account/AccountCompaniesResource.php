@@ -8,6 +8,7 @@ use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CompanyData;
 use Lenorix\BeelSdk\Generated\Model\CreateCompanyRequest;
 use Lenorix\BeelSdk\Generated\Model\ListCompanies200ResponseData;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -44,8 +45,13 @@ final readonly class AccountCompaniesResource extends GeneratedResource
         );
     }
 
-    public function create(CreateCompanyRequest $request): mixed
+    /**
+     * @param  CreateCompanyRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function create(CreateCompanyRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, CreateCompanyRequest::class);
+
         return $this->execute(fn () => $this->client->createCompany($this->accountId, $request));
     }
 

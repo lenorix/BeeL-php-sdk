@@ -10,6 +10,7 @@ use Lenorix\BeelSdk\Generated\Model\UpdateProductRequest;
 use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkDeleteBody;
 use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkDeleteResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkPostBody;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
 /**
@@ -41,8 +42,13 @@ final readonly class ProductsResource extends GeneratedResource
         return $this->execute(fn () => $this->client->listProducts($query));
     }
 
-    public function create(CreateProductRequest $request): mixed
+    /**
+     * @param  CreateProductRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function create(CreateProductRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, CreateProductRequest::class);
+
         return $this->execute(fn () => $this->client->createProduct($request));
     }
 
@@ -51,8 +57,13 @@ final readonly class ProductsResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getProduct($productId));
     }
 
-    public function update(string $productId, UpdateProductRequest $request): mixed
+    /**
+     * @param  UpdateProductRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function update(string $productId, UpdateProductRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, UpdateProductRequest::class);
+
         return $this->execute(fn () => $this->client->updateProduct($productId, $request));
     }
 
@@ -61,13 +72,23 @@ final readonly class ProductsResource extends GeneratedResource
         $this->execute(fn () => $this->client->deleteProduct($productId));
     }
 
-    public function createBulk(V1ProductsBulkPostBody $request): mixed
+    /**
+     * @param  V1ProductsBulkPostBody|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function createBulk(V1ProductsBulkPostBody|array $request): mixed
     {
+        $request = RequestModels::from($request, V1ProductsBulkPostBody::class);
+
         return $this->execute(fn () => $this->client->createProductsBulk($request));
     }
 
-    public function deleteBulk(V1ProductsBulkDeleteBody $request): V1ProductsBulkDeleteResponse200Data
+    /**
+     * @param  V1ProductsBulkDeleteBody|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function deleteBulk(V1ProductsBulkDeleteBody|array $request): V1ProductsBulkDeleteResponse200Data
     {
+        $request = RequestModels::from($request, V1ProductsBulkDeleteBody::class);
+
         return $this->execute(fn () => $this->client->deleteProductsBulk($request));
     }
 }

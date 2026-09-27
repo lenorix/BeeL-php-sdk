@@ -9,6 +9,7 @@ use Lenorix\BeelSdk\Generated\Model\CreateSeriesRequest;
 use Lenorix\BeelSdk\Generated\Model\InvoiceSeries;
 use Lenorix\BeelSdk\Generated\Model\PatchSeriesRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdSeriesGetResponse200Data;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -51,10 +52,13 @@ final readonly class CompanySeriesResource extends GeneratedResource
     /**
      * Create an invoice numbering series.
      *
+     * @param  CreateSeriesRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
      */
-    public function create(CreateSeriesRequest $request, array $headers = []): mixed
+    public function create(CreateSeriesRequest|array $request, array $headers = []): mixed
     {
+        $request = RequestModels::from($request, CreateSeriesRequest::class);
+
         return $this->execute(fn () => $this->client->createCompanySeries($this->companyId, $request, $headers));
     }
 
@@ -64,9 +68,13 @@ final readonly class CompanySeriesResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getCompanySeries($this->companyId, $seriesId));
     }
 
-    /** Partially update a series; omitted fields remain unchanged. */
-    public function update(string $seriesId, PatchSeriesRequest $request): mixed
+    /** Partially update a series; omitted fields remain unchan     *
+     * @param  PatchSeriesRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function update(string $seriesId, PatchSeriesRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, PatchSeriesRequest::class);
+
         return $this->execute(fn () => $this->client->patchCompanySeries($this->companyId, $seriesId, $request));
     }
 

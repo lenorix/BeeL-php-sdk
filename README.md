@@ -52,6 +52,25 @@ $issued = $company->invoices->issue($invoice->getId());
 echo $issued->getInvoiceNumber();
 ```
 
+Every method that takes a request model also accepts an array with the API's field names, like the plain objects of the official Node.js SDK:
+
+```php
+$invoice = $company->invoices->create([
+    'type' => 'STANDARD',
+    'recipient' => ['customer_id' => 'customer-uuid'],
+    'lines' => [[
+        'line_type' => 'NORMAL',
+        'description' => 'Consulting services',
+        'quantity' => 1,
+        'unit_price' => 100,
+        'main_tax' => ['type' => 'IVA', 'percentage' => 21, 'regime_key' => '01'],
+    ]],
+]);
+$company->invoices->void($invoice->getId(), ['reason' => 'Billing error']);
+```
+
+An array that does not match the model, or lacks a required field, throws `InvalidArgumentException` naming the problem before anything is sent.
+
 Create the invoice first and issue it when it is ready. The generated Jane model returned by the SDK is available directly, so its getters and the complete BeeL response remain accessible. Date-time fields become `DateTime` objects with second precision, as the generated models require; every other value, including anything in `metadata`, keeps exactly what BeeL sent.
 
 ## Client options
@@ -357,7 +376,7 @@ The SDK follows the official [`@beel_es/sdk`](https://www.npmjs.com/package/@bee
 
 - **Names:** classes use `Beel` casing (`Beel`, `BeelApiError`, `BeelRateLimitError`…), not `BeeL`. The BeeL error code is `apiCode`, because PHP's `Exception::$code` holds the HTTP status.
 - **Error data:** every error keeps the code and `details` BeeL sent. The Node.js SDK replaces the code of 401, 403, 404, 409, 422 and 429 errors with a fixed one, and drops `details` on all of them except 422, so a check such as `apiCode === 'UNPROCESSABLE_ENTITY'` only matches when BeeL sent no code.
-- **Return values:** methods return Jane models (objects with getters), not plain JSON, and list methods return the whole page with its pagination.
+- **Arguments and return values:** requests can be arrays in API format, like the Node.js SDK's plain objects, or Jane models. Methods return Jane models (objects with getters), not plain JSON, and list methods return the whole page with its pagination.
 - **Retries:** `429` and `5xx` responses are retried with the same `Idempotency-Key` on every attempt, and `autoIdempotencyKey: false` is honored.
 - **Webhooks:** every `v1` signature in the header is checked, so a secret rotation does not break verification. `verify()` returns an array and `verifyEvent()` a typed model; failures use the subclasses of `WebhookVerificationError`.
 - **Writes without a body:** they are sent as `{}` like in the Node.js SDK, but an existing `Content-Type`, such as a multipart upload, is never replaced.

@@ -7,6 +7,7 @@ namespace Lenorix\BeelSdk\Resource;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateCustomerRequest;
 use Lenorix\BeelSdk\Generated\Model\UpdateCustomerRequest;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
 /**
@@ -27,8 +28,13 @@ final readonly class CustomersResource extends GeneratedResource
         return $this->execute(fn () => $this->client->listCustomers($query));
     }
 
-    public function create(CreateCustomerRequest $request): mixed
+    /**
+     * @param  CreateCustomerRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function create(CreateCustomerRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, CreateCustomerRequest::class);
+
         return $this->execute(fn () => $this->client->createCustomer($request));
     }
 
@@ -37,8 +43,13 @@ final readonly class CustomersResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getCustomer($customerId));
     }
 
-    public function update(string $customerId, UpdateCustomerRequest $request): mixed
+    /**
+     * @param  UpdateCustomerRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function update(string $customerId, UpdateCustomerRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, UpdateCustomerRequest::class);
+
         return $this->execute(fn () => $this->client->updateCustomer($customerId, $request));
     }
 

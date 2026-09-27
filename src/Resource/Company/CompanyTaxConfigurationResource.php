@@ -6,6 +6,7 @@ namespace Lenorix\BeelSdk\Resource\Company;
 
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\UpdateTaxConfigurationRequest;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -23,9 +24,13 @@ final readonly class CompanyTaxConfigurationResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getCompanyTaxConfiguration($this->companyId));
     }
 
-    /** Update the company's tax defaults used by the BeeL dashboard. */
-    public function update(UpdateTaxConfigurationRequest $request): mixed
+    /** Update the company's tax defaults used by the BeeL dashbo     *
+     * @param  UpdateTaxConfigurationRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function update(UpdateTaxConfigurationRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, UpdateTaxConfigurationRequest::class);
+
         return $this->execute(fn () => $this->client->updateCompanyTaxConfiguration($this->companyId, $request));
     }
 }

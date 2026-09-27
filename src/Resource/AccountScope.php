@@ -11,6 +11,7 @@ use Lenorix\BeelSdk\Generated\Model\CreateClaimTokenRequest;
 use Lenorix\BeelSdk\Generated\Model\ManagedAccountSummary;
 use Lenorix\BeelSdk\Generated\Model\ProvisioningUsage;
 use Lenorix\BeelSdk\Generated\Model\SetAccountOwnerRequest;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\Account\AccountCompaniesResource;
 use Lenorix\BeelSdk\Resource\Account\AccountEmailsResource;
@@ -67,25 +68,36 @@ final readonly class AccountScope extends GeneratedResource
         return $this->execute(fn () => $this->client->getAccountUsage($this->accountId));
     }
 
-    /** Change the access level for a managed account. */
-    public function changeAccessLevel(ChangeAccessLevelRequest $request): mixed
+    /** Change the access level for a managed acco     *
+     * @param  ChangeAccessLevelRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function changeAccessLevel(ChangeAccessLevelRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, ChangeAccessLevelRequest::class);
+
         return $this->execute(fn () => $this->client->changeManagedAccountAccessLevel($this->accountId, $request));
     }
 
     /**
      * Create a token that lets the account owner claim this managed account.
      *
+     * @param  CreateClaimTokenRequest|array<string, mixed>|null  $request  The request as a model or as an array in API format.
      * @return ClaimTokenResult Claim URL/token and expiration details.
      */
-    public function createClaimToken(?CreateClaimTokenRequest $request = null): mixed
+    public function createClaimToken(CreateClaimTokenRequest|array|null $request = null): mixed
     {
+        $request = RequestModels::from($request, CreateClaimTokenRequest::class);
+
         return $this->execute(fn () => $this->client->createAccountClaimToken($this->accountId, $request));
     }
 
-    /** Transfer account ownership to another member. */
-    public function setOwner(SetAccountOwnerRequest $request): mixed
+    /** Transfer account ownership to another mem     *
+     * @param  SetAccountOwnerRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function setOwner(SetAccountOwnerRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, SetAccountOwnerRequest::class);
+
         return $this->execute(fn () => $this->client->putAccountOwner($this->accountId, $request));
     }
 

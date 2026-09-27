@@ -8,6 +8,7 @@ use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\MyIdentity;
 use Lenorix\BeelSdk\Generated\Model\MyPreferences;
 use Lenorix\BeelSdk\Generated\Model\UpdateMeRequest;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
 /** The authenticated principal: who the API key belongs to and what it may do. */
@@ -31,9 +32,13 @@ final readonly class MeResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getMyIdentity());
     }
 
-    /** Update the authenticated user's preferences. */
-    public function update(UpdateMeRequest $request): MyPreferences
+    /** Update the authenticated user's preferen     *
+     * @param  UpdateMeRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function update(UpdateMeRequest|array $request): MyPreferences
     {
+        $request = RequestModels::from($request, UpdateMeRequest::class);
+
         return $this->execute(fn () => $this->client->updateMe($request));
     }
 }

@@ -8,6 +8,7 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 - `createPdfArchive()` and `export()` on company invoices return a `BinaryDownload` with the response stream, file name, content type, length and invoice counts. They used to return `null`, as the generated client discards file bodies. The body is never read into memory, and neither operation retries a `5xx` by default.
 - `$company->representation` with `get()`, `generate()`, `documentLink()`, `submit()` and `cancel()`. Errors carry their real HTTP status.
+- Every method that takes a request model also accepts an array in API format, like the Node.js SDK's plain objects. Invalid arrays and missing required fields throw `InvalidArgumentException` before sending.
 - `RequestOptions(maxRetries: …, retryServerErrors: …)` control retries per call.
 - Enums matching the official Node.js SDK, with every value in the OpenAPI contract: `VeriFactuSubmissionStatus`, `RecurringInvoicePauseReason` and `WebhookAccountRelationship`.
 - The legacy `markSent()` accepts an optional body with `sent_at`, as in the Node.js SDK.

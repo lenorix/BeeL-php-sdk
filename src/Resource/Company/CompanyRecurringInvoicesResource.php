@@ -13,6 +13,7 @@ use Lenorix\BeelSdk\Generated\Model\RecurringInvoiceResponse;
 use Lenorix\BeelSdk\Generated\Model\SetRecurringInvoiceStatusRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdHistoryGetResponse200Data;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -52,9 +53,13 @@ final readonly class CompanyRecurringInvoicesResource extends GeneratedResource
         );
     }
 
-    /** Create a recurring invoice template. */
-    public function create(CreateRecurringInvoiceRequest $request): mixed
+    /** Create a recurring invoice templ     *
+     * @param  CreateRecurringInvoiceRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function create(CreateRecurringInvoiceRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, CreateRecurringInvoiceRequest::class);
+
         return $this->execute(fn () => $this->client->createCompanyRecurringInvoice($this->companyId, $request));
     }
 
@@ -76,15 +81,23 @@ final readonly class CompanyRecurringInvoicesResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getCompanyRecurringInvoice($this->companyId, $recurringInvoiceId));
     }
 
-    /** Partially update a recurring template; omitted fields remain unchanged. */
-    public function update(string $recurringInvoiceId, PatchRecurringInvoiceRequest $request): mixed
+    /** Partially update a recurring template; omitted fields remain unchan     *
+     * @param  PatchRecurringInvoiceRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function update(string $recurringInvoiceId, PatchRecurringInvoiceRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, PatchRecurringInvoiceRequest::class);
+
         return $this->execute(fn () => $this->client->patchCompanyRecurringInvoice($this->companyId, $recurringInvoiceId, $request));
     }
 
-    /** Pause or resume a recurring invoice template. */
-    public function setStatus(string $recurringInvoiceId, SetRecurringInvoiceStatusRequest $request): mixed
+    /** Pause or resume a recurring invoice templ     *
+     * @param  SetRecurringInvoiceStatusRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function setStatus(string $recurringInvoiceId, SetRecurringInvoiceStatusRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, SetRecurringInvoiceStatusRequest::class);
+
         return $this->execute(fn () => $this->client->setCompanyRecurringInvoiceStatus($this->companyId, $recurringInvoiceId, $request));
     }
 
@@ -122,9 +135,13 @@ final readonly class CompanyRecurringInvoicesResource extends GeneratedResource
         );
     }
 
-    /** Create a recurring template derived from an existing invoice. */
-    public function derive(CreateRecurringInvoiceDerivationRequest $request): mixed
+    /** Create a recurring template derived from an existing invo     *
+     * @param  CreateRecurringInvoiceDerivationRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function derive(CreateRecurringInvoiceDerivationRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, CreateRecurringInvoiceDerivationRequest::class);
+
         return $this->execute(fn () => $this->client->createCompanyRecurringInvoiceDerivation($this->companyId, $request));
     }
 

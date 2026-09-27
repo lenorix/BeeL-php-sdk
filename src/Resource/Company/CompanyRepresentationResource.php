@@ -9,6 +9,7 @@ use Lenorix\BeelSdk\Generated\Model\RepresentationActionResponseData;
 use Lenorix\BeelSdk\Generated\Model\RepresentationDownloadResponseData;
 use Lenorix\BeelSdk\Generated\Model\RepresentationStatusResponseData;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRepresentationSubmitPostBody;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -56,10 +57,13 @@ final readonly class CompanyRepresentationResource extends GeneratedResource
      * The signature is validated asynchronously: success means accepted for validation,
      * so poll {@see self::get()} for the outcome.
      *
+     * @param  V1CompaniesCompanyIdRepresentationSubmitPostBody|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Request headers, including optional `Idempotency-Key`.
      */
-    public function submit(V1CompaniesCompanyIdRepresentationSubmitPostBody $request, array $headers = []): RepresentationActionResponseData
+    public function submit(V1CompaniesCompanyIdRepresentationSubmitPostBody|array $request, array $headers = []): RepresentationActionResponseData
     {
+        $request = RequestModels::from($request, V1CompaniesCompanyIdRepresentationSubmitPostBody::class);
+
         return $this->execute(fn () => $this->client->submitCompanyRepresentation($this->companyId, $request, $headers));
     }
 

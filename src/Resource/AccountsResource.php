@@ -8,6 +8,7 @@ use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\ManagedAccountSummary;
 use Lenorix\BeelSdk\Generated\Model\ProvisionAccountRequest;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsGetResponse200Data;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
 final readonly class AccountsResource extends GeneratedResource
@@ -49,8 +50,13 @@ final readonly class AccountsResource extends GeneratedResource
         );
     }
 
-    public function provision(ProvisionAccountRequest $request): mixed
+    /**
+     * @param  ProvisionAccountRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function provision(ProvisionAccountRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, ProvisionAccountRequest::class);
+
         return $this->execute(fn () => $this->client->provisionAccount($request));
     }
 

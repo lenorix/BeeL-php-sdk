@@ -8,6 +8,7 @@ use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\UpdateTaxConfigurationRequest;
 use Lenorix\BeelSdk\Generated\Model\UpdateVeriFactuConfigurationRequest;
 use Lenorix\BeelSdk\Generated\Model\V1ConfigurationLanguagePutBody;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
 /** @deprecated Prefer company configuration resources and global catalogs. */
@@ -30,8 +31,13 @@ final readonly class ConfigurationResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getTaxConfiguration());
     }
 
-    public function updateTaxConfig(UpdateTaxConfigurationRequest $request): mixed
+    /**
+     * @param  UpdateTaxConfigurationRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function updateTaxConfig(UpdateTaxConfigurationRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, UpdateTaxConfigurationRequest::class);
+
         return $this->execute(fn () => $this->client->updateTaxConfiguration($request));
     }
 
@@ -40,8 +46,13 @@ final readonly class ConfigurationResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getVeriFactuConfiguration());
     }
 
-    public function updateVeriFactu(UpdateVeriFactuConfigurationRequest $request): mixed
+    /**
+     * @param  UpdateVeriFactuConfigurationRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     */
+    public function updateVeriFactu(UpdateVeriFactuConfigurationRequest|array $request): mixed
     {
+        $request = RequestModels::from($request, UpdateVeriFactuConfigurationRequest::class);
+
         return $this->execute(fn () => $this->client->updateVeriFactuConfiguration($request));
     }
 
