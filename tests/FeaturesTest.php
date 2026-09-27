@@ -482,6 +482,48 @@ it('keeps free-text response values that look like dates as BeeL sent them', fun
         ->and($invoice->getCreatedAt()?->format(DATE_ATOM))->toBe('2026-09-25T12:00:00+00:00');
 });
 
+it('never rewrites values inside free-form maps such as metadata', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => [
+        'id' => 'inv-1',
+        'created_at' => '2026-09-25T12:00:00.123Z',
+        'metadata' => ['created_at' => '2026-09-25T12:00:00.123Z', 'nested' => ['paid_at' => '2026-01-01T00:00:00.5Z']],
+    ]])]);
+
+    $invoice = testClient($transport)->company('c')->invoices->get('inv-1');
+
+    expect($invoice->getCreatedAt()->format(DATE_ATOM))->toBe('2026-09-25T12:00:00+00:00')
+        ->and($invoice->getMetadata()['created_at'])->toBe('2026-09-25T12:00:00.123Z')
+        ->and($invoice->getMetadata()['nested'])->toBe(['paid_at' => '2026-01-01T00:00:00.5Z'])
+        ->and(DateTimeFields::normalizeArray(['type' => 'x', 'data' => ['metadata' => ['sent_at' => '2026-09-25T12:00:00.1Z'], 'sent_at' => '2026-09-25T12:00:00.1Z']]))
+        ->toBe(['type' => 'x', 'data' => ['metadata' => ['sent_at' => '2026-09-25T12:00:00.1Z'], 'sent_at' => '2026-09-25T12:00:00+00:00']]);
+});
+
+it('keeps numbers, text and empty objects intact when it rewrites a document', function () {
+    $json = '{"created_at":"2026-09-25T12:00:00.1Z","amount":100.0,"count":3,"ratio":0.1,"name":"Añó / \\u00e9","empty":{},"list":[],"big":12345678901234}';
+
+    $normalized = DateTimeFields::normalizeJson($json);
+
+    expect(json_decode($normalized, false))->toEqual(json_decode(str_replace('12:00:00.1Z', '12:00:00+00:00', $json), false))
+        ->and($normalized)->toContain('"amount":100.0')
+        ->and($normalized)->toContain('"empty":{}')
+        ->and(DateTimeFields::normalizeJson('{"notes":"2026-09-25T12:00:00.1Z", "x" : 1}'))->toBe('{"notes":"2026-09-25T12:00:00.1Z", "x" : 1}');
+});
+
+it('lists every free-form map the generated normalizers copy without parsing', function () {
+    $names = [];
+    foreach (glob(__DIR__.'/../src/Generated/Normalizer/*.php') ?: [] as $file) {
+        preg_match_all("/new JsonObject;\\s*foreach \\(\\\$data\\['([A-Za-z0-9_]+)'\\]/", (string) file_get_contents($file), $matches);
+        array_push($names, ...$matches[1]);
+    }
+    $names = array_values(array_unique($names));
+    sort($names);
+    $listed = DateTimeFields::FREE_FORM_NAMES;
+    sort($listed);
+
+    expect($names)->not->toBeEmpty()
+        ->and($listed)->toBe($names);
+});
+
 it('lists every field the generated normalizers parse as date-time', function () {
     $names = [];
     $parses = 0;

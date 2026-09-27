@@ -52,7 +52,7 @@ $issued = $company->invoices->issue($invoice->getId());
 echo $issued->getInvoiceNumber();
 ```
 
-Create the invoice first and issue it when it is ready. The generated Jane model returned by the SDK is available directly, so its getters and the complete BeeL response remain accessible.
+Create the invoice first and issue it when it is ready. The generated Jane model returned by the SDK is available directly, so its getters and the complete BeeL response remain accessible. Date-time fields become `DateTime` objects with second precision, as the generated models require; every other value, including anything in `metadata`, keeps exactly what BeeL sent.
 
 ## Client options
 

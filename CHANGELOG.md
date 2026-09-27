@@ -17,6 +17,7 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 - An error status without a JSON body, such as an empty `503` from a proxy, now throws `BeelApiError` instead of a `TypeError`.
 - Error responses without a `Content-Type` no longer trigger a PHP deprecation in the generated client before reaching `BeelApiError`.
 - `all()` stops if BeeL answers a different page than the one requested, instead of looping forever on the same page.
+- Values inside free-form maps, such as `metadata`, `details` or request headers, are never rewritten, even when a key inside them matches a date-time field name. Before, `metadata.created_at` lost its fractional seconds. Response data now keeps the values BeeL sent, like the official Node.js SDK.
 
 ## v0.4.2 - 2026-09-27
 
