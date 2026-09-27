@@ -6,4 +6,6 @@ return [
   'directory' => __DIR__ . '/src/Generated',
   // Parse date-time values with `new \DateTime()`, which keeps fractional seconds, instead of a fixed format.
   'date-input-format' => '',
+  // Send date-time values with microseconds too; RFC 3339, which OpenAPI's date-time follows, allows fractional seconds.
+  'date-format' => 'Y-m-d\TH:i:s.uP',
 ];

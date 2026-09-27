@@ -43,7 +43,7 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 - A rate limit reads `retry_after` from the error body as well, like the Node.js SDK.
 - Webhook verification rejects a JSON list body; the payload must be an object.
 - The README documents the differences from the official Node.js SDK.
-- `.jane-openapi` sets `date-input-format` so a regenerated client parses date-time values with `new \DateTime()`, keeping microseconds. It changes nothing until the client is regenerated, and the regeneration must also remove `DateTimeFields` (used by the transport and `WebhookVerifier::toEvent()`), which would otherwise still cut the fraction; a test fails until it is removed. After regenerating, an empty date-time string would become the current time instead of throwing `InvalidDateException`.
+- `.jane-openapi` sets `date-input-format` so a regenerated client parses date-time values with `new \DateTime()`, keeping microseconds, and `date-format` so it also sends them with microseconds. It changes nothing until the client is regenerated, and the regeneration must also remove `DateTimeFields` (used by the transport and `WebhookVerifier::toEvent()`), which would otherwise still cut the fraction; a test fails until it is removed. After regenerating, an empty date-time string would become the current time instead of throwing `InvalidDateException`.
 
 ### Fixed
 

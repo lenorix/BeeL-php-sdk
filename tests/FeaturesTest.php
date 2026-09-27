@@ -1099,8 +1099,9 @@ it('declares every resource return type as the generated client actually returns
             }
             $checked[] = basename($file, '.php').'::'.$name;
             preg_match('/protected function transformResponseBody.*?\n    \}\n/s', (string) file_get_contents($root.'src/Generated/Endpoint/'.ucfirst($call[2]).'.php'), $transform);
-            preg_match_all('/\$status === (2\d\d)[^\n]*\n\s*return \$serializer->deserialize\(\$body, \'([^\']+)\'/', $transform[0], $bodies, PREG_SET_ORDER);
-            preg_match_all('/\$status === (2\d\d)/', $transform[0], $statuses);
+            // Raw Jane output writes `200 === $status`; Pint rewrites it to `$status === 200`.
+            preg_match_all('/(?|\$status === (2\d\d)|(2\d\d) === \$status)[^\n]*\n\s*return \$serializer->deserialize\(\$body, \'([^\']+)\'/', $transform[0], $bodies, PREG_SET_ORDER);
+            preg_match_all('/(?|\$status === (2\d\d)|(2\d\d) === \$status)/', $transform[0], $statuses);
 
             $types = [];
             $nullable = false;
