@@ -295,7 +295,15 @@ $raw = json_decode((string) $beel->getLastResponse()->getBody(), true);
 $raw['data']['created_at']; // "2026-09-25T01:29:40.548233096Z", with BeeL's nanoseconds
 ```
 
-PHP's `DateTime` holds microseconds; BeeL sends nanoseconds. When you need them, read the value from the last response and parse it with a library such as `brick/date-time`. The JSON body is always readable from the start, even with a streaming transport. After a failed call, the last response is the error response; with retries, it is the last attempt. Read it right after the call it belongs to.
+PHP's `DateTime` holds microseconds; BeeL sends nanoseconds. When you need them, parse the raw value with a nanosecond library:
+
+```php
+$at = Brick\DateTime\ZonedDateTime::parse($raw['data']['created_at']);             // brick/date-time
+preg_match('/\.(\d+)/', $value = $raw['data']['created_at'], $m);                  // azjezz/psl
+$at = Psl\DateTime\Timestamp::fromParts(strtotime($value), (int) str_pad($m[1] ?? '', 9, '0'));
+```
+
+The JSON body is always readable from the start, even with a streaming transport. After a failed call, the last response is the error response; with retries, it is the last attempt. Read it right after the call it belongs to.
 
 ## Any endpoint
 
