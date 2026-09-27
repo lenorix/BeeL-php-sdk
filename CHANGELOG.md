@@ -21,7 +21,7 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 - `BeelRateLimitError::$retryAfterSeconds` is `60` when BeeL gives no delay, as in the Node.js SDK, and is now typed `int`.
 - A POST, PUT or PATCH without a body is sent as `{}` with `Content-Type: application/json`, as the Node.js SDK does.
 - Builder error messages match the Node.js SDK, and `build()` returns a fresh model on every call, so later builder calls never change a model already returned.
-- Boolean query parameters are sent as `true`/`false`, like in the Node.js SDK, instead of the generated client's `1`/`0`.
+- Boolean query parameters are sent to BeeL as `true`/`false`, like in the Node.js SDK, instead of the generated client's `1`/`0`. Third-party URLs, such as signed download links, are never rewritten.
 - A rate limit reads `retry_after` from the error body as well, like the Node.js SDK.
 - Webhook verification rejects a JSON list body; the payload must be an object.
 - The README documents the differences from the official Node.js SDK.

@@ -14,6 +14,7 @@ use Lenorix\BeelSdk\Exception\BeelApiError;
 use Lenorix\BeelSdk\Exception\BeelNotReadyError;
 use Lenorix\BeelSdk\Generated\Client as JaneClient;
 use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Http\BooleanQueryPlugin;
 use Lenorix\BeelSdk\Http\RequestOptions;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Http\RetryingClient;
@@ -109,6 +110,7 @@ final readonly class Beel
             new AddHostPlugin($uri),
             new AddPathPlugin($uri),
             new HeaderDefaultsPlugin(['Authorization' => 'Bearer '.$apiKey]),
+            new BooleanQueryPlugin,
         ];
         $this->raw = JaneClient::create($this->transport, $plugins, applyServerPlugins: false);
         $this->api = new PluginClient($this->transport, $plugins);
@@ -135,12 +137,13 @@ final readonly class Beel
      *
      * @param  string  $method  HTTP method, such as `GET` or `POST`.
      * @param  string  $path  API path, such as `/v1/companies/{company_id}/logo`.
-     * @param  array<string, string>  $pathParams  Values for the `{name}` placeholders.
+     * @param  array<string, string|int>  $pathParams  Values for the `{name}` placeholders.
      * @param  array<string, mixed>  $query  Query parameters.
      * @param  mixed  $body  JSON body: an array, a JSON-serializable object, or null for none.
      * @return mixed The decoded JSON response, including BeeL's envelope, or null for an empty body.
      *
      * @throws BeelApiError If BeeL answers outside `2xx`.
+     * @throws \UnexpectedValueException If a successful response is not JSON, such as a file download.
      */
     public function request(string $method, string $path, array $pathParams = [], array $query = [], mixed $body = null, ?RequestOptions $options = null): mixed
     {
@@ -149,7 +152,7 @@ final readonly class Beel
                 throw new \InvalidArgumentException(sprintf('Missing path parameter "%s".', $matches[1]));
             }
 
-            return rawurlencode($pathParams[$matches[1]]);
+            return rawurlencode((string) $pathParams[$matches[1]]);
         }, $path);
         $queryString = self::queryString($query);
 
@@ -162,10 +165,15 @@ final readonly class Beel
 
         $this->responseContext->reset();
         $response = $this->responseContext->withRequestOptions($options, fn () => $this->api->sendRequest($request));
-        $contents = (string) $response->getBody();
         if ($response->getStatusCode() >= 400) {
-            throw BeelApiError::fromErrorResponse(new ErrorResponse, $response, $contents);
+            throw BeelApiError::fromErrorResponse(new ErrorResponse, $response, (string) $response->getBody());
         }
+        // Check the type before reading, so a file is never loaded into memory here.
+        $contentType = $response->getHeaderLine('Content-Type');
+        if ($contentType !== '' && ! str_contains(strtolower($contentType), 'json')) {
+            throw new \UnexpectedValueException(sprintf('BeeL answered %s, not JSON. request() is for JSON endpoints; use createPdfArchive(), export() or getPdf() for files.', $contentType));
+        }
+        $contents = (string) $response->getBody();
 
         return $contents === '' ? null : json_decode($contents, true, 512, JSON_THROW_ON_ERROR);
     }

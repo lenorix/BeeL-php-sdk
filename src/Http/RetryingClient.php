@@ -39,11 +39,6 @@ final readonly class RetryingClient implements ClientInterface
 
     public function sendRequest(RequestInterface $request): ResponseInterface
     {
-        $uri = $request->getUri();
-        $query = QueryParameters::booleans($uri->getQuery());
-        if ($query !== $uri->getQuery()) {
-            $request = $request->withUri($uri->withQuery($query), true);
-        }
         foreach ($this->responseContext->requestOptions()?->allHeaders() ?? [] as $name => $value) {
             $request = $request->withHeader($name, $value);
         }

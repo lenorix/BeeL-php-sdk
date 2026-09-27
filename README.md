@@ -235,7 +235,7 @@ $customer = $company->customers->create($customerRequest);
 
 ## Any endpoint
 
-`$beel->request()` calls any API path, like the official Node.js SDK's `beel.raw.GET(...)`. It uses the client's authentication, retries and idempotency keys, and maps errors to `BeelApiError` like every resource method. It returns the decoded JSON response, including BeeL's envelope:
+`$beel->request()` calls any API path, like the official Node.js SDK's `beel.raw.GET(...)`. It uses the client's authentication, retries and idempotency keys, and maps errors to `BeelApiError` like every resource method. It is for JSON endpoints and returns the decoded response, including BeeL's envelope; for files use `createPdfArchive()`, `export()` or `getPdf()`:
 
 ```php
 use Lenorix\BeelSdk\Http\RequestOptions;

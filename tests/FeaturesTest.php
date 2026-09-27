@@ -930,6 +930,17 @@ it('uploads the signed representation from an array', function () {
 
 // Second parity round
 
+it('never rewrites the query of a signed download URL', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['download_url' => 'https://signed.example.test/f.pdf?active=1&X-Sig=abc', 'file_name' => 'f.pdf', 'expires_in_seconds' => 300]]),
+        new Response(200, ['Content-Type' => 'application/pdf'], '%PDF'),
+    ]);
+
+    testClient($transport)->downloadPdf('inv-1');
+
+    expect($transport->requests[1]->getUri()->getQuery())->toBe('active=1&X-Sig=abc');
+});
+
 it('sends boolean query parameters as true and false', function () {
     $transport = new RecordingPsrClient([
         jsonResponse(['success' => true, 'data' => ['id' => 'inv-1']], 201),
@@ -1023,6 +1034,11 @@ it('calls any API path with the client authentication and error mapping', functi
         expect($exception->apiCode)->toBe('LOGO_NOT_FOUND');
     }
     expect(fn () => $beel->request('GET', '/v1/companies/{company_id}'))->toThrow(InvalidArgumentException::class, 'company_id');
+
+    $files = new RecordingPsrClient([new Response(200, ['Content-Type' => 'application/zip'], new TripwireStream('PK'))]);
+    expect(fn () => testClient($files)->request('POST', '/v1/companies/{company_id}/invoices/pdf-archive', ['company_id' => 42]))
+        ->toThrow(UnexpectedValueException::class, 'createPdfArchive()')
+        ->and($files->requests[0]->getUri()->getPath())->toBe('/api/v1/companies/42/invoices/pdf-archive');
 });
 
 it('lists every boolean and list query parameter of the generated endpoints', function () {
@@ -1042,6 +1058,20 @@ it('lists every boolean and list query parameter of the generated endpoints', fu
     sort($booleans);
     sort($lists);
 
+    $otherTypes = [];
+    foreach (glob(__DIR__.'/../src/Generated/Endpoint/*.php') ?: [] as $file) {
+        if (preg_match('/function getQueryOptionsResolver\\(\\).*?\\n    \\}\\n/s', (string) file_get_contents($file), $resolver) !== 1) {
+            continue;
+        }
+        foreach (QueryParameters::BOOLEANS as $name) {
+            // The rewrite is keyed by name, so a same-named int or string parameter would be corrupted.
+            if (preg_match("/addAllowedTypes\\('".$name."', \\['(?!bool')/", $resolver[0]) === 1) {
+                $otherTypes[] = basename($file).': '.$name;
+            }
+        }
+    }
+
     expect(QueryParameters::BOOLEANS)->toBe($booleans)
-        ->and(QueryParameters::LISTS)->toBe($lists);
+        ->and(QueryParameters::LISTS)->toBe($lists)
+        ->and($otherTypes)->toBe([]);
 });

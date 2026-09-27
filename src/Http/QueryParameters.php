@@ -11,7 +11,11 @@ namespace Lenorix\BeelSdk\Http;
  */
 final class QueryParameters
 {
-    /** Boolean query parameters, which BeeL documents as `true`/`false` (the generated client sends `1`/`0`). */
+    /**
+     * Boolean query parameters, which BeeL documents as `true`/`false` (the generated client sends `1`/`0`).
+     *
+     * None of these names has another type in any endpoint, which a test keeps true.
+     */
     public const BOOLEANS = [
         'active',
         'attach_source_invoices',
