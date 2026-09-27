@@ -518,7 +518,7 @@ it('keeps numbers, text and empty objects intact when it rewrites a document', f
 it('lists every free-form map the generated normalizers copy without parsing', function () {
     $names = [];
     foreach (glob(__DIR__.'/../src/Generated/Normalizer/*.php') ?: [] as $file) {
-        preg_match_all("/new JsonObject;\\s*foreach \\(\\\$data\\['([A-Za-z0-9_]+)'\\]/", (string) file_get_contents($file), $matches);
+        preg_match_all("/new (?:\\\\[A-Za-z\\\\]+\\\\)?JsonObject(?:\\(\\))?;\\s*foreach \\(\\\$data\\['([A-Za-z0-9_]+)'\\]/", (string) file_get_contents($file), $matches);
         array_push($names, ...$matches[1]);
     }
     $names = array_values(array_unique($names));

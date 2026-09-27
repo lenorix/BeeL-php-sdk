@@ -18,7 +18,7 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 - `BeelRateLimitError::$retryAfterSeconds` is `60` when BeeL gives no delay, as in the Node.js SDK, and is now typed `int`.
 - A POST, PUT or PATCH without a body is sent as `{}` with `Content-Type: application/json`, as the Node.js SDK does.
 - Builder error messages match the Node.js SDK.
-- `.jane-openapi` sets `date-input-format` to parse date-time values with fractional seconds. It takes effect when the client is regenerated.
+- `.jane-openapi` sets `date-input-format` so a regenerated client parses date-time values with `new \DateTime()`, keeping microseconds. It changes nothing until the client is regenerated, and the regeneration must also remove `DateTimeFields` (used by the transport and `WebhookVerifier::toEvent()`), which would otherwise still cut the fraction; a test fails until it is removed. After regenerating, an empty date-time string would become the current time instead of throwing `InvalidDateException`.
 
 ### Fixed
 
