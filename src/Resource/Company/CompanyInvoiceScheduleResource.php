@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Lenorix\BeelSdk\Resource\Company;
 
 use Lenorix\BeelSdk\Generated\Client;
+use Lenorix\BeelSdk\Generated\Model\Invoice;
+use Lenorix\BeelSdk\Generated\Model\InvoiceSchedule;
 use Lenorix\BeelSdk\Generated\Model\SetInvoiceScheduleRequest;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
@@ -17,7 +19,7 @@ final readonly class CompanyInvoiceScheduleResource extends GeneratedResource
         parent::__construct($client, $responseContext);
     }
 
-    public function get(string $invoiceId): mixed
+    public function get(string $invoiceId): InvoiceSchedule
     {
         return $this->execute(fn () => $this->client->getCompanyInvoiceSchedule($this->companyId, $invoiceId));
     }
@@ -25,15 +27,15 @@ final readonly class CompanyInvoiceScheduleResource extends GeneratedResource
     /**
      * @param  SetInvoiceScheduleRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function set(string $invoiceId, SetInvoiceScheduleRequest|array $request): mixed
+    public function set(string $invoiceId, SetInvoiceScheduleRequest|array $request): Invoice
     {
         $request = RequestModels::from($request, SetInvoiceScheduleRequest::class);
 
         return $this->execute(fn () => $this->client->setCompanyInvoiceSchedule($this->companyId, $invoiceId, $request));
     }
 
-    public function clear(string $invoiceId): mixed
+    public function clear(string $invoiceId): void
     {
-        return $this->execute(fn () => $this->client->deleteCompanyInvoiceSchedule($this->companyId, $invoiceId));
+        $this->execute(fn () => $this->client->deleteCompanyInvoiceSchedule($this->companyId, $invoiceId));
     }
 }

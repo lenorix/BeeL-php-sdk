@@ -25,7 +25,7 @@ final readonly class AccountMembersResource extends GeneratedResource
     /**
      * @param  array<string, mixed>  $query  Pagination options such as `page` and `limit`.
      */
-    public function list(array $query = []): mixed
+    public function list(array $query = []): V1AccountsAccountIdMembersGetResponse200Data
     {
         return $this->execute(fn () => $this->client->listAccountMembers($this->accountId, $query));
     }
@@ -48,7 +48,7 @@ final readonly class AccountMembersResource extends GeneratedResource
         );
     }
 
-    public function get(string $memberId): mixed
+    public function get(string $memberId): AccountMember
     {
         return $this->execute(fn () => $this->client->getAccountMember($this->accountId, $memberId));
     }
@@ -56,7 +56,7 @@ final readonly class AccountMembersResource extends GeneratedResource
     /**
      * @param  ChangeMemberRoleRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function update(string $memberId, ChangeMemberRoleRequest|array $request): mixed
+    public function update(string $memberId, ChangeMemberRoleRequest|array $request): AccountMember
     {
         $request = RequestModels::from($request, ChangeMemberRoleRequest::class);
 
@@ -71,7 +71,7 @@ final readonly class AccountMembersResource extends GeneratedResource
     /**
      * @param  array<string, mixed>  $query  Pagination options such as `page` and `limit`.
      */
-    public function listGrants(string $memberId, array $query = []): mixed
+    public function listGrants(string $memberId, array $query = []): V1AccountsAccountIdMembersMemberIdGrantsGetResponse200Data
     {
         return $this->execute(fn () => $this->client->listAccountMemberGrants($this->accountId, $memberId, $query));
     }
@@ -97,7 +97,7 @@ final readonly class AccountMembersResource extends GeneratedResource
     /**
      * @param  PutMemberGrantRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function putGrant(string $memberId, string $companyId, PutMemberGrantRequest|array $request): mixed
+    public function putGrant(string $memberId, string $companyId, PutMemberGrantRequest|array $request): GrantAssignment
     {
         $request = RequestModels::from($request, PutMemberGrantRequest::class);
 

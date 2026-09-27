@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace Lenorix\BeelSdk\Resource\Company;
 
 use Lenorix\BeelSdk\Generated\Client;
+use Lenorix\BeelSdk\Generated\Model\CompanyPaymentConnection;
 use Lenorix\BeelSdk\Generated\Model\InitiatePaymentConnectionRequest;
+use Lenorix\BeelSdk\Generated\Model\InitiatePaymentConnectionResponseData;
+use Lenorix\BeelSdk\Generated\Model\ListManagedPaymentConnectionsResponseData;
 use Lenorix\BeelSdk\Generated\Model\UpdateCompanyPaymentConnectionRequest;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
@@ -23,7 +26,7 @@ final readonly class CompanyPaymentConnectionsResource extends GeneratedResource
         return $this->inheritOptions(new CompanyPaymentEventsResource($this->client, $this->companyId, $connectionId, $this->responseContext));
     }
 
-    public function list(): mixed
+    public function list(): ListManagedPaymentConnectionsResponseData
     {
         return $this->execute(fn () => $this->client->listCompanyPaymentConnections($this->companyId));
     }
@@ -31,7 +34,7 @@ final readonly class CompanyPaymentConnectionsResource extends GeneratedResource
     /**
      * @param  InitiatePaymentConnectionRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function authorize(InitiatePaymentConnectionRequest|array $request): mixed
+    public function authorize(InitiatePaymentConnectionRequest|array $request): InitiatePaymentConnectionResponseData
     {
         $request = RequestModels::from($request, InitiatePaymentConnectionRequest::class);
 
@@ -46,7 +49,7 @@ final readonly class CompanyPaymentConnectionsResource extends GeneratedResource
     /**
      * @param  UpdateCompanyPaymentConnectionRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function update(string $connectionId, UpdateCompanyPaymentConnectionRequest|array $request): mixed
+    public function update(string $connectionId, UpdateCompanyPaymentConnectionRequest|array $request): CompanyPaymentConnection
     {
         $request = RequestModels::from($request, UpdateCompanyPaymentConnectionRequest::class);
 

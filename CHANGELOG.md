@@ -17,6 +17,7 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 ### Changed
 
+- Every resource method now declares its concrete return type instead of `mixed`, so applications get autocompletion and static analysis. Operations answered with `204 No Content` return `void`. A test checks each type against the generated client, so a declared type can never drift from what is returned.
 - When BeeL sends no error code, `apiCode` falls back to the Node.js SDK codes (`UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `CONFLICT`, `UNPROCESSABLE_ENTITY`, `RATE_LIMIT_EXCEEDED`, `UNKNOWN`) instead of `null`.
 - `BeelRateLimitError::$retryAfterSeconds` is `60` when BeeL gives no delay, as in the Node.js SDK, and is now typed `int`.
 - A POST, PUT or PATCH without a body is sent as `{}` with `Content-Type: application/json`, as the Node.js SDK does.
@@ -29,6 +30,7 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 ### Fixed
 
+- `$beel->catalogs->taxTypes()` threw a `TypeError` on every call: it declared the response envelope instead of the catalog it returns. It now returns `TaxTypesCatalog` and uses the canonical `/v1/tax-types` route instead of the deprecated `/v1/configuration/tax-types`, like the Node.js SDK.
 - `InvoiceBuilder` reported a missing customer as `\Lenorix\BeelSdk\Generated\Model\Customer ID is required.`.
 - Transports that return non-seekable bodies, such as Guzzle with `'stream' => true`, no longer break JSON responses.
 - The SDK no longer copies successful non-JSON response bodies into memory. `Beel::downloadPdf()` now holds the PDF once instead of twice.

@@ -6,10 +6,13 @@ namespace Lenorix\BeelSdk\Resource;
 
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateProductRequest;
+use Lenorix\BeelSdk\Generated\Model\Product;
+use Lenorix\BeelSdk\Generated\Model\ProductBulkCreateResult;
 use Lenorix\BeelSdk\Generated\Model\UpdateProductRequest;
 use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkDeleteBody;
 use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkDeleteResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkPostBody;
+use Lenorix\BeelSdk\Generated\Model\V1ProductsGetResponse200Data;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
@@ -23,8 +26,12 @@ final readonly class ProductsResource extends GeneratedResource
         parent::__construct($client, $responseContext);
     }
 
-    /** Search the deprecated product-search route (the company list route is preferred). */
-    public function search(string $query, ?int $limit = null): mixed
+    /**
+     * Search the deprecated product-search route (the company list route is preferred).
+     *
+     * @return list<Product>
+     */
+    public function search(string $query, ?int $limit = null): array
     {
         $parameters = ['q' => $query];
         if ($limit !== null) {
@@ -37,7 +44,7 @@ final readonly class ProductsResource extends GeneratedResource
     /**
      * @param  array<string, mixed>  $query
      */
-    public function list(array $query = []): mixed
+    public function list(array $query = []): V1ProductsGetResponse200Data
     {
         return $this->execute(fn () => $this->client->listProducts($query));
     }
@@ -45,14 +52,14 @@ final readonly class ProductsResource extends GeneratedResource
     /**
      * @param  CreateProductRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function create(CreateProductRequest|array $request): mixed
+    public function create(CreateProductRequest|array $request): Product
     {
         $request = RequestModels::from($request, CreateProductRequest::class);
 
         return $this->execute(fn () => $this->client->createProduct($request));
     }
 
-    public function get(string $productId): mixed
+    public function get(string $productId): Product
     {
         return $this->execute(fn () => $this->client->getProduct($productId));
     }
@@ -60,7 +67,7 @@ final readonly class ProductsResource extends GeneratedResource
     /**
      * @param  UpdateProductRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function update(string $productId, UpdateProductRequest|array $request): mixed
+    public function update(string $productId, UpdateProductRequest|array $request): Product
     {
         $request = RequestModels::from($request, UpdateProductRequest::class);
 
@@ -75,7 +82,7 @@ final readonly class ProductsResource extends GeneratedResource
     /**
      * @param  V1ProductsBulkPostBody|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function createBulk(V1ProductsBulkPostBody|array $request): mixed
+    public function createBulk(V1ProductsBulkPostBody|array $request): ProductBulkCreateResult
     {
         $request = RequestModels::from($request, V1ProductsBulkPostBody::class);
 

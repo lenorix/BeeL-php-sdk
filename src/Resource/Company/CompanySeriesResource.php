@@ -8,6 +8,8 @@ use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateSeriesRequest;
 use Lenorix\BeelSdk\Generated\Model\InvoiceSeries;
 use Lenorix\BeelSdk\Generated\Model\PatchSeriesRequest;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdSeriesDefaultsGetResponse200Data;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdSeriesDefaultsPutResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdSeriesGetResponse200Data;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
@@ -26,7 +28,7 @@ final readonly class CompanySeriesResource extends GeneratedResource
      *
      * @param  array<string, mixed>  $query  Series filters accepted by BeeL.
      */
-    public function list(array $query = []): mixed
+    public function list(array $query = []): V1CompaniesCompanyIdSeriesGetResponse200Data
     {
         return $this->execute(fn () => $this->client->listCompanySeries($this->companyId, $query));
     }
@@ -55,7 +57,7 @@ final readonly class CompanySeriesResource extends GeneratedResource
      * @param  CreateSeriesRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
      */
-    public function create(CreateSeriesRequest|array $request, array $headers = []): mixed
+    public function create(CreateSeriesRequest|array $request, array $headers = []): InvoiceSeries
     {
         $request = RequestModels::from($request, CreateSeriesRequest::class);
 
@@ -63,7 +65,7 @@ final readonly class CompanySeriesResource extends GeneratedResource
     }
 
     /** Retrieve one numbering series. */
-    public function get(string $seriesId): mixed
+    public function get(string $seriesId): InvoiceSeries
     {
         return $this->execute(fn () => $this->client->getCompanySeries($this->companyId, $seriesId));
     }
@@ -71,7 +73,7 @@ final readonly class CompanySeriesResource extends GeneratedResource
     /** Partially update a series; omitted fields remain unchan     *
      * @param  PatchSeriesRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function update(string $seriesId, PatchSeriesRequest|array $request): mixed
+    public function update(string $seriesId, PatchSeriesRequest|array $request): InvoiceSeries
     {
         $request = RequestModels::from($request, PatchSeriesRequest::class);
 
@@ -79,19 +81,19 @@ final readonly class CompanySeriesResource extends GeneratedResource
     }
 
     /** Delete a series that is no longer in use. */
-    public function delete(string $seriesId): mixed
+    public function delete(string $seriesId): void
     {
-        return $this->execute(fn () => $this->client->deleteCompanySeries($this->companyId, $seriesId));
+        $this->execute(fn () => $this->client->deleteCompanySeries($this->companyId, $seriesId));
     }
 
     /** Retrieve the default series assignments for this company's invoice types. */
-    public function getDefaults(): mixed
+    public function getDefaults(): V1CompaniesCompanyIdSeriesDefaultsGetResponse200Data
     {
         return $this->execute(fn () => $this->client->getCompanyDefaultSeries($this->companyId));
     }
 
     /** Alias for {@see getDefaults()}. */
-    public function getDefault(): mixed
+    public function getDefault(): V1CompaniesCompanyIdSeriesDefaultsGetResponse200Data
     {
         return $this->execute(fn () => $this->client->getCompanyDefaultSeries($this->companyId));
     }
@@ -101,7 +103,7 @@ final readonly class CompanySeriesResource extends GeneratedResource
      *
      * @param  array<string, mixed>  $headers  Optional request headers.
      */
-    public function setDefault(string $seriesId, array $headers = []): mixed
+    public function setDefault(string $seriesId, array $headers = []): InvoiceSeries
     {
         return $this->execute(fn () => $this->client->setCompanyDefaultSeries($this->companyId, $seriesId, $headers));
     }
@@ -111,7 +113,7 @@ final readonly class CompanySeriesResource extends GeneratedResource
      *
      * @param  array<string, mixed>  $headers  Optional request headers.
      */
-    public function ensureDefaults(array $headers = []): mixed
+    public function ensureDefaults(array $headers = []): V1CompaniesCompanyIdSeriesDefaultsPutResponse200Data
     {
         return $this->execute(fn () => $this->client->ensureCompanyDefaultSeries($this->companyId, $headers));
     }

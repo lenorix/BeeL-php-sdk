@@ -8,14 +8,17 @@ use Lenorix\BeelSdk\Exception\BeelNotReadyError;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateCorrectiveInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\CreateInvoiceRequest;
+use Lenorix\BeelSdk\Generated\Model\Invoice;
 use Lenorix\BeelSdk\Generated\Model\InvoicePdfResponseData;
 use Lenorix\BeelSdk\Generated\Model\SendEmailRequest;
 use Lenorix\BeelSdk\Generated\Model\UpdateInvoiceRequest;
+use Lenorix\BeelSdk\Generated\Model\V1InvoicesGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdDuplicatePostBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdMarkPaidPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdMarkSentPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdReschedulePatchBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSchedulePostBody;
+use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSendPostResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\VoidInvoiceRequest;
 use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\RequestModels;
@@ -34,7 +37,7 @@ final readonly class InvoicesResource extends GeneratedResource
     /**
      * @param  array<string, mixed>  $query
      */
-    public function list(array $query = []): mixed
+    public function list(array $query = []): V1InvoicesGetResponse200Data
     {
         return $this->execute(fn () => $this->client->listInvoices(QueryParameters::lists($query)));
     }
@@ -42,14 +45,14 @@ final readonly class InvoicesResource extends GeneratedResource
     /**
      * @param  CreateInvoiceRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function create(CreateInvoiceRequest|array $request): mixed
+    public function create(CreateInvoiceRequest|array $request): Invoice
     {
         $request = RequestModels::from($request, CreateInvoiceRequest::class);
 
         return $this->execute(fn () => $this->client->createInvoice($request));
     }
 
-    public function get(string $invoiceId): mixed
+    public function get(string $invoiceId): Invoice
     {
         return $this->execute(fn () => $this->client->getInvoice($invoiceId));
     }
@@ -57,7 +60,7 @@ final readonly class InvoicesResource extends GeneratedResource
     /**
      * @param  UpdateInvoiceRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function update(string $invoiceId, UpdateInvoiceRequest|array $request): mixed
+    public function update(string $invoiceId, UpdateInvoiceRequest|array $request): Invoice
     {
         $request = RequestModels::from($request, UpdateInvoiceRequest::class);
 
@@ -72,7 +75,7 @@ final readonly class InvoicesResource extends GeneratedResource
     /**
      * @param  V1InvoicesInvoiceIdDuplicatePostBody|array<string, mixed>|null  $request  The request as a model or as an array in API format.
      */
-    public function duplicate(string $invoiceId, V1InvoicesInvoiceIdDuplicatePostBody|array|null $request = null): mixed
+    public function duplicate(string $invoiceId, V1InvoicesInvoiceIdDuplicatePostBody|array|null $request = null): Invoice
     {
         $request = RequestModels::from($request, V1InvoicesInvoiceIdDuplicatePostBody::class);
 
@@ -83,7 +86,7 @@ final readonly class InvoicesResource extends GeneratedResource
      * @param  array<string, mixed>  $query
      * @param  array<string, mixed>  $headers
      */
-    public function issue(string $invoiceId, array $query = [], array $headers = []): mixed
+    public function issue(string $invoiceId, array $query = [], array $headers = []): Invoice
     {
         return $this->execute(fn () => $this->client->issueInvoice($invoiceId, $query, $headers));
     }
@@ -91,7 +94,7 @@ final readonly class InvoicesResource extends GeneratedResource
     /**
      * @param  V1InvoicesInvoiceIdMarkPaidPostBody|array<string, mixed>|null  $request  The request as a model or as an array in API format.
      */
-    public function markPaid(string $invoiceId, V1InvoicesInvoiceIdMarkPaidPostBody|array|null $request = null): mixed
+    public function markPaid(string $invoiceId, V1InvoicesInvoiceIdMarkPaidPostBody|array|null $request = null): Invoice
     {
         $request = RequestModels::from($request, V1InvoicesInvoiceIdMarkPaidPostBody::class);
 
@@ -104,14 +107,14 @@ final readonly class InvoicesResource extends GeneratedResource
      * @param  V1InvoicesInvoiceIdMarkSentPostBody|array<string, mixed>|null  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Request headers, including optional `Idempotency-Key`.
      */
-    public function markSent(string $invoiceId, V1InvoicesInvoiceIdMarkSentPostBody|array|null $request = null, array $headers = []): mixed
+    public function markSent(string $invoiceId, V1InvoicesInvoiceIdMarkSentPostBody|array|null $request = null, array $headers = []): Invoice
     {
         $request = RequestModels::from($request, V1InvoicesInvoiceIdMarkSentPostBody::class);
 
         return $this->execute(fn () => $this->client->markInvoiceSent($invoiceId, $request, $headers));
     }
 
-    public function revertToIssued(string $invoiceId): mixed
+    public function revertToIssued(string $invoiceId): Invoice
     {
         return $this->execute(fn () => $this->client->revertInvoiceToIssued($invoiceId));
     }
@@ -119,7 +122,7 @@ final readonly class InvoicesResource extends GeneratedResource
     /**
      * @param  VoidInvoiceRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function void(string $invoiceId, VoidInvoiceRequest|array $request): mixed
+    public function void(string $invoiceId, VoidInvoiceRequest|array $request): Invoice
     {
         $request = RequestModels::from($request, VoidInvoiceRequest::class);
 
@@ -129,7 +132,7 @@ final readonly class InvoicesResource extends GeneratedResource
     /**
      * @param  CreateCorrectiveInvoiceRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function createCorrective(string $invoiceId, CreateCorrectiveInvoiceRequest|array $request): mixed
+    public function createCorrective(string $invoiceId, CreateCorrectiveInvoiceRequest|array $request): Invoice
     {
         $request = RequestModels::from($request, CreateCorrectiveInvoiceRequest::class);
 
@@ -139,14 +142,14 @@ final readonly class InvoicesResource extends GeneratedResource
     /**
      * @param  V1InvoicesInvoiceIdSchedulePostBody|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function schedule(string $invoiceId, V1InvoicesInvoiceIdSchedulePostBody|array $request): mixed
+    public function schedule(string $invoiceId, V1InvoicesInvoiceIdSchedulePostBody|array $request): Invoice
     {
         $request = RequestModels::from($request, V1InvoicesInvoiceIdSchedulePostBody::class);
 
         return $this->execute(fn () => $this->client->scheduleInvoice($invoiceId, $request));
     }
 
-    public function unschedule(string $invoiceId): mixed
+    public function unschedule(string $invoiceId): Invoice
     {
         return $this->execute(fn () => $this->client->unscheduleInvoice($invoiceId));
     }
@@ -154,7 +157,7 @@ final readonly class InvoicesResource extends GeneratedResource
     /**
      * @param  V1InvoicesInvoiceIdReschedulePatchBody|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function reschedule(string $invoiceId, V1InvoicesInvoiceIdReschedulePatchBody|array $request): mixed
+    public function reschedule(string $invoiceId, V1InvoicesInvoiceIdReschedulePatchBody|array $request): Invoice
     {
         $request = RequestModels::from($request, V1InvoicesInvoiceIdReschedulePatchBody::class);
 
@@ -181,7 +184,7 @@ final readonly class InvoicesResource extends GeneratedResource
     /**
      * @param  SendEmailRequest|array<string, mixed>|null  $request  The request as a model or as an array in API format.
      */
-    public function sendEmail(string $invoiceId, SendEmailRequest|array|null $request = null): mixed
+    public function sendEmail(string $invoiceId, SendEmailRequest|array|null $request = null): V1InvoicesInvoiceIdSendPostResponse200Data
     {
         $request = RequestModels::from($request, SendEmailRequest::class);
 

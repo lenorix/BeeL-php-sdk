@@ -7,6 +7,8 @@ namespace Lenorix\BeelSdk\Resource\Company;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateCustomerRequest;
 use Lenorix\BeelSdk\Generated\Model\Customer;
+use Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteResult;
+use Lenorix\BeelSdk\Generated\Model\CustomerValidationUnifiedResult;
 use Lenorix\BeelSdk\Generated\Model\PatchCustomerRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersBulkPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersGetResponse200Data;
@@ -78,9 +80,9 @@ final readonly class CompanyCustomersResource extends GeneratedResource
     }
 
     /** Delete a customer from this company's catalog. */
-    public function delete(string $customerId): mixed
+    public function delete(string $customerId): void
     {
-        return $this->execute(fn () => $this->client->deleteCompanyCustomer($this->companyId, $customerId));
+        $this->execute(fn () => $this->client->deleteCompanyCustomer($this->companyId, $customerId));
     }
 
     /**
@@ -90,7 +92,7 @@ final readonly class CompanyCustomersResource extends GeneratedResource
      * @param  array<string, mixed>  $query  Query options.
      * @param  array<string, mixed>  $headers  Optional request headers.
      */
-    public function createBulk(V1CompaniesCompanyIdCustomersBulkPostBody|array $request, array $query = [], array $headers = []): mixed
+    public function createBulk(V1CompaniesCompanyIdCustomersBulkPostBody|array $request, array $query = [], array $headers = []): CustomerValidationUnifiedResult
     {
         $request = RequestModels::from($request, V1CompaniesCompanyIdCustomersBulkPostBody::class);
 
@@ -102,7 +104,7 @@ final readonly class CompanyCustomersResource extends GeneratedResource
      *
      * @param  array<string, mixed>  $query  Deletion filters and IDs accepted by BeeL.
      */
-    public function deleteBulk(array $query = []): mixed
+    public function deleteBulk(array $query = []): CustomerBulkDeleteResult
     {
         return $this->execute(fn () => $this->client->deleteCompanyCustomersBulk($this->companyId, $query));
     }
@@ -113,7 +115,7 @@ final readonly class CompanyCustomersResource extends GeneratedResource
      * @param  V1CompaniesCompanyIdCustomersImportsPostBody|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
      */
-    public function import(V1CompaniesCompanyIdCustomersImportsPostBody|array $request, array $headers = []): mixed
+    public function import(V1CompaniesCompanyIdCustomersImportsPostBody|array $request, array $headers = []): CustomerValidationUnifiedResult
     {
         $request = RequestModels::from($request, V1CompaniesCompanyIdCustomersImportsPostBody::class);
 
@@ -123,7 +125,7 @@ final readonly class CompanyCustomersResource extends GeneratedResource
     /** Validate an import payload and preview its results without importing custom     *
      * @param  V1CompaniesCompanyIdCustomersImportsPreviewPostBody|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function previewImport(V1CompaniesCompanyIdCustomersImportsPreviewPostBody|array $request): mixed
+    public function previewImport(V1CompaniesCompanyIdCustomersImportsPreviewPostBody|array $request): CustomerValidationUnifiedResult
     {
         $request = RequestModels::from($request, V1CompaniesCompanyIdCustomersImportsPreviewPostBody::class);
 

@@ -11,6 +11,8 @@ use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdWebhooksGetResponse200Dat
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdWebhooksWebhookIdDeliveriesGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\WebhookDeliveryLog;
 use Lenorix\BeelSdk\Generated\Model\WebhookSubscription;
+use Lenorix\BeelSdk\Generated\Model\WebhookSubscriptionWithSecret;
+use Lenorix\BeelSdk\Generated\Model\WebhookTestResult;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
@@ -25,7 +27,7 @@ final readonly class AccountWebhooksResource extends GeneratedResource
     /**
      * @param  array<string, mixed>  $query
      */
-    public function list(array $query = []): mixed
+    public function list(array $query = []): V1AccountsAccountIdWebhooksGetResponse200Data
     {
         return $this->execute(fn () => $this->client->listAccountWebhookSubscriptions($this->accountId, $query));
     }
@@ -51,14 +53,14 @@ final readonly class AccountWebhooksResource extends GeneratedResource
     /**
      * @param  CreateWebhookSubscriptionRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function create(CreateWebhookSubscriptionRequest|array $request): mixed
+    public function create(CreateWebhookSubscriptionRequest|array $request): WebhookSubscriptionWithSecret
     {
         $request = RequestModels::from($request, CreateWebhookSubscriptionRequest::class);
 
         return $this->execute(fn () => $this->client->createAccountWebhookSubscription($this->accountId, $request));
     }
 
-    public function get(string $webhookId): mixed
+    public function get(string $webhookId): WebhookSubscription
     {
         return $this->execute(fn () => $this->client->getAccountWebhookSubscription($this->accountId, $webhookId));
     }
@@ -66,7 +68,7 @@ final readonly class AccountWebhooksResource extends GeneratedResource
     /**
      * @param  UpdateWebhookSubscriptionRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function update(string $webhookId, UpdateWebhookSubscriptionRequest|array $request): mixed
+    public function update(string $webhookId, UpdateWebhookSubscriptionRequest|array $request): WebhookSubscription
     {
         $request = RequestModels::from($request, UpdateWebhookSubscriptionRequest::class);
 
@@ -78,12 +80,12 @@ final readonly class AccountWebhooksResource extends GeneratedResource
         $this->execute(fn () => $this->client->deleteAccountWebhookSubscription($this->accountId, $webhookId));
     }
 
-    public function test(string $webhookId): mixed
+    public function test(string $webhookId): WebhookTestResult
     {
         return $this->execute(fn () => $this->client->testAccountWebhookSubscription($this->accountId, $webhookId));
     }
 
-    public function rotateSecret(string $webhookId): mixed
+    public function rotateSecret(string $webhookId): WebhookSubscriptionWithSecret
     {
         return $this->execute(fn () => $this->client->rotateAccountWebhookSecret($this->accountId, $webhookId));
     }
@@ -91,7 +93,7 @@ final readonly class AccountWebhooksResource extends GeneratedResource
     /**
      * @param  array<string, mixed>  $query
      */
-    public function listDeliveries(string $webhookId, array $query = []): mixed
+    public function listDeliveries(string $webhookId, array $query = []): V1AccountsAccountIdWebhooksWebhookIdDeliveriesGetResponse200Data
     {
         return $this->execute(fn () => $this->client->listAccountWebhookDeliveries($this->accountId, $webhookId, $query));
     }
@@ -114,7 +116,7 @@ final readonly class AccountWebhooksResource extends GeneratedResource
         );
     }
 
-    public function retryDelivery(string $webhookId, string $deliveryId): mixed
+    public function retryDelivery(string $webhookId, string $deliveryId): WebhookDeliveryLog
     {
         return $this->execute(fn () => $this->client->retryAccountWebhookDelivery($this->accountId, $webhookId, $deliveryId));
     }

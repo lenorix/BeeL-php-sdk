@@ -8,6 +8,8 @@ use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateProductRequest;
 use Lenorix\BeelSdk\Generated\Model\PatchProductRequest;
 use Lenorix\BeelSdk\Generated\Model\Product;
+use Lenorix\BeelSdk\Generated\Model\ProductBulkCreateResult;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkDeleteResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsGetResponse200Data;
 use Lenorix\BeelSdk\Http\RequestModels;
@@ -80,9 +82,9 @@ final readonly class CompanyProductsResource extends GeneratedResource
     }
 
     /** Delete a product from this company's catalog. */
-    public function delete(string $productId): mixed
+    public function delete(string $productId): void
     {
-        return $this->execute(fn () => $this->client->deleteCompanyProduct($this->companyId, $productId));
+        $this->execute(fn () => $this->client->deleteCompanyProduct($this->companyId, $productId));
     }
 
     /**
@@ -91,7 +93,7 @@ final readonly class CompanyProductsResource extends GeneratedResource
      * @param  V1CompaniesCompanyIdProductsBulkPostBody|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
      */
-    public function createBulk(V1CompaniesCompanyIdProductsBulkPostBody|array $request, array $headers = []): mixed
+    public function createBulk(V1CompaniesCompanyIdProductsBulkPostBody|array $request, array $headers = []): ProductBulkCreateResult
     {
         $request = RequestModels::from($request, V1CompaniesCompanyIdProductsBulkPostBody::class);
 
@@ -103,7 +105,7 @@ final readonly class CompanyProductsResource extends GeneratedResource
      *
      * @param  array<string, mixed>  $query  Product IDs accepted by BeeL.
      */
-    public function deleteBulk(array $query = []): mixed
+    public function deleteBulk(array $query = []): V1CompaniesCompanyIdProductsBulkDeleteResponse200Data
     {
         return $this->execute(fn () => $this->client->deleteCompanyProductsBulk($this->companyId, $query));
     }

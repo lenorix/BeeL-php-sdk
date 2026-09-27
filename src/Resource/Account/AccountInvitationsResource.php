@@ -6,6 +6,7 @@ namespace Lenorix\BeelSdk\Resource\Account;
 
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateInvitationRequest;
+use Lenorix\BeelSdk\Generated\Model\Invitation;
 use Lenorix\BeelSdk\Generated\Model\InvitationSummary;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdInvitationsGetResponse200Data;
 use Lenorix\BeelSdk\Http\RequestModels;
@@ -22,7 +23,7 @@ final readonly class AccountInvitationsResource extends GeneratedResource
     /**
      * @param  array<string, mixed>  $query  Pagination options such as `page` and `limit`.
      */
-    public function list(array $query = []): mixed
+    public function list(array $query = []): V1AccountsAccountIdInvitationsGetResponse200Data
     {
         return $this->execute(fn () => $this->client->listAccountInvitations($this->accountId, $query));
     }
@@ -48,14 +49,14 @@ final readonly class AccountInvitationsResource extends GeneratedResource
     /**
      * @param  CreateInvitationRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function create(CreateInvitationRequest|array $request): mixed
+    public function create(CreateInvitationRequest|array $request): Invitation
     {
         $request = RequestModels::from($request, CreateInvitationRequest::class);
 
         return $this->execute(fn () => $this->client->createAccountInvitation($this->accountId, $request));
     }
 
-    public function get(string $invitationId): mixed
+    public function get(string $invitationId): InvitationSummary
     {
         return $this->execute(fn () => $this->client->getAccountInvitation($this->accountId, $invitationId));
     }

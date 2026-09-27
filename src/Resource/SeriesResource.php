@@ -6,7 +6,9 @@ namespace Lenorix\BeelSdk\Resource;
 
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateSeriesRequest;
+use Lenorix\BeelSdk\Generated\Model\InvoiceSeries;
 use Lenorix\BeelSdk\Generated\Model\UpdateSeriesRequest;
+use Lenorix\BeelSdk\Generated\Model\V1ConfigurationSeriesGetResponse200Data;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
@@ -20,7 +22,7 @@ final readonly class SeriesResource extends GeneratedResource
         parent::__construct($client, $responseContext);
     }
 
-    public function list(?bool $active = null): mixed
+    public function list(?bool $active = null): V1ConfigurationSeriesGetResponse200Data
     {
         $query = $active === null ? [] : ['active' => $active];
 
@@ -30,7 +32,7 @@ final readonly class SeriesResource extends GeneratedResource
     /**
      * @param  CreateSeriesRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function create(CreateSeriesRequest|array $request): mixed
+    public function create(CreateSeriesRequest|array $request): InvoiceSeries
     {
         $request = RequestModels::from($request, CreateSeriesRequest::class);
 
@@ -40,19 +42,19 @@ final readonly class SeriesResource extends GeneratedResource
     /**
      * @param  UpdateSeriesRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function update(string $seriesId, UpdateSeriesRequest|array $request): mixed
+    public function update(string $seriesId, UpdateSeriesRequest|array $request): InvoiceSeries
     {
         $request = RequestModels::from($request, UpdateSeriesRequest::class);
 
         return $this->execute(fn () => $this->client->updateSeries($seriesId, $request));
     }
 
-    public function delete(string $seriesId): mixed
+    public function delete(string $seriesId): void
     {
-        return $this->execute(fn () => $this->client->deleteSeries($seriesId));
+        $this->execute(fn () => $this->client->deleteSeries($seriesId));
     }
 
-    public function setDefault(string $seriesId): mixed
+    public function setDefault(string $seriesId): InvoiceSeries
     {
         return $this->execute(fn () => $this->client->setDefaultSeries($seriesId));
     }

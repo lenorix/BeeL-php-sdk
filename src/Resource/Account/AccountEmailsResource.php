@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Lenorix\BeelSdk\Resource\Account;
 
 use Lenorix\BeelSdk\Generated\Client;
+use Lenorix\BeelSdk\Generated\Model\EmailDeliveryDetail;
+use Lenorix\BeelSdk\Generated\Model\EmailDeliveryIndicatorListResponseData;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryListResponseData;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryResponse;
 use Lenorix\BeelSdk\Http\QueryParameters;
@@ -21,7 +23,7 @@ final readonly class AccountEmailsResource extends GeneratedResource
     /**
      * @param  array<string, mixed>  $query
      */
-    public function list(array $query = []): mixed
+    public function list(array $query = []): EmailDeliveryListResponseData
     {
         return $this->execute(fn () => $this->client->listAccountEmailDeliveries($this->accountId, $query));
     }
@@ -47,12 +49,12 @@ final readonly class AccountEmailsResource extends GeneratedResource
     /**
      * @param  array<string, mixed>  $query
      */
-    public function indicators(array $query = []): mixed
+    public function indicators(array $query = []): EmailDeliveryIndicatorListResponseData
     {
         return $this->execute(fn () => $this->client->getAccountEmailDeliveryIndicators($this->accountId, QueryParameters::lists($query)));
     }
 
-    public function get(string $emailId): mixed
+    public function get(string $emailId): EmailDeliveryDetail
     {
         return $this->execute(fn () => $this->client->getAccountEmailDelivery($this->accountId, $emailId));
     }

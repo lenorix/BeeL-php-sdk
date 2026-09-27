@@ -78,7 +78,7 @@ final readonly class CompanyScope extends GeneratedResource
      *
      * @return CompanyData Company data, unwrapped from BeeL's response envelope.
      */
-    public function get(): mixed
+    public function get(): CompanyData
     {
         return $this->execute(fn () => $this->client->getCompanyById($this->companyId));
     }
@@ -89,7 +89,7 @@ final readonly class CompanyScope extends GeneratedResource
      * @param  UpdateCompanyRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @return CompanyData Updated company data.
      */
-    public function update(UpdateCompanyRequest|array $request): mixed
+    public function update(UpdateCompanyRequest|array $request): CompanyData
     {
         $request = RequestModels::from($request, UpdateCompanyRequest::class);
 
@@ -97,9 +97,9 @@ final readonly class CompanyScope extends GeneratedResource
     }
 
     /** Delete this company profile. */
-    public function delete(): mixed
+    public function delete(): void
     {
-        return $this->execute(fn () => $this->client->deleteCompanyById($this->companyId));
+        $this->execute(fn () => $this->client->deleteCompanyById($this->companyId));
     }
 
     /**
@@ -108,7 +108,7 @@ final readonly class CompanyScope extends GeneratedResource
      * @param  array<string, mixed>  $query
      * @return FiscalSummaryResponse Totals and invoice counts for the requested period.
      */
-    public function fiscalSummary(array $query = []): mixed
+    public function fiscalSummary(array $query = []): FiscalSummaryResponse
     {
         return $this->execute(fn () => $this->client->getCompanyFiscalSummary($this->companyId, $query));
     }
@@ -120,7 +120,7 @@ final readonly class CompanyScope extends GeneratedResource
      *
      * @see https://docs.beel.es/companies/getCompanyIssuingReadiness
      */
-    public function issuingReadiness(): mixed
+    public function issuingReadiness(): IssuingReadinessData
     {
         return $this->execute(fn () => $this->client->getCompanyIssuingReadiness($this->companyId));
     }

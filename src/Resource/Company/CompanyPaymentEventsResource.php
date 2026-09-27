@@ -7,6 +7,7 @@ namespace Lenorix\BeelSdk\Resource\Company;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\ListManagedPaymentEventsResponseData;
 use Lenorix\BeelSdk\Generated\Model\ManagedPaymentEvent;
+use Lenorix\BeelSdk\Generated\Model\ManagedPaymentEventDraftResponseData;
 use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
@@ -24,7 +25,7 @@ final readonly class CompanyPaymentEventsResource extends GeneratedResource
      *
      * @param  array<string, mixed>  $query  Event filters and pagination options accepted by BeeL.
      */
-    public function list(array $query = []): mixed
+    public function list(array $query = []): ListManagedPaymentEventsResponseData
     {
         return $this->execute(fn () => $this->client->listCompanyPaymentEvents($this->companyId, $this->connectionId, QueryParameters::lists($query)));
     }
@@ -48,37 +49,37 @@ final readonly class CompanyPaymentEventsResource extends GeneratedResource
     }
 
     /** Retrieve one payment event and its processing details. */
-    public function get(string $eventId): mixed
+    public function get(string $eventId): ManagedPaymentEvent
     {
         return $this->execute(fn () => $this->client->getCompanyPaymentEvent($this->companyId, $this->connectionId, $eventId));
     }
 
     /** Retry processing this payment event. */
-    public function retry(string $eventId): mixed
+    public function retry(string $eventId): ManagedPaymentEvent
     {
         return $this->execute(fn () => $this->client->retryCompanyPaymentEvent($this->companyId, $this->connectionId, $eventId));
     }
 
     /** Create a draft invoice from the payment event for review before issuing. */
-    public function draft(string $eventId): mixed
+    public function draft(string $eventId): ManagedPaymentEventDraftResponseData
     {
         return $this->execute(fn () => $this->client->generateCompanyPaymentEventDraft($this->companyId, $this->connectionId, $eventId));
     }
 
     /** Mark this payment event as resolved after handling it. */
-    public function resolve(string $eventId): mixed
+    public function resolve(string $eventId): ManagedPaymentEvent
     {
         return $this->execute(fn () => $this->client->resolveCompanyPaymentEvent($this->companyId, $this->connectionId, $eventId));
     }
 
     /** Discard an event that should not create an invoice. */
-    public function discard(string $eventId): mixed
+    public function discard(string $eventId): ManagedPaymentEvent
     {
         return $this->execute(fn () => $this->client->discardCompanyPaymentEvent($this->companyId, $this->connectionId, $eventId));
     }
 
     /** Restore a discarded event to the actionable event list. */
-    public function restore(string $eventId): mixed
+    public function restore(string $eventId): ManagedPaymentEvent
     {
         return $this->execute(fn () => $this->client->restoreCompanyPaymentEvent($this->companyId, $this->connectionId, $eventId));
     }

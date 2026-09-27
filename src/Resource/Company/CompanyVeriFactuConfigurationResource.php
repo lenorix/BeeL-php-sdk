@@ -6,6 +6,7 @@ namespace Lenorix\BeelSdk\Resource\Company;
 
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\UpdateVeriFactuConfigurationRequest;
+use Lenorix\BeelSdk\Generated\Model\VeriFactuConfiguration;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
@@ -19,7 +20,7 @@ final readonly class CompanyVeriFactuConfigurationResource extends GeneratedReso
     }
 
     /** Retrieve the VeriFactu setting and server-resolved fiscal regime. */
-    public function get(): mixed
+    public function get(): VeriFactuConfiguration
     {
         return $this->execute(fn () => $this->client->getCompanyVeriFactuConfiguration($this->companyId));
     }
@@ -34,7 +35,7 @@ final readonly class CompanyVeriFactuConfigurationResource extends GeneratedReso
      *
      * @see https://docs.beel.es/verifactu/getCompanyVeriFactuConfiguration
      */
-    public function update(UpdateVeriFactuConfigurationRequest|array $request): mixed
+    public function update(UpdateVeriFactuConfigurationRequest|array $request): VeriFactuConfiguration
     {
         $request = RequestModels::from($request, UpdateVeriFactuConfigurationRequest::class);
 

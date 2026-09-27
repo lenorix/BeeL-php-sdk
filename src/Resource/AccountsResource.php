@@ -7,6 +7,7 @@ namespace Lenorix\BeelSdk\Resource;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\ManagedAccountSummary;
 use Lenorix\BeelSdk\Generated\Model\ProvisionAccountRequest;
+use Lenorix\BeelSdk\Generated\Model\ProvisionAccountResult;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsGetResponse200Data;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
@@ -26,7 +27,7 @@ final readonly class AccountsResource extends GeneratedResource
     /**
      * @param  array<string, mixed>  $query
      */
-    public function list(array $query = []): mixed
+    public function list(array $query = []): V1AccountsGetResponse200Data
     {
         return $this->execute(fn () => $this->client->listAccounts($query));
     }
@@ -53,14 +54,14 @@ final readonly class AccountsResource extends GeneratedResource
     /**
      * @param  ProvisionAccountRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function provision(ProvisionAccountRequest|array $request): mixed
+    public function provision(ProvisionAccountRequest|array $request): ProvisionAccountResult
     {
         $request = RequestModels::from($request, ProvisionAccountRequest::class);
 
         return $this->execute(fn () => $this->client->provisionAccount($request));
     }
 
-    public function get(string $accountId): mixed
+    public function get(string $accountId): ManagedAccountSummary
     {
         return $this->execute(fn () => $this->client->getAccount($accountId));
     }

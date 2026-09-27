@@ -216,7 +216,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      *
      * @see https://docs.beel.es/invoices/createCompanyInvoiceDerivation
      */
-    public function derive(CreateInvoiceDerivationRequest|array $request, array $headers = []): mixed
+    public function derive(CreateInvoiceDerivationRequest|array $request, array $headers = []): Invoice
     {
         $request = RequestModels::from($request, CreateInvoiceDerivationRequest::class);
 
@@ -230,7 +230,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      * @param  array<string, mixed>  $headers  Optional request headers.
      * @return BulkOperationResult Per-invoice results and summary counts.
      */
-    public function createBatch(CreateInvoiceBatchRequest|array $request, array $headers = []): mixed
+    public function createBatch(CreateInvoiceBatchRequest|array $request, array $headers = []): BulkOperationResult
     {
         $request = RequestModels::from($request, CreateInvoiceBatchRequest::class);
 
@@ -270,7 +270,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      *
      * @see https://docs.beel.es/invoices/createCompanyInvoiceDelivery
      */
-    public function deliver(CreateInvoiceDeliveryRequest|array $request, array $headers = []): mixed
+    public function deliver(CreateInvoiceDeliveryRequest|array $request, array $headers = []): V1CompaniesCompanyIdInvoicesDeliveriesPostResponse200Data
     {
         $request = RequestModels::from($request, CreateInvoiceDeliveryRequest::class);
 
@@ -312,7 +312,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      *
      * @return InvoicePreviewResponseData Preview metadata and PDF content or URL.
      */
-    public function preview(string $invoiceId): mixed
+    public function preview(string $invoiceId): InvoicePreviewResponseData
     {
         return $this->execute(fn () => $this->client->getCompanyInvoicePreview($this->companyId, $invoiceId));
     }
@@ -331,7 +331,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      *
      * @see https://docs.beel.es/invoices/sendCompanyInvoice
      */
-    public function send(string $invoiceId, SendEmailRequest|array|null $request = null, array $headers = []): mixed
+    public function send(string $invoiceId, SendEmailRequest|array|null $request = null, array $headers = []): V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data
     {
         $request = RequestModels::from($request, SendEmailRequest::class);
 
@@ -345,7 +345,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      * @param  array<string, mixed>  $headers  Optional request headers.
      * @return Invoice The newly created fiscal invoice.
      */
-    public function convertToInvoice(string $invoiceId, ConvertProformaToInvoiceRequest|array|null $request = null, array $headers = []): mixed
+    public function convertToInvoice(string $invoiceId, ConvertProformaToInvoiceRequest|array|null $request = null, array $headers = []): Invoice
     {
         $request = RequestModels::from($request, ConvertProformaToInvoiceRequest::class);
 
@@ -357,7 +357,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      *
      * @return InvoiceSchedule The schedule and processing details.
      */
-    public function getSchedule(string $invoiceId): mixed
+    public function getSchedule(string $invoiceId): InvoiceSchedule
     {
         return $this->execute(fn () => $this->client->getCompanyInvoiceSchedule($this->companyId, $invoiceId));
     }
@@ -368,7 +368,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      * @param  SetInvoiceScheduleRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      * @return Invoice The updated invoice.
      */
-    public function setSchedule(string $invoiceId, SetInvoiceScheduleRequest|array $request): mixed
+    public function setSchedule(string $invoiceId, SetInvoiceScheduleRequest|array $request): Invoice
     {
         $request = RequestModels::from($request, SetInvoiceScheduleRequest::class);
 
@@ -376,8 +376,8 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
     }
 
     /** Remove an invoice's scheduled issue date. */
-    public function clearSchedule(string $invoiceId): mixed
+    public function clearSchedule(string $invoiceId): void
     {
-        return $this->execute(fn () => $this->client->deleteCompanyInvoiceSchedule($this->companyId, $invoiceId));
+        $this->execute(fn () => $this->client->deleteCompanyInvoiceSchedule($this->companyId, $invoiceId));
     }
 }

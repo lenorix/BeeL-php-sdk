@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Lenorix\BeelSdk\Resource\Account;
 
 use Lenorix\BeelSdk\Generated\Client;
+use Lenorix\BeelSdk\Generated\Model\CompanyCreatedData;
 use Lenorix\BeelSdk\Generated\Model\CompanyData;
 use Lenorix\BeelSdk\Generated\Model\CreateCompanyRequest;
 use Lenorix\BeelSdk\Generated\Model\ListCompanies200ResponseData;
+use Lenorix\BeelSdk\Generated\Model\ListCompanyStats200ResponseData;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
@@ -22,7 +24,7 @@ final readonly class AccountCompaniesResource extends GeneratedResource
     /**
      * @param  array<string, mixed>  $query
      */
-    public function list(array $query = []): mixed
+    public function list(array $query = []): ListCompanies200ResponseData
     {
         return $this->execute(fn () => $this->client->listCompanies($this->accountId, $query));
     }
@@ -48,7 +50,7 @@ final readonly class AccountCompaniesResource extends GeneratedResource
     /**
      * @param  CreateCompanyRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
-    public function create(CreateCompanyRequest|array $request): mixed
+    public function create(CreateCompanyRequest|array $request): CompanyCreatedData
     {
         $request = RequestModels::from($request, CreateCompanyRequest::class);
 
@@ -58,7 +60,7 @@ final readonly class AccountCompaniesResource extends GeneratedResource
     /**
      * @param  array<string, mixed>  $query
      */
-    public function stats(array $query = []): mixed
+    public function stats(array $query = []): ListCompanyStats200ResponseData
     {
         return $this->execute(fn () => $this->client->listCompanyStats($this->accountId, $query));
     }

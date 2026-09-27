@@ -1075,3 +1075,52 @@ it('lists every boolean and list query parameter of the generated endpoints', fu
         ->and(QueryParameters::LISTS)->toBe($lists)
         ->and($otherTypes)->toBe([]);
 });
+
+// Return types
+
+it('declares every resource return type as the generated client actually returns it', function () {
+    $root = __DIR__.'/../';
+    $mismatches = [];
+    foreach (array_merge(glob($root.'src/Resource/*.php') ?: [], glob($root.'src/Resource/*/*.php') ?: []) as $file) {
+        preg_match_all('/public function (\w+)\(([^)]*)\): ([^\n{]+)\n    \{\n(.*?)\n    \}\n/s', (string) file_get_contents($file), $methods, PREG_SET_ORDER);
+        foreach ($methods as [, $name, , $declared, $body]) {
+            if (preg_match('/\$this->(execute(?:Ready)?)\(\s*fn \(\) => \$this->client->(\w+)\(/', $body, $call) !== 1) {
+                continue;
+            }
+            preg_match('/protected function transformResponseBody.*?\n    \}\n/s', (string) file_get_contents($root.'src/Generated/Endpoint/'.ucfirst($call[2]).'.php'), $transform);
+            preg_match_all('/\$status === (2\d\d)[^\n]*\n\s*return \$serializer->deserialize\(\$body, \'([^\']+)\'/', $transform[0], $bodies, PREG_SET_ORDER);
+            preg_match_all('/\$status === (2\d\d)/', $transform[0], $statuses);
+
+            $types = [];
+            $nullable = false;
+            foreach ($bodies as [, , $class]) {
+                if (str_ends_with($class, '[]')) {
+                    $types[] = 'array';
+
+                    continue;
+                }
+                $type = method_exists($class, 'getData') ? (string) (new ReflectionMethod($class, 'getData'))->getReturnType() : $class;
+                $nullable = $nullable || str_starts_with($type, '?');
+                $types[] = ltrim($type, '?\\');
+            }
+            $types = array_values(array_unique($types));
+            // executeReady() turns a bodiless 202 into BeelNotReadyError, so only execute() can return null for it.
+            $bodiless = array_diff(array_unique($statuses[1]), array_column($bodies, 1));
+            $nullable = $nullable || ($call[1] === 'execute' && $bodiless !== []);
+
+            $expected = $types === [] ? 'void' : (count($types) === 1 ? $types[0] : implode('|', $types));
+            $actual = (string) (new ReflectionMethod(
+                'Lenorix\\BeelSdk\\Resource\\'.str_replace(['/', '.php'], ['\\', ''], substr($file, strlen($root.'src/Resource/'))),
+                $name,
+            ))->getReturnType();
+            $actualType = ltrim($actual, '?\\');
+            $isNullable = str_starts_with($actual, '?');
+            // Declaring void deliberately discards the response (as the Node.js SDK does for customers->deactivate()); it can never fail.
+            if ($actual !== 'void' && ($actualType !== $expected || ($nullable && ! $isNullable && $expected !== 'void'))) {
+                $mismatches[] = basename($file, '.php')."::{$name}(): {$actual}, expected ".($nullable ? '?' : '').$expected;
+            }
+        }
+    }
+
+    expect($mismatches)->toBe([]);
+});
