@@ -37,6 +37,7 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 - When BeeL sends no error code, `apiCode` falls back to the Node.js SDK codes (`UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `CONFLICT`, `UNPROCESSABLE_ENTITY`, `RATE_LIMIT_EXCEEDED`, `UNKNOWN`) instead of `null`.
 - `BeelRateLimitError::$retryAfterSeconds` is `60` when BeeL gives no delay, as in the Node.js SDK, and is now typed `int`.
 - A POST, PUT or PATCH without a body is sent as `{}` with `Content-Type: application/json`, as the Node.js SDK does.
+- When BeeL sends no error message, `BeelApiError` uses `API error N`, like the Node.js SDK, instead of `BeeL API request failed with HTTP N.` or the generated client's exception message.
 - Builder error messages match the Node.js SDK, and `build()` returns a fresh model on every call, so later builder calls never change a model already returned.
 - Boolean query parameters are sent to BeeL as `true`/`false`, like in the Node.js SDK, instead of the generated client's `1`/`0`. Third-party URLs, such as signed download links, are never rewritten.
 - A rate limit reads `retry_after` from the error body as well, like the Node.js SDK.

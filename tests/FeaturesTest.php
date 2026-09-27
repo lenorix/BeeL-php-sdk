@@ -690,7 +690,7 @@ it('limits retries per call with maxRetries', function () {
     $transport = new RecordingPsrClient([$unavailable(), $unavailable(), jsonResponse(['success' => true, 'data' => ['id' => 'inv-1']])]);
     $invoices = testClient($transport, maxRetries: 2)->company('c')->invoices;
 
-    expect(fn () => $invoices->withOptions(new RequestOptions(maxRetries: 0))->get('inv-1'))->toThrow(BeelApiError::class, 'HTTP 503')
+    expect(fn () => $invoices->withOptions(new RequestOptions(maxRetries: 0))->get('inv-1'))->toThrow(BeelApiError::class, 'API error 503')
         ->and($transport->requests)->toHaveCount(1)
         ->and(fn () => new RequestOptions(maxRetries: -1))->toThrow(InvalidArgumentException::class);
 });
@@ -705,7 +705,7 @@ it('maps an empty error response without Content-Type to BeelApiError', function
 
     try {
         expect(fn () => testClient(new RecordingPsrClient([new Response(503)]))->company('c')->invoices->get('inv-1'))
-            ->toThrow(BeelApiError::class, 'HTTP 503');
+            ->toThrow(BeelApiError::class, 'API error 503');
     } finally {
         restore_error_handler();
     }
@@ -1272,3 +1272,16 @@ it('builds typed events without a verifier and flags provisioner-only events', f
         ->and(array_values(array_map(static fn (WebhookEventType $type): string => $type->value, array_filter(WebhookEventType::cases(), static fn (WebhookEventType $type): bool => $type->isProvisionerOnly()))))
         ->toBe(['account.claimed']);
 });
+
+it('uses the Node.js SDK fallback message when BeeL sends none', function (Response $response, string $message) {
+    try {
+        testClient(new RecordingPsrClient([$response]))->company('c')->invoices->get('inv-1');
+        test()->fail('Expected an API error.');
+    } catch (BeelApiError $exception) {
+        expect($exception->getMessage())->toBe($message);
+    }
+})->with([
+    'declared JSON error without message' => [new Response(404, ['Content-Type' => 'application/json'], '{"success":false}'), 'API error 404'],
+    'undeclared HTML error' => [new Response(502, ['Content-Type' => 'text/html'], '<html>Bad gateway</html>'), 'API error 502'],
+    'JSON error with message' => [new Response(409, ['Content-Type' => 'application/json'], '{"success":false,"error":{"code":"X","message":"Already issued"}}'), 'Already issued'],
+]);

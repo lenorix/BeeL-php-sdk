@@ -67,7 +67,8 @@ class BeelApiError extends \RuntimeException
         $payload = method_exists($exception, 'getErrorResponse') ? $exception->getErrorResponse() : null;
         $error = $payload instanceof ErrorResponse && $payload->isInitialized('error') ? $payload->getError() : null;
         $code = $error instanceof ErrorDetail && $error->isInitialized('code') ? $error->getCode() : null;
-        $message = $error instanceof ErrorDetail && $error->isInitialized('message') ? $error->getMessage() : $exception->getMessage();
+        // Same fallback as the official Node.js SDK when BeeL sends no message.
+        $message = $error instanceof ErrorDetail && $error->isInitialized('message') ? $error->getMessage() : 'API error '.$status;
         $details = $error instanceof ErrorDetail && $error->isInitialized('details') ? $error->getDetails() : null;
         $requestId = $response->getHeaderLine('X-Request-Id') ?: null;
         if ($requestId === null && $payload instanceof ErrorResponse && $payload->isInitialized('meta')) {
@@ -122,7 +123,7 @@ class BeelApiError extends \RuntimeException
 
         return self::forStatus(
             $status,
-            $message ?? ($response === null ? 'BeeL API returned an error response.' : 'BeeL API request failed with HTTP '.$status.'.'),
+            $message ?? ($response === null ? 'API error' : 'API error '.$status),
             $code,
             $details,
             $requestId,
