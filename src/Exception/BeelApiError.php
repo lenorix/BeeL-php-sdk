@@ -6,6 +6,7 @@ namespace Lenorix\BeelSdk\Exception;
 
 use Lenorix\BeelSdk\Generated\Model\ErrorDetail;
 use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Http\RetryAfter;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
@@ -75,10 +76,7 @@ class BeelApiError extends \RuntimeException
             $meta = $payload->getMeta();
             $requestId = $meta->isInitialized('requestId') ? $meta->getRequestId() : null;
         }
-        $retryAfter = ctype_digit($response->getHeaderLine('Retry-After')) ? (int) $response->getHeaderLine('Retry-After') : null;
-        if ($retryAfter === null && $error instanceof \ArrayAccess && is_numeric($error['retry_after'] ?? null)) {
-            $retryAfter = (int) $error['retry_after'];
-        }
+        $retryAfter = RetryAfter::seconds($response);
         $retryAfter ??= self::retryAfterFromDetails($details);
 
         return self::forStatus($status, $message, $code, $details, $requestId, $retryAfter, $exception);
@@ -111,15 +109,8 @@ class BeelApiError extends \RuntimeException
             }
         }
 
-        $retryAfterHeader = $response?->getHeaderLine('Retry-After') ?? '';
-        $retryAfter = ctype_digit($retryAfterHeader) ? (int) $retryAfterHeader : null;
+        $retryAfter = $response === null ? null : RetryAfter::seconds($response, $body);
         $retryAfter ??= self::retryAfterFromDetails($details);
-        // The official Node.js SDK reads `error.retry_after` from the body.
-        if ($retryAfter === null && $body !== null) {
-            $data = json_decode($body, true);
-            $bodyRetryAfter = is_array($data) ? ($data['error']['retry_after'] ?? $data['retry_after'] ?? null) : null;
-            $retryAfter = is_numeric($bodyRetryAfter) ? (int) $bodyRetryAfter : null;
-        }
 
         return self::forStatus(
             $status,

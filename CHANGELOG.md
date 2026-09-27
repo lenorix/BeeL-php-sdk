@@ -2,6 +2,20 @@
 
 All notable changes to `BeeL-php-sdk` will be documented in this file.
 
+## Unreleased
+
+### Changed
+
+- When BeeL asks for a delay longer than `maxRetryDelayMs`, the SDK no longer waits a shorter time and likely gets another `429`: it stops and throws, with the requested delay in `retryAfterSeconds`. A delay BeeL asks for within `maxRetryDelayMs` is waited exactly, instead of being shortened; `maxRetryDelayMs` otherwise caps the exponential backoff.
+
+### Added
+
+- Connection errors (timeouts, refused or dropped connections, DNS failures) are retried with the same rules as a `5xx`: only for idempotent methods or requests with an `Idempotency-Key`, never when `retryServerErrors` is `false`, with backoff. After the last attempt the original exception is rethrown.
+
+### Fixed
+
+- A `Retry-After` sent as an HTTP date is now read by the exceptions too; `retryAfterSeconds` used to fall back to `60` for it.
+
 ## v0.5.0 - 2026-09-27
 
 ### Upgrading from 0.4

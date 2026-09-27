@@ -88,7 +88,11 @@ $beel = new Beel(
 
 Use a test key (`beel_sk_test_...`) while developing and a live key (`beel_sk_live_...`) in production. The key selects the environment; the base URL stays the same.
 
-`maxRetries` is the maximum number of retries after the first attempt. The SDK retries `429` and `5xx` responses with exponential backoff, honors `Retry-After` when provided up to `maxRetryDelayMs`, and uses the same idempotency key for every retry of a POST. It does not retry other client errors. A POST or PATCH without an `Idempotency-Key` is not retried after a `5xx`, because BeeL may already have applied it. Only POST requests get an automatic key, so PATCH requests retry on `5xx` only when you pass an `Idempotency-Key`, for example with `withOptions()`. A `429` is always retried: BeeL rejects it without applying the request.
+`maxRetries` is the maximum number of retries after the first attempt. The SDK retries `429` and `5xx` responses, and connection errors (timeouts, refused or dropped connections, DNS failures), with the same key on every attempt of a POST:
+
+- **Waiting:** when BeeL asks for a delay (`Retry-After` in seconds or as an HTTP date, or `retry_after` in the error body), the SDK waits exactly that long. If BeeL asks for longer than `maxRetryDelayMs`, the SDK does not wait less: it stops and throws, and `BeelRateLimitError::$retryAfterSeconds` (or `$retryAfter` on other errors) tells you how long to wait. Without a delay from BeeL it uses exponential backoff up to `maxRetryDelayMs`.
+- **What is repeated:** a `429` is always retried, because BeeL rejects it without applying the request. A `5xx` or a connection error may hide a request that was applied, so it is retried only for GET, PUT and DELETE, and for POST or PATCH carrying an `Idempotency-Key` (POST requests get one automatically unless `autoIdempotencyKey` is `false`). File downloads (`createPdfArchive()`, `export()`) do not retry them by default. Other client errors are not retried.
+- **Waits block the process** in PHP. To handle waits yourself, for example with a queued job's `release()`, set `maxRetries: 0` on the client or per call with `RequestOptions(maxRetries: 0)` and use `retryAfterSeconds` from the exception. The same setting avoids real waits in your application's tests.
 
 The client is instance-based. Each `Beel` instance has its own API key and transport; there is no global configuration or shared authentication state.
 

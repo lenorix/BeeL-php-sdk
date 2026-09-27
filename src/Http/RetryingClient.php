@@ -6,6 +6,7 @@ namespace Lenorix\BeelSdk\Http;
 
 use GuzzleHttp\Psr7\Utils;
 use Psr\Http\Client\ClientInterface;
+use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
@@ -22,6 +23,9 @@ final readonly class RetryingClient implements ClientInterface
 
     private ResponseContext $responseContext;
 
+    /** @var \Closure(int): void Waits the given milliseconds. */
+    private \Closure $sleep;
+
     public function __construct(
         private ClientInterface $client,
         private int $maxRetries = self::DEFAULT_MAX_RETRIES,
@@ -29,8 +33,12 @@ final readonly class RetryingClient implements ClientInterface
         private int $maxRetryDelayMs = self::DEFAULT_MAX_RETRY_DELAY_MS,
         private bool $autoIdempotencyKey = true,
         ?ResponseContext $responseContext = null,
+        ?\Closure $sleep = null,
     ) {
         $this->responseContext = $responseContext ?? new ResponseContext;
+        $this->sleep = $sleep ?? static function (int $milliseconds): void {
+            usleep($milliseconds * 1_000);
+        };
 
         if ($maxRetries < 0 || $retryDelayMs < 0 || $maxRetryDelayMs < 0) {
             throw new \InvalidArgumentException('Retry limits and delays must not be negative.');
@@ -67,7 +75,17 @@ final readonly class RetryingClient implements ClientInterface
                 $body->seek($position);
             }
 
-            $response = $this->client->sendRequest($request);
+            try {
+                $response = $this->client->sendRequest($request);
+            } catch (NetworkExceptionInterface $exception) {
+                // A timeout or a dropped connection may hide an applied request: retry only what is safe to repeat.
+                if ($attempt >= $maxRetries || ! $canReplayBody || ! $canRetry) {
+                    throw $exception;
+                }
+                ($this->sleep)($this->backoff($attempt));
+
+                continue;
+            }
             // Jane's generated error handling assumes a Content-Type; proxies often omit it on errors.
             if ($response->getStatusCode() >= 400 && ! $response->hasHeader('Content-Type')) {
                 $response = $response->withHeader('Content-Type', 'application/octet-stream');
@@ -86,9 +104,15 @@ final readonly class RetryingClient implements ClientInterface
                 return $response;
             }
 
-            $delay = $this->retryDelay($response, $attempt);
+            // Wait exactly what BeeL asks for. When that is longer than maxRetryDelayMs, return the
+            // response instead of waiting less: the error then carries the requested delay.
+            $requested = RetryAfter::seconds($response);
+            if ($requested !== null && $requested * 1_000 > $this->maxRetryDelayMs) {
+                return $response;
+            }
+            $delay = $requested !== null ? $requested * 1_000 : $this->backoff($attempt);
             if ($delay > 0) {
-                usleep($delay * 1_000);
+                ($this->sleep)($delay);
             }
         }
     }
@@ -98,29 +122,9 @@ final readonly class RetryingClient implements ClientInterface
         return $this->responseContext;
     }
 
-    private function retryDelay(ResponseInterface $response, int $attempt): int
+    /** Exponential backoff with jitter for attempts BeeL gave no delay for, capped at maxRetryDelayMs. */
+    private function backoff(int $attempt): int
     {
-        $retryAfter = $response->getHeaderLine('Retry-After');
-        if ($retryAfter !== '' && ctype_digit($retryAfter)) {
-            return $this->boundedDelay((float) $retryAfter);
-        }
-        if ($retryAfter !== '' && ($retryAt = strtotime($retryAfter)) !== false) {
-            return $this->boundedDelay(max(0, $retryAt - time()));
-        }
-        $body = $response->getBody();
-        if ($body->isSeekable()) {
-            $position = $body->tell();
-            try {
-                $error = json_decode((string) $body, true);
-                $seconds = $error['error']['retry_after'] ?? $error['retry_after'] ?? null;
-                if (is_numeric($seconds)) {
-                    return $this->boundedDelay((float) $seconds);
-                }
-            } finally {
-                $body->seek($position);
-            }
-        }
-
         $base = min($this->retryDelayMs, $this->maxRetryDelayMs);
         for ($step = 0; $step < $attempt && $base < $this->maxRetryDelayMs; $step++) {
             $base = $base > intdiv($this->maxRetryDelayMs, 2)
@@ -132,11 +136,6 @@ final readonly class RetryingClient implements ClientInterface
         }
 
         return random_int((int) ($base * 0.5), $base);
-    }
-
-    private function boundedDelay(float $seconds): int
-    {
-        return (int) min(max(0, $seconds * 1_000), $this->maxRetryDelayMs);
     }
 
     private function uuid(): string

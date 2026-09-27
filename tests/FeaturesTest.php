@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Psr7\NoSeekStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -68,6 +69,9 @@ use Lenorix\BeelSdk\Webhook\WebhookEventType;
 use Lenorix\BeelSdk\Webhook\WebhookSignatureHeader;
 use Lenorix\BeelSdk\Webhook\WebhookSigner;
 use Lenorix\BeelSdk\Webhook\WebhookVerifier;
+use Psr\Http\Client\ClientInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /** Read a source file with Unix line endings; Git checks files out with CRLF on Windows. */
 function sourceCode(string $file): string
@@ -1354,3 +1358,140 @@ it('keeps the error response as the last response after a failed call', function
         ->and($beel->getLastResponse()?->getStatusCode())->toBe(404)
         ->and(json_decode((string) $beel->getLastResponse()?->getBody(), true)['error']['code'])->toBe('NOT_FOUND');
 });
+
+// Retry delays and network errors
+
+/** A transport that fails with a connection error for each queued exception, then answers with the queued responses. */
+function flakyTransport(array $outcomes): ClientInterface
+{
+    return new class($outcomes) implements ClientInterface
+    {
+        /** @var list<RequestInterface> */
+        public array $requests = [];
+
+        public function __construct(private array $outcomes) {}
+
+        public function sendRequest(RequestInterface $request): ResponseInterface
+        {
+            $this->requests[] = $request;
+            $outcome = array_shift($this->outcomes) ?? throw new LogicException('Unexpected request.');
+            if ($outcome instanceof Throwable) {
+                throw $outcome;
+            }
+
+            return $outcome;
+        }
+    };
+}
+
+function retryingClient(ClientInterface $transport, array &$sleeps, int $maxRetries = 1, int $maxRetryDelayMs = 30_000, int $retryDelayMs = 500): RetryingClient
+{
+    return new RetryingClient($transport, $maxRetries, $retryDelayMs, $maxRetryDelayMs, sleep: static function (int $milliseconds) use (&$sleeps): void {
+        $sleeps[] = $milliseconds;
+    });
+}
+
+it('waits exactly the Retry-After BeeL asks for when it fits under maxRetryDelayMs', function () {
+    $sleeps = [];
+    $transport = new RecordingPsrClient([new Response(429, ['Retry-After' => '60']), new Response(200)]);
+
+    retryingClient($transport, $sleeps, maxRetryDelayMs: 60_000)->sendRequest(new Request('GET', 'https://example.test/x'));
+
+    expect($sleeps)->toBe([60_000])->and($transport->requests)->toHaveCount(2);
+});
+
+it('does not wait less than BeeL asks: it returns the 429 with the requested delay', function () {
+    $sleeps = [];
+    $transport = new RecordingPsrClient([new Response(429, ['Retry-After' => '60'])]);
+
+    $response = retryingClient($transport, $sleeps, maxRetryDelayMs: 30_000)->sendRequest(new Request('GET', 'https://example.test/x'));
+
+    expect($response->getStatusCode())->toBe(429)
+        ->and($sleeps)->toBe([])
+        ->and($transport->requests)->toHaveCount(1);
+});
+
+it('reports the requested delay on the exception when it does not wait', function (array $headers, string $body, int $expected) {
+    $transport = new RecordingPsrClient([new Response(429, ['Content-Type' => 'application/json', ...$headers], $body)]);
+    $started = microtime(true);
+
+    try {
+        testClient($transport, maxRetries: 3)->company('c')->invoices->get('inv-1');
+        test()->fail('Expected a rate limit error.');
+    } catch (BeelRateLimitError $exception) {
+        expect($exception->retryAfterSeconds)->toBeGreaterThanOrEqual($expected - 1)->toBeLessThanOrEqual($expected)
+            ->and($exception->retryAfter)->toBe($exception->retryAfterSeconds)
+            ->and(microtime(true) - $started)->toBeLessThan(1.0)
+            ->and($transport->requests)->toHaveCount(1);
+    }
+})->with([
+    'seconds' => [['Retry-After' => '120'], '{"success":false}', 120],
+    'HTTP date' => [['Retry-After' => gmdate('D, d M Y H:i:s \G\M\T', time() + 120)], '{"success":false}', 120],
+    'error body' => [[], '{"success":false,"error":{"code":"RATE_LIMITED","message":"Slow","retry_after":90}}', 90],
+]);
+
+it('backs off within maxRetryDelayMs for a 429 without Retry-After and for 5xx', function (int $status) {
+    $sleeps = [];
+    $transport = new RecordingPsrClient([new Response($status), new Response($status), new Response(200)]);
+
+    retryingClient($transport, $sleeps, maxRetries: 2, maxRetryDelayMs: 1_000, retryDelayMs: 5_000)->sendRequest(new Request('GET', 'https://example.test/x'));
+
+    expect($sleeps)->toHaveCount(2)
+        ->and(max($sleeps))->toBeLessThanOrEqual(1_000)
+        ->and(min($sleeps))->toBeGreaterThanOrEqual(500);
+})->with(['429 without Retry-After' => [429], '503' => [503]]);
+
+it('lets a single call skip waiting with maxRetries 0', function () {
+    $transport = new RecordingPsrClient([new Response(429, ['Content-Type' => 'application/json', 'Retry-After' => '5'], '{"success":false}')]);
+
+    try {
+        testClient($transport, maxRetries: 3)->company('c')->invoices->withOptions(new RequestOptions(maxRetries: 0))->get('inv-1');
+        test()->fail('Expected a rate limit error.');
+    } catch (BeelRateLimitError $exception) {
+        expect($exception->retryAfterSeconds)->toBe(5)->and($transport->requests)->toHaveCount(1);
+    }
+});
+
+it('retries a connection error on a safe request and rethrows the original after the last attempt', function () {
+    $sleeps = [];
+    $first = new ConnectException('Connection refused', new Request('GET', 'https://example.test/x'));
+    $last = new ConnectException('Timed out', new Request('GET', 'https://example.test/x'));
+    $transport = flakyTransport([$first, $first, $last]);
+
+    try {
+        retryingClient($transport, $sleeps, maxRetries: 2, retryDelayMs: 0)->sendRequest(new Request('GET', 'https://example.test/x'));
+        test()->fail('Expected the connection error.');
+    } catch (ConnectException $exception) {
+        expect($exception)->toBe($last)
+            ->and($transport->requests)->toHaveCount(3)
+            ->and($sleeps)->toHaveCount(2);
+    }
+});
+
+it('retries a connection error only when repeating it cannot duplicate a write', function (string $method, array $headers, bool $retried) {
+    $sleeps = [];
+    $transport = flakyTransport([new ConnectException('Timed out', new Request($method, 'https://example.test/x')), new Response(200)]);
+    $client = new RetryingClient($transport, 1, 0, 0, autoIdempotencyKey: false);
+
+    try {
+        $client->sendRequest(new Request($method, 'https://example.test/x', $headers, '{}'));
+    } catch (ConnectException) {
+    }
+
+    expect($transport->requests)->toHaveCount($retried ? 2 : 1);
+})->with([
+    'GET' => ['GET', [], true],
+    'POST with Idempotency-Key' => ['POST', ['Idempotency-Key' => 'op-1'], true],
+    'POST without key' => ['POST', [], false],
+    'PATCH without key' => ['PATCH', [], false],
+]);
+
+it('does not retry a connection error on file downloads', function (string $method) {
+    $transport = flakyTransport([new ConnectException('Timed out', new Request('POST', 'https://example.test/x')), new Response(200, ['Content-Type' => 'application/zip'], 'PK')]);
+    $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 1, retryDelayMs: 0, maxRetryDelayMs: 0, httpClient: $transport);
+    $invoices = $beel->company('c')->invoices;
+
+    expect(fn () => $method === 'archive' ? $invoices->createPdfArchive(archiveRequest()) : $invoices->export(new CreateInvoiceExportRequest))
+        ->toThrow(ConnectException::class)
+        ->and($transport->requests)->toHaveCount(1);
+})->with(['archive' => ['archive'], 'export' => ['export']]);
