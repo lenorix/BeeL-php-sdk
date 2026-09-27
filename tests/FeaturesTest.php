@@ -7,12 +7,17 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Utils;
 use Lenorix\BeelSdk\Beel;
+use Lenorix\BeelSdk\Builder\CustomerBuilder;
 use Lenorix\BeelSdk\Builder\InvoiceBuilder;
+use Lenorix\BeelSdk\Enum\RecurringInvoicePauseReason;
+use Lenorix\BeelSdk\Enum\VeriFactuSubmissionStatus;
+use Lenorix\BeelSdk\Enum\WebhookAccountRelationship;
 use Lenorix\BeelSdk\Exception\BeelApiError;
 use Lenorix\BeelSdk\Exception\BeelAuthError;
 use Lenorix\BeelSdk\Exception\BeelConflictError;
 use Lenorix\BeelSdk\Exception\BeelNotFoundError;
 use Lenorix\BeelSdk\Exception\BeelNotReadyError;
+use Lenorix\BeelSdk\Exception\BeelRateLimitError;
 use Lenorix\BeelSdk\Exception\BeelValidationError;
 use Lenorix\BeelSdk\Exception\WebhookHeaderError;
 use Lenorix\BeelSdk\Exception\WebhookPayloadError;
@@ -38,6 +43,7 @@ use Lenorix\BeelSdk\Generated\Model\Product;
 use Lenorix\BeelSdk\Generated\Model\RecurringInvoiceResponse;
 use Lenorix\BeelSdk\Generated\Model\RepresentationStatusResponseData;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRepresentationSubmitPostBody;
+use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdMarkSentPostBody;
 use Lenorix\BeelSdk\Generated\Model\WebhookDeliveryLog;
 use Lenorix\BeelSdk\Generated\Model\WebhookEvent;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceIssued;
@@ -611,7 +617,7 @@ it('maps export errors to BeelApiError with their BeeL code', function () {
     $limit = new RecordingPsrClient([jsonResponse(['success' => false, 'error' => ['code' => 'EXPORT_LIMIT_EXCEEDED', 'message' => 'Too many']], 422)]);
     $gateway = new RecordingPsrClient([new Response(502, ['Content-Type' => 'text/html'], '<html>Bad gateway</html>')]);
 
-    foreach ([[$selection, BeelApiError::class, 400, 'EXPORT_SELECTION_REQUIRED'], [$limit, BeelValidationError::class, 422, 'EXPORT_LIMIT_EXCEEDED'], [$gateway, BeelApiError::class, 502, null]] as [$transport, $class, $status, $code]) {
+    foreach ([[$selection, BeelApiError::class, 400, 'EXPORT_SELECTION_REQUIRED'], [$limit, BeelValidationError::class, 422, 'EXPORT_LIMIT_EXCEEDED'], [$gateway, BeelApiError::class, 502, 'UNKNOWN']] as [$transport, $class, $status, $code]) {
         try {
             testClient($transport)->company('c')->invoices->export(new CreateInvoiceExportRequest);
             test()->fail('Expected an API error.');
@@ -726,4 +732,83 @@ it('uploads the signed representation as a replayable multipart body', function 
         ->and($transport->requests[0]->getHeaderLine('Content-Type'))->toStartWith('multipart/form-data')
         ->and((string) $transport->requests[1]->getBody())->toContain('%PDF-signed')
         ->and($transport->requests[1]->getHeaderLine('Idempotency-Key'))->toBe('sign-1');
+});
+
+// Parity with the official Node.js SDK
+
+it('falls back to the Node.js SDK error codes when BeeL sends none', function (int $status, string $class, string $code) {
+    $transport = new RecordingPsrClient([new Response($status, ['Content-Type' => 'application/json'], '{"success":false}')]);
+
+    try {
+        testClient($transport)->company('c')->invoices->get('inv-1');
+        test()->fail('Expected an API error.');
+    } catch (BeelApiError $exception) {
+        expect($exception)->toBeInstanceOf($class)
+            ->and($exception->apiCode)->toBe($code);
+    }
+})->with([
+    [401, BeelAuthError::class, 'UNAUTHORIZED'],
+    [403, BeelAuthError::class, 'FORBIDDEN'],
+    [404, BeelNotFoundError::class, 'NOT_FOUND'],
+    [409, BeelConflictError::class, 'CONFLICT'],
+    [422, BeelValidationError::class, 'UNPROCESSABLE_ENTITY'],
+    [429, BeelRateLimitError::class, 'RATE_LIMIT_EXCEEDED'],
+    [400, BeelApiError::class, 'UNKNOWN'],
+]);
+
+it('keeps the code BeeL sends and defaults a rate limit without delay to 60 seconds', function () {
+    $coded = new RecordingPsrClient([jsonResponse(['success' => false, 'error' => ['code' => 'INVOICE_NOT_FOUND', 'message' => 'Missing']], 404)]);
+    $limited = new RecordingPsrClient([jsonResponse(['success' => false, 'error' => ['code' => 'RATE_LIMITED', 'message' => 'Slow down']], 429)]);
+    $withDelay = new RecordingPsrClient([new Response(429, ['Content-Type' => 'application/json', 'Retry-After' => '7'], '{"success":false}')]);
+
+    $caught = [];
+    foreach ([$coded, $limited, $withDelay] as $transport) {
+        try {
+            testClient($transport)->company('c')->invoices->get('inv-1');
+        } catch (BeelApiError $exception) {
+            $caught[] = $exception;
+        }
+    }
+
+    expect($caught[0]->apiCode)->toBe('INVOICE_NOT_FOUND')
+        ->and($caught[1]->apiCode)->toBe('RATE_LIMITED')
+        ->and($caught[1]->retryAfterSeconds)->toBe(60)
+        ->and($caught[1]->retryAfter)->toBeNull()
+        ->and($caught[2]->retryAfterSeconds)->toBe(7);
+});
+
+it('sends an empty JSON object when a write has no body', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['id' => 'inv-1']]),
+        jsonResponse(['success' => true, 'data' => ['id' => 'inv-1']]),
+    ]);
+    $beel = testClient($transport);
+
+    $beel->company('c')->invoices->issue('inv-1');
+    $beel->company('c')->representation->submit((new V1CompaniesCompanyIdRepresentationSubmitPostBody)->setFile('%PDF'));
+
+    expect((string) $transport->requests[0]->getBody())->toBe('{}')
+        ->and($transport->requests[0]->getHeaderLine('Content-Type'))->toBe('application/json')
+        ->and($transport->requests[1]->getHeaderLine('Content-Type'))->toStartWith('multipart/form-data');
+});
+
+it('marks a legacy invoice as sent with an optional sent_at', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => ['id' => 'inv-1']])]);
+
+    testClient($transport)->invoices->markSent('inv-1', (new V1InvoicesInvoiceIdMarkSentPostBody)->setSentAt(new DateTime('2026-09-25T12:00:00+00:00')));
+
+    expect(json_decode((string) $transport->requests[0]->getBody(), true))->toBe(['sent_at' => '2026-09-25T12:00:00+00:00']);
+});
+
+it('exposes the Node.js SDK enums with every value in the OpenAPI contract', function () {
+    expect(array_map(static fn (VeriFactuSubmissionStatus $case): string => $case->value, VeriFactuSubmissionStatus::cases()))
+        ->toBe(['PENDING', 'ACCEPTED', 'VOIDED', 'REJECTED', 'NOT_SUBMITTED'])
+        ->and(RecurringInvoicePauseReason::from('GENERATION_FAILURE'))->toBe(RecurringInvoicePauseReason::GENERATION_FAILURE)
+        ->and(WebhookAccountRelationship::from('managed'))->toBe(WebhookAccountRelationship::MANAGED);
+});
+
+it('uses the Node.js SDK builder messages', function () {
+    expect(fn () => InvoiceBuilder::create()->build())->toThrow(LogicException::class, 'Customer ID is required')
+        ->and(fn () => InvoiceBuilder::create()->forCustomer('c')->build())->toThrow(LogicException::class, 'At least one invoice line is required')
+        ->and(fn () => CustomerBuilder::create()->name('Acme')->nif('B1')->build())->toThrow(LogicException::class, 'Address is required');
 });

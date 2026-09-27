@@ -87,13 +87,13 @@ final class CustomerBuilder
     public function build(): CreateCustomerRequest
     {
         if ($this->name === null || trim($this->name) === '') {
-            throw new \LogicException('Legal name is required.');
+            throw new \LogicException('Legal name is required');
         }
         if ($this->nif === null || trim($this->nif) === '') {
-            throw new \LogicException('NIF/CIF is required.');
+            throw new \LogicException('NIF/CIF is required');
         }
         if ($this->address === null) {
-            throw new \LogicException('Set the customer address before building.');
+            throw new \LogicException('Address is required');
         }
 
         return $this->request->setAddress($this->address);

@@ -134,10 +134,10 @@ final class InvoiceBuilder
     public function build(): CreateInvoiceRequest
     {
         if (! $this->customerId) {
-            throw new \LogicException('\Lenorix\BeelSdk\Generated\Model\Customer ID is required.');
+            throw new \LogicException('Customer ID is required');
         }
         if ($this->lines === []) {
-            throw new \LogicException('At least one invoice line is required.');
+            throw new \LogicException('At least one invoice line is required');
         }
         $this->request->setLines($this->lines);
 

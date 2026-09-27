@@ -9,9 +9,20 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 - `createPdfArchive()` and `export()` on company invoices return a `BinaryDownload` with the response stream, file name, content type, length and invoice counts. They used to return `null`, as the generated client discards file bodies. The body is never read into memory, and neither operation retries a `5xx` by default.
 - `$company->representation` with `get()`, `generate()`, `documentLink()`, `submit()` and `cancel()`. Errors carry their real HTTP status.
 - `RequestOptions(maxRetries: …, retryServerErrors: …)` control retries per call.
+- Enums matching the official Node.js SDK, with every value in the OpenAPI contract: `VeriFactuSubmissionStatus`, `RecurringInvoicePauseReason` and `WebhookAccountRelationship`.
+- The legacy `markSent()` accepts an optional body with `sent_at`, as in the Node.js SDK.
+
+### Changed
+
+- When BeeL sends no error code, `apiCode` falls back to the Node.js SDK codes (`UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `CONFLICT`, `UNPROCESSABLE_ENTITY`, `RATE_LIMIT_EXCEEDED`, `UNKNOWN`) instead of `null`.
+- `BeelRateLimitError::$retryAfterSeconds` is `60` when BeeL gives no delay, as in the Node.js SDK, and is now typed `int`.
+- A POST, PUT or PATCH without a body is sent as `{}` with `Content-Type: application/json`, as the Node.js SDK does.
+- Builder error messages match the Node.js SDK.
+- `.jane-openapi` sets `date-input-format` to parse date-time values with fractional seconds. It takes effect when the client is regenerated.
 
 ### Fixed
 
+- `InvoiceBuilder` reported a missing customer as `\Lenorix\BeelSdk\Generated\Model\Customer ID is required.`.
 - Transports that return non-seekable bodies, such as Guzzle with `'stream' => true`, no longer break JSON responses.
 - The SDK no longer copies successful non-JSON response bodies into memory. `Beel::downloadPdf()` now holds the PDF once instead of twice.
 - An error status without a JSON body, such as an empty `503` from a proxy, now throws `BeelApiError` instead of a `TypeError`.

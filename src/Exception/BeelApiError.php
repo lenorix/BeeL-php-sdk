@@ -133,6 +133,17 @@ class BeelApiError extends \RuntimeException
         ?int $retryAfter,
         ?Throwable $previous = null,
     ): self {
+        // Same fallback codes as the official Node.js SDK when BeeL sends none.
+        $code ??= match (true) {
+            $status === 401 => 'UNAUTHORIZED',
+            $status === 403 => 'FORBIDDEN',
+            $status === 404 => 'NOT_FOUND',
+            $status === 409 => 'CONFLICT',
+            $status === 422 => 'UNPROCESSABLE_ENTITY',
+            $status === 429 => 'RATE_LIMIT_EXCEEDED',
+            default => 'UNKNOWN',
+        };
+
         $class = match (true) {
             $status === 401 || $status === 403 => BeelAuthError::class,
             $status === 404 => BeelNotFoundError::class,

@@ -316,6 +316,8 @@ $signatureHeader = (new WebhookSigner($secret))->sign($body); // "t=...,v1=..."
 
 `$verifier->toEvent($payload)` builds the typed model from a payload that `verify()` already returned, without checking the signature again. Only pass it verified payloads.
 
+Event field values are also available as enums in `Lenorix\BeelSdk\Enum`: `VeriFactuSubmissionStatus`, `RecurringInvoicePauseReason` and `WebhookAccountRelationship`.
+
 `verifyEvent()` returns Jane's generated `WebhookEvent` model, with `data` denormalized to the generated model for its event type. This is useful when dispatching typed framework events, such as Laravel events. `verify()` remains available when you prefer the decoded payload as an array. Event names are also available as `WebhookEventType` enum cases, for example `WebhookEventType::INVOICE_ISSUED->value`.
 
 ## Errors
@@ -331,7 +333,7 @@ API errors are mapped to semantic exception classes. All extend `BeelApiError`:
 | `BeelRateLimitError` | 429 | `statusCode`, `retryAfter`, `retryAfterSeconds` |
 | `BeelApiError` | Other API errors | `statusCode`, `apiCode`, `details`, `requestId` |
 
-An error without a JSON body, such as an HTML `502` or an empty `503` from a proxy, is mapped the same way, with its real `statusCode`. `BeelNotReadyError` (HTTP `202`, see [PDF downloads](#pdf-downloads)) does not extend `BeelApiError`, because it is not an error.
+An error without a JSON body, such as an HTML `502` or an empty `503` from a proxy, is mapped the same way, with its real `statusCode`. When BeeL sends no error code, `apiCode` falls back to the same values as the official Node.js SDK: `UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `CONFLICT`, `UNPROCESSABLE_ENTITY`, `RATE_LIMIT_EXCEEDED` or `UNKNOWN`. `BeelRateLimitError::$retryAfterSeconds` is `60` when BeeL gives no delay, also like the Node.js SDK; `retryAfter` stays `null` in that case. `BeelNotReadyError` (HTTP `202`, see [PDF downloads](#pdf-downloads)) does not extend `BeelApiError`, because it is not an error.
 
 `$exception->context()` returns `status_code`, `api_code`, `request_id` and `retry_after` as an array, ready for a PSR-3 logging context. It leaves out `details`, because validation errors echo submitted values such as NIFs or amounts; read `$exception->details` explicitly when you need them.
 

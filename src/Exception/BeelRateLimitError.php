@@ -7,8 +7,10 @@ namespace Lenorix\BeelSdk\Exception;
 /** Rate limit was reached (HTTP 429); retry after the indicated delay. */
 final class BeelRateLimitError extends BeelApiError
 {
-    /** Retry delay in seconds, when BeeL supplied one. */
-    public readonly ?int $retryAfterSeconds;
+    public const DEFAULT_RETRY_AFTER_SECONDS = 60;
+
+    /** Seconds BeeL asks to wait before retrying; 60 when it gives no delay, as in the official Node.js SDK. */
+    public readonly int $retryAfterSeconds;
 
     public function __construct(
         string $message,
@@ -20,6 +22,6 @@ final class BeelRateLimitError extends BeelApiError
         ?\Throwable $previous = null,
     ) {
         parent::__construct($message, $statusCode, $apiCode, $details, $requestId, $retryAfter, $previous);
-        $this->retryAfterSeconds = $retryAfter;
+        $this->retryAfterSeconds = $retryAfter ?? self::DEFAULT_RETRY_AFTER_SECONDS;
     }
 }

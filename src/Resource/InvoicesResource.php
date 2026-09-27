@@ -13,6 +13,7 @@ use Lenorix\BeelSdk\Generated\Model\SendEmailRequest;
 use Lenorix\BeelSdk\Generated\Model\UpdateInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdDuplicatePostBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdMarkPaidPostBody;
+use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdMarkSentPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdReschedulePatchBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSchedulePostBody;
 use Lenorix\BeelSdk\Generated\Model\VoidInvoiceRequest;
@@ -75,9 +76,14 @@ final readonly class InvoicesResource extends GeneratedResource
         return $this->execute(fn () => $this->client->markInvoicePaid($invoiceId, $request));
     }
 
-    public function markSent(string $invoiceId): mixed
+    /**
+     * Mark an invoice as sent, optionally recording when (`sent_at`).
+     *
+     * @param  array<string, mixed>  $headers  Request headers, including optional `Idempotency-Key`.
+     */
+    public function markSent(string $invoiceId, ?V1InvoicesInvoiceIdMarkSentPostBody $request = null, array $headers = []): mixed
     {
-        return $this->execute(fn () => $this->client->markInvoiceSent($invoiceId));
+        return $this->execute(fn () => $this->client->markInvoiceSent($invoiceId, $request, $headers));
     }
 
     public function revertToIssued(string $invoiceId): mixed

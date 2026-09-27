@@ -54,8 +54,8 @@
     "scripts": {
         "test": "php -d memory_limit=512M vendor/bin/pest --no-coverage",
         "test-coverage": "vendor/bin/pest --coverage",
-        "pint": "vendor/bin/pint src/Beel.php src/Builder src/Exception src/Http src/Resource src/Webhook tests",
-        "format": "vendor/bin/pint src/Beel.php src/Builder src/Exception src/Http src/Resource src/Webhook tests",
+        "pint": "vendor/bin/pint src/Beel.php src/Builder src/Enum src/Exception src/Http src/Resource src/Webhook tests",
+        "format": "vendor/bin/pint src/Beel.php src/Builder src/Enum src/Exception src/Http src/Resource src/Webhook tests",
         "phpstan": "vendor/bin/phpstan analyse --configuration=phpstan.neon.dist --memory-limit=512M",
         "generate": "@php bin/prepare-openapi.php && php -d memory_limit=256M vendor/bin/jane-openapi generate"
     },

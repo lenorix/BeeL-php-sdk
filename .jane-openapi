@@ -4,4 +4,6 @@ return [
   'openapi-file' => __DIR__ . '/build/openapi.json',
   'namespace' => 'Lenorix\BeelSdk\Generated',
   'directory' => __DIR__ . '/src/Generated',
+  // Parse date-time values with `new \DateTime()`, which keeps fractional seconds, instead of a fixed format.
+  'date-input-format' => '',
 ];
