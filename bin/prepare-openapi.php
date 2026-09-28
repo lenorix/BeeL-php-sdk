@@ -70,3 +70,6 @@ if ($json === false || (! is_dir(dirname($destination)) && ! mkdir(dirname($dest
 }
 
 fwrite(STDOUT, "Wrote {$destination} ({$patched} parameter schemas given a type for Jane).\n");
+if ($patched === 0) {
+    fwrite(STDOUT, "BeeL's contract no longer needs this edit: the conversion to JSON is all that is left of this script.\n");
+}
