@@ -11,7 +11,8 @@ Regenerated from BeeL's current OpenAPI contract (still labelled 1.9.0).
 - `$company->invoices->send()` and the legacy `sendEmail()` may return the new `...Response202Data` model: with `attach_pdf` and a PDF not generated yet, BeeL queues the email and answers `202`. Both models carry `email_id`.
 - `$company->invoices->preview()` throws `BeelNotReadyError` when the invoice PDF is not generated yet (HTTP `202`) instead of failing with a `TypeError`.
 - `$account->members->allGrants()` yields `MemberGrant` models, as BeeL now returns them.
-- Generated models follow the updated contract: new and changed fields, and five removed schemas (`VatCategory`, `IrpfCategory`, `IgicPercentage`, `IpsiPercentage`, `OtherTaxPercentage`).
+- `CreateSeriesRequest` now requires `document_type`, as BeeL does. An array without it throws `InvalidArgumentException` naming the field; a hand-built model without it fails when sent.
+- No generated class, method or signature was removed or changed: the updated contract only adds classes (`VeriFactuRecord`, `MemberGrant`, `WithholdingOptions`, the `202` send models…) and tightens validation rules and descriptions.
 
 ### Added
 
