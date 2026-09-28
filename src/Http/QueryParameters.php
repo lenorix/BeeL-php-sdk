@@ -34,6 +34,7 @@ final class QueryParameters
         'event_kind',
         'failure_category',
         'failure_reason',
+        'payment_method',
         'related_entity_ids',
         'status',
     ];

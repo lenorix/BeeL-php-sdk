@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\CustomerValidationMetadata;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class CustomerValidationMetadataNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class CustomerValidationMetadataNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === CustomerValidationMetadata::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\CustomerValidationMetadata::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === CustomerValidationMetadata::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CustomerValidationMetadata::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new CustomerValidationMetadata;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\CustomerValidationMetadata();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -64,21 +59,24 @@ class CustomerValidationMetadataNormalizer implements DenormalizerAwareInterface
         if (\array_key_exists('filename', $data) && $data['filename'] !== null) {
             $object->setFilename($data['filename']);
             unset($data['filename']);
-        } elseif (\array_key_exists('filename', $data) && $data['filename'] === null) {
+        }
+        elseif (\array_key_exists('filename', $data) && $data['filename'] === null) {
             $object->setFilename(null);
             unset($data['filename']);
         }
         if (\array_key_exists('file_size_bytes', $data) && $data['file_size_bytes'] !== null) {
             $object->setFileSizeBytes($data['file_size_bytes']);
             unset($data['file_size_bytes']);
-        } elseif (\array_key_exists('file_size_bytes', $data) && $data['file_size_bytes'] === null) {
+        }
+        elseif (\array_key_exists('file_size_bytes', $data) && $data['file_size_bytes'] === null) {
             $object->setFileSizeBytes(null);
             unset($data['file_size_bytes']);
         }
         if (\array_key_exists('total_rows', $data) && $data['total_rows'] !== null) {
             $object->setTotalRows($data['total_rows']);
             unset($data['total_rows']);
-        } elseif (\array_key_exists('total_rows', $data) && $data['total_rows'] === null) {
+        }
+        elseif (\array_key_exists('total_rows', $data) && $data['total_rows'] === null) {
             $object->setTotalRows(null);
             unset($data['total_rows']);
         }
@@ -87,10 +85,8 @@ class CustomerValidationMetadataNormalizer implements DenormalizerAwareInterface
                 $object[$key] = $value;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -98,13 +94,13 @@ class CustomerValidationMetadataNormalizer implements DenormalizerAwareInterface
         $dataArray['is_dry_run'] = $data->getIsDryRun();
         $dataArray['processing_time_ms'] = $data->getProcessingTimeMs();
         $dataArray['source_type'] = $data->getSourceType();
-        if ($data->isInitialized('filename') && $data->getFilename() !== null) {
+        if ($data->isInitialized('filename') && null !== $data->getFilename()) {
             $dataArray['filename'] = $data->getFilename();
         }
-        if ($data->isInitialized('fileSizeBytes') && $data->getFileSizeBytes() !== null) {
+        if ($data->isInitialized('fileSizeBytes') && null !== $data->getFileSizeBytes()) {
             $dataArray['file_size_bytes'] = $data->getFileSizeBytes();
         }
-        if ($data->isInitialized('totalRows') && $data->getTotalRows() !== null) {
+        if ($data->isInitialized('totalRows') && null !== $data->getTotalRows()) {
             $dataArray['total_rows'] = $data->getTotalRows();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -112,12 +108,10 @@ class CustomerValidationMetadataNormalizer implements DenormalizerAwareInterface
                 $dataArray[$key] = $value;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [CustomerValidationMetadata::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\CustomerValidationMetadata::class => false];
     }
 }

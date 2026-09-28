@@ -111,6 +111,13 @@ $company->invoices->void(
     (new \Lenorix\BeelSdk\Generated\Model\VoidInvoiceRequest())->setReason('Billing error'),
 );
 $pdf = $company->invoices->getPdf($invoice->getId());
+$records = $company->invoices->listVerifactuRecords($invoice->getId())->getRecords(); // registration and cancellation
+
+// A full invoice in exchange for simplified ones, when the customer asks for their details
+$full = $company->invoices->createSimplifiedExchange([
+    'simplified_invoice_ids' => ['simplified-uuid'],
+    'recipient' => ['customer_id' => 'customer-uuid'],
+]);
 
 $customer = $company->customers->create($customerRequest);
 $product = $company->products->create($productRequest);
@@ -119,6 +126,8 @@ $company->series->ensureDefaults();
 $summary = $company->fiscalSummary(['year' => 2026]);
 $readiness = $company->issuingReadiness();
 ```
+
+Right after issuing, the invoice PDF may still be generating. Then `getPdf()` and `preview()` (a preview image URL) throw `BeelNotReadyError` with BeeL's `Retry-After`, and `send()` with `attach_pdf` queues the email: it returns the `...Response202Data` model instead of `...Response200Data`, and the email goes out once the PDF exists.
 
 The company scope exposes `invoices`, `customers`, `products`, `series`, `recurringInvoices`, `paymentConnections`, `taxConfiguration`, `verifactuConfiguration`, `invoiceCustomization`, `logo`, `activations` and `representation`, along with company operations such as `get()`, `update()`, `delete()`, `fiscalSummary()`, and `issuingReadiness()`.
 

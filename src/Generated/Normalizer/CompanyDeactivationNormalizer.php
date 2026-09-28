@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\CompanyDeactivation;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class CompanyDeactivationNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class CompanyDeactivationNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === CompanyDeactivation::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\CompanyDeactivation::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === CompanyDeactivation::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CompanyDeactivation::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new CompanyDeactivation;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\CompanyDeactivation();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -56,7 +51,8 @@ class CompanyDeactivationNormalizer implements DenormalizerAwareInterface, Denor
         if (\array_key_exists('effective_at', $data) && $data['effective_at'] !== null) {
             $object->setEffectiveAt((new \DateTime($data['effective_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['effective_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['effective_at']));
             unset($data['effective_at']);
-        } elseif (\array_key_exists('effective_at', $data) && $data['effective_at'] === null) {
+        }
+        elseif (\array_key_exists('effective_at', $data) && $data['effective_at'] === null) {
             $object->setEffectiveAt(null);
             unset($data['effective_at']);
         }
@@ -69,16 +65,14 @@ class CompanyDeactivationNormalizer implements DenormalizerAwareInterface, Denor
                 $object[$key] = $value;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['company_id'] = $data->getCompanyId();
         $dataArray['environment'] = $data->getEnvironment();
-        if ($data->isInitialized('effectiveAt') && $data->getEffectiveAt() !== null) {
+        if ($data->isInitialized('effectiveAt') && null !== $data->getEffectiveAt()) {
             $dataArray['effective_at'] = $data->getEffectiveAt()?->format('Y-m-d\TH:i:s.uP');
         }
         $dataArray['already_scheduled'] = $data->getAlreadyScheduled();
@@ -87,12 +81,10 @@ class CompanyDeactivationNormalizer implements DenormalizerAwareInterface, Denor
                 $dataArray[$key] = $value;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [CompanyDeactivation::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\CompanyDeactivation::class => false];
     }
 }

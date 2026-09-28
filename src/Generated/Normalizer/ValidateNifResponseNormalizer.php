@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\ValidateNifResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class ValidateNifResponseNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class ValidateNifResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === ValidateNifResponse::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\ValidateNifResponse::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === ValidateNifResponse::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\ValidateNifResponse::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new ValidateNifResponse;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\ValidateNifResponse();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -59,7 +54,8 @@ class ValidateNifResponseNormalizer implements DenormalizerAwareInterface, Denor
         if (\array_key_exists('legal_name', $data) && $data['legal_name'] !== null) {
             $object->setLegalName($data['legal_name']);
             unset($data['legal_name']);
-        } elseif (\array_key_exists('legal_name', $data) && $data['legal_name'] === null) {
+        }
+        elseif (\array_key_exists('legal_name', $data) && $data['legal_name'] === null) {
             $object->setLegalName(null);
             unset($data['legal_name']);
         }
@@ -78,7 +74,8 @@ class ValidateNifResponseNormalizer implements DenormalizerAwareInterface, Denor
         if (\array_key_exists('validated_at', $data) && $data['validated_at'] !== null) {
             $object->setValidatedAt((new \DateTime($data['validated_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['validated_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['validated_at']));
             unset($data['validated_at']);
-        } elseif (\array_key_exists('validated_at', $data) && $data['validated_at'] === null) {
+        }
+        elseif (\array_key_exists('validated_at', $data) && $data['validated_at'] === null) {
             $object->setValidatedAt(null);
             unset($data['validated_at']);
         }
@@ -87,26 +84,24 @@ class ValidateNifResponseNormalizer implements DenormalizerAwareInterface, Denor
                 $object[$key] = $value;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['valid'] = $data->getValid();
         $dataArray['status'] = $data->getStatus();
-        if ($data->isInitialized('legalName') && $data->getLegalName() !== null) {
+        if ($data->isInitialized('legalName') && null !== $data->getLegalName()) {
             $dataArray['legal_name'] = $data->getLegalName();
         }
-        if ($data->isInitialized('legalNameVerified') && $data->getLegalNameVerified() !== null) {
+        if ($data->isInitialized('legalNameVerified') && null !== $data->getLegalNameVerified()) {
             $dataArray['legal_name_verified'] = $data->getLegalNameVerified();
         }
-        if ($data->isInitialized('censusStatus') && $data->getCensusStatus() !== null) {
+        if ($data->isInitialized('censusStatus') && null !== $data->getCensusStatus()) {
             $dataArray['census_status'] = $data->getCensusStatus();
         }
         $dataArray['message'] = $data->getMessage();
-        if ($data->isInitialized('validatedAt') && $data->getValidatedAt() !== null) {
+        if ($data->isInitialized('validatedAt') && null !== $data->getValidatedAt()) {
             $dataArray['validated_at'] = $data->getValidatedAt()?->format('Y-m-d\TH:i:s.uP');
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -114,12 +109,10 @@ class ValidateNifResponseNormalizer implements DenormalizerAwareInterface, Denor
                 $dataArray[$key] = $value;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [ValidateNifResponse::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\ValidateNifResponse::class => false];
     }
 }

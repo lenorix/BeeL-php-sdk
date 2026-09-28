@@ -2,34 +2,27 @@
 
 namespace Lenorix\BeelSdk\Generated\Exception;
 
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
-use Psr\Http\Message\ResponseInterface;
-
 class CreateCustomerConflictException extends ConflictException
 {
     /**
-     * @var ErrorResponse
+     * @var \Lenorix\BeelSdk\Generated\Model\ErrorResponse
      */
     private $errorResponse;
-
     /**
-     * @var ResponseInterface
+     * @var \Psr\Http\Message\ResponseInterface
      */
     private $response;
-
-    public function __construct(ErrorResponse $errorResponse, ResponseInterface $response)
+    public function __construct(\Lenorix\BeelSdk\Generated\Model\ErrorResponse $errorResponse, \Psr\Http\Message\ResponseInterface $response)
     {
-        parent::__construct('Duplicate customer (same NIF)');
+        parent::__construct('`CLIENT_DUPLICATE` — a customer of this company already carries that NIF or alternative identifier. `details` is an empty object; the identifier is not echoed back. The body is parsed and validated first, so a `400` or `422` always takes precedence over this conflict; a JSON number sent for a string field is coerced, not rejected.');
         $this->errorResponse = $errorResponse;
         $this->response = $response;
     }
-
-    public function getErrorResponse(): ErrorResponse
+    public function getErrorResponse(): \Lenorix\BeelSdk\Generated\Model\ErrorResponse
     {
         return $this->errorResponse;
     }
-
-    public function getResponse(): ResponseInterface
+    public function getResponse(): \Psr\Http\Message\ResponseInterface
     {
         return $this->response;
     }

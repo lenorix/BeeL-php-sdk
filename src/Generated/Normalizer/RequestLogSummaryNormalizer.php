@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\RequestLogSummary;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class RequestLogSummaryNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class RequestLogSummaryNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === RequestLogSummary::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\RequestLogSummary::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === RequestLogSummary::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\RequestLogSummary::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new RequestLogSummary;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\RequestLogSummary();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -65,35 +60,40 @@ class RequestLogSummaryNormalizer implements DenormalizerAwareInterface, Denorma
         if (\array_key_exists('duration_ms', $data) && $data['duration_ms'] !== null) {
             $object->setDurationMs($data['duration_ms']);
             unset($data['duration_ms']);
-        } elseif (\array_key_exists('duration_ms', $data) && $data['duration_ms'] === null) {
+        }
+        elseif (\array_key_exists('duration_ms', $data) && $data['duration_ms'] === null) {
             $object->setDurationMs(null);
             unset($data['duration_ms']);
         }
         if (\array_key_exists('environment', $data) && $data['environment'] !== null) {
             $object->setEnvironment($data['environment']);
             unset($data['environment']);
-        } elseif (\array_key_exists('environment', $data) && $data['environment'] === null) {
+        }
+        elseif (\array_key_exists('environment', $data) && $data['environment'] === null) {
             $object->setEnvironment(null);
             unset($data['environment']);
         }
         if (\array_key_exists('api_key_id', $data) && $data['api_key_id'] !== null) {
             $object->setApiKeyId($data['api_key_id']);
             unset($data['api_key_id']);
-        } elseif (\array_key_exists('api_key_id', $data) && $data['api_key_id'] === null) {
+        }
+        elseif (\array_key_exists('api_key_id', $data) && $data['api_key_id'] === null) {
             $object->setApiKeyId(null);
             unset($data['api_key_id']);
         }
         if (\array_key_exists('error_code', $data) && $data['error_code'] !== null) {
             $object->setErrorCode($data['error_code']);
             unset($data['error_code']);
-        } elseif (\array_key_exists('error_code', $data) && $data['error_code'] === null) {
+        }
+        elseif (\array_key_exists('error_code', $data) && $data['error_code'] === null) {
             $object->setErrorCode(null);
             unset($data['error_code']);
         }
         if (\array_key_exists('client_ip', $data) && $data['client_ip'] !== null) {
             $object->setClientIp($data['client_ip']);
             unset($data['client_ip']);
-        } elseif (\array_key_exists('client_ip', $data) && $data['client_ip'] === null) {
+        }
+        elseif (\array_key_exists('client_ip', $data) && $data['client_ip'] === null) {
             $object->setClientIp(null);
             unset($data['client_ip']);
         }
@@ -102,10 +102,8 @@ class RequestLogSummaryNormalizer implements DenormalizerAwareInterface, Denorma
                 $object[$key] = $value;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -114,19 +112,19 @@ class RequestLogSummaryNormalizer implements DenormalizerAwareInterface, Denorma
         $dataArray['http_method'] = $data->getHttpMethod();
         $dataArray['http_path'] = $data->getHttpPath();
         $dataArray['http_status'] = $data->getHttpStatus();
-        if ($data->isInitialized('durationMs') && $data->getDurationMs() !== null) {
+        if ($data->isInitialized('durationMs') && null !== $data->getDurationMs()) {
             $dataArray['duration_ms'] = $data->getDurationMs();
         }
-        if ($data->isInitialized('environment') && $data->getEnvironment() !== null) {
+        if ($data->isInitialized('environment') && null !== $data->getEnvironment()) {
             $dataArray['environment'] = $data->getEnvironment();
         }
-        if ($data->isInitialized('apiKeyId') && $data->getApiKeyId() !== null) {
+        if ($data->isInitialized('apiKeyId') && null !== $data->getApiKeyId()) {
             $dataArray['api_key_id'] = $data->getApiKeyId();
         }
-        if ($data->isInitialized('errorCode') && $data->getErrorCode() !== null) {
+        if ($data->isInitialized('errorCode') && null !== $data->getErrorCode()) {
             $dataArray['error_code'] = $data->getErrorCode();
         }
-        if ($data->isInitialized('clientIp') && $data->getClientIp() !== null) {
+        if ($data->isInitialized('clientIp') && null !== $data->getClientIp()) {
             $dataArray['client_ip'] = $data->getClientIp();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -134,12 +132,10 @@ class RequestLogSummaryNormalizer implements DenormalizerAwareInterface, Denorma
                 $dataArray[$key] = $value;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [RequestLogSummary::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\RequestLogSummary::class => false];
     }
 }

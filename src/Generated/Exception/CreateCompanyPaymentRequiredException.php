@@ -2,22 +2,17 @@
 
 namespace Lenorix\BeelSdk\Generated\Exception;
 
-use Lenorix\BeelSdk\Generated\Model\PaymentRequiredResponse;
-use Psr\Http\Message\ResponseInterface;
-
 class CreateCompanyPaymentRequiredException extends PaymentRequiredException
 {
     /**
-     * @var PaymentRequiredResponse
+     * @var \Lenorix\BeelSdk\Generated\Model\PaymentRequiredResponse
      */
     private $paymentRequiredResponse;
-
     /**
-     * @var ResponseInterface
+     * @var \Psr\Http\Message\ResponseInterface
      */
     private $response;
-
-    public function __construct(PaymentRequiredResponse $paymentRequiredResponse, ResponseInterface $response)
+    public function __construct(\Lenorix\BeelSdk\Generated\Model\PaymentRequiredResponse $paymentRequiredResponse, \Psr\Http\Message\ResponseInterface $response)
     {
         parent::__construct('Payment required before creating a production NIF. No company is created and no
 checkout is opened. Three distinct reasons, so branch on `error.code`:
@@ -33,13 +28,11 @@ checkout is opened. Three distinct reasons, so branch on `error.code`:
         $this->paymentRequiredResponse = $paymentRequiredResponse;
         $this->response = $response;
     }
-
-    public function getPaymentRequiredResponse(): PaymentRequiredResponse
+    public function getPaymentRequiredResponse(): \Lenorix\BeelSdk\Generated\Model\PaymentRequiredResponse
     {
         return $this->paymentRequiredResponse;
     }
-
-    public function getResponse(): ResponseInterface
+    public function getResponse(): \Psr\Http\Message\ResponseInterface
     {
         return $this->response;
     }

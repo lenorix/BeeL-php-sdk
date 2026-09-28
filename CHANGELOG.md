@@ -2,6 +2,27 @@
 
 All notable changes to `BeeL-php-sdk` will be documented in this file.
 
+## Unreleased
+
+Regenerated from BeeL's current OpenAPI contract (still labelled 1.9.0).
+
+### Upgrading from 0.6
+
+- `$company->invoices->send()` and the legacy `sendEmail()` may return the new `...Response202Data` model: with `attach_pdf` and a PDF not generated yet, BeeL queues the email and answers `202`. Both models carry `email_id`.
+- `$company->invoices->preview()` throws `BeelNotReadyError` when the invoice PDF is not generated yet (HTTP `202`) instead of failing with a `TypeError`.
+- `$account->members->allGrants()` yields `MemberGrant` models, as BeeL now returns them.
+- Generated models follow the updated contract: new and changed fields, and five removed schemas (`VatCategory`, `IrpfCategory`, `IgicPercentage`, `IpsiPercentage`, `OtherTaxPercentage`).
+
+### Added
+
+- `$company->invoices->createSimplifiedExchange()` issues a full invoice in exchange for simplified invoices.
+- `$company->invoices->listVerifactuRecords()` lists an invoice's VeriFactu records.
+- The `payment_method` invoice filter accepts a single value as well as a list, like `status`.
+
+### Fixed
+
+- `$company->invoices->preview()` documented a draft PDF render; it returns a temporary URL to a preview image.
+
 ## v0.6.2 - 2026-09-28
 
 ### Fixed

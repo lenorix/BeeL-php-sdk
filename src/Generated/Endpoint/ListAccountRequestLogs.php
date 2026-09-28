@@ -2,25 +2,9 @@
 
 namespace Lenorix\BeelSdk\Generated\Endpoint;
 
-use Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsBadRequestException;
-use Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsForbiddenException;
-use Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsInternalServerErrorException;
-use Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsTooManyRequestsException;
-use Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
-use Lenorix\BeelSdk\Generated\Model\RequestLogListResponse;
-use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
-use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
-use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
-use Psr\Http\Message\ResponseInterface;
-use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Serializer\SerializerInterface;
-
-class ListAccountRequestLogs extends BaseEndpoint implements Endpoint
+class ListAccountRequestLogs extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint implements \Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint
 {
     protected $account_id;
-
     /**
      * Returns the history of public API requests made by you, with any of your API keys in this
      * environment — not only the key you are authenticating with. Only `auth_type=API_KEY`
@@ -39,17 +23,17 @@ class ListAccountRequestLogs extends BaseEndpoint implements Endpoint
      *   `prev_cursor`; there is no jump to an arbitrary page N.
      * - **Time window:** defaults to the last 30 days; narrow or move it with `from`/`to`.
      *
-     * @param  string  $accountId  Account the call is authorized against. It does not widen the result set.
+     * @param string $accountId Account the call is authorized against. It does not widen the result set.
      * @param array{
      *    "only_errors"?: bool, //If true, only requests with status >= 400.
      *    "method"?: string, //Filter by HTTP method.
      *    "http_status"?: int, //Filter by an exact HTTP status code.
-     *    "path_contains"?: string, //Filter by path substring (case-insensitive).
+     *    "path_contains"?: string, //Case-insensitive substring of the actual request path, IDs included (for example `/v1/companies/3f1c9a2e-5b7d-4e8f-9a1b-2c3d4e5f6a7b/invoices/8a2b4c6d-1e3f-4a5b-8c7d-9e0f1a2b3c4d/send`), so a path template with `{placeholders}` never matches, and a full path only matches requests made to that exact route shape. Prefer a resource segment such as `/invoices`, which matches that resource on every route that serves it.
      *    "api_key_id"?: string, //Narrow the result to one of your API keys. Any key of yours in this environment is accepted, not just the one you authenticate with; a key belonging to someone else simply yields no results.
      *    "from"?: string, //Lower bound of the time range (inclusive). Defaults to 30 days ago.
      *    "to"?: string, //Upper bound of the time range (inclusive). Defaults to now.
      *    "cursor"?: string, //Opaque cursor returned by a previous response (next_cursor / prev_cursor).
-     *    "limit"?: int,
+     *    "limit"?: int, //Maximum number of log entries in the page, from 1 to 100. Defaults to 25.
      * } $queryParameters
      */
     public function __construct(string $accountId, array $queryParameters = [])
@@ -57,30 +41,24 @@ class ListAccountRequestLogs extends BaseEndpoint implements Endpoint
         $this->account_id = $accountId;
         $this->queryParameters = $queryParameters;
     }
-
-    use EndpointTrait;
-
+    use \Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
     public function getMethod(): string
     {
         return 'GET';
     }
-
     public function getUri(): string
     {
         return str_replace(['{account_id}'], [rawurlencode($this->account_id)], '/v1/accounts/{account_id}/request-logs');
     }
-
-    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
+    public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer, $streamFactory = null): array
     {
         return [[], null];
     }
-
     public function getExtraHeaders(): array
     {
         return ['Accept' => ['application/json']];
     }
-
-    protected function getQueryOptionsResolver(): OptionsResolver
+    protected function getQueryOptionsResolver(): \Symfony\Component\OptionsResolver\OptionsResolver
     {
         $optionsResolver = parent::getQueryOptionsResolver();
         $optionsResolver->setDefined(['only_errors', 'method', 'http_status', 'path_contains', 'api_key_id', 'from', 'to', 'cursor', 'limit']);
@@ -95,53 +73,49 @@ class ListAccountRequestLogs extends BaseEndpoint implements Endpoint
         $optionsResolver->addAllowedTypes('to', ['string']);
         $optionsResolver->addAllowedTypes('cursor', ['string']);
         $optionsResolver->addAllowedTypes('limit', ['int']);
-
         return $optionsResolver;
     }
-
     /**
      * {@inheritdoc}
      *
+     * @throws \Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsBadRequestException
+     * @throws \Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsUnauthorizedException
+     * @throws \Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsForbiddenException
+     * @throws \Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsUnprocessableEntityException
+     * @throws \Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsTooManyRequestsException
+     * @throws \Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsInternalServerErrorException
      *
-     * @return null|RequestLogListResponse|ErrorResponse
-     *
-     * @throws ListAccountRequestLogsBadRequestException
-     * @throws ListAccountRequestLogsUnauthorizedException
-     * @throws ListAccountRequestLogsForbiddenException
-     * @throws ListAccountRequestLogsUnprocessableEntityException
-     * @throws ListAccountRequestLogsTooManyRequestsException
-     * @throws ListAccountRequestLogsInternalServerErrorException
+     * @return null|\Lenorix\BeelSdk\Generated\Model\RequestLogListResponse|\Lenorix\BeelSdk\Generated\Model\ErrorResponse
      */
-    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (is_null($contentType) === false && ($status === 200 && stripos(strtolower($contentType), 'application/json') !== false)) {
+        if (is_null($contentType) === false && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\RequestLogListResponse', 'json');
         }
-        if (is_null($contentType) === false && ($status === 400 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new ListAccountRequestLogsBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && (400 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new \Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && ($status === 401 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new ListAccountRequestLogsUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && (401 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new \Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && ($status === 403 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new ListAccountRequestLogsForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && (403 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new \Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && ($status === 422 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new ListAccountRequestLogsUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && (422 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new \Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && ($status === 429 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new ListAccountRequestLogsTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && (429 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new \Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new ListAccountRequestLogsInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && (500 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new \Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
         if (stripos(strtolower($contentType), 'application/json') !== false) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
-
     public function getAuthenticationScopes(): array
     {
         return ['ApiKeyAuth'];

@@ -2,37 +2,31 @@
 
 namespace Lenorix\BeelSdk\Generated\Exception;
 
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
-use Psr\Http\Message\ResponseInterface;
-
 class SendInvoicesBulkEmailUnprocessableEntityException extends UnprocessableEntityException
 {
     /**
-     * @var ErrorResponse
+     * @var \Lenorix\BeelSdk\Generated\Model\ErrorResponse
      */
     private $errorResponse;
-
     /**
-     * @var ResponseInterface
+     * @var \Psr\Http\Message\ResponseInterface
      */
     private $response;
-
-    public function __construct(ErrorResponse $errorResponse, ResponseInterface $response)
+    public function __construct(\Lenorix\BeelSdk\Generated\Model\ErrorResponse $errorResponse, \Psr\Http\Message\ResponseInterface $response)
     {
         parent::__construct('Validation error: too many invoices, invalid recipients, or no recipients specified.
-`recipients` has no fallback — a request without recipients is rejected here, it is
-not completed from any profile.
+`recipients` has no fallback — a request without recipients is rejected here with
+`INVOICE_EMAIL_NO_RECIPIENTS`, the same code as a single send; it is not completed
+from any profile or customer.
 ');
         $this->errorResponse = $errorResponse;
         $this->response = $response;
     }
-
-    public function getErrorResponse(): ErrorResponse
+    public function getErrorResponse(): \Lenorix\BeelSdk\Generated\Model\ErrorResponse
     {
         return $this->errorResponse;
     }
-
-    public function getResponse(): ResponseInterface
+    public function getResponse(): \Psr\Http\Message\ResponseInterface
     {
         return $this->response;
     }

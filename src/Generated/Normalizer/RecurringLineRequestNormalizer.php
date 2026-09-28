@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\RecurringLineRequest;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class RecurringLineRequestNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class RecurringLineRequestNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === RecurringLineRequest::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\RecurringLineRequest::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === RecurringLineRequest::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\RecurringLineRequest::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new RecurringLineRequest;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\RecurringLineRequest();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -109,14 +104,16 @@ class RecurringLineRequestNormalizer implements DenormalizerAwareInterface, Deno
         if (\array_key_exists('equivalence_surcharge_rate', $data) && $data['equivalence_surcharge_rate'] !== null) {
             $object->setEquivalenceSurchargeRate($data['equivalence_surcharge_rate']);
             unset($data['equivalence_surcharge_rate']);
-        } elseif (\array_key_exists('equivalence_surcharge_rate', $data) && $data['equivalence_surcharge_rate'] === null) {
+        }
+        elseif (\array_key_exists('equivalence_surcharge_rate', $data) && $data['equivalence_surcharge_rate'] === null) {
             $object->setEquivalenceSurchargeRate(null);
             unset($data['equivalence_surcharge_rate']);
         }
         if (\array_key_exists('irpf_rate', $data) && $data['irpf_rate'] !== null) {
             $object->setIrpfRate($data['irpf_rate']);
             unset($data['irpf_rate']);
-        } elseif (\array_key_exists('irpf_rate', $data) && $data['irpf_rate'] === null) {
+        }
+        elseif (\array_key_exists('irpf_rate', $data) && $data['irpf_rate'] === null) {
             $object->setIrpfRate(null);
             unset($data['irpf_rate']);
         }
@@ -127,7 +124,8 @@ class RecurringLineRequestNormalizer implements DenormalizerAwareInterface, Deno
         if (\array_key_exists('exemption_reason_text', $data) && $data['exemption_reason_text'] !== null) {
             $object->setExemptionReasonText($data['exemption_reason_text']);
             unset($data['exemption_reason_text']);
-        } elseif (\array_key_exists('exemption_reason_text', $data) && $data['exemption_reason_text'] === null) {
+        }
+        elseif (\array_key_exists('exemption_reason_text', $data) && $data['exemption_reason_text'] === null) {
             $object->setExemptionReasonText(null);
             unset($data['exemption_reason_text']);
         }
@@ -136,47 +134,45 @@ class RecurringLineRequestNormalizer implements DenormalizerAwareInterface, Deno
                 $object[$key] = $value;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['description'] = $data->getDescription();
         $dataArray['quantity'] = $data->getQuantity();
-        if ($data->isInitialized('unit') && $data->getUnit() !== null) {
+        if ($data->isInitialized('unit') && null !== $data->getUnit()) {
             $dataArray['unit'] = $data->getUnit();
         }
-        if ($data->isInitialized('unitPrice') && $data->getUnitPrice() !== null) {
+        if ($data->isInitialized('unitPrice') && null !== $data->getUnitPrice()) {
             $dataArray['unit_price'] = $data->getUnitPrice();
         }
-        if ($data->isInitialized('totalExcludingTax') && $data->getTotalExcludingTax() !== null) {
+        if ($data->isInitialized('totalExcludingTax') && null !== $data->getTotalExcludingTax()) {
             $dataArray['total_excluding_tax'] = $data->getTotalExcludingTax();
         }
-        if ($data->isInitialized('totalIncludingTax') && $data->getTotalIncludingTax() !== null) {
+        if ($data->isInitialized('totalIncludingTax') && null !== $data->getTotalIncludingTax()) {
             $dataArray['total_including_tax'] = $data->getTotalIncludingTax();
         }
-        if ($data->isInitialized('discountPercentage') && $data->getDiscountPercentage() !== null) {
+        if ($data->isInitialized('discountPercentage') && null !== $data->getDiscountPercentage()) {
             $dataArray['discount_percentage'] = $data->getDiscountPercentage();
         }
-        if ($data->isInitialized('taxType') && $data->getTaxType() !== null) {
+        if ($data->isInitialized('taxType') && null !== $data->getTaxType()) {
             $dataArray['tax_type'] = $data->getTaxType();
         }
         $dataArray['vat_rate'] = $data->getVatRate();
-        if ($data->isInitialized('regimeKey') && $data->getRegimeKey() !== null) {
+        if ($data->isInitialized('regimeKey') && null !== $data->getRegimeKey()) {
             $dataArray['regime_key'] = $data->getRegimeKey();
         }
-        if ($data->isInitialized('equivalenceSurchargeRate') && $data->getEquivalenceSurchargeRate() !== null) {
+        if ($data->isInitialized('equivalenceSurchargeRate') && null !== $data->getEquivalenceSurchargeRate()) {
             $dataArray['equivalence_surcharge_rate'] = $data->getEquivalenceSurchargeRate();
         }
-        if ($data->isInitialized('irpfRate') && $data->getIrpfRate() !== null) {
+        if ($data->isInitialized('irpfRate') && null !== $data->getIrpfRate()) {
             $dataArray['irpf_rate'] = $data->getIrpfRate();
         }
-        if ($data->isInitialized('exemptionReason') && $data->getExemptionReason() !== null) {
+        if ($data->isInitialized('exemptionReason') && null !== $data->getExemptionReason()) {
             $dataArray['exemption_reason'] = $data->getExemptionReason();
         }
-        if ($data->isInitialized('exemptionReasonText') && $data->getExemptionReasonText() !== null) {
+        if ($data->isInitialized('exemptionReasonText') && null !== $data->getExemptionReasonText()) {
             $dataArray['exemption_reason_text'] = $data->getExemptionReasonText();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -184,12 +180,10 @@ class RecurringLineRequestNormalizer implements DenormalizerAwareInterface, Deno
                 $dataArray[$key] = $value;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [RecurringLineRequest::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\RecurringLineRequest::class => false];
     }
 }

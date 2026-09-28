@@ -2,34 +2,29 @@
 
 namespace Lenorix\BeelSdk\Generated\Exception;
 
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
-use Psr\Http\Message\ResponseInterface;
-
 class ImportHoldedContactsRequestEntityTooLargeException extends RequestEntityTooLargeException
 {
     /**
-     * @var ErrorResponse
+     * @var \Lenorix\BeelSdk\Generated\Model\ErrorResponse
      */
     private $errorResponse;
-
     /**
-     * @var ResponseInterface
+     * @var \Psr\Http\Message\ResponseInterface
      */
     private $response;
-
-    public function __construct(ErrorResponse $errorResponse, ResponseInterface $response)
+    public function __construct(\Lenorix\BeelSdk\Generated\Model\ErrorResponse $errorResponse, \Psr\Http\Message\ResponseInterface $response)
     {
-        parent::__construct('File too large (>10MB)');
+        parent::__construct('The uploaded file is over 12 MB (`FILE_TOO_LARGE`) and is rejected before it is read; a
+file over its own 10 MB limit answers `400` instead.
+');
         $this->errorResponse = $errorResponse;
         $this->response = $response;
     }
-
-    public function getErrorResponse(): ErrorResponse
+    public function getErrorResponse(): \Lenorix\BeelSdk\Generated\Model\ErrorResponse
     {
         return $this->errorResponse;
     }
-
-    public function getResponse(): ResponseInterface
+    public function getResponse(): \Psr\Http\Message\ResponseInterface
     {
         return $this->response;
     }

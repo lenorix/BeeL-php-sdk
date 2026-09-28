@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceEmailSent;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class WebhookEventDataInvoiceEmailSentNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class WebhookEventDataInvoiceEmailSentNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === WebhookEventDataInvoiceEmailSent::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceEmailSent::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === WebhookEventDataInvoiceEmailSent::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceEmailSent::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new WebhookEventDataInvoiceEmailSent;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceEmailSent();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -47,7 +42,8 @@ class WebhookEventDataInvoiceEmailSentNormalizer implements DenormalizerAwareInt
         }
         if (\array_key_exists('invoice_number', $data) && $data['invoice_number'] !== null) {
             $object->setInvoiceNumber($data['invoice_number']);
-        } elseif (\array_key_exists('invoice_number', $data) && $data['invoice_number'] === null) {
+        }
+        elseif (\array_key_exists('invoice_number', $data) && $data['invoice_number'] === null) {
             $object->setInvoiceNumber(null);
         }
         if (\array_key_exists('all_recipients', $data)) {
@@ -60,15 +56,13 @@ class WebhookEventDataInvoiceEmailSentNormalizer implements DenormalizerAwareInt
         if (\array_key_exists('sent_at', $data)) {
             $object->setSentAt((new \DateTime($data['sent_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['sent_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['sent_at']));
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['invoice_id'] = $data->getInvoiceId();
-        if ($data->isInitialized('invoiceNumber') && $data->getInvoiceNumber() !== null) {
+        if ($data->isInitialized('invoiceNumber') && null !== $data->getInvoiceNumber()) {
             $dataArray['invoice_number'] = $data->getInvoiceNumber();
         }
         $values = [];
@@ -77,12 +71,10 @@ class WebhookEventDataInvoiceEmailSentNormalizer implements DenormalizerAwareInt
         }
         $dataArray['all_recipients'] = $values;
         $dataArray['sent_at'] = $data->getSentAt()->format('Y-m-d\TH:i:s.uP');
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [WebhookEventDataInvoiceEmailSent::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceEmailSent::class => false];
     }
 }

@@ -35,13 +35,14 @@ use Lenorix\BeelSdk\Generated\Model\CreateInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\Customer;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryResponse;
 use Lenorix\BeelSdk\Generated\Model\GenerationHistoryResponse;
-use Lenorix\BeelSdk\Generated\Model\GrantAssignment;
 use Lenorix\BeelSdk\Generated\Model\InvitationSummary;
 use Lenorix\BeelSdk\Generated\Model\Invoice;
 use Lenorix\BeelSdk\Generated\Model\InvoicePdfResponseData;
+use Lenorix\BeelSdk\Generated\Model\InvoicePreviewResponseData;
 use Lenorix\BeelSdk\Generated\Model\InvoiceSeries;
 use Lenorix\BeelSdk\Generated\Model\ManagedAccountSummary;
 use Lenorix\BeelSdk\Generated\Model\ManagedPaymentEvent;
+use Lenorix\BeelSdk\Generated\Model\MemberGrant;
 use Lenorix\BeelSdk\Generated\Model\MyIdentity;
 use Lenorix\BeelSdk\Generated\Model\Product;
 use Lenorix\BeelSdk\Generated\Model\RecurringInvoiceResponse;
@@ -49,8 +50,11 @@ use Lenorix\BeelSdk\Generated\Model\RepresentationStatusResponseData;
 use Lenorix\BeelSdk\Generated\Model\RequestLogDetail;
 use Lenorix\BeelSdk\Generated\Model\RequestLogSummary;
 use Lenorix\BeelSdk\Generated\Model\TaxTypesCatalog;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse202Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRepresentationSubmitPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdMarkSentPostBody;
+use Lenorix\BeelSdk\Generated\Model\VeriFactuRecord;
 use Lenorix\BeelSdk\Generated\Model\WebhookDeliveryLog;
 use Lenorix\BeelSdk\Generated\Model\WebhookEvent;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceIssued;
@@ -284,7 +288,7 @@ it('iterates every paginated list into its generated item model', function (Clos
     'payment events' => [fn (Beel $beel) => $beel->company('c')->paymentConnections->events('p')->all(), 'events', ManagedPaymentEvent::class, '/v1/companies/c/payment-connections/p/events'],
     'account companies' => [fn (Beel $beel) => $beel->account('a')->companies->all(), 'companies', CompanyData::class, '/v1/accounts/a/companies'],
     'account members' => [fn (Beel $beel) => $beel->account('a')->members->all(), 'members', AccountMember::class, '/v1/accounts/a/members'],
-    'member grants' => [fn (Beel $beel) => $beel->account('a')->members->allGrants('m'), 'grants', GrantAssignment::class, '/v1/accounts/a/members/m/grants'],
+    'member grants' => [fn (Beel $beel) => $beel->account('a')->members->allGrants('m'), 'grants', MemberGrant::class, '/v1/accounts/a/members/m/grants'],
     'account invitations' => [fn (Beel $beel) => $beel->account('a')->invitations->all(), 'invitations', InvitationSummary::class, '/v1/accounts/a/invitations'],
     'account webhooks' => [fn (Beel $beel) => $beel->account('a')->webhooks->all(), 'webhooks', WebhookSubscription::class, '/v1/accounts/a/webhooks'],
     'webhook deliveries' => [fn (Beel $beel) => $beel->account('a')->webhooks->allDeliveries('w'), 'deliveries', WebhookDeliveryLog::class, '/v1/accounts/a/webhooks/w/deliveries'],
@@ -1516,3 +1520,76 @@ it('keeps the Content-Type charset of a download while contentType stays the med
     'among other parameters' => ['text/csv; header=present; charset=utf-8', 'utf-8'],
     'without charset' => ['text/csv', null],
 ]);
+
+// OpenAPI 1.9.0 update: preview and send may answer 202, payment_method, new endpoints
+
+it('reports a draft preview whose PDF is not ready as not ready', function () {
+    $transport = new RecordingPsrClient([
+        new Response(202, ['Retry-After' => '4']),
+        jsonResponse(['success' => true, 'data' => ['invoice_id' => 'inv-1']]),
+    ]);
+    $invoices = testClient($transport)->company('c')->invoices;
+
+    try {
+        $invoices->preview('inv-1');
+        test()->fail('Expected BeelNotReadyError.');
+    } catch (BeelNotReadyError $exception) {
+        expect($exception->retryAfter)->toBe(4);
+    }
+
+    expect($invoices->preview('inv-1'))->toBeInstanceOf(InvoicePreviewResponseData::class);
+});
+
+it('returns the queued email when BeeL accepts a send that waits for the PDF', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['email_id' => 'e-1', 'sent_to' => ['a@example.test'], 'sent_at' => '2026-09-28T10:00:00Z']]),
+        jsonResponse(['success' => true, 'data' => ['email_id' => 'e-2', 'sent_to' => ['a@example.test'], 'sent_at' => '2026-09-28T10:00:00Z']], 202),
+    ]);
+    $invoices = testClient($transport)->company('c')->invoices;
+
+    $sent = $invoices->send('inv-1');
+    $queued = $invoices->send('inv-1');
+
+    expect($sent)->toBeInstanceOf(V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data::class)
+        ->and($queued)->toBeInstanceOf(V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse202Data::class)
+        ->and($queued->getEmailId())->toBe('e-2');
+});
+
+it('filters invoices by a single payment method', function () {
+    $transport = new RecordingPsrClient([invoicePage([], 1, 1, hasNext: false)]);
+
+    testClient($transport)->company('c')->invoices->list(['payment_method' => 'CARD']);
+
+    parse_str($transport->requests[0]->getUri()->getQuery(), $query);
+    expect($query['payment_method'])->toBe('CARD');
+});
+
+it('exchanges simplified invoices for a full invoice', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => ['id' => 'inv-full']], 201)]);
+
+    $invoice = testClient($transport)->company('c')->invoices->createSimplifiedExchange(
+        ['simplified_invoice_ids' => ['s-1', 's-2'], 'recipient' => ['customer_id' => 'cust-1']],
+        ['Idempotency-Key' => 'exchange-1'],
+    );
+
+    expect($invoice)->toBeInstanceOf(Invoice::class)
+        ->and($invoice->getId())->toBe('inv-full')
+        ->and($transport->requests[0]->getMethod())->toBe('POST')
+        ->and($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/companies/c/invoices/simplified-exchanges')
+        ->and($transport->requests[0]->getHeaderLine('Idempotency-Key'))->toBe('exchange-1')
+        ->and(json_decode((string) $transport->requests[0]->getBody(), true))->toBe(['simplified_invoice_ids' => ['s-1', 's-2'], 'recipient' => ['customer_id' => 'cust-1']]);
+});
+
+it('lists the VeriFactu records of an invoice', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => ['records' => [
+        ['id' => 'r-1', 'operation' => 'REGISTRATION', 'submission_status' => 'ACCEPTED', 'registered_at' => '2026-09-28T10:00:00.123456789Z'],
+    ]]])]);
+
+    $records = testClient($transport)->company('c')->invoices->listVerifactuRecords('inv-1')->getRecords();
+
+    expect($records)->toHaveCount(1)
+        ->and($records[0])->toBeInstanceOf(VeriFactuRecord::class)
+        ->and($records[0]->getSubmissionStatus())->toBe('ACCEPTED')
+        ->and($records[0]->getRegisteredAt()->format('u'))->toBe('123456')
+        ->and($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/companies/c/invoices/inv-1/verifactu-records');
+});

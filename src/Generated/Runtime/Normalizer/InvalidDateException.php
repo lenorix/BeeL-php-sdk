@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Runtime\Normalizer;
 
 use RuntimeException;
-
 class InvalidDateException extends RuntimeException
 {
     public function __construct(mixed $value, string $format)

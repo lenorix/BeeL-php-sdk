@@ -20,6 +20,7 @@ use Lenorix\BeelSdk\Generated\Model\CreateInvoiceDerivationRequest;
 use Lenorix\BeelSdk\Generated\Model\CreateInvoiceExportRequest;
 use Lenorix\BeelSdk\Generated\Model\CreateInvoicePdfArchiveRequest;
 use Lenorix\BeelSdk\Generated\Model\CreateInvoiceRequest;
+use Lenorix\BeelSdk\Generated\Model\CreateSimplifiedExchangeRequest;
 use Lenorix\BeelSdk\Generated\Model\Invoice;
 use Lenorix\BeelSdk\Generated\Model\InvoicePdfResponseData;
 use Lenorix\BeelSdk\Generated\Model\InvoicePreviewResponseData;
@@ -31,6 +32,8 @@ use Lenorix\BeelSdk\Generated\Model\UpdateInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesDeliveriesPostResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse202Data;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdVerifactuRecordsGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\VoidInvoiceRequest;
 use Lenorix\BeelSdk\Http\BinaryDownload;
 use Lenorix\BeelSdk\Http\QueryParameters;
@@ -279,6 +282,37 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
     }
 
     /**
+     * Issue a full invoice in exchange for one or more issued simplified invoices, when the
+     * customer asks for an invoice with their details (RD 1619/2012, art. 15.6).
+     *
+     * It is not a corrective invoice: it documents the same operations again with the recipient
+     * identified, using the lines of the simplified invoices in the given order.
+     *
+     * @param  CreateSimplifiedExchangeRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
+     * @param  array<string, mixed>  $headers  Request headers, including optional `Idempotency-Key`.
+     * @return Invoice The full invoice issued.
+     *
+     * @see https://docs.beel.es/invoices/createCompanySimplifiedExchange
+     */
+    public function createSimplifiedExchange(CreateSimplifiedExchangeRequest|array $request, array $headers = []): Invoice
+    {
+        $request = RequestModels::from($request, CreateSimplifiedExchangeRequest::class);
+
+        return $this->execute(fn () => $this->client->createCompanySimplifiedExchange($this->companyId, $request, $headers));
+    }
+
+    /**
+     * List an invoice's VeriFactu records, oldest first: its registration and, if it was
+     * voided, its cancellation, each with its own submission status.
+     *
+     * @see https://docs.beel.es/invoices/listCompanyInvoiceVerifactuRecords
+     */
+    public function listVerifactuRecords(string $invoiceId): V1CompaniesCompanyIdInvoicesInvoiceIdVerifactuRecordsGetResponse200Data
+    {
+        return $this->execute(fn () => $this->client->listCompanyInvoiceVerifactuRecords($this->companyId, $invoiceId));
+    }
+
+    /**
      * Download the PDF preview of a draft invoice as a stream; this does not issue or number it.
      *
      * @throws BeelApiError If BeeL cannot render the preview, for example for an unknown invoice.
@@ -321,13 +355,21 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
     }
 
     /**
-     * Render a draft invoice PDF for preview; this does not issue or number it.
+     * Get a temporary URL to a preview image (WebP) of an invoice, for inline rendering.
      *
-     * @return InvoicePreviewResponseData Preview metadata and PDF content or URL.
+     * The image of an issued invoice is taken from its PDF, which is generated asynchronously:
+     * right after issuing it may not exist yet, and BeeL answers `202` with a `Retry-After`.
+     *
+     * @throws BeelNotReadyError If the invoice PDF is not generated yet (HTTP 202); see its `retryAfter`.
+     *
+     * @see https://docs.beel.es/invoices/getCompanyInvoicePreview
      */
     public function preview(string $invoiceId): InvoicePreviewResponseData
     {
-        return $this->execute(fn () => $this->client->getCompanyInvoicePreview($this->companyId, $invoiceId));
+        return $this->executeReady(
+            fn () => $this->client->getCompanyInvoicePreview($this->companyId, $invoiceId),
+            'Invoice preview is not ready: its PDF is still being generated; retry the request later.',
+        );
     }
 
     /**
@@ -338,13 +380,16 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      * from account defaults, invoice settings and customer billing emails. Check
      * email delivery history for the final status.
      *
+     * With `attach_pdf` and a PDF not generated yet, BeeL answers `202`: the email is queued and
+     * goes out once the PDF exists. That returns the `...Response202Data` model instead of the
+     * `...Response200Data` one; both carry the `email_id` to follow the delivery.
+     *
      * @param  SendEmailRequest|array<string, mixed>|null  $request  The request as a model or as an array in API format.
      * @param  array<string, mixed>  $headers  Optional request headers.
-     * @return V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data Email delivery acceptance details.
      *
      * @see https://docs.beel.es/invoices/sendCompanyInvoice
      */
-    public function send(string $invoiceId, SendEmailRequest|array|null $request = null, array $headers = []): V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data
+    public function send(string $invoiceId, SendEmailRequest|array|null $request = null, array $headers = []): V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data|V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse202Data
     {
         $request = RequestModels::from($request, SendEmailRequest::class);
 

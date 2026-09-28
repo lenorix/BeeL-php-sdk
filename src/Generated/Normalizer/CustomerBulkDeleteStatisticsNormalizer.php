@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteStatistics;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class CustomerBulkDeleteStatisticsNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class CustomerBulkDeleteStatisticsNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === CustomerBulkDeleteStatistics::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteStatistics::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === CustomerBulkDeleteStatistics::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteStatistics::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new CustomerBulkDeleteStatistics;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteStatistics();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -58,6 +53,10 @@ class CustomerBulkDeleteStatisticsNormalizer implements DenormalizerAwareInterfa
             $object->setHasInvoices($data['has_invoices']);
             unset($data['has_invoices']);
         }
+        if (\array_key_exists('has_recurring_invoice', $data)) {
+            $object->setHasRecurringInvoice($data['has_recurring_invoice']);
+            unset($data['has_recurring_invoice']);
+        }
         if (\array_key_exists('errors', $data)) {
             $object->setErrors($data['errors']);
             unset($data['errors']);
@@ -67,10 +66,8 @@ class CustomerBulkDeleteStatisticsNormalizer implements DenormalizerAwareInterfa
                 $object[$key] = $value;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -78,18 +75,17 @@ class CustomerBulkDeleteStatisticsNormalizer implements DenormalizerAwareInterfa
         $dataArray['deleted'] = $data->getDeleted();
         $dataArray['not_found'] = $data->getNotFound();
         $dataArray['has_invoices'] = $data->getHasInvoices();
+        $dataArray['has_recurring_invoice'] = $data->getHasRecurringInvoice();
         $dataArray['errors'] = $data->getErrors();
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [CustomerBulkDeleteStatistics::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteStatistics::class => false];
     }
 }

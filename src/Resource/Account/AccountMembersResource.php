@@ -8,6 +8,7 @@ use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\AccountMember;
 use Lenorix\BeelSdk\Generated\Model\ChangeMemberRoleRequest;
 use Lenorix\BeelSdk\Generated\Model\GrantAssignment;
+use Lenorix\BeelSdk\Generated\Model\MemberGrant;
 use Lenorix\BeelSdk\Generated\Model\PutMemberGrantRequest;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdMembersGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdMembersMemberIdGrantsGetResponse200Data;
@@ -83,7 +84,7 @@ final readonly class AccountMembersResource extends GeneratedResource
      * page; `page` sets the first page to read.
      *
      * @param  array<string, mixed>  $query  The same filters as `listGrants()`.
-     * @return \Generator<int, GrantAssignment>
+     * @return \Generator<int, MemberGrant>
      */
     public function allGrants(string $memberId, array $query = []): \Generator
     {

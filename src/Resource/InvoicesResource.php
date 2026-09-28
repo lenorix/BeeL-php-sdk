@@ -19,6 +19,7 @@ use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdMarkSentPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdReschedulePatchBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSchedulePostBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSendPostResponse200Data;
+use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSendPostResponse202Data;
 use Lenorix\BeelSdk\Generated\Model\VoidInvoiceRequest;
 use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\RequestModels;
@@ -184,7 +185,7 @@ final readonly class InvoicesResource extends GeneratedResource
     /**
      * @param  SendEmailRequest|array<string, mixed>|null  $request  The request as a model or as an array in API format.
      */
-    public function sendEmail(string $invoiceId, SendEmailRequest|array|null $request = null): V1InvoicesInvoiceIdSendPostResponse200Data
+    public function sendEmail(string $invoiceId, SendEmailRequest|array|null $request = null): V1InvoicesInvoiceIdSendPostResponse200Data|V1InvoicesInvoiceIdSendPostResponse202Data
     {
         $request = RequestModels::from($request, SendEmailRequest::class);
 

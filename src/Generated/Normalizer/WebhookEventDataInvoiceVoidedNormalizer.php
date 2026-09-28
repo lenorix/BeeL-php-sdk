@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceVoided;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class WebhookEventDataInvoiceVoidedNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class WebhookEventDataInvoiceVoidedNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === WebhookEventDataInvoiceVoided::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceVoided::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === WebhookEventDataInvoiceVoided::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceVoided::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new WebhookEventDataInvoiceVoided;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceVoided();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -50,27 +45,24 @@ class WebhookEventDataInvoiceVoidedNormalizer implements DenormalizerAwareInterf
         }
         if (\array_key_exists('cancellation_reason', $data) && $data['cancellation_reason'] !== null) {
             $object->setCancellationReason($data['cancellation_reason']);
-        } elseif (\array_key_exists('cancellation_reason', $data) && $data['cancellation_reason'] === null) {
+        }
+        elseif (\array_key_exists('cancellation_reason', $data) && $data['cancellation_reason'] === null) {
             $object->setCancellationReason(null);
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['invoice_id'] = $data->getInvoiceId();
         $dataArray['invoice_number'] = $data->getInvoiceNumber();
-        if ($data->isInitialized('cancellationReason') && $data->getCancellationReason() !== null) {
+        if ($data->isInitialized('cancellationReason') && null !== $data->getCancellationReason()) {
             $dataArray['cancellation_reason'] = $data->getCancellationReason();
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [WebhookEventDataInvoiceVoided::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceVoided::class => false];
     }
 }

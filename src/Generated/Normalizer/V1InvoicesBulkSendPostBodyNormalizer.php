@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\V1InvoicesBulkSendPostBody;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class V1InvoicesBulkSendPostBodyNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class V1InvoicesBulkSendPostBodyNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === V1InvoicesBulkSendPostBody::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\V1InvoicesBulkSendPostBody::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === V1InvoicesBulkSendPostBody::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\V1InvoicesBulkSendPostBody::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new V1InvoicesBulkSendPostBody;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\V1InvoicesBulkSendPostBody();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -83,10 +78,8 @@ class V1InvoicesBulkSendPostBodyNormalizer implements DenormalizerAwareInterface
                 $object[$key] = $value_3;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -95,27 +88,27 @@ class V1InvoicesBulkSendPostBodyNormalizer implements DenormalizerAwareInterface
             $values[] = $value;
         }
         $dataArray['invoice_ids'] = $values;
-        if ($data->isInitialized('recipients') && $data->getRecipients() !== null) {
+        if ($data->isInitialized('recipients') && null !== $data->getRecipients()) {
             $values_1 = [];
             foreach ($data->getRecipients() as $value_1) {
                 $values_1[] = $value_1;
             }
             $dataArray['recipients'] = $values_1;
         }
-        if ($data->isInitialized('cc') && $data->getCc() !== null) {
+        if ($data->isInitialized('cc') && null !== $data->getCc()) {
             $values_2 = [];
             foreach ($data->getCc() as $value_2) {
                 $values_2[] = $value_2;
             }
             $dataArray['cc'] = $values_2;
         }
-        if ($data->isInitialized('subject') && $data->getSubject() !== null) {
+        if ($data->isInitialized('subject') && null !== $data->getSubject()) {
             $dataArray['subject'] = $data->getSubject();
         }
-        if ($data->isInitialized('message') && $data->getMessage() !== null) {
+        if ($data->isInitialized('message') && null !== $data->getMessage()) {
             $dataArray['message'] = $data->getMessage();
         }
-        if ($data->isInitialized('language') && $data->getLanguage() !== null) {
+        if ($data->isInitialized('language') && null !== $data->getLanguage()) {
             $dataArray['language'] = $data->getLanguage();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value_3) {
@@ -123,12 +116,10 @@ class V1InvoicesBulkSendPostBodyNormalizer implements DenormalizerAwareInterface
                 $dataArray[$key] = $value_3;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [V1InvoicesBulkSendPostBody::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\V1InvoicesBulkSendPostBody::class => false];
     }
 }

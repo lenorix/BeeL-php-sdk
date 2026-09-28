@@ -3,8 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\ErrorDetail;
-use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -13,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class ErrorDetailNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class ErrorDetailNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === ErrorDetail::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\ErrorDetail::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === ErrorDetail::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\ErrorDetail::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new ErrorDetail;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\ErrorDetail();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -52,7 +46,7 @@ class ErrorDetailNormalizer implements DenormalizerAwareInterface, DenormalizerI
             unset($data['message']);
         }
         if (\array_key_exists('details', $data)) {
-            $values = new JsonObject;
+            $values = new \Lenorix\BeelSdk\Generated\Runtime\JsonObject();
             foreach ($data['details'] as $key => $value) {
                 $values[$key] = $value;
             }
@@ -64,17 +58,15 @@ class ErrorDetailNormalizer implements DenormalizerAwareInterface, DenormalizerI
                 $object[$key_1] = $value_1;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['code'] = $data->getCode();
         $dataArray['message'] = $data->getMessage();
-        if ($data->isInitialized('details') && $data->getDetails() !== null) {
-            $values = new JsonObject;
+        if ($data->isInitialized('details') && null !== $data->getDetails()) {
+            $values = new \Lenorix\BeelSdk\Generated\Runtime\JsonObject();
             foreach ($data->getDetails() as $key => $value) {
                 $values[$key] = $value;
             }
@@ -85,12 +77,10 @@ class ErrorDetailNormalizer implements DenormalizerAwareInterface, DenormalizerI
                 $dataArray[$key_1] = $value_1;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [ErrorDetail::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\ErrorDetail::class => false];
     }
 }

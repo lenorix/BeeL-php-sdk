@@ -3,11 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\InvoiceTotals;
-use Lenorix\BeelSdk\Generated\Model\InvoiceTotalsIrpfBreakdownItem;
-use Lenorix\BeelSdk\Generated\Model\InvoiceTotalsSurchargeBreakdownItem;
-use Lenorix\BeelSdk\Generated\Model\InvoiceTotalsVatBreakdownItem;
-use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -16,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class InvoiceTotalsNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class InvoiceTotalsNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === InvoiceTotals::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\InvoiceTotals::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === InvoiceTotals::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\InvoiceTotals::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new InvoiceTotals;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\InvoiceTotals();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -81,7 +72,7 @@ class InvoiceTotalsNormalizer implements DenormalizerAwareInterface, Denormalize
         if (\array_key_exists('vat_breakdown', $data)) {
             $values = [];
             foreach ($data['vat_breakdown'] as $value) {
-                $values[] = $this->denormalizer->denormalize($value, InvoiceTotalsVatBreakdownItem::class, 'json', $context);
+                $values[] = $this->denormalizer->denormalize($value, \Lenorix\BeelSdk\Generated\Model\InvoiceTotalsVatBreakdownItem::class, 'json', $context);
             }
             $object->setVatBreakdown($values);
             unset($data['vat_breakdown']);
@@ -93,7 +84,7 @@ class InvoiceTotalsNormalizer implements DenormalizerAwareInterface, Denormalize
         if (\array_key_exists('surcharge_breakdown', $data)) {
             $values_1 = [];
             foreach ($data['surcharge_breakdown'] as $value_1) {
-                $values_1[] = $this->denormalizer->denormalize($value_1, InvoiceTotalsSurchargeBreakdownItem::class, 'json', $context);
+                $values_1[] = $this->denormalizer->denormalize($value_1, \Lenorix\BeelSdk\Generated\Model\InvoiceTotalsSurchargeBreakdownItem::class, 'json', $context);
             }
             $object->setSurchargeBreakdown($values_1);
             unset($data['surcharge_breakdown']);
@@ -105,7 +96,7 @@ class InvoiceTotalsNormalizer implements DenormalizerAwareInterface, Denormalize
         if (\array_key_exists('irpf_breakdown', $data)) {
             $values_2 = [];
             foreach ($data['irpf_breakdown'] as $value_2) {
-                $values_2[] = $this->denormalizer->denormalize($value_2, InvoiceTotalsIrpfBreakdownItem::class, 'json', $context);
+                $values_2[] = $this->denormalizer->denormalize($value_2, \Lenorix\BeelSdk\Generated\Model\InvoiceTotalsIrpfBreakdownItem::class, 'json', $context);
             }
             $object->setIrpfBreakdown($values_2);
             unset($data['irpf_breakdown']);
@@ -131,46 +122,44 @@ class InvoiceTotalsNormalizer implements DenormalizerAwareInterface, Denormalize
                 $object[$key] = $value_3;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['taxable_base'] = $data->getTaxableBase();
-        if ($data->isInitialized('totalDiscounts') && $data->getTotalDiscounts() !== null) {
+        if ($data->isInitialized('totalDiscounts') && null !== $data->getTotalDiscounts()) {
             $dataArray['total_discounts'] = $data->getTotalDiscounts();
         }
-        if ($data->isInitialized('vatBreakdown') && $data->getVatBreakdown() !== null) {
+        if ($data->isInitialized('vatBreakdown') && null !== $data->getVatBreakdown()) {
             $values = [];
             foreach ($data->getVatBreakdown() as $value) {
-                $values[] = $value === null ? null : new JsonObject($this->normalizer->normalize($value, 'json', $context));
+                $values[] = $value === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($value, 'json', $context));
             }
             $dataArray['vat_breakdown'] = $values;
         }
         $dataArray['total_vat'] = $data->getTotalVat();
-        if ($data->isInitialized('surchargeBreakdown') && $data->getSurchargeBreakdown() !== null) {
+        if ($data->isInitialized('surchargeBreakdown') && null !== $data->getSurchargeBreakdown()) {
             $values_1 = [];
             foreach ($data->getSurchargeBreakdown() as $value_1) {
-                $values_1[] = $value_1 === null ? null : new JsonObject($this->normalizer->normalize($value_1, 'json', $context));
+                $values_1[] = $value_1 === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($value_1, 'json', $context));
             }
             $dataArray['surcharge_breakdown'] = $values_1;
         }
         $dataArray['total_equivalence_surcharge'] = $data->getTotalEquivalenceSurcharge();
-        if ($data->isInitialized('irpfBreakdown') && $data->getIrpfBreakdown() !== null) {
+        if ($data->isInitialized('irpfBreakdown') && null !== $data->getIrpfBreakdown()) {
             $values_2 = [];
             foreach ($data->getIrpfBreakdown() as $value_2) {
-                $values_2[] = $value_2 === null ? null : new JsonObject($this->normalizer->normalize($value_2, 'json', $context));
+                $values_2[] = $value_2 === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($value_2, 'json', $context));
             }
             $dataArray['irpf_breakdown'] = $values_2;
         }
         $dataArray['total_irpf'] = $data->getTotalIrpf();
         $dataArray['invoice_total'] = $data->getInvoiceTotal();
-        if ($data->isInitialized('totalDisbursements') && $data->getTotalDisbursements() !== null) {
+        if ($data->isInitialized('totalDisbursements') && null !== $data->getTotalDisbursements()) {
             $dataArray['total_disbursements'] = $data->getTotalDisbursements();
         }
-        if ($data->isInitialized('totalToPay') && $data->getTotalToPay() !== null) {
+        if ($data->isInitialized('totalToPay') && null !== $data->getTotalToPay()) {
             $dataArray['total_to_pay'] = $data->getTotalToPay();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value_3) {
@@ -178,12 +167,10 @@ class InvoiceTotalsNormalizer implements DenormalizerAwareInterface, Denormalize
                 $dataArray[$key] = $value_3;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [InvoiceTotals::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\InvoiceTotals::class => false];
     }
 }

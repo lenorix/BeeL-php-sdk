@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSendPostResponse200Data;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class V1InvoicesInvoiceIdSendPostResponse200DataNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class V1InvoicesInvoiceIdSendPostResponse200DataNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === V1InvoicesInvoiceIdSendPostResponse200Data::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSendPostResponse200Data::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === V1InvoicesInvoiceIdSendPostResponse200Data::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSendPostResponse200Data::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new V1InvoicesInvoiceIdSendPostResponse200Data;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSendPostResponse200Data();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -63,24 +58,22 @@ class V1InvoicesInvoiceIdSendPostResponse200DataNormalizer implements Denormaliz
                 $object[$key] = $value_1;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('emailId') && $data->getEmailId() !== null) {
+        if ($data->isInitialized('emailId') && null !== $data->getEmailId()) {
             $dataArray['email_id'] = $data->getEmailId();
         }
-        if ($data->isInitialized('sentTo') && $data->getSentTo() !== null) {
+        if ($data->isInitialized('sentTo') && null !== $data->getSentTo()) {
             $values = [];
             foreach ($data->getSentTo() as $value) {
                 $values[] = $value;
             }
             $dataArray['sent_to'] = $values;
         }
-        if ($data->isInitialized('sentAt') && $data->getSentAt() !== null) {
+        if ($data->isInitialized('sentAt') && null !== $data->getSentAt()) {
             $dataArray['sent_at'] = $data->getSentAt()->format('Y-m-d\TH:i:s.uP');
         }
         foreach ($data->additionalPropertyEntries() as $key => $value_1) {
@@ -88,12 +81,10 @@ class V1InvoicesInvoiceIdSendPostResponse200DataNormalizer implements Denormaliz
                 $dataArray[$key] = $value_1;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [V1InvoicesInvoiceIdSendPostResponse200Data::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSendPostResponse200Data::class => false];
     }
 }

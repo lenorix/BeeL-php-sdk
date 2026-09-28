@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\Invitation;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class InvitationNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class InvitationNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === Invitation::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\Invitation::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === Invitation::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\Invitation::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new Invitation;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\Invitation();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -65,7 +60,8 @@ class InvitationNormalizer implements DenormalizerAwareInterface, DenormalizerIn
         if (\array_key_exists('invitation_url', $data) && $data['invitation_url'] !== null) {
             $object->setInvitationUrl($data['invitation_url']);
             unset($data['invitation_url']);
-        } elseif (\array_key_exists('invitation_url', $data) && $data['invitation_url'] === null) {
+        }
+        elseif (\array_key_exists('invitation_url', $data) && $data['invitation_url'] === null) {
             $object->setInvitationUrl(null);
             unset($data['invitation_url']);
         }
@@ -74,10 +70,8 @@ class InvitationNormalizer implements DenormalizerAwareInterface, DenormalizerIn
                 $object[$key] = $value;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -86,7 +80,7 @@ class InvitationNormalizer implements DenormalizerAwareInterface, DenormalizerIn
         $dataArray['account_role'] = $data->getAccountRole();
         $dataArray['expires_at'] = $data->getExpiresAt()->format('Y-m-d\TH:i:s.uP');
         $dataArray['token'] = $data->getToken();
-        if ($data->isInitialized('invitationUrl') && $data->getInvitationUrl() !== null) {
+        if ($data->isInitialized('invitationUrl') && null !== $data->getInvitationUrl()) {
             $dataArray['invitation_url'] = $data->getInvitationUrl();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -94,12 +88,10 @@ class InvitationNormalizer implements DenormalizerAwareInterface, DenormalizerIn
                 $dataArray[$key] = $value;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [Invitation::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\Invitation::class => false];
     }
 }

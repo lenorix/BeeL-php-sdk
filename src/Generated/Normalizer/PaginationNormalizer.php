@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\Pagination;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class PaginationNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class PaginationNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === Pagination::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\Pagination::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === Pagination::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\Pagination::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new Pagination;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\Pagination();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -77,10 +72,8 @@ class PaginationNormalizer implements DenormalizerAwareInterface, DenormalizerIn
                 $object[$key] = $value;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -88,10 +81,10 @@ class PaginationNormalizer implements DenormalizerAwareInterface, DenormalizerIn
         $dataArray['total_pages'] = $data->getTotalPages();
         $dataArray['total_items'] = $data->getTotalItems();
         $dataArray['items_per_page'] = $data->getItemsPerPage();
-        if ($data->isInitialized('hasNext') && $data->getHasNext() !== null) {
+        if ($data->isInitialized('hasNext') && null !== $data->getHasNext()) {
             $dataArray['has_next'] = $data->getHasNext();
         }
-        if ($data->isInitialized('hasPrevious') && $data->getHasPrevious() !== null) {
+        if ($data->isInitialized('hasPrevious') && null !== $data->getHasPrevious()) {
             $dataArray['has_previous'] = $data->getHasPrevious();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -99,12 +92,10 @@ class PaginationNormalizer implements DenormalizerAwareInterface, DenormalizerIn
                 $dataArray[$key] = $value;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [Pagination::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\Pagination::class => false];
     }
 }

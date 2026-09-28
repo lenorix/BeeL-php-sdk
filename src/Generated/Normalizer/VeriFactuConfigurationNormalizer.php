@@ -3,7 +3,6 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
-use Lenorix\BeelSdk\Generated\Model\VeriFactuConfiguration;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -12,31 +11,27 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-
-class VeriFactuConfigurationNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
+class VeriFactuConfigurationNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
 {
-    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
+    use CheckArray;
     use ValidatorTrait;
-
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === VeriFactuConfiguration::class;
+        return $type === \Lenorix\BeelSdk\Generated\Model\VeriFactuConfiguration::class;
     }
-
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === VeriFactuConfiguration::class;
+        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\VeriFactuConfiguration::class;
     }
-
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new VeriFactuConfiguration;
-        if ($data === null || \is_array($data) === false) {
+        $object = new \Lenorix\BeelSdk\Generated\Model\VeriFactuConfiguration();
+        if (null === $data || false === \is_array($data)) {
             return $object;
         }
-        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
+        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -61,42 +56,48 @@ class VeriFactuConfigurationNormalizer implements DenormalizerAwareInterface, De
         if (\array_key_exists('nif_status', $data) && $data['nif_status'] !== null) {
             $object->setNifStatus($data['nif_status']);
             unset($data['nif_status']);
-        } elseif (\array_key_exists('nif_status', $data) && $data['nif_status'] === null) {
+        }
+        elseif (\array_key_exists('nif_status', $data) && $data['nif_status'] === null) {
             $object->setNifStatus(null);
             unset($data['nif_status']);
         }
         if (\array_key_exists('nif_registered_at', $data) && $data['nif_registered_at'] !== null) {
             $object->setNifRegisteredAt((new \DateTime($data['nif_registered_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['nif_registered_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['nif_registered_at']));
             unset($data['nif_registered_at']);
-        } elseif (\array_key_exists('nif_registered_at', $data) && $data['nif_registered_at'] === null) {
+        }
+        elseif (\array_key_exists('nif_registered_at', $data) && $data['nif_registered_at'] === null) {
             $object->setNifRegisteredAt(null);
             unset($data['nif_registered_at']);
         }
         if (\array_key_exists('status', $data) && $data['status'] !== null) {
             $object->setStatus($data['status']);
             unset($data['status']);
-        } elseif (\array_key_exists('status', $data) && $data['status'] === null) {
+        }
+        elseif (\array_key_exists('status', $data) && $data['status'] === null) {
             $object->setStatus(null);
             unset($data['status']);
         }
         if (\array_key_exists('signed', $data) && $data['signed'] !== null) {
             $object->setSigned($data['signed']);
             unset($data['signed']);
-        } elseif (\array_key_exists('signed', $data) && $data['signed'] === null) {
+        }
+        elseif (\array_key_exists('signed', $data) && $data['signed'] === null) {
             $object->setSigned(null);
             unset($data['signed']);
         }
         if (\array_key_exists('activated', $data) && $data['activated'] !== null) {
             $object->setActivated($data['activated']);
             unset($data['activated']);
-        } elseif (\array_key_exists('activated', $data) && $data['activated'] === null) {
+        }
+        elseif (\array_key_exists('activated', $data) && $data['activated'] === null) {
             $object->setActivated(null);
             unset($data['activated']);
         }
         if (\array_key_exists('pdf_generated', $data) && $data['pdf_generated'] !== null) {
             $object->setPdfGenerated($data['pdf_generated']);
             unset($data['pdf_generated']);
-        } elseif (\array_key_exists('pdf_generated', $data) && $data['pdf_generated'] === null) {
+        }
+        elseif (\array_key_exists('pdf_generated', $data) && $data['pdf_generated'] === null) {
             $object->setPdfGenerated(null);
             unset($data['pdf_generated']);
         }
@@ -105,30 +106,28 @@ class VeriFactuConfigurationNormalizer implements DenormalizerAwareInterface, De
                 $object[$key] = $value;
             }
         }
-
         return $object;
     }
-
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['enabled'] = $data->getEnabled();
-        if ($data->isInitialized('nifStatus') && $data->getNifStatus() !== null) {
+        if ($data->isInitialized('nifStatus') && null !== $data->getNifStatus()) {
             $dataArray['nif_status'] = $data->getNifStatus();
         }
-        if ($data->isInitialized('nifRegisteredAt') && $data->getNifRegisteredAt() !== null) {
+        if ($data->isInitialized('nifRegisteredAt') && null !== $data->getNifRegisteredAt()) {
             $dataArray['nif_registered_at'] = $data->getNifRegisteredAt()?->format('Y-m-d\TH:i:s.uP');
         }
-        if ($data->isInitialized('status') && $data->getStatus() !== null) {
+        if ($data->isInitialized('status') && null !== $data->getStatus()) {
             $dataArray['status'] = $data->getStatus();
         }
-        if ($data->isInitialized('signed') && $data->getSigned() !== null) {
+        if ($data->isInitialized('signed') && null !== $data->getSigned()) {
             $dataArray['signed'] = $data->getSigned();
         }
-        if ($data->isInitialized('activated') && $data->getActivated() !== null) {
+        if ($data->isInitialized('activated') && null !== $data->getActivated()) {
             $dataArray['activated'] = $data->getActivated();
         }
-        if ($data->isInitialized('pdfGenerated') && $data->getPdfGenerated() !== null) {
+        if ($data->isInitialized('pdfGenerated') && null !== $data->getPdfGenerated()) {
             $dataArray['pdf_generated'] = $data->getPdfGenerated();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -136,12 +135,10 @@ class VeriFactuConfigurationNormalizer implements DenormalizerAwareInterface, De
                 $dataArray[$key] = $value;
             }
         }
-
         return $dataArray;
     }
-
     public function getSupportedTypes(?string $format = null): array
     {
-        return [VeriFactuConfiguration::class => false];
+        return [\Lenorix\BeelSdk\Generated\Model\VeriFactuConfiguration::class => false];
     }
 }
