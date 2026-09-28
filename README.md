@@ -373,7 +373,7 @@ fclose($file);
 $download->counts; // ['total' => 10, 'successful' => 9, 'failed' => 1]
 ```
 
-`fileName` comes from `Content-Disposition` and is reduced to a base name, so it never contains a path. The archive's `counts` has `total`, `successful` and `failed`; the export's has `total`. Errors such as `EXPORT_SELECTION_REQUIRED` or `EXPORT_LIMIT_EXCEEDED` throw `BeelApiError`. Neither operation retries a `5xx` by default, because each attempt builds the file again.
+`fileName` comes from `Content-Disposition` and is reduced to a base name, so it never contains a path. `contentType` is the media type, such as `text/csv`, and `charset` the `Content-Type` charset when BeeL sends one, such as `utf-8`. The archive's `counts` has `total`, `successful` and `failed`; the export's has `total`. Errors such as `EXPORT_SELECTION_REQUIRED` or `EXPORT_LIMIT_EXCEEDED` throw `BeelApiError`. Neither operation retries a `5xx` by default, because each attempt builds the file again.
 
 With the default Guzzle client, the body is downloaded to a temporary stream (in memory up to 2 MB, then on disk) before the call returns. For true network streaming, pass a client created with `new \GuzzleHttp\Client(['stream' => true])`; the body can then be read only once.
 

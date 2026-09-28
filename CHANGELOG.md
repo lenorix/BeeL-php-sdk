@@ -2,6 +2,12 @@
 
 All notable changes to `BeeL-php-sdk` will be documented in this file.
 
+## Unreleased
+
+### Fixed
+
+- `BinaryDownload` dropped the `Content-Type` parameters, so the `charset` of a CSV download was lost. It now keeps it in `BinaryDownload::$charset` (for example `utf-8`, or `null` when absent); `contentType` is still the media type without parameters, such as `text/csv`.
+
 ## v0.6.1 - 2026-09-27
 
 ### Fixed

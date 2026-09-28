@@ -19,9 +19,10 @@ final readonly class BinaryDownload
     /**
      * @param  StreamInterface  $body  File contents, positioned at the start when the stream is seekable.
      * @param  string|null  $fileName  Suggested file name from `Content-Disposition`, reduced to a base name.
-     * @param  string|null  $contentType  Media type, such as `application/zip`.
+     * @param  string|null  $contentType  Media type without parameters, such as `application/zip` or `text/csv`.
      * @param  int|null  $contentLength  Size in bytes, when known.
      * @param  array<string, int>  $counts  Invoice counts reported by BeeL; each operation documents its keys.
+     * @param  string|null  $charset  The `charset` parameter of `Content-Type`, such as `utf-8`, as BeeL sent it; null when absent.
      */
     public function __construct(
         public StreamInterface $body,
@@ -29,6 +30,7 @@ final readonly class BinaryDownload
         public ?string $contentType,
         public ?int $contentLength,
         public array $counts = [],
+        public ?string $charset = null,
     ) {}
 
     /**
@@ -60,7 +62,22 @@ final readonly class BinaryDownload
             trim(explode(';', $response->getHeaderLine('Content-Type'))[0]) ?: null,
             ctype_digit($length) ? (int) $length : $body->getSize(),
             $counts,
+            self::charset($response->getHeaderLine('Content-Type')),
         );
+    }
+
+    /**
+     * Read the `charset` parameter of a `Content-Type` value (RFC 9110): the name is
+     * case-insensitive and the value may be a quoted string.
+     */
+    private static function charset(string $contentType): ?string
+    {
+        if (preg_match('/;\s*charset\s*=\s*(?:"((?:[^"\\\\]|\\\\.)*)"|([^;\s]+))/i', $contentType, $matches) !== 1) {
+            return null;
+        }
+        $value = ($matches[2] ?? '') !== '' ? $matches[2] : (string) preg_replace('/\\\\(.)/s', '$1', $matches[1]);
+
+        return $value === '' ? null : $value;
     }
 
     /**

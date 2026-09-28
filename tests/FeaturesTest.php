@@ -1501,3 +1501,18 @@ it('does not retry a connection error on file downloads', function (string $meth
         ->toThrow(ConnectException::class)
         ->and($transport->requests)->toHaveCount(1);
 })->with(['archive' => ['archive'], 'export' => ['export']]);
+
+it('keeps the Content-Type charset of a download while contentType stays the media type', function (string $header, ?string $charset) {
+    $transport = new RecordingPsrClient([new Response(200, ['Content-Type' => $header], "legal_name,nif\n")]);
+
+    $download = testClient($transport)->templates->customerImport();
+
+    expect($download->contentType)->toBe('text/csv')
+        ->and($download->charset)->toBe($charset);
+})->with([
+    'as BeeL sends it' => ['text/csv; charset=utf-8', 'utf-8'],
+    'quoted' => ['text/csv; charset="UTF-8"', 'UTF-8'],
+    'upper-case name' => ['text/csv;CHARSET=iso-8859-1', 'iso-8859-1'],
+    'among other parameters' => ['text/csv; header=present; charset=utf-8', 'utf-8'],
+    'without charset' => ['text/csv', null],
+]);
