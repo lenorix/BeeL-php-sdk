@@ -324,16 +324,21 @@ it('stops instead of looping when BeeL ignores the requested page', function () 
         ->and($transport->requests)->toHaveCount(2);
 });
 
-it('keeps paginating when BeeL does not report the current page', function () {
+it('keeps paginating when BeeL does not report the current page', function (string $key, Closure $all) {
     $transport = new RecordingPsrClient([
-        jsonResponse(['success' => true, 'data' => ['invoices' => [['id' => 'a']], 'pagination' => ['has_next' => true]]]),
-        jsonResponse(['success' => true, 'data' => ['invoices' => [['id' => 'b']], 'pagination' => ['has_next' => false]]]),
+        jsonResponse(['success' => true, 'data' => [$key => [['id' => 'a']], 'pagination' => ['has_next' => true]]]),
+        jsonResponse(['success' => true, 'data' => [$key => [['id' => 'b']], 'pagination' => ['has_next' => false]]]),
     ]);
 
-    $ids = array_map(static fn (Invoice $invoice): string => $invoice->getId(), iterator_to_array(testClient($transport)->company('c')->invoices->all()));
+    $ids = array_map(static fn (object $item): string => $item->getId(), iterator_to_array($all(testClient($transport))));
 
     expect($ids)->toBe(['a', 'b']);
-});
+})->with([
+    // Pagination is required in the invoice list and optional in the other two.
+    'invoices' => ['invoices', fn (Beel $beel) => $beel->company('c')->invoices->all()],
+    'recurring invoices' => ['recurring_invoices', fn (Beel $beel) => $beel->company('c')->recurringInvoices->all()],
+    'account webhooks' => ['webhooks', fn (Beel $beel) => $beel->account('a')->webhooks->all()],
+]);
 
 it('follows next_cursor for cursor-paginated lists', function () {
     $transport = new RecordingPsrClient([

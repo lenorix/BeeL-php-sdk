@@ -7005,12 +7005,7 @@
                                                             }
                                                         },
                                                         "pagination": {
-                                                            "oneOf": [
-                                                                {
-                                                                    "$ref": "#/components/schemas/Pagination"
-                                                                }
-                                                            ],
-                                                            "nullable": true
+                                                            "$ref": "#/components/schemas/Pagination"
                                                         }
                                                     }
                                                 }
@@ -8047,12 +8042,7 @@
                                                             }
                                                         },
                                                         "pagination": {
-                                                            "oneOf": [
-                                                                {
-                                                                    "$ref": "#/components/schemas/Pagination"
-                                                                }
-                                                            ],
-                                                            "nullable": true
+                                                            "$ref": "#/components/schemas/Pagination"
                                                         }
                                                     }
                                                 }
@@ -21410,12 +21400,7 @@
                                                             "nullable": true
                                                         },
                                                         "pagination": {
-                                                            "oneOf": [
-                                                                {
-                                                                    "$ref": "#/components/schemas/Pagination"
-                                                                }
-                                                            ],
-                                                            "nullable": true
+                                                            "$ref": "#/components/schemas/Pagination"
                                                         }
                                                     }
                                                 }
@@ -21730,12 +21715,7 @@
                                                             "nullable": true
                                                         },
                                                         "pagination": {
-                                                            "oneOf": [
-                                                                {
-                                                                    "$ref": "#/components/schemas/Pagination"
-                                                                }
-                                                            ],
-                                                            "nullable": true
+                                                            "$ref": "#/components/schemas/Pagination"
                                                         }
                                                     }
                                                 }
@@ -22341,12 +22321,7 @@
                                                             "nullable": true
                                                         },
                                                         "pagination": {
-                                                            "oneOf": [
-                                                                {
-                                                                    "$ref": "#/components/schemas/Pagination"
-                                                                }
-                                                            ],
-                                                            "nullable": true
+                                                            "$ref": "#/components/schemas/Pagination"
                                                         }
                                                     }
                                                 }
@@ -22674,12 +22649,7 @@
                                                             "nullable": true
                                                         },
                                                         "pagination": {
-                                                            "oneOf": [
-                                                                {
-                                                                    "$ref": "#/components/schemas/Pagination"
-                                                                }
-                                                            ],
-                                                            "nullable": true
+                                                            "$ref": "#/components/schemas/Pagination"
                                                         }
                                                     }
                                                 }
@@ -30535,12 +30505,7 @@
                                 }
                             },
                             "pagination": {
-                                "oneOf": [
-                                    {
-                                        "$ref": "#/components/schemas/Pagination"
-                                    }
-                                ],
-                                "nullable": true
+                                "$ref": "#/components/schemas/Pagination"
                             },
                             "counts": {
                                 "$ref": "#/components/schemas/PaymentEventCounts"
@@ -30750,12 +30715,7 @@
                                 }
                             },
                             "pagination": {
-                                "oneOf": [
-                                    {
-                                        "$ref": "#/components/schemas/Pagination"
-                                    }
-                                ],
-                                "nullable": true
+                                "$ref": "#/components/schemas/Pagination"
                             }
                         }
                     },

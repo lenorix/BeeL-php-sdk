@@ -250,21 +250,25 @@ $everySent(static function (stdClass $schema, string $property, bool $required) 
     }
 });
 // Jane reads a one-item `oneOf` as its model only when the object has every required key and
-// known enum values. Without enums, that only fails on an object that breaks the contract, while
-// a new enum value would make the model unreadable.
-$hasEnum = static function (string $name) use ($schemas, $component): bool {
-    foreach (get_object_vars($schemas->{$name}->properties ?? new stdClass) as $property) {
+// known enum values; otherwise the raw array reaches the setter and the whole response fails.
+// So the wrapper is only safe around a model with neither, which Jane reads from any object.
+$readsAnyObject = static function (string $name) use ($schemas, $component): bool {
+    $schema = $schemas->{$name};
+    if (! isset($schema->properties) || isset($schema->allOf) || ($schema->required ?? []) !== []) {
+        return false;
+    }
+    foreach (get_object_vars($schema->properties) as $property) {
         $target = $component($property);
         if (isset($property->enum) || ($target !== null && isset($schemas->{$target}->enum))) {
-            return true;
+            return false;
         }
     }
 
-    return false;
+    return true;
 };
 $optionalMadeNullable = 0;
 $sharedComponents = [];
-$makeNullable = static function (stdClass $schema, string $property) use (&$optionalMadeNullable, &$sharedComponents, $everRequired, $optionalUses, $otherUses, $requiredInSent, $schemas, $component, $isScalar, $wrapScalarReference, $hasEnum): void {
+$makeNullable = static function (stdClass $schema, string $property) use (&$optionalMadeNullable, &$sharedComponents, $everRequired, $optionalUses, $otherUses, $requiredInSent, $schemas, $component, $isScalar, $wrapScalarReference, $readsAnyObject): void {
     $propertySchema = $schema->properties->{$property};
     if (($everRequired[spl_object_id($schema).'.'.$property] ?? false) || ($propertySchema->nullable ?? false) === true) {
         return;
@@ -283,8 +287,8 @@ $makeNullable = static function (stdClass $schema, string $property) use (&$opti
         // Request properties that require it accept null too; BeeL still rejects one sent as null.
         $schemas->{$name}->nullable = true;
         $optionalMadeNullable++;
-    } elseif (isset($schemas->{$name}->properties) && ! isset($schemas->{$name}->allOf) && ! $hasEnum($name)) {
-        // Required elsewhere in what BeeL sends: only this use becomes nullable (see $hasEnum).
+    } elseif ($readsAnyObject($name)) {
+        // Required elsewhere in what BeeL sends: only this use becomes nullable (see $readsAnyObject).
         $wrapped = (object) ['oneOf' => [(object) ['$ref' => '#/components/schemas/'.$name]]];
         foreach (get_object_vars($propertySchema) as $keyword => $value) {
             if ($keyword !== '$ref') {
@@ -310,7 +314,7 @@ if ($json === false || (! is_dir(dirname($destination)) && ! mkdir(dirname($dest
 
 fwrite(STDOUT, "Wrote {$destination} ({$patched} parameter schemas given a type for Jane, {$nullableRefs} nullable references wrapped, {$envelopesCompleted} envelopes given a required `data`, {$optionalMadeNullable} optional properties or models made nullable).\n");
 if ($sharedComponents !== []) {
-    fwrite(STDOUT, 'Optional but left non-nullable, as they are also required in what BeeL sends and have enums: '.implode(', ', array_keys($sharedComponents)).".\n");
+    fwrite(STDOUT, 'Optional but left non-nullable, as they are also required in what BeeL sends and have required keys or enums: '.implode(', ', array_keys($sharedComponents)).".\n");
 }
 if ($patched === 0 && ! isset($argv[1])) {
     fwrite(STDOUT, "BeeL's contract no longer needs the first edit: Jane can read every parameter type.\n");

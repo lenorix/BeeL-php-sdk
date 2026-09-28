@@ -53,20 +53,13 @@ class V1CompaniesCompanyIdRecurringInvoicesGetResponse200DataNormalizer implemen
             $object->setRecurringInvoices($values);
             unset($data['recurring_invoices']);
         }
-        if (\array_key_exists('pagination', $data) && $data['pagination'] !== null) {
-            $value_1 = $data['pagination'];
-            if (is_array($data['pagination']) and \array_key_exists('current_page', $data['pagination']) and \array_key_exists('total_pages', $data['pagination']) and \array_key_exists('total_items', $data['pagination']) and \array_key_exists('items_per_page', $data['pagination'])) {
-                $value_1 = $this->denormalizer->denormalize($data['pagination'], Pagination::class, 'json', $context);
-            }
-            $object->setPagination($value_1);
-            unset($data['pagination']);
-        } elseif (\array_key_exists('pagination', $data) && $data['pagination'] === null) {
-            $object->setPagination(null);
+        if (\array_key_exists('pagination', $data)) {
+            $object->setPagination($this->denormalizer->denormalize($data['pagination'], Pagination::class, 'json', $context));
             unset($data['pagination']);
         }
-        foreach ($data as $key => $value_2) {
+        foreach ($data as $key => $value_1) {
             if (preg_match('/.*/', (string) $key)) {
-                $object[$key] = $value_2;
+                $object[$key] = $value_1;
             }
         }
 
@@ -82,15 +75,11 @@ class V1CompaniesCompanyIdRecurringInvoicesGetResponse200DataNormalizer implemen
         }
         $dataArray['recurring_invoices'] = $values;
         if ($data->isInitialized('pagination') && $data->getPagination() !== null) {
-            $value_1 = $data->getPagination();
-            if (is_object($data->getPagination())) {
-                $value_1 = $data->getPagination() === null ? null : new JsonObject($this->normalizer->normalize($data->getPagination(), 'json', $context));
-            }
-            $dataArray['pagination'] = $value_1;
+            $dataArray['pagination'] = $data->getPagination() === null ? null : new JsonObject($this->normalizer->normalize($data->getPagination(), 'json', $context));
         }
-        foreach ($data->additionalPropertyEntries() as $key => $value_2) {
+        foreach ($data->additionalPropertyEntries() as $key => $value_1) {
             if (preg_match('/.*/', (string) $key)) {
-                $dataArray[$key] = $value_2;
+                $dataArray[$key] = $value_1;
             }
         }
 

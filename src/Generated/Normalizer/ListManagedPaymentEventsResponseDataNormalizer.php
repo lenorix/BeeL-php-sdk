@@ -54,15 +54,8 @@ class ListManagedPaymentEventsResponseDataNormalizer implements DenormalizerAwar
             $object->setEvents($values);
             unset($data['events']);
         }
-        if (\array_key_exists('pagination', $data) && $data['pagination'] !== null) {
-            $value_1 = $data['pagination'];
-            if (is_array($data['pagination']) and \array_key_exists('current_page', $data['pagination']) and \array_key_exists('total_pages', $data['pagination']) and \array_key_exists('total_items', $data['pagination']) and \array_key_exists('items_per_page', $data['pagination'])) {
-                $value_1 = $this->denormalizer->denormalize($data['pagination'], Pagination::class, 'json', $context);
-            }
-            $object->setPagination($value_1);
-            unset($data['pagination']);
-        } elseif (\array_key_exists('pagination', $data) && $data['pagination'] === null) {
-            $object->setPagination(null);
+        if (\array_key_exists('pagination', $data)) {
+            $object->setPagination($this->denormalizer->denormalize($data['pagination'], Pagination::class, 'json', $context));
             unset($data['pagination']);
         }
         if (\array_key_exists('counts', $data) && $data['counts'] !== null) {
@@ -72,9 +65,9 @@ class ListManagedPaymentEventsResponseDataNormalizer implements DenormalizerAwar
             $object->setCounts(null);
             unset($data['counts']);
         }
-        foreach ($data as $key => $value_2) {
+        foreach ($data as $key => $value_1) {
             if (preg_match('/.*/', (string) $key)) {
-                $object[$key] = $value_2;
+                $object[$key] = $value_1;
             }
         }
 
@@ -90,18 +83,14 @@ class ListManagedPaymentEventsResponseDataNormalizer implements DenormalizerAwar
         }
         $dataArray['events'] = $values;
         if ($data->isInitialized('pagination') && $data->getPagination() !== null) {
-            $value_1 = $data->getPagination();
-            if (is_object($data->getPagination())) {
-                $value_1 = $data->getPagination() === null ? null : new JsonObject($this->normalizer->normalize($data->getPagination(), 'json', $context));
-            }
-            $dataArray['pagination'] = $value_1;
+            $dataArray['pagination'] = $data->getPagination() === null ? null : new JsonObject($this->normalizer->normalize($data->getPagination(), 'json', $context));
         }
         if ($data->isInitialized('counts') && $data->getCounts() !== null) {
             $dataArray['counts'] = $data->getCounts() === null ? null : new JsonObject($this->normalizer->normalize($data->getCounts(), 'json', $context));
         }
-        foreach ($data->additionalPropertyEntries() as $key => $value_2) {
+        foreach ($data->additionalPropertyEntries() as $key => $value_1) {
             if (preg_match('/.*/', (string) $key)) {
-                $dataArray[$key] = $value_2;
+                $dataArray[$key] = $value_1;
             }
         }
 
