@@ -57,7 +57,7 @@
         "pint": "vendor/bin/pint src/Beel.php src/Builder src/Enum src/Exception src/Http src/Resource src/Webhook tests",
         "format": "vendor/bin/pint src/Beel.php src/Builder src/Enum src/Exception src/Http src/Resource src/Webhook tests",
         "phpstan": "vendor/bin/phpstan analyse --configuration=phpstan.neon.dist --memory-limit=512M",
-        "generate": "@php bin/prepare-openapi.php && php -d memory_limit=256M vendor/bin/jane-openapi generate"
+        "generate": "@php bin/prepare-openapi.php && php -d memory_limit=256M vendor/bin/jane-openapi generate && vendor/bin/pint src/Generated"
     },
     "config": {
         "sort-packages": true,
