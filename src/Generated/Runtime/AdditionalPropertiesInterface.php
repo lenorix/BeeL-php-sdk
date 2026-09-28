@@ -2,12 +2,13 @@
 
 namespace Lenorix\BeelSdk\Generated\Runtime;
 
-interface AdditionalPropertiesInterface extends \IteratorAggregate, \Countable, \ArrayAccess, \JsonSerializable
+interface AdditionalPropertiesInterface extends \ArrayAccess, \Countable, \IteratorAggregate, \JsonSerializable
 {
     /**
      * @return array<string, mixed>
      */
     public function toArray(): array;
+
     /**
      * @return iterable<string, mixed>
      */

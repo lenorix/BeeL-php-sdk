@@ -3,6 +3,9 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\WebhookSubscriptionWithSecret;
+use Lenorix\BeelSdk\Generated\Model\WebhookSubscriptionWithSecretTestDelivery;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +14,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class WebhookSubscriptionWithSecretNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class WebhookSubscriptionWithSecretNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\WebhookSubscriptionWithSecret::class;
+        return $type === WebhookSubscriptionWithSecret::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\WebhookSubscriptionWithSecret::class;
+        return is_object($data) && get_class($data) === WebhookSubscriptionWithSecret::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\WebhookSubscriptionWithSecret();
-        if (null === $data || false === \is_array($data)) {
+        $object = new WebhookSubscriptionWithSecret;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -63,56 +70,49 @@ class WebhookSubscriptionWithSecretNormalizer implements DenormalizerInterface, 
         if (\array_key_exists('account_relationship', $data) && $data['account_relationship'] !== null) {
             $object->setAccountRelationship($data['account_relationship']);
             unset($data['account_relationship']);
-        }
-        elseif (\array_key_exists('account_relationship', $data) && $data['account_relationship'] === null) {
+        } elseif (\array_key_exists('account_relationship', $data) && $data['account_relationship'] === null) {
             $object->setAccountRelationship(null);
             unset($data['account_relationship']);
         }
         if (\array_key_exists('deactivated_by', $data) && $data['deactivated_by'] !== null) {
             $object->setDeactivatedBy($data['deactivated_by']);
             unset($data['deactivated_by']);
-        }
-        elseif (\array_key_exists('deactivated_by', $data) && $data['deactivated_by'] === null) {
+        } elseif (\array_key_exists('deactivated_by', $data) && $data['deactivated_by'] === null) {
             $object->setDeactivatedBy(null);
             unset($data['deactivated_by']);
         }
         if (\array_key_exists('deactivated_at', $data) && $data['deactivated_at'] !== null) {
             $object->setDeactivatedAt($this->denormalizer->denormalize($data['deactivated_at'], \DateTime::class, 'json', $context));
             unset($data['deactivated_at']);
-        }
-        elseif (\array_key_exists('deactivated_at', $data) && $data['deactivated_at'] === null) {
+        } elseif (\array_key_exists('deactivated_at', $data) && $data['deactivated_at'] === null) {
             $object->setDeactivatedAt(null);
             unset($data['deactivated_at']);
         }
         if (\array_key_exists('last_error', $data) && $data['last_error'] !== null) {
             $object->setLastError($data['last_error']);
             unset($data['last_error']);
-        }
-        elseif (\array_key_exists('last_error', $data) && $data['last_error'] === null) {
+        } elseif (\array_key_exists('last_error', $data) && $data['last_error'] === null) {
             $object->setLastError(null);
             unset($data['last_error']);
         }
         if (\array_key_exists('last_error_cause', $data) && $data['last_error_cause'] !== null) {
             $object->setLastErrorCause($data['last_error_cause']);
             unset($data['last_error_cause']);
-        }
-        elseif (\array_key_exists('last_error_cause', $data) && $data['last_error_cause'] === null) {
+        } elseif (\array_key_exists('last_error_cause', $data) && $data['last_error_cause'] === null) {
             $object->setLastErrorCause(null);
             unset($data['last_error_cause']);
         }
         if (\array_key_exists('consecutive_failures', $data) && $data['consecutive_failures'] !== null) {
             $object->setConsecutiveFailures($data['consecutive_failures']);
             unset($data['consecutive_failures']);
-        }
-        elseif (\array_key_exists('consecutive_failures', $data) && $data['consecutive_failures'] === null) {
+        } elseif (\array_key_exists('consecutive_failures', $data) && $data['consecutive_failures'] === null) {
             $object->setConsecutiveFailures(null);
             unset($data['consecutive_failures']);
         }
         if (\array_key_exists('last_used_at', $data) && $data['last_used_at'] !== null) {
             $object->setLastUsedAt($this->denormalizer->denormalize($data['last_used_at'], \DateTime::class, 'json', $context));
             unset($data['last_used_at']);
-        }
-        elseif (\array_key_exists('last_used_at', $data) && $data['last_used_at'] === null) {
+        } elseif (\array_key_exists('last_used_at', $data) && $data['last_used_at'] === null) {
             $object->setLastUsedAt(null);
             unset($data['last_used_at']);
         }
@@ -123,16 +123,14 @@ class WebhookSubscriptionWithSecretNormalizer implements DenormalizerInterface, 
         if (\array_key_exists('secret', $data) && $data['secret'] !== null) {
             $object->setSecret($data['secret']);
             unset($data['secret']);
-        }
-        elseif (\array_key_exists('secret', $data) && $data['secret'] === null) {
+        } elseif (\array_key_exists('secret', $data) && $data['secret'] === null) {
             $object->setSecret(null);
             unset($data['secret']);
         }
         if (\array_key_exists('test_delivery', $data) && $data['test_delivery'] !== null) {
-            $object->setTestDelivery($this->denormalizer->denormalize($data['test_delivery'], \Lenorix\BeelSdk\Generated\Model\WebhookSubscriptionWithSecretTestDelivery::class, 'json', $context));
+            $object->setTestDelivery($this->denormalizer->denormalize($data['test_delivery'], WebhookSubscriptionWithSecretTestDelivery::class, 'json', $context));
             unset($data['test_delivery']);
-        }
-        elseif (\array_key_exists('test_delivery', $data) && $data['test_delivery'] === null) {
+        } elseif (\array_key_exists('test_delivery', $data) && $data['test_delivery'] === null) {
             $object->setTestDelivery(null);
             unset($data['test_delivery']);
         }
@@ -141,8 +139,10 @@ class WebhookSubscriptionWithSecretNormalizer implements DenormalizerInterface, 
                 $object[$key] = $value_1;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -154,43 +154,45 @@ class WebhookSubscriptionWithSecretNormalizer implements DenormalizerInterface, 
         }
         $dataArray['events'] = $values;
         $dataArray['active'] = $data->getActive();
-        if ($data->isInitialized('accountRelationship') && null !== $data->getAccountRelationship()) {
+        if ($data->isInitialized('accountRelationship') && $data->getAccountRelationship() !== null) {
             $dataArray['account_relationship'] = $data->getAccountRelationship();
         }
-        if ($data->isInitialized('deactivatedBy') && null !== $data->getDeactivatedBy()) {
+        if ($data->isInitialized('deactivatedBy') && $data->getDeactivatedBy() !== null) {
             $dataArray['deactivated_by'] = $data->getDeactivatedBy();
         }
-        if ($data->isInitialized('deactivatedAt') && null !== $data->getDeactivatedAt()) {
+        if ($data->isInitialized('deactivatedAt') && $data->getDeactivatedAt() !== null) {
             $dataArray['deactivated_at'] = $this->normalizer->normalize($data->getDeactivatedAt(), 'json', $context);
         }
-        if ($data->isInitialized('lastError') && null !== $data->getLastError()) {
+        if ($data->isInitialized('lastError') && $data->getLastError() !== null) {
             $dataArray['last_error'] = $data->getLastError();
         }
-        if ($data->isInitialized('lastErrorCause') && null !== $data->getLastErrorCause()) {
+        if ($data->isInitialized('lastErrorCause') && $data->getLastErrorCause() !== null) {
             $dataArray['last_error_cause'] = $data->getLastErrorCause();
         }
-        if ($data->isInitialized('consecutiveFailures') && null !== $data->getConsecutiveFailures()) {
+        if ($data->isInitialized('consecutiveFailures') && $data->getConsecutiveFailures() !== null) {
             $dataArray['consecutive_failures'] = $data->getConsecutiveFailures();
         }
-        if ($data->isInitialized('lastUsedAt') && null !== $data->getLastUsedAt()) {
+        if ($data->isInitialized('lastUsedAt') && $data->getLastUsedAt() !== null) {
             $dataArray['last_used_at'] = $this->normalizer->normalize($data->getLastUsedAt(), 'json', $context);
         }
         $dataArray['created_at'] = $this->normalizer->normalize($data->getCreatedAt(), 'json', $context);
-        if ($data->isInitialized('secret') && null !== $data->getSecret()) {
+        if ($data->isInitialized('secret') && $data->getSecret() !== null) {
             $dataArray['secret'] = $data->getSecret();
         }
-        if ($data->isInitialized('testDelivery') && null !== $data->getTestDelivery()) {
-            $dataArray['test_delivery'] = $data->getTestDelivery() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getTestDelivery(), 'json', $context));
+        if ($data->isInitialized('testDelivery') && $data->getTestDelivery() !== null) {
+            $dataArray['test_delivery'] = $data->getTestDelivery() === null ? null : new JsonObject($this->normalizer->normalize($data->getTestDelivery(), 'json', $context));
         }
         foreach ($data->additionalPropertyEntries() as $key => $value_1) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value_1;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\WebhookSubscriptionWithSecret::class => false];
+        return [WebhookSubscriptionWithSecret::class => false];
     }
 }

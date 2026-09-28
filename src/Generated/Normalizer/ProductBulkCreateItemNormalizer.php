@@ -3,6 +3,9 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\ProductBulkCreateItem;
+use Lenorix\BeelSdk\Generated\Model\ProductBulkCreateItemError;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +14,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class ProductBulkCreateItemNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class ProductBulkCreateItemNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\ProductBulkCreateItem::class;
+        return $type === ProductBulkCreateItem::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\ProductBulkCreateItem::class;
+        return is_object($data) && get_class($data) === ProductBulkCreateItem::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\ProductBulkCreateItem();
-        if (null === $data || false === \is_array($data)) {
+        $object = new ProductBulkCreateItem;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -44,16 +51,14 @@ class ProductBulkCreateItemNormalizer implements DenormalizerInterface, Normaliz
         if (\array_key_exists('code', $data) && $data['code'] !== null) {
             $object->setCode($data['code']);
             unset($data['code']);
-        }
-        elseif (\array_key_exists('code', $data) && $data['code'] === null) {
+        } elseif (\array_key_exists('code', $data) && $data['code'] === null) {
             $object->setCode(null);
             unset($data['code']);
         }
         if (\array_key_exists('name', $data) && $data['name'] !== null) {
             $object->setName($data['name']);
             unset($data['name']);
-        }
-        elseif (\array_key_exists('name', $data) && $data['name'] === null) {
+        } elseif (\array_key_exists('name', $data) && $data['name'] === null) {
             $object->setName(null);
             unset($data['name']);
         }
@@ -64,16 +69,14 @@ class ProductBulkCreateItemNormalizer implements DenormalizerInterface, Normaliz
         if (\array_key_exists('product_id', $data) && $data['product_id'] !== null) {
             $object->setProductId($data['product_id']);
             unset($data['product_id']);
-        }
-        elseif (\array_key_exists('product_id', $data) && $data['product_id'] === null) {
+        } elseif (\array_key_exists('product_id', $data) && $data['product_id'] === null) {
             $object->setProductId(null);
             unset($data['product_id']);
         }
         if (\array_key_exists('error', $data) && $data['error'] !== null) {
-            $object->setError($this->denormalizer->denormalize($data['error'], \Lenorix\BeelSdk\Generated\Model\ProductBulkCreateItemError::class, 'json', $context));
+            $object->setError($this->denormalizer->denormalize($data['error'], ProductBulkCreateItemError::class, 'json', $context));
             unset($data['error']);
-        }
-        elseif (\array_key_exists('error', $data) && $data['error'] === null) {
+        } elseif (\array_key_exists('error', $data) && $data['error'] === null) {
             $object->setError(null);
             unset($data['error']);
         }
@@ -82,34 +85,38 @@ class ProductBulkCreateItemNormalizer implements DenormalizerInterface, Normaliz
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['index'] = $data->getIndex();
-        if ($data->isInitialized('code') && null !== $data->getCode()) {
+        if ($data->isInitialized('code') && $data->getCode() !== null) {
             $dataArray['code'] = $data->getCode();
         }
-        if ($data->isInitialized('name') && null !== $data->getName()) {
+        if ($data->isInitialized('name') && $data->getName() !== null) {
             $dataArray['name'] = $data->getName();
         }
         $dataArray['status'] = $data->getStatus();
-        if ($data->isInitialized('productId') && null !== $data->getProductId()) {
+        if ($data->isInitialized('productId') && $data->getProductId() !== null) {
             $dataArray['product_id'] = $data->getProductId();
         }
-        if ($data->isInitialized('error') && null !== $data->getError()) {
-            $dataArray['error'] = $data->getError() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getError(), 'json', $context));
+        if ($data->isInitialized('error') && $data->getError() !== null) {
+            $dataArray['error'] = $data->getError() === null ? null : new JsonObject($this->normalizer->normalize($data->getError(), 'json', $context));
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\ProductBulkCreateItem::class => false];
+        return [ProductBulkCreateItem::class => false];
     }
 }

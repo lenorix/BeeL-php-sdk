@@ -2,17 +2,22 @@
 
 namespace Lenorix\BeelSdk\Generated\Exception;
 
+use Lenorix\BeelSdk\Generated\Model\ResponseInvalidJsonFormat;
+use Psr\Http\Message\ResponseInterface;
+
 class CreateCompanyCorrectiveInvoiceBadRequestException extends BadRequestException
 {
     /**
-     * @var \Lenorix\BeelSdk\Generated\Model\ResponseInvalidJsonFormat
+     * @var ResponseInvalidJsonFormat
      */
     private $responseInvalidJsonFormat;
+
     /**
-     * @var \Psr\Http\Message\ResponseInterface
+     * @var ResponseInterface
      */
     private $response;
-    public function __construct(\Lenorix\BeelSdk\Generated\Model\ResponseInvalidJsonFormat $responseInvalidJsonFormat, \Psr\Http\Message\ResponseInterface $response)
+
+    public function __construct(ResponseInvalidJsonFormat $responseInvalidJsonFormat, ResponseInterface $response)
     {
         parent::__construct('`INVALID_JSON_FORMAT` — the body is not valid JSON, or a property has the wrong type or format
 (a string where a number is expected, a date that does not parse, a malformed UUID, a boolean
@@ -28,11 +33,13 @@ string that names nothing the operation knows, so it is judged as content: `422`
         $this->responseInvalidJsonFormat = $responseInvalidJsonFormat;
         $this->response = $response;
     }
-    public function getResponseInvalidJsonFormat(): \Lenorix\BeelSdk\Generated\Model\ResponseInvalidJsonFormat
+
+    public function getResponseInvalidJsonFormat(): ResponseInvalidJsonFormat
     {
         return $this->responseInvalidJsonFormat;
     }
-    public function getResponse(): \Psr\Http\Message\ResponseInterface
+
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }

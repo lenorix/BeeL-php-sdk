@@ -2,17 +2,22 @@
 
 namespace Lenorix\BeelSdk\Generated\Exception;
 
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Psr\Http\Message\ResponseInterface;
+
 class CreateCompanyInvoiceDerivationUnprocessableEntityException extends UnprocessableEntityException
 {
     /**
-     * @var \Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @var ErrorResponse
      */
     private $errorResponse;
+
     /**
-     * @var \Psr\Http\Message\ResponseInterface
+     * @var ResponseInterface
      */
     private $response;
-    public function __construct(\Lenorix\BeelSdk\Generated\Model\ErrorResponse $errorResponse, \Psr\Http\Message\ResponseInterface $response)
+
+    public function __construct(ErrorResponse $errorResponse, ResponseInterface $response)
     {
         parent::__construct('`VALIDATION_ERROR` — the body parses but a value is not acceptable. `details` is a flat map from
 the offending property\'s name (in the contract\'s `snake_case`, nested paths joined with a dot,
@@ -23,11 +28,13 @@ follows `FieldDeserializationError` (`field`, `invalid_value`, `allowed_values`)
         $this->errorResponse = $errorResponse;
         $this->response = $response;
     }
-    public function getErrorResponse(): \Lenorix\BeelSdk\Generated\Model\ErrorResponse
+
+    public function getErrorResponse(): ErrorResponse
     {
         return $this->errorResponse;
     }
-    public function getResponse(): \Psr\Http\Message\ResponseInterface
+
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }

@@ -2,80 +2,104 @@
 
 namespace Lenorix\BeelSdk\Generated\Endpoint;
 
-class GetCompanySeries extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint implements \Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint
+use Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesBadRequestException;
+use Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesForbiddenException;
+use Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesInternalServerErrorException;
+use Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesNotFoundException;
+use Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesTooManyRequestsException;
+use Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesUnauthorizedException;
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdSeriesSeriesIdGetResponse200;
+use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class GetCompanySeries extends BaseEndpoint implements Endpoint
 {
     protected $company_id;
+
     protected $series_id;
+
     /**
      * Returns one invoice series of a company, with its code, format, counter state,
      * document type and whether it is the default of that type.
      *
-     * @param string $companyId Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
-     * @param string $seriesId Series ID
+     * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
+     * @param  string  $seriesId  Series ID
      */
     public function __construct(string $companyId, string $seriesId)
     {
         $this->company_id = $companyId;
         $this->series_id = $seriesId;
     }
-    use \Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+
+    use EndpointTrait;
+
     public function getMethod(): string
     {
         return 'GET';
     }
+
     public function getUri(): string
     {
         return str_replace(['{company_id}', '{series_id}'], [rawurlencode($this->company_id), rawurlencode($this->series_id)], '/v1/companies/{company_id}/series/{series_id}');
     }
-    public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer, $streamFactory = null): array
+
+    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
         return [[], null];
     }
+
     public function getExtraHeaders(): array
     {
         return ['Accept' => ['application/json']];
     }
+
     /**
      * {@inheritdoc}
      *
-     * @throws \Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesBadRequestException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesUnauthorizedException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesForbiddenException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesNotFoundException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesTooManyRequestsException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesInternalServerErrorException
      *
-     * @return null|\Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdSeriesSeriesIdGetResponse200|\Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @return null|V1CompaniesCompanyIdSeriesSeriesIdGetResponse200|ErrorResponse
+     *
+     * @throws GetCompanySeriesBadRequestException
+     * @throws GetCompanySeriesUnauthorizedException
+     * @throws GetCompanySeriesForbiddenException
+     * @throws GetCompanySeriesNotFoundException
+     * @throws GetCompanySeriesTooManyRequestsException
+     * @throws GetCompanySeriesInternalServerErrorException
      */
-    protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (is_null($contentType) === false && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+        if (is_null($contentType) === false && ($status === 200 && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdSeriesSeriesIdGetResponse200', 'json');
         }
-        if (is_null($contentType) === false && (400 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 400 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new GetCompanySeriesBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (401 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 401 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new GetCompanySeriesUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (403 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 403 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new GetCompanySeriesForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (404 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesNotFoundException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 404 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new GetCompanySeriesNotFoundException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (429 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 429 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new GetCompanySeriesTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (500 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\GetCompanySeriesInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new GetCompanySeriesInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
         if (stripos(strtolower($contentType), 'application/json') !== false) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
+
     public function getAuthenticationScopes(): array
     {
         return ['ApiKeyAuth'];

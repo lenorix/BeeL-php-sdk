@@ -4,27 +4,32 @@ namespace Lenorix\BeelSdk\Generated\Model;
 
 use Lenorix\BeelSdk\Generated\Runtime\AdditionalAndPatternProperties;
 use Lenorix\BeelSdk\Generated\Runtime\AdditionalPropertiesInterface;
+
 class IssuingReadinessData implements AdditionalPropertiesInterface
 {
     use AdditionalAndPatternProperties;
+
     /**
      * @var array
      */
     protected $initialized = [];
+
     public function isInitialized($property): bool
     {
         return array_key_exists($property, $this->initialized);
     }
+
     /**
      * true if the company can issue invoices (no blockers).
      *
      * @var bool|null
      */
     protected $ready;
+
     /**
      * Reasons the company cannot issue yet (empty when ready). Each one names what is
      * missing and how to clear it:
-     * 
+     *
      * - `COMPANY_HAS_NO_NIF`: the company has no NIF. Set `nif` with
      *   `PATCH /v1/companies/{company_id}`; once set it cannot be changed.
      * - `SERIES_DEFAULT_NOT_FOUND`: there is no default `STANDARD` invoice series in this
@@ -50,47 +55,46 @@ class IssuingReadinessData implements AdditionalPropertiesInterface
      *   representation in force. Generate it with
      *   `POST /v1/companies/{company_id}/representation`, sign it digitally and send it with
      *   `POST /v1/companies/{company_id}/representation/submit`. Live only.
-     * 
+     *
      *
      * @var list<string>|null
      */
     protected $blockers;
+
     /**
      * The compliance question, separate from the operational `ready` above: would
      * this NIF pass a VeriFactu emission right now? Relevant before putting the company
      * under the VeriFactu regime. For a company already under the regime,
      * `verifactu.ready` coincides with `ready` (same evaluation).
-     * 
+     *
      *
      * @var IssuingReadinessDataVerifactu|null
      */
     protected $verifactu;
+
     /**
      * true if the company can issue invoices (no blockers).
-     *
-     * @return bool|null
      */
     public function getReady(): ?bool
     {
         return $this->ready;
     }
+
     /**
      * true if the company can issue invoices (no blockers).
-     *
-     * @param bool|null $ready
-     *
-     * @return self
      */
     public function setReady(?bool $ready): self
     {
         $this->initialized['ready'] = true;
         $this->ready = $ready;
+
         return $this;
     }
+
     /**
      * Reasons the company cannot issue yet (empty when ready). Each one names what is
      * missing and how to clear it:
-     * 
+     *
      * - `COMPANY_HAS_NO_NIF`: the company has no NIF. Set `nif` with
      *   `PATCH /v1/companies/{company_id}`; once set it cannot be changed.
      * - `SERIES_DEFAULT_NOT_FOUND`: there is no default `STANDARD` invoice series in this
@@ -116,7 +120,7 @@ class IssuingReadinessData implements AdditionalPropertiesInterface
      *   representation in force. Generate it with
      *   `POST /v1/companies/{company_id}/representation`, sign it digitally and send it with
      *   `POST /v1/companies/{company_id}/representation/submit`. Live only.
-     * 
+     *
      *
      * @return list<string>|null
      */
@@ -124,10 +128,11 @@ class IssuingReadinessData implements AdditionalPropertiesInterface
     {
         return $this->blockers;
     }
+
     /**
-    * Reasons the company cannot issue yet (empty when ready). Each one names what is
+     * Reasons the company cannot issue yet (empty when ready). Each one names what is
     missing and how to clear it:
-    
+
     - `COMPANY_HAS_NO_NIF`: the company has no NIF. Set `nif` with
      `PATCH /v1/companies/{company_id}`; once set it cannot be changed.
     - `SERIES_DEFAULT_NOT_FOUND`: there is no default `STANDARD` invoice series in this
@@ -153,48 +158,43 @@ class IssuingReadinessData implements AdditionalPropertiesInterface
      representation in force. Generate it with
      `POST /v1/companies/{company_id}/representation`, sign it digitally and send it with
      `POST /v1/companies/{company_id}/representation/submit`. Live only.
-    
-    *
-    * @param list<string>|null $blockers
-    *
-    * @return self
-    */
+
+     *
+     * @param  list<string>|null  $blockers
+     */
     public function setBlockers(?array $blockers): self
     {
         $this->initialized['blockers'] = true;
         $this->blockers = $blockers;
+
         return $this;
     }
+
     /**
      * The compliance question, separate from the operational `ready` above: would
      * this NIF pass a VeriFactu emission right now? Relevant before putting the company
      * under the VeriFactu regime. For a company already under the regime,
      * `verifactu.ready` coincides with `ready` (same evaluation).
-     * 
-     *
-     * @return IssuingReadinessDataVerifactu|null
      */
     public function getVerifactu(): ?IssuingReadinessDataVerifactu
     {
         return $this->verifactu;
     }
+
     /**
-    * The compliance question, separate from the operational `ready` above: would
+     * The compliance question, separate from the operational `ready` above: would
     this NIF pass a VeriFactu emission right now? Relevant before putting the company
     under the VeriFactu regime. For a company already under the regime,
     `verifactu.ready` coincides with `ready` (same evaluation).
-    
-    *
-    * @param IssuingReadinessDataVerifactu|null $verifactu
-    *
-    * @return self
-    */
+     */
     public function setVerifactu(?IssuingReadinessDataVerifactu $verifactu): self
     {
         $this->initialized['verifactu'] = true;
         $this->verifactu = $verifactu;
+
         return $this;
     }
+
     public function definedProperties(): array
     {
         return ['ready' => ['ready', 'getReady', 'setReady'], 'blockers' => ['blockers', 'getBlockers', 'setBlockers'], 'verifactu' => ['verifactu', 'getVerifactu', 'setVerifactu']];

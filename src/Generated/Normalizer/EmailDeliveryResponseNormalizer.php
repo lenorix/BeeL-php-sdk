@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\EmailDeliveryResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class EmailDeliveryResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class EmailDeliveryResponseNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\EmailDeliveryResponse::class;
+        return $type === EmailDeliveryResponse::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\EmailDeliveryResponse::class;
+        return is_object($data) && get_class($data) === EmailDeliveryResponse::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\EmailDeliveryResponse();
-        if (null === $data || false === \is_array($data)) {
+        $object = new EmailDeliveryResponse;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -60,32 +65,28 @@ class EmailDeliveryResponseNormalizer implements DenormalizerInterface, Normaliz
             }
             $object->setCc($values_1);
             unset($data['cc']);
-        }
-        elseif (\array_key_exists('cc', $data) && $data['cc'] === null) {
+        } elseif (\array_key_exists('cc', $data) && $data['cc'] === null) {
             $object->setCc(null);
             unset($data['cc']);
         }
         if (\array_key_exists('subject', $data) && $data['subject'] !== null) {
             $object->setSubject($data['subject']);
             unset($data['subject']);
-        }
-        elseif (\array_key_exists('subject', $data) && $data['subject'] === null) {
+        } elseif (\array_key_exists('subject', $data) && $data['subject'] === null) {
             $object->setSubject(null);
             unset($data['subject']);
         }
         if (\array_key_exists('related_entity_type', $data) && $data['related_entity_type'] !== null) {
             $object->setRelatedEntityType($data['related_entity_type']);
             unset($data['related_entity_type']);
-        }
-        elseif (\array_key_exists('related_entity_type', $data) && $data['related_entity_type'] === null) {
+        } elseif (\array_key_exists('related_entity_type', $data) && $data['related_entity_type'] === null) {
             $object->setRelatedEntityType(null);
             unset($data['related_entity_type']);
         }
         if (\array_key_exists('related_entity_id', $data) && $data['related_entity_id'] !== null) {
             $object->setRelatedEntityId($data['related_entity_id']);
             unset($data['related_entity_id']);
-        }
-        elseif (\array_key_exists('related_entity_id', $data) && $data['related_entity_id'] === null) {
+        } elseif (\array_key_exists('related_entity_id', $data) && $data['related_entity_id'] === null) {
             $object->setRelatedEntityId(null);
             unset($data['related_entity_id']);
         }
@@ -96,8 +97,7 @@ class EmailDeliveryResponseNormalizer implements DenormalizerInterface, Normaliz
         if (\array_key_exists('sent_at', $data) && $data['sent_at'] !== null) {
             $object->setSentAt($this->denormalizer->denormalize($data['sent_at'], \DateTime::class, 'json', $context));
             unset($data['sent_at']);
-        }
-        elseif (\array_key_exists('sent_at', $data) && $data['sent_at'] === null) {
+        } elseif (\array_key_exists('sent_at', $data) && $data['sent_at'] === null) {
             $object->setSentAt(null);
             unset($data['sent_at']);
         }
@@ -106,8 +106,10 @@ class EmailDeliveryResponseNormalizer implements DenormalizerInterface, Normaliz
                 $object[$key] = $value_2;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -118,24 +120,24 @@ class EmailDeliveryResponseNormalizer implements DenormalizerInterface, Normaliz
             $values[] = $value;
         }
         $dataArray['recipients'] = $values;
-        if ($data->isInitialized('cc') && null !== $data->getCc()) {
+        if ($data->isInitialized('cc') && $data->getCc() !== null) {
             $values_1 = [];
             foreach ($data->getCc() as $value_1) {
                 $values_1[] = $value_1;
             }
             $dataArray['cc'] = $values_1;
         }
-        if ($data->isInitialized('subject') && null !== $data->getSubject()) {
+        if ($data->isInitialized('subject') && $data->getSubject() !== null) {
             $dataArray['subject'] = $data->getSubject();
         }
-        if ($data->isInitialized('relatedEntityType') && null !== $data->getRelatedEntityType()) {
+        if ($data->isInitialized('relatedEntityType') && $data->getRelatedEntityType() !== null) {
             $dataArray['related_entity_type'] = $data->getRelatedEntityType();
         }
-        if ($data->isInitialized('relatedEntityId') && null !== $data->getRelatedEntityId()) {
+        if ($data->isInitialized('relatedEntityId') && $data->getRelatedEntityId() !== null) {
             $dataArray['related_entity_id'] = $data->getRelatedEntityId();
         }
         $dataArray['status'] = $data->getStatus();
-        if ($data->isInitialized('sentAt') && null !== $data->getSentAt()) {
+        if ($data->isInitialized('sentAt') && $data->getSentAt() !== null) {
             $dataArray['sent_at'] = $this->normalizer->normalize($data->getSentAt(), 'json', $context);
         }
         foreach ($data->additionalPropertyEntries() as $key => $value_2) {
@@ -143,10 +145,12 @@ class EmailDeliveryResponseNormalizer implements DenormalizerInterface, Normaliz
                 $dataArray[$key] = $value_2;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\EmailDeliveryResponse::class => false];
+        return [EmailDeliveryResponse::class => false];
     }
 }

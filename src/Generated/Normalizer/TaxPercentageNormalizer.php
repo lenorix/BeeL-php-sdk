@@ -3,7 +3,9 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\TaxPercentage;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
+use Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -11,27 +13,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class TaxPercentageNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class TaxPercentageNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\TaxPercentage::class;
+        return $type === TaxPercentage::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\TaxPercentage::class;
+        return is_object($data) && get_class($data) === TaxPercentage::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\TaxPercentage();
-        if (null === $data || false === \is_array($data)) {
+        $object = new TaxPercentage;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -61,32 +67,29 @@ class TaxPercentageNormalizer implements DenormalizerInterface, NormalizerInterf
         if (\array_key_exists('associated_equivalence_surcharge', $data) && $data['associated_equivalence_surcharge'] !== null) {
             $object->setAssociatedEquivalenceSurcharge($data['associated_equivalence_surcharge']);
             unset($data['associated_equivalence_surcharge']);
-        }
-        elseif (\array_key_exists('associated_equivalence_surcharge', $data) && $data['associated_equivalence_surcharge'] === null) {
+        } elseif (\array_key_exists('associated_equivalence_surcharge', $data) && $data['associated_equivalence_surcharge'] === null) {
             $object->setAssociatedEquivalenceSurcharge(null);
             unset($data['associated_equivalence_surcharge']);
         }
         if (\array_key_exists('valid_from', $data) && $data['valid_from'] !== null) {
             $date = \DateTime::createFromFormat('Y-m-d', $data['valid_from']);
-            if (false === $date) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['valid_from'], 'Y-m-d');
+            if ($date === false) {
+                throw new InvalidDateException($data['valid_from'], 'Y-m-d');
             }
             $object->setValidFrom($date->setTime(0, 0, 0));
             unset($data['valid_from']);
-        }
-        elseif (\array_key_exists('valid_from', $data) && $data['valid_from'] === null) {
+        } elseif (\array_key_exists('valid_from', $data) && $data['valid_from'] === null) {
             $object->setValidFrom(null);
             unset($data['valid_from']);
         }
         if (\array_key_exists('valid_until', $data) && $data['valid_until'] !== null) {
             $date_1 = \DateTime::createFromFormat('Y-m-d', $data['valid_until']);
-            if (false === $date_1) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['valid_until'], 'Y-m-d');
+            if ($date_1 === false) {
+                throw new InvalidDateException($data['valid_until'], 'Y-m-d');
             }
             $object->setValidUntil($date_1->setTime(0, 0, 0));
             unset($data['valid_until']);
-        }
-        elseif (\array_key_exists('valid_until', $data) && $data['valid_until'] === null) {
+        } elseif (\array_key_exists('valid_until', $data) && $data['valid_until'] === null) {
             $object->setValidUntil(null);
             unset($data['valid_until']);
         }
@@ -95,21 +98,23 @@ class TaxPercentageNormalizer implements DenormalizerInterface, NormalizerInterf
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['percentage'] = $data->getPercentage();
         $dataArray['description'] = $data->getDescription();
         $dataArray['active'] = $data->getActive();
-        if ($data->isInitialized('associatedEquivalenceSurcharge') && null !== $data->getAssociatedEquivalenceSurcharge()) {
+        if ($data->isInitialized('associatedEquivalenceSurcharge') && $data->getAssociatedEquivalenceSurcharge() !== null) {
             $dataArray['associated_equivalence_surcharge'] = $data->getAssociatedEquivalenceSurcharge();
         }
-        if ($data->isInitialized('validFrom') && null !== $data->getValidFrom()) {
+        if ($data->isInitialized('validFrom') && $data->getValidFrom() !== null) {
             $dataArray['valid_from'] = $data->getValidFrom()?->format('Y-m-d');
         }
-        if ($data->isInitialized('validUntil') && null !== $data->getValidUntil()) {
+        if ($data->isInitialized('validUntil') && $data->getValidUntil() !== null) {
             $dataArray['valid_until'] = $data->getValidUntil()?->format('Y-m-d');
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -117,10 +122,12 @@ class TaxPercentageNormalizer implements DenormalizerInterface, NormalizerInterf
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\TaxPercentage::class => false];
+        return [TaxPercentage::class => false];
     }
 }

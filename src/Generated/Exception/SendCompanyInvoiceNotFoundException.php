@@ -2,17 +2,22 @@
 
 namespace Lenorix\BeelSdk\Generated\Exception;
 
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Psr\Http\Message\ResponseInterface;
+
 class SendCompanyInvoiceNotFoundException extends NotFoundException
 {
     /**
-     * @var \Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @var ErrorResponse
      */
     private $errorResponse;
+
     /**
-     * @var \Psr\Http\Message\ResponseInterface
+     * @var ResponseInterface
      */
     private $response;
-    public function __construct(\Lenorix\BeelSdk\Generated\Model\ErrorResponse $errorResponse, \Psr\Http\Message\ResponseInterface $response)
+
+    public function __construct(ErrorResponse $errorResponse, ResponseInterface $response)
     {
         parent::__construct('The resource addressed by the path does not exist, or is not one this credential can see —
 the two are answered identically, so existence is never disclosed. `error.code` names the
@@ -41,11 +46,13 @@ any resource. When the path exists but not with that method, the answer is `405`
         $this->errorResponse = $errorResponse;
         $this->response = $response;
     }
-    public function getErrorResponse(): \Lenorix\BeelSdk\Generated\Model\ErrorResponse
+
+    public function getErrorResponse(): ErrorResponse
     {
         return $this->errorResponse;
     }
-    public function getResponse(): \Psr\Http\Message\ResponseInterface
+
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }

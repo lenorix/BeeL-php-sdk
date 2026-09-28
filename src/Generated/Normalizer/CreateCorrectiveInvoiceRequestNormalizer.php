@@ -3,7 +3,13 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\CreateCorrectiveInvoiceRequest;
+use Lenorix\BeelSdk\Generated\Model\CreateCorrectiveInvoiceRequestLinesItem;
+use Lenorix\BeelSdk\Generated\Model\CreateCorrectiveInvoiceRequestRecipient;
+use Lenorix\BeelSdk\Generated\Model\InvoiceProcessingOptions;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
+use Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
@@ -11,27 +17,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class CreateCorrectiveInvoiceRequestNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class CreateCorrectiveInvoiceRequestNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\CreateCorrectiveInvoiceRequest::class;
+        return $type === CreateCorrectiveInvoiceRequest::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CreateCorrectiveInvoiceRequest::class;
+        return is_object($data) && get_class($data) === CreateCorrectiveInvoiceRequest::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\CreateCorrectiveInvoiceRequest();
-        if (null === $data || false === \is_array($data)) {
+        $object = new CreateCorrectiveInvoiceRequest;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -55,15 +65,15 @@ class CreateCorrectiveInvoiceRequestNormalizer implements DenormalizerInterface,
         if (\array_key_exists('lines', $data)) {
             $values = [];
             foreach ($data['lines'] as $value) {
-                $values[] = $this->denormalizer->denormalize($value, \Lenorix\BeelSdk\Generated\Model\CreateCorrectiveInvoiceRequestLinesItem::class, 'json', $context);
+                $values[] = $this->denormalizer->denormalize($value, CreateCorrectiveInvoiceRequestLinesItem::class, 'json', $context);
             }
             $object->setLines($values);
             unset($data['lines']);
         }
         if (\array_key_exists('circumstance_date', $data)) {
             $date = \DateTime::createFromFormat('Y-m-d', $data['circumstance_date']);
-            if (false === $date) {
-                throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['circumstance_date'], 'Y-m-d');
+            if ($date === false) {
+                throw new InvalidDateException($data['circumstance_date'], 'Y-m-d');
             }
             $object->setCircumstanceDate($date->setTime(0, 0, 0));
             unset($data['circumstance_date']);
@@ -85,7 +95,7 @@ class CreateCorrectiveInvoiceRequestNormalizer implements DenormalizerInterface,
             unset($data['external_ref']);
         }
         if (\array_key_exists('metadata', $data)) {
-            $values_1 = new \Lenorix\BeelSdk\Generated\Runtime\JsonObject();
+            $values_1 = new JsonObject;
             foreach ($data['metadata'] as $key => $value_1) {
                 $values_1[$key] = $value_1;
             }
@@ -93,11 +103,11 @@ class CreateCorrectiveInvoiceRequestNormalizer implements DenormalizerInterface,
             unset($data['metadata']);
         }
         if (\array_key_exists('recipient', $data)) {
-            $object->setRecipient($this->denormalizer->denormalize($data['recipient'], \Lenorix\BeelSdk\Generated\Model\CreateCorrectiveInvoiceRequestRecipient::class, 'json', $context));
+            $object->setRecipient($this->denormalizer->denormalize($data['recipient'], CreateCorrectiveInvoiceRequestRecipient::class, 'json', $context));
             unset($data['recipient']);
         }
         if (\array_key_exists('options', $data)) {
-            $object->setOptions($this->denormalizer->denormalize($data['options'], \Lenorix\BeelSdk\Generated\Model\InvoiceProcessingOptions::class, 'json', $context));
+            $object->setOptions($this->denormalizer->denormalize($data['options'], InvoiceProcessingOptions::class, 'json', $context));
             unset($data['options']);
         }
         foreach ($data as $key_1 => $value_2) {
@@ -105,58 +115,62 @@ class CreateCorrectiveInvoiceRequestNormalizer implements DenormalizerInterface,
                 $object[$key_1] = $value_2;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['rectification_type'] = $data->getRectificationType();
         $dataArray['rectification_code'] = $data->getRectificationCode();
         $dataArray['reason'] = $data->getReason();
-        if ($data->isInitialized('lines') && null !== $data->getLines()) {
+        if ($data->isInitialized('lines') && $data->getLines() !== null) {
             $values = [];
             foreach ($data->getLines() as $value) {
-                $values[] = $value === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($value, 'json', $context));
+                $values[] = $value === null ? null : new JsonObject($this->normalizer->normalize($value, 'json', $context));
             }
             $dataArray['lines'] = $values;
         }
-        if ($data->isInitialized('circumstanceDate') && null !== $data->getCircumstanceDate()) {
+        if ($data->isInitialized('circumstanceDate') && $data->getCircumstanceDate() !== null) {
             $dataArray['circumstance_date'] = $data->getCircumstanceDate()->format('Y-m-d');
         }
-        if ($data->isInitialized('recipientIsBusiness') && null !== $data->getRecipientIsBusiness()) {
+        if ($data->isInitialized('recipientIsBusiness') && $data->getRecipientIsBusiness() !== null) {
             $dataArray['recipient_is_business'] = $data->getRecipientIsBusiness();
         }
-        if ($data->isInitialized('notes') && null !== $data->getNotes()) {
+        if ($data->isInitialized('notes') && $data->getNotes() !== null) {
             $dataArray['notes'] = $data->getNotes();
         }
-        if ($data->isInitialized('seriesId') && null !== $data->getSeriesId()) {
+        if ($data->isInitialized('seriesId') && $data->getSeriesId() !== null) {
             $dataArray['series_id'] = $data->getSeriesId();
         }
-        if ($data->isInitialized('externalRef') && null !== $data->getExternalRef()) {
+        if ($data->isInitialized('externalRef') && $data->getExternalRef() !== null) {
             $dataArray['external_ref'] = $data->getExternalRef();
         }
-        if ($data->isInitialized('metadata') && null !== $data->getMetadata()) {
-            $values_1 = new \Lenorix\BeelSdk\Generated\Runtime\JsonObject();
+        if ($data->isInitialized('metadata') && $data->getMetadata() !== null) {
+            $values_1 = new JsonObject;
             foreach ($data->getMetadata() as $key => $value_1) {
                 $values_1[$key] = $value_1;
             }
             $dataArray['metadata'] = $values_1;
         }
-        if ($data->isInitialized('recipient') && null !== $data->getRecipient()) {
-            $dataArray['recipient'] = $data->getRecipient() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getRecipient(), 'json', $context));
+        if ($data->isInitialized('recipient') && $data->getRecipient() !== null) {
+            $dataArray['recipient'] = $data->getRecipient() === null ? null : new JsonObject($this->normalizer->normalize($data->getRecipient(), 'json', $context));
         }
-        if ($data->isInitialized('options') && null !== $data->getOptions()) {
-            $dataArray['options'] = $data->getOptions() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getOptions(), 'json', $context));
+        if ($data->isInitialized('options') && $data->getOptions() !== null) {
+            $dataArray['options'] = $data->getOptions() === null ? null : new JsonObject($this->normalizer->normalize($data->getOptions(), 'json', $context));
         }
         foreach ($data->additionalPropertyEntries() as $key_1 => $value_2) {
             if (preg_match('/.*/', (string) $key_1)) {
                 $dataArray[$key_1] = $value_2;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\CreateCorrectiveInvoiceRequest::class => false];
+        return [CreateCorrectiveInvoiceRequest::class => false];
     }
 }

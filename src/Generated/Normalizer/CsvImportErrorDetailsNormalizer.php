@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\CsvImportErrorDetails;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class CsvImportErrorDetailsNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class CsvImportErrorDetailsNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\CsvImportErrorDetails::class;
+        return $type === CsvImportErrorDetails::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CsvImportErrorDetails::class;
+        return is_object($data) && get_class($data) === CsvImportErrorDetails::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\CsvImportErrorDetails();
-        if (null === $data || false === \is_array($data)) {
+        $object = new CsvImportErrorDetails;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -77,31 +82,33 @@ class CsvImportErrorDetailsNormalizer implements DenormalizerInterface, Normaliz
                 $object[$key] = $value_2;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('fileSizeMb') && null !== $data->getFileSizeMb()) {
+        if ($data->isInitialized('fileSizeMb') && $data->getFileSizeMb() !== null) {
             $dataArray['file_size_mb'] = $data->getFileSizeMb();
         }
-        if ($data->isInitialized('maxFileSizeMb') && null !== $data->getMaxFileSizeMb()) {
+        if ($data->isInitialized('maxFileSizeMb') && $data->getMaxFileSizeMb() !== null) {
             $dataArray['max_file_size_mb'] = $data->getMaxFileSizeMb();
         }
-        if ($data->isInitialized('recordCount') && null !== $data->getRecordCount()) {
+        if ($data->isInitialized('recordCount') && $data->getRecordCount() !== null) {
             $dataArray['record_count'] = $data->getRecordCount();
         }
-        if ($data->isInitialized('maxRecords') && null !== $data->getMaxRecords()) {
+        if ($data->isInitialized('maxRecords') && $data->getMaxRecords() !== null) {
             $dataArray['max_records'] = $data->getMaxRecords();
         }
-        if ($data->isInitialized('missingHeaders') && null !== $data->getMissingHeaders()) {
+        if ($data->isInitialized('missingHeaders') && $data->getMissingHeaders() !== null) {
             $values = [];
             foreach ($data->getMissingHeaders() as $value) {
                 $values[] = $value;
             }
             $dataArray['missing_headers'] = $values;
         }
-        if ($data->isInitialized('foundHeaders') && null !== $data->getFoundHeaders()) {
+        if ($data->isInitialized('foundHeaders') && $data->getFoundHeaders() !== null) {
             $values_1 = [];
             foreach ($data->getFoundHeaders() as $value_1) {
                 $values_1[] = $value_1;
@@ -113,10 +120,12 @@ class CsvImportErrorDetailsNormalizer implements DenormalizerInterface, Normaliz
                 $dataArray[$key] = $value_2;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\CsvImportErrorDetails::class => false];
+        return [CsvImportErrorDetails::class => false];
     }
 }

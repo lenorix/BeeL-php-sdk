@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\LineUnitPriceOutOfRangeDetails;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class LineUnitPriceOutOfRangeDetailsNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class LineUnitPriceOutOfRangeDetailsNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\LineUnitPriceOutOfRangeDetails::class;
+        return $type === LineUnitPriceOutOfRangeDetails::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\LineUnitPriceOutOfRangeDetails::class;
+        return is_object($data) && get_class($data) === LineUnitPriceOutOfRangeDetails::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\LineUnitPriceOutOfRangeDetails();
-        if (null === $data || false === \is_array($data)) {
+        $object = new LineUnitPriceOutOfRangeDetails;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -60,8 +65,10 @@ class LineUnitPriceOutOfRangeDetailsNormalizer implements DenormalizerInterface,
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -73,10 +80,12 @@ class LineUnitPriceOutOfRangeDetailsNormalizer implements DenormalizerInterface,
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\LineUnitPriceOutOfRangeDetails::class => false];
+        return [LineUnitPriceOutOfRangeDetails::class => false];
     }
 }

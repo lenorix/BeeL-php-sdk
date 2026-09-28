@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\InvoiceSeries;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class InvoiceSeriesNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class InvoiceSeriesNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\InvoiceSeries::class;
+        return $type === InvoiceSeries::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\InvoiceSeries::class;
+        return is_object($data) && get_class($data) === InvoiceSeries::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\InvoiceSeries();
-        if (null === $data || false === \is_array($data)) {
+        $object = new InvoiceSeries;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -65,8 +70,7 @@ class InvoiceSeriesNormalizer implements DenormalizerInterface, NormalizerInterf
         if (\array_key_exists('description', $data) && $data['description'] !== null) {
             $object->setDescription($data['description']);
             unset($data['description']);
-        }
-        elseif (\array_key_exists('description', $data) && $data['description'] === null) {
+        } elseif (\array_key_exists('description', $data) && $data['description'] === null) {
             $object->setDescription(null);
             unset($data['description']);
         }
@@ -81,8 +85,7 @@ class InvoiceSeriesNormalizer implements DenormalizerInterface, NormalizerInterf
         if (\array_key_exists('initial_number', $data) && $data['initial_number'] !== null) {
             $object->setInitialNumber($data['initial_number']);
             unset($data['initial_number']);
-        }
-        elseif (\array_key_exists('initial_number', $data) && $data['initial_number'] === null) {
+        } elseif (\array_key_exists('initial_number', $data) && $data['initial_number'] === null) {
             $object->setInitialNumber(null);
             unset($data['initial_number']);
         }
@@ -97,32 +100,28 @@ class InvoiceSeriesNormalizer implements DenormalizerInterface, NormalizerInterf
         if (\array_key_exists('numbering_locked', $data) && $data['numbering_locked'] !== null) {
             $object->setNumberingLocked($data['numbering_locked']);
             unset($data['numbering_locked']);
-        }
-        elseif (\array_key_exists('numbering_locked', $data) && $data['numbering_locked'] === null) {
+        } elseif (\array_key_exists('numbering_locked', $data) && $data['numbering_locked'] === null) {
             $object->setNumberingLocked(null);
             unset($data['numbering_locked']);
         }
         if (\array_key_exists('created_at', $data) && $data['created_at'] !== null) {
             $object->setCreatedAt($this->denormalizer->denormalize($data['created_at'], \DateTime::class, 'json', $context));
             unset($data['created_at']);
-        }
-        elseif (\array_key_exists('created_at', $data) && $data['created_at'] === null) {
+        } elseif (\array_key_exists('created_at', $data) && $data['created_at'] === null) {
             $object->setCreatedAt(null);
             unset($data['created_at']);
         }
         if (\array_key_exists('next_number', $data) && $data['next_number'] !== null) {
             $object->setNextNumber($data['next_number']);
             unset($data['next_number']);
-        }
-        elseif (\array_key_exists('next_number', $data) && $data['next_number'] === null) {
+        } elseif (\array_key_exists('next_number', $data) && $data['next_number'] === null) {
             $object->setNextNumber(null);
             unset($data['next_number']);
         }
         if (\array_key_exists('updated_at', $data) && $data['updated_at'] !== null) {
             $object->setUpdatedAt($this->denormalizer->denormalize($data['updated_at'], \DateTime::class, 'json', $context));
             unset($data['updated_at']);
-        }
-        elseif (\array_key_exists('updated_at', $data) && $data['updated_at'] === null) {
+        } elseif (\array_key_exists('updated_at', $data) && $data['updated_at'] === null) {
             $object->setUpdatedAt(null);
             unset($data['updated_at']);
         }
@@ -131,8 +130,10 @@ class InvoiceSeriesNormalizer implements DenormalizerInterface, NormalizerInterf
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -140,20 +141,20 @@ class InvoiceSeriesNormalizer implements DenormalizerInterface, NormalizerInterf
         $dataArray['document_type'] = $data->getDocumentType();
         $dataArray['name'] = $data->getName();
         $dataArray['code'] = $data->getCode();
-        if ($data->isInitialized('description') && null !== $data->getDescription()) {
+        if ($data->isInitialized('description') && $data->getDescription() !== null) {
             $dataArray['description'] = $data->getDescription();
         }
         $dataArray['format'] = $data->getFormat();
         $dataArray['counter_reset'] = $data->getCounterReset();
-        if ($data->isInitialized('initialNumber') && null !== $data->getInitialNumber()) {
+        if ($data->isInitialized('initialNumber') && $data->getInitialNumber() !== null) {
             $dataArray['initial_number'] = $data->getInitialNumber();
         }
         $dataArray['active'] = $data->getActive();
         $dataArray['default_series'] = $data->getDefaultSeries();
-        if ($data->isInitialized('createdAt') && null !== $data->getCreatedAt()) {
+        if ($data->isInitialized('createdAt') && $data->getCreatedAt() !== null) {
             $dataArray['created_at'] = $this->normalizer->normalize($data->getCreatedAt(), 'json', $context);
         }
-        if ($data->isInitialized('updatedAt') && null !== $data->getUpdatedAt()) {
+        if ($data->isInitialized('updatedAt') && $data->getUpdatedAt() !== null) {
             $dataArray['updated_at'] = $this->normalizer->normalize($data->getUpdatedAt(), 'json', $context);
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -161,10 +162,12 @@ class InvoiceSeriesNormalizer implements DenormalizerInterface, NormalizerInterf
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\InvoiceSeries::class => false];
+        return [InvoiceSeries::class => false];
     }
 }

@@ -3,6 +3,9 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\AccountImportCustomerRow;
+use Lenorix\BeelSdk\Generated\Model\AccountImportCustomersSource;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +14,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class AccountImportCustomersSourceNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class AccountImportCustomersSourceNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\AccountImportCustomersSource::class;
+        return $type === AccountImportCustomersSource::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\AccountImportCustomersSource::class;
+        return is_object($data) && get_class($data) === AccountImportCustomersSource::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\AccountImportCustomersSource();
-        if (null === $data || false === \is_array($data)) {
+        $object = new AccountImportCustomersSource;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -52,7 +59,7 @@ class AccountImportCustomersSourceNormalizer implements DenormalizerInterface, N
         if (\array_key_exists('rejected', $data)) {
             $values = [];
             foreach ($data['rejected'] as $value) {
-                $values[] = $this->denormalizer->denormalize($value, \Lenorix\BeelSdk\Generated\Model\AccountImportCustomerRow::class, 'json', $context);
+                $values[] = $this->denormalizer->denormalize($value, AccountImportCustomerRow::class, 'json', $context);
             }
             $object->setRejected($values);
             unset($data['rejected']);
@@ -62,8 +69,10 @@ class AccountImportCustomersSourceNormalizer implements DenormalizerInterface, N
                 $object[$key] = $value_1;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -72,7 +81,7 @@ class AccountImportCustomersSourceNormalizer implements DenormalizerInterface, N
         $dataArray['invalid'] = $data->getInvalid();
         $values = [];
         foreach ($data->getRejected() as $value) {
-            $values[] = $value === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($value, 'json', $context));
+            $values[] = $value === null ? null : new JsonObject($this->normalizer->normalize($value, 'json', $context));
         }
         $dataArray['rejected'] = $values;
         foreach ($data->additionalPropertyEntries() as $key => $value_1) {
@@ -80,10 +89,12 @@ class AccountImportCustomersSourceNormalizer implements DenormalizerInterface, N
                 $dataArray[$key] = $value_1;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\AccountImportCustomersSource::class => false];
+        return [AccountImportCustomersSource::class => false];
     }
 }

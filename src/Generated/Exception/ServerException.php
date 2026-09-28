@@ -2,6 +2,4 @@
 
 namespace Lenorix\BeelSdk\Generated\Exception;
 
-interface ServerException extends ApiException
-{
-}
+interface ServerException extends ApiException {}

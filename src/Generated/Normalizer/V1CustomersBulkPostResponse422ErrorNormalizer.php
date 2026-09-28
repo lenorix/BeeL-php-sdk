@@ -3,6 +3,9 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\V1CustomersBulkPostResponse422Error;
+use Lenorix\BeelSdk\Generated\Model\V1CustomersBulkPostResponse422ErrorErrorsItem;
+use Lenorix\BeelSdk\Generated\Runtime\JsonObject;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +14,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class V1CustomersBulkPostResponse422ErrorNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class V1CustomersBulkPostResponse422ErrorNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\V1CustomersBulkPostResponse422Error::class;
+        return $type === V1CustomersBulkPostResponse422Error::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\V1CustomersBulkPostResponse422Error::class;
+        return is_object($data) && get_class($data) === V1CustomersBulkPostResponse422Error::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\V1CustomersBulkPostResponse422Error();
-        if (null === $data || false === \is_array($data)) {
+        $object = new V1CustomersBulkPostResponse422Error;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -48,7 +55,7 @@ class V1CustomersBulkPostResponse422ErrorNormalizer implements DenormalizerInter
         if (\array_key_exists('errors', $data)) {
             $values = [];
             foreach ($data['errors'] as $value) {
-                $values[] = $this->denormalizer->denormalize($value, \Lenorix\BeelSdk\Generated\Model\V1CustomersBulkPostResponse422ErrorErrorsItem::class, 'json', $context);
+                $values[] = $this->denormalizer->denormalize($value, V1CustomersBulkPostResponse422ErrorErrorsItem::class, 'json', $context);
             }
             $object->setErrors($values);
             unset($data['errors']);
@@ -58,21 +65,23 @@ class V1CustomersBulkPostResponse422ErrorNormalizer implements DenormalizerInter
                 $object[$key] = $value_1;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('code') && null !== $data->getCode()) {
+        if ($data->isInitialized('code') && $data->getCode() !== null) {
             $dataArray['code'] = $data->getCode();
         }
-        if ($data->isInitialized('message') && null !== $data->getMessage()) {
+        if ($data->isInitialized('message') && $data->getMessage() !== null) {
             $dataArray['message'] = $data->getMessage();
         }
-        if ($data->isInitialized('errors') && null !== $data->getErrors()) {
+        if ($data->isInitialized('errors') && $data->getErrors() !== null) {
             $values = [];
             foreach ($data->getErrors() as $value) {
-                $values[] = $value === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($value, 'json', $context));
+                $values[] = $value === null ? null : new JsonObject($this->normalizer->normalize($value, 'json', $context));
             }
             $dataArray['errors'] = $values;
         }
@@ -81,10 +90,12 @@ class V1CustomersBulkPostResponse422ErrorNormalizer implements DenormalizerInter
                 $dataArray[$key] = $value_1;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\V1CustomersBulkPostResponse422Error::class => false];
+        return [V1CustomersBulkPostResponse422Error::class => false];
     }
 }

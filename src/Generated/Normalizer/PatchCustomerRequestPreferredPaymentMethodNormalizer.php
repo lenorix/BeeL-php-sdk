@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\PatchCustomerRequestPreferredPaymentMethod;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class PatchCustomerRequestPreferredPaymentMethodNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class PatchCustomerRequestPreferredPaymentMethodNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\PatchCustomerRequestPreferredPaymentMethod::class;
+        return $type === PatchCustomerRequestPreferredPaymentMethod::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\PatchCustomerRequestPreferredPaymentMethod::class;
+        return is_object($data) && get_class($data) === PatchCustomerRequestPreferredPaymentMethod::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\PatchCustomerRequestPreferredPaymentMethod();
-        if (null === $data || false === \is_array($data)) {
+        $object = new PatchCustomerRequestPreferredPaymentMethod;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -40,32 +45,28 @@ class PatchCustomerRequestPreferredPaymentMethodNormalizer implements Denormaliz
         if (\array_key_exists('method', $data) && $data['method'] !== null) {
             $object->setMethod($data['method']);
             unset($data['method']);
-        }
-        elseif (\array_key_exists('method', $data) && $data['method'] === null) {
+        } elseif (\array_key_exists('method', $data) && $data['method'] === null) {
             $object->setMethod(null);
             unset($data['method']);
         }
         if (\array_key_exists('iban', $data) && $data['iban'] !== null) {
             $object->setIban($data['iban']);
             unset($data['iban']);
-        }
-        elseif (\array_key_exists('iban', $data) && $data['iban'] === null) {
+        } elseif (\array_key_exists('iban', $data) && $data['iban'] === null) {
             $object->setIban(null);
             unset($data['iban']);
         }
         if (\array_key_exists('swift', $data) && $data['swift'] !== null) {
             $object->setSwift($data['swift']);
             unset($data['swift']);
-        }
-        elseif (\array_key_exists('swift', $data) && $data['swift'] === null) {
+        } elseif (\array_key_exists('swift', $data) && $data['swift'] === null) {
             $object->setSwift(null);
             unset($data['swift']);
         }
         if (\array_key_exists('payment_term_days', $data) && $data['payment_term_days'] !== null) {
             $object->setPaymentTermDays($data['payment_term_days']);
             unset($data['payment_term_days']);
-        }
-        elseif (\array_key_exists('payment_term_days', $data) && $data['payment_term_days'] === null) {
+        } elseif (\array_key_exists('payment_term_days', $data) && $data['payment_term_days'] === null) {
             $object->setPaymentTermDays(null);
             unset($data['payment_term_days']);
         }
@@ -74,21 +75,23 @@ class PatchCustomerRequestPreferredPaymentMethodNormalizer implements Denormaliz
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('method') && null !== $data->getMethod()) {
+        if ($data->isInitialized('method') && $data->getMethod() !== null) {
             $dataArray['method'] = $data->getMethod();
         }
-        if ($data->isInitialized('iban') && null !== $data->getIban()) {
+        if ($data->isInitialized('iban') && $data->getIban() !== null) {
             $dataArray['iban'] = $data->getIban();
         }
-        if ($data->isInitialized('swift') && null !== $data->getSwift()) {
+        if ($data->isInitialized('swift') && $data->getSwift() !== null) {
             $dataArray['swift'] = $data->getSwift();
         }
-        if ($data->isInitialized('paymentTermDays') && null !== $data->getPaymentTermDays()) {
+        if ($data->isInitialized('paymentTermDays') && $data->getPaymentTermDays() !== null) {
             $dataArray['payment_term_days'] = $data->getPaymentTermDays();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -96,10 +99,12 @@ class PatchCustomerRequestPreferredPaymentMethodNormalizer implements Denormaliz
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\PatchCustomerRequestPreferredPaymentMethod::class => false];
+        return [PatchCustomerRequestPreferredPaymentMethod::class => false];
     }
 }

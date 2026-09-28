@@ -2,9 +2,27 @@
 
 namespace Lenorix\BeelSdk\Generated\Endpoint;
 
-class UpdateCustomer extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint implements \Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint
+use Lenorix\BeelSdk\Generated\Exception\UpdateCustomerBadRequestException;
+use Lenorix\BeelSdk\Generated\Exception\UpdateCustomerForbiddenException;
+use Lenorix\BeelSdk\Generated\Exception\UpdateCustomerInternalServerErrorException;
+use Lenorix\BeelSdk\Generated\Exception\UpdateCustomerNotFoundException;
+use Lenorix\BeelSdk\Generated\Exception\UpdateCustomerTooManyRequestsException;
+use Lenorix\BeelSdk\Generated\Exception\UpdateCustomerUnauthorizedException;
+use Lenorix\BeelSdk\Generated\Exception\UpdateCustomerUnprocessableEntityException;
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Generated\Model\UpdateCustomerRequest;
+use Lenorix\BeelSdk\Generated\Model\V1CustomersCustomerIdPutResponse200;
+use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
+use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+use Lenorix\BeelSdk\Generated\Runtime\Client\JsonPayload;
+use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Serializer\SerializerInterface;
+
+class UpdateCustomer extends BaseEndpoint implements Endpoint
 {
     protected $customer_id;
+
     /**
      * Replaces an existing customer with the body you send.
      *
@@ -28,79 +46,87 @@ class UpdateCustomer extends \Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpo
      *
      * **Retires on 9 December 2026.** See the [migration guide](https://docs.beel.es/changelog/resources-under-the-nif) for what moved where and what changes when you switch.
      *
-     * @param string $customerId Customer ID
-     * @param \Lenorix\BeelSdk\Generated\Model\UpdateCustomerRequest $requestBody
+     * @param  string  $customerId  Customer ID
      */
-    public function __construct(string $customerId, \Lenorix\BeelSdk\Generated\Model\UpdateCustomerRequest $requestBody)
+    public function __construct(string $customerId, UpdateCustomerRequest $requestBody)
     {
         $this->customer_id = $customerId;
         $this->body = $requestBody;
     }
-    use \Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
+
+    use EndpointTrait;
+
     public function getMethod(): string
     {
         return 'PUT';
     }
+
     public function getUri(): string
     {
         return str_replace(['{customer_id}'], [rawurlencode($this->customer_id)], '/v1/customers/{customer_id}');
     }
-    public function getBody(\Symfony\Component\Serializer\SerializerInterface $serializer, $streamFactory = null): array
+
+    public function getBody(SerializerInterface $serializer, $streamFactory = null): array
     {
-        if ($this->body instanceof \Lenorix\BeelSdk\Generated\Model\UpdateCustomerRequest) {
-            return [['Content-Type' => ['application/json']], \Lenorix\BeelSdk\Generated\Runtime\Client\JsonPayload::encode($serializer, $this->body)];
+        if ($this->body instanceof UpdateCustomerRequest) {
+            return [['Content-Type' => ['application/json']], JsonPayload::encode($serializer, $this->body)];
         }
+
         return [[], null];
     }
+
     public function getExtraHeaders(): array
     {
         return ['Accept' => ['application/json']];
     }
+
     /**
      * {@inheritdoc}
      *
-     * @throws \Lenorix\BeelSdk\Generated\Exception\UpdateCustomerBadRequestException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\UpdateCustomerUnauthorizedException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\UpdateCustomerForbiddenException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\UpdateCustomerNotFoundException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\UpdateCustomerUnprocessableEntityException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\UpdateCustomerTooManyRequestsException
-     * @throws \Lenorix\BeelSdk\Generated\Exception\UpdateCustomerInternalServerErrorException
      *
-     * @return null|\Lenorix\BeelSdk\Generated\Model\V1CustomersCustomerIdPutResponse200|\Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @return null|V1CustomersCustomerIdPutResponse200|ErrorResponse
+     *
+     * @throws UpdateCustomerBadRequestException
+     * @throws UpdateCustomerUnauthorizedException
+     * @throws UpdateCustomerForbiddenException
+     * @throws UpdateCustomerNotFoundException
+     * @throws UpdateCustomerUnprocessableEntityException
+     * @throws UpdateCustomerTooManyRequestsException
+     * @throws UpdateCustomerInternalServerErrorException
      */
-    protected function transformResponseBody(\Psr\Http\Message\ResponseInterface $response, \Symfony\Component\Serializer\SerializerInterface $serializer, ?string $contentType = null)
+    protected function transformResponseBody(ResponseInterface $response, SerializerInterface $serializer, ?string $contentType = null)
     {
         $status = $response->getStatusCode();
         $body = (string) $response->getBody();
-        if (is_null($contentType) === false && (200 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
+        if (is_null($contentType) === false && ($status === 200 && stripos(strtolower($contentType), 'application/json') !== false)) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\V1CustomersCustomerIdPutResponse200', 'json');
         }
-        if (is_null($contentType) === false && (400 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\UpdateCustomerBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ResponseInvalidJsonFormat', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 400 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new UpdateCustomerBadRequestException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ResponseInvalidJsonFormat', 'json'), $response);
         }
-        if (is_null($contentType) === false && (401 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\UpdateCustomerUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 401 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new UpdateCustomerUnauthorizedException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (403 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\UpdateCustomerForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 403 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new UpdateCustomerForbiddenException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (404 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\UpdateCustomerNotFoundException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 404 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new UpdateCustomerNotFoundException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (422 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\UpdateCustomerUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 422 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new UpdateCustomerUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (429 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\UpdateCustomerTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 429 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new UpdateCustomerTooManyRequestsException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
-        if (is_null($contentType) === false && (500 === $status && stripos(strtolower($contentType), 'application/json') !== false)) {
-            throw new \Lenorix\BeelSdk\Generated\Exception\UpdateCustomerInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
+        if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
+            throw new UpdateCustomerInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
         }
         if (stripos(strtolower($contentType), 'application/json') !== false) {
             return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
+
     public function getAuthenticationScopes(): array
     {
         return ['ApiKeyAuth'];

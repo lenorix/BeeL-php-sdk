@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\ActivateCompanyRequest;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class ActivateCompanyRequestNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class ActivateCompanyRequestNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\ActivateCompanyRequest::class;
+        return $type === ActivateCompanyRequest::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\ActivateCompanyRequest::class;
+        return is_object($data) && get_class($data) === ActivateCompanyRequest::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\ActivateCompanyRequest();
-        if (null === $data || false === \is_array($data)) {
+        $object = new ActivateCompanyRequest;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -54,16 +59,18 @@ class ActivateCompanyRequestNormalizer implements DenormalizerInterface, Normali
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
         $dataArray['environment'] = $data->getEnvironment();
-        if ($data->isInitialized('successUrl') && null !== $data->getSuccessUrl()) {
+        if ($data->isInitialized('successUrl') && $data->getSuccessUrl() !== null) {
             $dataArray['success_url'] = $data->getSuccessUrl();
         }
-        if ($data->isInitialized('cancelUrl') && null !== $data->getCancelUrl()) {
+        if ($data->isInitialized('cancelUrl') && $data->getCancelUrl() !== null) {
             $dataArray['cancel_url'] = $data->getCancelUrl();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -71,10 +78,12 @@ class ActivateCompanyRequestNormalizer implements DenormalizerInterface, Normali
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\ActivateCompanyRequest::class => false];
+        return [ActivateCompanyRequest::class => false];
     }
 }

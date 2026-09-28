@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\CustomerValidationStatistics;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class CustomerValidationStatisticsNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class CustomerValidationStatisticsNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\CustomerValidationStatistics::class;
+        return $type === CustomerValidationStatistics::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CustomerValidationStatistics::class;
+        return is_object($data) && get_class($data) === CustomerValidationStatistics::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\CustomerValidationStatistics();
-        if (null === $data || false === \is_array($data)) {
+        $object = new CustomerValidationStatistics;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -75,16 +80,14 @@ class CustomerValidationStatisticsNormalizer implements DenormalizerInterface, N
         if (\array_key_exists('importable', $data) && $data['importable'] !== null) {
             $object->setImportable($data['importable']);
             unset($data['importable']);
-        }
-        elseif (\array_key_exists('importable', $data) && $data['importable'] === null) {
+        } elseif (\array_key_exists('importable', $data) && $data['importable'] === null) {
             $object->setImportable(null);
             unset($data['importable']);
         }
         if (\array_key_exists('not_importable', $data) && $data['not_importable'] !== null) {
             $object->setNotImportable($data['not_importable']);
             unset($data['not_importable']);
-        }
-        elseif (\array_key_exists('not_importable', $data) && $data['not_importable'] === null) {
+        } elseif (\array_key_exists('not_importable', $data) && $data['not_importable'] === null) {
             $object->setNotImportable(null);
             unset($data['not_importable']);
         }
@@ -93,8 +96,10 @@ class CustomerValidationStatisticsNormalizer implements DenormalizerInterface, N
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -106,10 +111,10 @@ class CustomerValidationStatisticsNormalizer implements DenormalizerInterface, N
         $dataArray['invalid_nifs'] = $data->getInvalidNifs();
         $dataArray['imported'] = $data->getImported();
         $dataArray['success_rate'] = $data->getSuccessRate();
-        if ($data->isInitialized('importable') && null !== $data->getImportable()) {
+        if ($data->isInitialized('importable') && $data->getImportable() !== null) {
             $dataArray['importable'] = $data->getImportable();
         }
-        if ($data->isInitialized('notImportable') && null !== $data->getNotImportable()) {
+        if ($data->isInitialized('notImportable') && $data->getNotImportable() !== null) {
             $dataArray['not_importable'] = $data->getNotImportable();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -117,10 +122,12 @@ class CustomerValidationStatisticsNormalizer implements DenormalizerInterface, N
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\CustomerValidationStatistics::class => false];
+        return [CustomerValidationStatistics::class => false];
     }
 }

@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\CompanyPaymentConnectionSeries;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class CompanyPaymentConnectionSeriesNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class CompanyPaymentConnectionSeriesNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\CompanyPaymentConnectionSeries::class;
+        return $type === CompanyPaymentConnectionSeries::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CompanyPaymentConnectionSeries::class;
+        return is_object($data) && get_class($data) === CompanyPaymentConnectionSeries::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\CompanyPaymentConnectionSeries();
-        if (null === $data || false === \is_array($data)) {
+        $object = new CompanyPaymentConnectionSeries;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -40,24 +45,21 @@ class CompanyPaymentConnectionSeriesNormalizer implements DenormalizerInterface,
         if (\array_key_exists('ordinaria', $data) && $data['ordinaria'] !== null) {
             $object->setOrdinaria($data['ordinaria']);
             unset($data['ordinaria']);
-        }
-        elseif (\array_key_exists('ordinaria', $data) && $data['ordinaria'] === null) {
+        } elseif (\array_key_exists('ordinaria', $data) && $data['ordinaria'] === null) {
             $object->setOrdinaria(null);
             unset($data['ordinaria']);
         }
         if (\array_key_exists('simplificada', $data) && $data['simplificada'] !== null) {
             $object->setSimplificada($data['simplificada']);
             unset($data['simplificada']);
-        }
-        elseif (\array_key_exists('simplificada', $data) && $data['simplificada'] === null) {
+        } elseif (\array_key_exists('simplificada', $data) && $data['simplificada'] === null) {
             $object->setSimplificada(null);
             unset($data['simplificada']);
         }
         if (\array_key_exists('rectificativa', $data) && $data['rectificativa'] !== null) {
             $object->setRectificativa($data['rectificativa']);
             unset($data['rectificativa']);
-        }
-        elseif (\array_key_exists('rectificativa', $data) && $data['rectificativa'] === null) {
+        } elseif (\array_key_exists('rectificativa', $data) && $data['rectificativa'] === null) {
             $object->setRectificativa(null);
             unset($data['rectificativa']);
         }
@@ -66,18 +68,20 @@ class CompanyPaymentConnectionSeriesNormalizer implements DenormalizerInterface,
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('ordinaria') && null !== $data->getOrdinaria()) {
+        if ($data->isInitialized('ordinaria') && $data->getOrdinaria() !== null) {
             $dataArray['ordinaria'] = $data->getOrdinaria();
         }
-        if ($data->isInitialized('simplificada') && null !== $data->getSimplificada()) {
+        if ($data->isInitialized('simplificada') && $data->getSimplificada() !== null) {
             $dataArray['simplificada'] = $data->getSimplificada();
         }
-        if ($data->isInitialized('rectificativa') && null !== $data->getRectificativa()) {
+        if ($data->isInitialized('rectificativa') && $data->getRectificativa() !== null) {
             $dataArray['rectificativa'] = $data->getRectificativa();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -85,10 +89,12 @@ class CompanyPaymentConnectionSeriesNormalizer implements DenormalizerInterface,
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\CompanyPaymentConnectionSeries::class => false];
+        return [CompanyPaymentConnectionSeries::class => false];
     }
 }

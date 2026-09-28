@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200DataNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200DataNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data::class;
+        return $type === V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data::class;
+        return is_object($data) && get_class($data) === V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data();
-        if (null === $data || false === \is_array($data)) {
+        $object = new V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -40,8 +45,7 @@ class V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200DataNormalizer imp
         if (\array_key_exists('email_id', $data) && $data['email_id'] !== null) {
             $object->setEmailId($data['email_id']);
             unset($data['email_id']);
-        }
-        elseif (\array_key_exists('email_id', $data) && $data['email_id'] === null) {
+        } elseif (\array_key_exists('email_id', $data) && $data['email_id'] === null) {
             $object->setEmailId(null);
             unset($data['email_id']);
         }
@@ -52,16 +56,14 @@ class V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200DataNormalizer imp
             }
             $object->setSentTo($values);
             unset($data['sent_to']);
-        }
-        elseif (\array_key_exists('sent_to', $data) && $data['sent_to'] === null) {
+        } elseif (\array_key_exists('sent_to', $data) && $data['sent_to'] === null) {
             $object->setSentTo(null);
             unset($data['sent_to']);
         }
         if (\array_key_exists('sent_at', $data) && $data['sent_at'] !== null) {
             $object->setSentAt($this->denormalizer->denormalize($data['sent_at'], \DateTime::class, 'json', $context));
             unset($data['sent_at']);
-        }
-        elseif (\array_key_exists('sent_at', $data) && $data['sent_at'] === null) {
+        } elseif (\array_key_exists('sent_at', $data) && $data['sent_at'] === null) {
             $object->setSentAt(null);
             unset($data['sent_at']);
         }
@@ -70,22 +72,24 @@ class V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200DataNormalizer imp
                 $object[$key] = $value_1;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('emailId') && null !== $data->getEmailId()) {
+        if ($data->isInitialized('emailId') && $data->getEmailId() !== null) {
             $dataArray['email_id'] = $data->getEmailId();
         }
-        if ($data->isInitialized('sentTo') && null !== $data->getSentTo()) {
+        if ($data->isInitialized('sentTo') && $data->getSentTo() !== null) {
             $values = [];
             foreach ($data->getSentTo() as $value) {
                 $values[] = $value;
             }
             $dataArray['sent_to'] = $values;
         }
-        if ($data->isInitialized('sentAt') && null !== $data->getSentAt()) {
+        if ($data->isInitialized('sentAt') && $data->getSentAt() !== null) {
             $dataArray['sent_at'] = $this->normalizer->normalize($data->getSentAt(), 'json', $context);
         }
         foreach ($data->additionalPropertyEntries() as $key => $value_1) {
@@ -93,10 +97,12 @@ class V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200DataNormalizer imp
                 $dataArray[$key] = $value_1;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data::class => false];
+        return [V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data::class => false];
     }
 }

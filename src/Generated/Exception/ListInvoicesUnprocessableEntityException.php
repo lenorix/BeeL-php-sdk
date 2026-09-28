@@ -2,17 +2,22 @@
 
 namespace Lenorix\BeelSdk\Generated\Exception;
 
+use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Psr\Http\Message\ResponseInterface;
+
 class ListInvoicesUnprocessableEntityException extends UnprocessableEntityException
 {
     /**
-     * @var \Lenorix\BeelSdk\Generated\Model\ErrorResponse
+     * @var ErrorResponse
      */
     private $errorResponse;
+
     /**
-     * @var \Psr\Http\Message\ResponseInterface
+     * @var ResponseInterface
      */
     private $response;
-    public function __construct(\Lenorix\BeelSdk\Generated\Model\ErrorResponse $errorResponse, \Psr\Http\Message\ResponseInterface $response)
+
+    public function __construct(ErrorResponse $errorResponse, ResponseInterface $response)
     {
         parent::__construct('A parameter parsed as its declared type but its value is not one the operation admits:
 a `limit` outside its range (`limit=0`, `limit=101`), a `page` under 1, a `cursor` that is
@@ -25,11 +30,13 @@ refused. Fix the value — retrying the same query answers the same way.
         $this->errorResponse = $errorResponse;
         $this->response = $response;
     }
-    public function getErrorResponse(): \Lenorix\BeelSdk\Generated\Model\ErrorResponse
+
+    public function getErrorResponse(): ErrorResponse
     {
         return $this->errorResponse;
     }
-    public function getResponse(): \Psr\Http\Message\ResponseInterface
+
+    public function getResponse(): ResponseInterface
     {
         return $this->response;
     }

@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Runtime\Client;
 
 use Symfony\Component\Serializer\SerializerInterface;
+
 final class JsonPayload
 {
     /**
@@ -15,9 +16,10 @@ final class JsonPayload
     public static function encode(SerializerInterface $serializer, mixed $body): string
     {
         $serialized = $serializer->serialize($body, 'json');
-        if ('[]' === $serialized) {
+        if ($serialized === '[]') {
             return '{}';
         }
+
         return $serialized;
     }
 }

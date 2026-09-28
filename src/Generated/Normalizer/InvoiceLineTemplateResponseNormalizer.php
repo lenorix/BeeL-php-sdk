@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\InvoiceLineTemplateResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class InvoiceLineTemplateResponseNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class InvoiceLineTemplateResponseNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\InvoiceLineTemplateResponse::class;
+        return $type === InvoiceLineTemplateResponse::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\InvoiceLineTemplateResponse::class;
+        return is_object($data) && get_class($data) === InvoiceLineTemplateResponse::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\InvoiceLineTemplateResponse();
-        if (null === $data || false === \is_array($data)) {
+        $object = new InvoiceLineTemplateResponse;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -64,136 +69,119 @@ class InvoiceLineTemplateResponseNormalizer implements DenormalizerInterface, No
         if (\array_key_exists('id', $data) && $data['id'] !== null) {
             $object->setId($data['id']);
             unset($data['id']);
-        }
-        elseif (\array_key_exists('id', $data) && $data['id'] === null) {
+        } elseif (\array_key_exists('id', $data) && $data['id'] === null) {
             $object->setId(null);
             unset($data['id']);
         }
         if (\array_key_exists('order', $data) && $data['order'] !== null) {
             $object->setOrder($data['order']);
             unset($data['order']);
-        }
-        elseif (\array_key_exists('order', $data) && $data['order'] === null) {
+        } elseif (\array_key_exists('order', $data) && $data['order'] === null) {
             $object->setOrder(null);
             unset($data['order']);
         }
         if (\array_key_exists('description', $data) && $data['description'] !== null) {
             $object->setDescription($data['description']);
             unset($data['description']);
-        }
-        elseif (\array_key_exists('description', $data) && $data['description'] === null) {
+        } elseif (\array_key_exists('description', $data) && $data['description'] === null) {
             $object->setDescription(null);
             unset($data['description']);
         }
         if (\array_key_exists('quantity', $data) && $data['quantity'] !== null) {
             $object->setQuantity($data['quantity']);
             unset($data['quantity']);
-        }
-        elseif (\array_key_exists('quantity', $data) && $data['quantity'] === null) {
+        } elseif (\array_key_exists('quantity', $data) && $data['quantity'] === null) {
             $object->setQuantity(null);
             unset($data['quantity']);
         }
         if (\array_key_exists('unit', $data) && $data['unit'] !== null) {
             $object->setUnit($data['unit']);
             unset($data['unit']);
-        }
-        elseif (\array_key_exists('unit', $data) && $data['unit'] === null) {
+        } elseif (\array_key_exists('unit', $data) && $data['unit'] === null) {
             $object->setUnit(null);
             unset($data['unit']);
         }
         if (\array_key_exists('unit_price', $data) && $data['unit_price'] !== null) {
             $object->setUnitPrice($data['unit_price']);
             unset($data['unit_price']);
-        }
-        elseif (\array_key_exists('unit_price', $data) && $data['unit_price'] === null) {
+        } elseif (\array_key_exists('unit_price', $data) && $data['unit_price'] === null) {
             $object->setUnitPrice(null);
             unset($data['unit_price']);
         }
         if (\array_key_exists('pricing_mode', $data) && $data['pricing_mode'] !== null) {
             $object->setPricingMode($data['pricing_mode']);
             unset($data['pricing_mode']);
-        }
-        elseif (\array_key_exists('pricing_mode', $data) && $data['pricing_mode'] === null) {
+        } elseif (\array_key_exists('pricing_mode', $data) && $data['pricing_mode'] === null) {
             $object->setPricingMode(null);
             unset($data['pricing_mode']);
         }
         if (\array_key_exists('total_excluding_tax', $data) && $data['total_excluding_tax'] !== null) {
             $object->setTotalExcludingTax($data['total_excluding_tax']);
             unset($data['total_excluding_tax']);
-        }
-        elseif (\array_key_exists('total_excluding_tax', $data) && $data['total_excluding_tax'] === null) {
+        } elseif (\array_key_exists('total_excluding_tax', $data) && $data['total_excluding_tax'] === null) {
             $object->setTotalExcludingTax(null);
             unset($data['total_excluding_tax']);
         }
         if (\array_key_exists('total_including_tax', $data) && $data['total_including_tax'] !== null) {
             $object->setTotalIncludingTax($data['total_including_tax']);
             unset($data['total_including_tax']);
-        }
-        elseif (\array_key_exists('total_including_tax', $data) && $data['total_including_tax'] === null) {
+        } elseif (\array_key_exists('total_including_tax', $data) && $data['total_including_tax'] === null) {
             $object->setTotalIncludingTax(null);
             unset($data['total_including_tax']);
         }
         if (\array_key_exists('discount_percentage', $data) && $data['discount_percentage'] !== null) {
             $object->setDiscountPercentage($data['discount_percentage']);
             unset($data['discount_percentage']);
-        }
-        elseif (\array_key_exists('discount_percentage', $data) && $data['discount_percentage'] === null) {
+        } elseif (\array_key_exists('discount_percentage', $data) && $data['discount_percentage'] === null) {
             $object->setDiscountPercentage(null);
             unset($data['discount_percentage']);
         }
         if (\array_key_exists('tax_type', $data) && $data['tax_type'] !== null) {
             $object->setTaxType($data['tax_type']);
             unset($data['tax_type']);
-        }
-        elseif (\array_key_exists('tax_type', $data) && $data['tax_type'] === null) {
+        } elseif (\array_key_exists('tax_type', $data) && $data['tax_type'] === null) {
             $object->setTaxType(null);
             unset($data['tax_type']);
         }
         if (\array_key_exists('vat_rate', $data) && $data['vat_rate'] !== null) {
             $object->setVatRate($data['vat_rate']);
             unset($data['vat_rate']);
-        }
-        elseif (\array_key_exists('vat_rate', $data) && $data['vat_rate'] === null) {
+        } elseif (\array_key_exists('vat_rate', $data) && $data['vat_rate'] === null) {
             $object->setVatRate(null);
             unset($data['vat_rate']);
         }
         if (\array_key_exists('regime_key', $data) && $data['regime_key'] !== null) {
             $object->setRegimeKey($data['regime_key']);
             unset($data['regime_key']);
-        }
-        elseif (\array_key_exists('regime_key', $data) && $data['regime_key'] === null) {
+        } elseif (\array_key_exists('regime_key', $data) && $data['regime_key'] === null) {
             $object->setRegimeKey(null);
             unset($data['regime_key']);
         }
         if (\array_key_exists('equivalence_surcharge_rate', $data) && $data['equivalence_surcharge_rate'] !== null) {
             $object->setEquivalenceSurchargeRate($data['equivalence_surcharge_rate']);
             unset($data['equivalence_surcharge_rate']);
-        }
-        elseif (\array_key_exists('equivalence_surcharge_rate', $data) && $data['equivalence_surcharge_rate'] === null) {
+        } elseif (\array_key_exists('equivalence_surcharge_rate', $data) && $data['equivalence_surcharge_rate'] === null) {
             $object->setEquivalenceSurchargeRate(null);
             unset($data['equivalence_surcharge_rate']);
         }
         if (\array_key_exists('irpf_rate', $data) && $data['irpf_rate'] !== null) {
             $object->setIrpfRate($data['irpf_rate']);
             unset($data['irpf_rate']);
-        }
-        elseif (\array_key_exists('irpf_rate', $data) && $data['irpf_rate'] === null) {
+        } elseif (\array_key_exists('irpf_rate', $data) && $data['irpf_rate'] === null) {
             $object->setIrpfRate(null);
             unset($data['irpf_rate']);
         }
         if (\array_key_exists('exemption_reason', $data) && $data['exemption_reason'] !== null) {
             $object->setExemptionReason($data['exemption_reason']);
             unset($data['exemption_reason']);
-        }
-        elseif (\array_key_exists('exemption_reason', $data) && $data['exemption_reason'] === null) {
+        } elseif (\array_key_exists('exemption_reason', $data) && $data['exemption_reason'] === null) {
             $object->setExemptionReason(null);
             unset($data['exemption_reason']);
         }
         if (\array_key_exists('exemption_reason_text', $data) && $data['exemption_reason_text'] !== null) {
             $object->setExemptionReasonText($data['exemption_reason_text']);
             unset($data['exemption_reason_text']);
-        }
-        elseif (\array_key_exists('exemption_reason_text', $data) && $data['exemption_reason_text'] === null) {
+        } elseif (\array_key_exists('exemption_reason_text', $data) && $data['exemption_reason_text'] === null) {
             $object->setExemptionReasonText(null);
             unset($data['exemption_reason_text']);
         }
@@ -202,60 +190,62 @@ class InvoiceLineTemplateResponseNormalizer implements DenormalizerInterface, No
                 $object[$key] = $value;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('id') && null !== $data->getId()) {
+        if ($data->isInitialized('id') && $data->getId() !== null) {
             $dataArray['id'] = $data->getId();
         }
-        if ($data->isInitialized('order') && null !== $data->getOrder()) {
+        if ($data->isInitialized('order') && $data->getOrder() !== null) {
             $dataArray['order'] = $data->getOrder();
         }
-        if ($data->isInitialized('description') && null !== $data->getDescription()) {
+        if ($data->isInitialized('description') && $data->getDescription() !== null) {
             $dataArray['description'] = $data->getDescription();
         }
-        if ($data->isInitialized('quantity') && null !== $data->getQuantity()) {
+        if ($data->isInitialized('quantity') && $data->getQuantity() !== null) {
             $dataArray['quantity'] = $data->getQuantity();
         }
-        if ($data->isInitialized('unit') && null !== $data->getUnit()) {
+        if ($data->isInitialized('unit') && $data->getUnit() !== null) {
             $dataArray['unit'] = $data->getUnit();
         }
-        if ($data->isInitialized('unitPrice') && null !== $data->getUnitPrice()) {
+        if ($data->isInitialized('unitPrice') && $data->getUnitPrice() !== null) {
             $dataArray['unit_price'] = $data->getUnitPrice();
         }
-        if ($data->isInitialized('pricingMode') && null !== $data->getPricingMode()) {
+        if ($data->isInitialized('pricingMode') && $data->getPricingMode() !== null) {
             $dataArray['pricing_mode'] = $data->getPricingMode();
         }
-        if ($data->isInitialized('totalExcludingTax') && null !== $data->getTotalExcludingTax()) {
+        if ($data->isInitialized('totalExcludingTax') && $data->getTotalExcludingTax() !== null) {
             $dataArray['total_excluding_tax'] = $data->getTotalExcludingTax();
         }
-        if ($data->isInitialized('totalIncludingTax') && null !== $data->getTotalIncludingTax()) {
+        if ($data->isInitialized('totalIncludingTax') && $data->getTotalIncludingTax() !== null) {
             $dataArray['total_including_tax'] = $data->getTotalIncludingTax();
         }
-        if ($data->isInitialized('discountPercentage') && null !== $data->getDiscountPercentage()) {
+        if ($data->isInitialized('discountPercentage') && $data->getDiscountPercentage() !== null) {
             $dataArray['discount_percentage'] = $data->getDiscountPercentage();
         }
-        if ($data->isInitialized('taxType') && null !== $data->getTaxType()) {
+        if ($data->isInitialized('taxType') && $data->getTaxType() !== null) {
             $dataArray['tax_type'] = $data->getTaxType();
         }
-        if ($data->isInitialized('vatRate') && null !== $data->getVatRate()) {
+        if ($data->isInitialized('vatRate') && $data->getVatRate() !== null) {
             $dataArray['vat_rate'] = $data->getVatRate();
         }
-        if ($data->isInitialized('regimeKey') && null !== $data->getRegimeKey()) {
+        if ($data->isInitialized('regimeKey') && $data->getRegimeKey() !== null) {
             $dataArray['regime_key'] = $data->getRegimeKey();
         }
-        if ($data->isInitialized('equivalenceSurchargeRate') && null !== $data->getEquivalenceSurchargeRate()) {
+        if ($data->isInitialized('equivalenceSurchargeRate') && $data->getEquivalenceSurchargeRate() !== null) {
             $dataArray['equivalence_surcharge_rate'] = $data->getEquivalenceSurchargeRate();
         }
-        if ($data->isInitialized('irpfRate') && null !== $data->getIrpfRate()) {
+        if ($data->isInitialized('irpfRate') && $data->getIrpfRate() !== null) {
             $dataArray['irpf_rate'] = $data->getIrpfRate();
         }
-        if ($data->isInitialized('exemptionReason') && null !== $data->getExemptionReason()) {
+        if ($data->isInitialized('exemptionReason') && $data->getExemptionReason() !== null) {
             $dataArray['exemption_reason'] = $data->getExemptionReason();
         }
-        if ($data->isInitialized('exemptionReasonText') && null !== $data->getExemptionReasonText()) {
+        if ($data->isInitialized('exemptionReasonText') && $data->getExemptionReasonText() !== null) {
             $dataArray['exemption_reason_text'] = $data->getExemptionReasonText();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
@@ -263,10 +253,12 @@ class InvoiceLineTemplateResponseNormalizer implements DenormalizerInterface, No
                 $dataArray[$key] = $value;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\InvoiceLineTemplateResponse::class => false];
+        return [InvoiceLineTemplateResponse::class => false];
     }
 }

@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\CreateInvoiceDeliveryRequest;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class CreateInvoiceDeliveryRequestNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class CreateInvoiceDeliveryRequestNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\CreateInvoiceDeliveryRequest::class;
+        return $type === CreateInvoiceDeliveryRequest::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CreateInvoiceDeliveryRequest::class;
+        return is_object($data) && get_class($data) === CreateInvoiceDeliveryRequest::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\CreateInvoiceDeliveryRequest();
-        if (null === $data || false === \is_array($data)) {
+        $object = new CreateInvoiceDeliveryRequest;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -78,8 +83,10 @@ class CreateInvoiceDeliveryRequestNormalizer implements DenormalizerInterface, N
                 $object[$key] = $value_3;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -93,20 +100,20 @@ class CreateInvoiceDeliveryRequestNormalizer implements DenormalizerInterface, N
             $values_1[] = $value_1;
         }
         $dataArray['recipients'] = $values_1;
-        if ($data->isInitialized('cc') && null !== $data->getCc()) {
+        if ($data->isInitialized('cc') && $data->getCc() !== null) {
             $values_2 = [];
             foreach ($data->getCc() as $value_2) {
                 $values_2[] = $value_2;
             }
             $dataArray['cc'] = $values_2;
         }
-        if ($data->isInitialized('subject') && null !== $data->getSubject()) {
+        if ($data->isInitialized('subject') && $data->getSubject() !== null) {
             $dataArray['subject'] = $data->getSubject();
         }
-        if ($data->isInitialized('message') && null !== $data->getMessage()) {
+        if ($data->isInitialized('message') && $data->getMessage() !== null) {
             $dataArray['message'] = $data->getMessage();
         }
-        if ($data->isInitialized('language') && null !== $data->getLanguage()) {
+        if ($data->isInitialized('language') && $data->getLanguage() !== null) {
             $dataArray['language'] = $data->getLanguage();
         }
         foreach ($data->additionalPropertyEntries() as $key => $value_3) {
@@ -114,10 +121,12 @@ class CreateInvoiceDeliveryRequestNormalizer implements DenormalizerInterface, N
                 $dataArray[$key] = $value_3;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\CreateInvoiceDeliveryRequest::class => false];
+        return [CreateInvoiceDeliveryRequest::class => false];
     }
 }

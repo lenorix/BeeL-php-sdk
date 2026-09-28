@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\WithholdingOptions;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class WithholdingOptionsNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class WithholdingOptionsNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\WithholdingOptions::class;
+        return $type === WithholdingOptions::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\WithholdingOptions::class;
+        return is_object($data) && get_class($data) === WithholdingOptions::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\WithholdingOptions();
-        if (null === $data || false === \is_array($data)) {
+        $object = new WithholdingOptions;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -51,8 +56,7 @@ class WithholdingOptionsNormalizer implements DenormalizerInterface, NormalizerI
         if (\array_key_exists('suggested_irpf_rate', $data) && $data['suggested_irpf_rate'] !== null) {
             $object->setSuggestedIrpfRate($data['suggested_irpf_rate']);
             unset($data['suggested_irpf_rate']);
-        }
-        elseif (\array_key_exists('suggested_irpf_rate', $data) && $data['suggested_irpf_rate'] === null) {
+        } elseif (\array_key_exists('suggested_irpf_rate', $data) && $data['suggested_irpf_rate'] === null) {
             $object->setSuggestedIrpfRate(null);
             unset($data['suggested_irpf_rate']);
         }
@@ -61,8 +65,10 @@ class WithholdingOptionsNormalizer implements DenormalizerInterface, NormalizerI
                 $object[$key] = $value_1;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
@@ -77,10 +83,12 @@ class WithholdingOptionsNormalizer implements DenormalizerInterface, NormalizerI
                 $dataArray[$key] = $value_1;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\WithholdingOptions::class => false];
+        return [WithholdingOptions::class => false];
     }
 }

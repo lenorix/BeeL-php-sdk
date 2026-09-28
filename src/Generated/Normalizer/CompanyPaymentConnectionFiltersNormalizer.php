@@ -3,6 +3,7 @@
 namespace Lenorix\BeelSdk\Generated\Normalizer;
 
 use Jane\Component\JsonSchemaRuntime\Reference;
+use Lenorix\BeelSdk\Generated\Model\CompanyPaymentConnectionFilters;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\CheckArray;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\ValidatorTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
@@ -11,27 +12,31 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-class CompanyPaymentConnectionFiltersNormalizer implements DenormalizerInterface, NormalizerInterface, DenormalizerAwareInterface, NormalizerAwareInterface
+
+class CompanyPaymentConnectionFiltersNormalizer implements DenormalizerAwareInterface, DenormalizerInterface, NormalizerAwareInterface, NormalizerInterface
 {
+    use CheckArray;
     use DenormalizerAwareTrait;
     use NormalizerAwareTrait;
-    use CheckArray;
     use ValidatorTrait;
+
     public function supportsDenormalization(mixed $data, string $type, ?string $format = null, array $context = []): bool
     {
-        return $type === \Lenorix\BeelSdk\Generated\Model\CompanyPaymentConnectionFilters::class;
+        return $type === CompanyPaymentConnectionFilters::class;
     }
+
     public function supportsNormalization(mixed $data, ?string $format = null, array $context = []): bool
     {
-        return is_object($data) && get_class($data) === \Lenorix\BeelSdk\Generated\Model\CompanyPaymentConnectionFilters::class;
+        return is_object($data) && get_class($data) === CompanyPaymentConnectionFilters::class;
     }
+
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): mixed
     {
-        $object = new \Lenorix\BeelSdk\Generated\Model\CompanyPaymentConnectionFilters();
-        if (null === $data || false === \is_array($data)) {
+        $object = new CompanyPaymentConnectionFilters;
+        if ($data === null || \is_array($data) === false) {
             return $object;
         }
-        if (isset($data['$ref']) && !isset($data['type']) && !isset($data['properties']) && !isset($data['allOf'])) {
+        if (isset($data['$ref']) && ! isset($data['type']) && ! isset($data['properties']) && ! isset($data['allOf'])) {
             return new Reference($data['$ref'], $context['document-origin']);
         }
         if (isset($data['$recursiveRef'])) {
@@ -49,24 +54,21 @@ class CompanyPaymentConnectionFiltersNormalizer implements DenormalizerInterface
         if (\array_key_exists('min_amount', $data) && $data['min_amount'] !== null) {
             $object->setMinAmount($data['min_amount']);
             unset($data['min_amount']);
-        }
-        elseif (\array_key_exists('min_amount', $data) && $data['min_amount'] === null) {
+        } elseif (\array_key_exists('min_amount', $data) && $data['min_amount'] === null) {
             $object->setMinAmount(null);
             unset($data['min_amount']);
         }
         if (\array_key_exists('max_amount', $data) && $data['max_amount'] !== null) {
             $object->setMaxAmount($data['max_amount']);
             unset($data['max_amount']);
-        }
-        elseif (\array_key_exists('max_amount', $data) && $data['max_amount'] === null) {
+        } elseif (\array_key_exists('max_amount', $data) && $data['max_amount'] === null) {
             $object->setMaxAmount(null);
             unset($data['max_amount']);
         }
         if (\array_key_exists('only_mapped_customers', $data) && $data['only_mapped_customers'] !== null) {
             $object->setOnlyMappedCustomers($data['only_mapped_customers']);
             unset($data['only_mapped_customers']);
-        }
-        elseif (\array_key_exists('only_mapped_customers', $data) && $data['only_mapped_customers'] === null) {
+        } elseif (\array_key_exists('only_mapped_customers', $data) && $data['only_mapped_customers'] === null) {
             $object->setOnlyMappedCustomers(null);
             unset($data['only_mapped_customers']);
         }
@@ -77,8 +79,7 @@ class CompanyPaymentConnectionFiltersNormalizer implements DenormalizerInterface
             }
             $object->setAllowedCustomerIds($values);
             unset($data['allowed_customer_ids']);
-        }
-        elseif (\array_key_exists('allowed_customer_ids', $data) && $data['allowed_customer_ids'] === null) {
+        } elseif (\array_key_exists('allowed_customer_ids', $data) && $data['allowed_customer_ids'] === null) {
             $object->setAllowedCustomerIds(null);
             unset($data['allowed_customer_ids']);
         }
@@ -89,8 +90,7 @@ class CompanyPaymentConnectionFiltersNormalizer implements DenormalizerInterface
             }
             $object->setExcludedDescriptionPatterns($values_1);
             unset($data['excluded_description_patterns']);
-        }
-        elseif (\array_key_exists('excluded_description_patterns', $data) && $data['excluded_description_patterns'] === null) {
+        } elseif (\array_key_exists('excluded_description_patterns', $data) && $data['excluded_description_patterns'] === null) {
             $object->setExcludedDescriptionPatterns(null);
             unset($data['excluded_description_patterns']);
         }
@@ -101,8 +101,7 @@ class CompanyPaymentConnectionFiltersNormalizer implements DenormalizerInterface
             }
             $object->setRequiredDescriptionPatterns($values_2);
             unset($data['required_description_patterns']);
-        }
-        elseif (\array_key_exists('required_description_patterns', $data) && $data['required_description_patterns'] === null) {
+        } elseif (\array_key_exists('required_description_patterns', $data) && $data['required_description_patterns'] === null) {
             $object->setRequiredDescriptionPatterns(null);
             unset($data['required_description_patterns']);
         }
@@ -113,8 +112,7 @@ class CompanyPaymentConnectionFiltersNormalizer implements DenormalizerInterface
             }
             $object->setDisabledCategories($values_3);
             unset($data['disabled_categories']);
-        }
-        elseif (\array_key_exists('disabled_categories', $data) && $data['disabled_categories'] === null) {
+        } elseif (\array_key_exists('disabled_categories', $data) && $data['disabled_categories'] === null) {
             $object->setDisabledCategories(null);
             unset($data['disabled_categories']);
         }
@@ -123,42 +121,44 @@ class CompanyPaymentConnectionFiltersNormalizer implements DenormalizerInterface
                 $object[$key] = $value_4;
             }
         }
+
         return $object;
     }
+
     public function normalize(mixed $data, ?string $format = null, array $context = []): array|string|int|float|bool|\ArrayObject|null
     {
         $dataArray = [];
-        if ($data->isInitialized('minAmount') && null !== $data->getMinAmount()) {
+        if ($data->isInitialized('minAmount') && $data->getMinAmount() !== null) {
             $dataArray['min_amount'] = $data->getMinAmount();
         }
-        if ($data->isInitialized('maxAmount') && null !== $data->getMaxAmount()) {
+        if ($data->isInitialized('maxAmount') && $data->getMaxAmount() !== null) {
             $dataArray['max_amount'] = $data->getMaxAmount();
         }
-        if ($data->isInitialized('onlyMappedCustomers') && null !== $data->getOnlyMappedCustomers()) {
+        if ($data->isInitialized('onlyMappedCustomers') && $data->getOnlyMappedCustomers() !== null) {
             $dataArray['only_mapped_customers'] = $data->getOnlyMappedCustomers();
         }
-        if ($data->isInitialized('allowedCustomerIds') && null !== $data->getAllowedCustomerIds()) {
+        if ($data->isInitialized('allowedCustomerIds') && $data->getAllowedCustomerIds() !== null) {
             $values = [];
             foreach ($data->getAllowedCustomerIds() as $value) {
                 $values[] = $value;
             }
             $dataArray['allowed_customer_ids'] = $values;
         }
-        if ($data->isInitialized('excludedDescriptionPatterns') && null !== $data->getExcludedDescriptionPatterns()) {
+        if ($data->isInitialized('excludedDescriptionPatterns') && $data->getExcludedDescriptionPatterns() !== null) {
             $values_1 = [];
             foreach ($data->getExcludedDescriptionPatterns() as $value_1) {
                 $values_1[] = $value_1;
             }
             $dataArray['excluded_description_patterns'] = $values_1;
         }
-        if ($data->isInitialized('requiredDescriptionPatterns') && null !== $data->getRequiredDescriptionPatterns()) {
+        if ($data->isInitialized('requiredDescriptionPatterns') && $data->getRequiredDescriptionPatterns() !== null) {
             $values_2 = [];
             foreach ($data->getRequiredDescriptionPatterns() as $value_2) {
                 $values_2[] = $value_2;
             }
             $dataArray['required_description_patterns'] = $values_2;
         }
-        if ($data->isInitialized('disabledCategories') && null !== $data->getDisabledCategories()) {
+        if ($data->isInitialized('disabledCategories') && $data->getDisabledCategories() !== null) {
             $values_3 = [];
             foreach ($data->getDisabledCategories() as $value_3) {
                 $values_3[] = $value_3;
@@ -170,10 +170,12 @@ class CompanyPaymentConnectionFiltersNormalizer implements DenormalizerInterface
                 $dataArray[$key] = $value_4;
             }
         }
+
         return $dataArray;
     }
+
     public function getSupportedTypes(?string $format = null): array
     {
-        return [\Lenorix\BeelSdk\Generated\Model\CompanyPaymentConnectionFilters::class => false];
+        return [CompanyPaymentConnectionFilters::class => false];
     }
 }

@@ -4,101 +4,99 @@ namespace Lenorix\BeelSdk\Generated\Model;
 
 use Lenorix\BeelSdk\Generated\Runtime\AdditionalAndPatternProperties;
 use Lenorix\BeelSdk\Generated\Runtime\AdditionalPropertiesInterface;
+
 class UpdateCompanyPaymentConnectionSeries implements AdditionalPropertiesInterface
 {
     use AdditionalAndPatternProperties;
+
     /**
      * @var array
      */
     protected $initialized = [];
+
     public function isInitialized($property): bool
     {
         return array_key_exists($property, $this->initialized);
     }
+
     /**
      * Series for auto-issued ordinary invoices.
      *
      * @var string|null
      */
     protected $ordinaria;
+
     /**
      * Series for auto-issued simplified invoices.
      *
      * @var string|null
      */
     protected $simplificada;
+
     /**
      * Series for auto-issued corrective invoices (refunds).
      *
      * @var string|null
      */
     protected $rectificativa;
+
     /**
      * Series for auto-issued ordinary invoices.
-     *
-     * @return string|null
      */
     public function getOrdinaria(): ?string
     {
         return $this->ordinaria;
     }
+
     /**
      * Series for auto-issued ordinary invoices.
-     *
-     * @param string|null $ordinaria
-     *
-     * @return self
      */
     public function setOrdinaria(?string $ordinaria): self
     {
         $this->initialized['ordinaria'] = true;
         $this->ordinaria = $ordinaria;
+
         return $this;
     }
+
     /**
      * Series for auto-issued simplified invoices.
-     *
-     * @return string|null
      */
     public function getSimplificada(): ?string
     {
         return $this->simplificada;
     }
+
     /**
      * Series for auto-issued simplified invoices.
-     *
-     * @param string|null $simplificada
-     *
-     * @return self
      */
     public function setSimplificada(?string $simplificada): self
     {
         $this->initialized['simplificada'] = true;
         $this->simplificada = $simplificada;
+
         return $this;
     }
+
     /**
      * Series for auto-issued corrective invoices (refunds).
-     *
-     * @return string|null
      */
     public function getRectificativa(): ?string
     {
         return $this->rectificativa;
     }
+
     /**
      * Series for auto-issued corrective invoices (refunds).
-     *
-     * @param string|null $rectificativa
-     *
-     * @return self
      */
     public function setRectificativa(?string $rectificativa): self
     {
         $this->initialized['rectificativa'] = true;
         $this->rectificativa = $rectificativa;
+
         return $this;
     }
+
     public function definedProperties(): array
     {
         return ['ordinaria' => ['ordinaria', 'getOrdinaria', 'setOrdinaria'], 'simplificada' => ['simplificada', 'getSimplificada', 'setSimplificada'], 'rectificativa' => ['rectificativa', 'getRectificativa', 'setRectificativa']];

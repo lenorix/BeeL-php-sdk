@@ -4,20 +4,24 @@ namespace Lenorix\BeelSdk\Generated\Model;
 
 use Lenorix\BeelSdk\Generated\Runtime\AdditionalAndPatternProperties;
 use Lenorix\BeelSdk\Generated\Runtime\AdditionalPropertiesInterface;
+
 class RepresentationStatusResponseData implements AdditionalPropertiesInterface
 {
     use AdditionalAndPatternProperties;
+
     /**
      * @var array
      */
     protected $initialized = [];
+
     public function isInitialized($property): bool
     {
         return array_key_exists($property, $this->initialized);
     }
+
     /**
      * Stage of the AEAT representation of the company.
-     * 
+     *
      * - `NOT_STARTED`: no representation document has been generated yet.
      * - `PDF_GENERATED`: the document is generated and waits for a digital signature.
      * - `SUBMITTED`: returned only by the submit operation, as its acknowledgement; this
@@ -27,22 +31,25 @@ class RepresentationStatusResponseData implements AdditionalPropertiesInterface
      * - `ERROR`: reserved; not currently returned.
      * - `CANCELLED`: the representation was cancelled. Invoices of this NIF are not
      *   submitted to the AEAT in Live until a new signed document is accepted.
-     * 
+     *
      *
      * @var string|null
      */
     protected $status;
+
     /**
      * @var string|null
      */
     protected $message;
+
     /**
      * @var \DateTime|null
      */
     protected $updatedAt;
+
     /**
      * Stage of the AEAT representation of the company.
-     * 
+     *
      * - `NOT_STARTED`: no representation document has been generated yet.
      * - `PDF_GENERATED`: the document is generated and waits for a digital signature.
      * - `SUBMITTED`: returned only by the submit operation, as its acknowledgement; this
@@ -52,17 +59,15 @@ class RepresentationStatusResponseData implements AdditionalPropertiesInterface
      * - `ERROR`: reserved; not currently returned.
      * - `CANCELLED`: the representation was cancelled. Invoices of this NIF are not
      *   submitted to the AEAT in Live until a new signed document is accepted.
-     * 
-     *
-     * @return string|null
      */
     public function getStatus(): ?string
     {
         return $this->status;
     }
+
     /**
-    * Stage of the AEAT representation of the company.
-    
+     * Stage of the AEAT representation of the company.
+
     - `NOT_STARTED`: no representation document has been generated yet.
     - `PDF_GENERATED`: the document is generated and waits for a digital signature.
     - `SUBMITTED`: returned only by the submit operation, as its acknowledgement; this
@@ -72,54 +77,41 @@ class RepresentationStatusResponseData implements AdditionalPropertiesInterface
     - `ERROR`: reserved; not currently returned.
     - `CANCELLED`: the representation was cancelled. Invoices of this NIF are not
      submitted to the AEAT in Live until a new signed document is accepted.
-    
-    *
-    * @param string|null $status
-    *
-    * @return self
-    */
+     */
     public function setStatus(?string $status): self
     {
         $this->initialized['status'] = true;
         $this->status = $status;
+
         return $this;
     }
-    /**
-     * @return string|null
-     */
+
     public function getMessage(): ?string
     {
         return $this->message;
     }
-    /**
-     * @param string|null $message
-     *
-     * @return self
-     */
+
     public function setMessage(?string $message): self
     {
         $this->initialized['message'] = true;
         $this->message = $message;
+
         return $this;
     }
-    /**
-     * @return \DateTime|null
-     */
+
     public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
-    /**
-     * @param \DateTime|null $updatedAt
-     *
-     * @return self
-     */
+
     public function setUpdatedAt(?\DateTime $updatedAt): self
     {
         $this->initialized['updatedAt'] = true;
         $this->updatedAt = $updatedAt;
+
         return $this;
     }
+
     public function definedProperties(): array
     {
         return ['status' => ['status', 'getStatus', 'setStatus'], 'message' => ['message', 'getMessage', 'setMessage'], 'updatedAt' => ['updated_at', 'getUpdatedAt', 'setUpdatedAt']];
