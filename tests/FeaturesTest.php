@@ -1705,3 +1705,17 @@ it('ends iteration when a page leaves out its optional list or pagination', func
         ->and(iterator_to_array($account->requestLogs->all()))->toBe([])
         ->and($transport->requests)->toHaveCount(3);
 });
+
+it('sends a list of IDs to bulk deletes as the comma-separated value BeeL expects', function (string $resource) {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['deleted' => 2]]),
+        jsonResponse(['success' => true, 'data' => ['deleted' => 2]]),
+    ]);
+    $company = testClient($transport)->company('c');
+
+    $company->{$resource}->deleteBulk(['ids' => ['id-1', 'id-2']]);
+    $company->{$resource}->deleteBulk(['ids' => 'id-1,id-2']);
+
+    expect(rawurldecode($transport->requests[0]->getUri()->getQuery()))->toBe('ids=id-1,id-2')
+        ->and(rawurldecode($transport->requests[1]->getUri()->getQuery()))->toBe('ids=id-1,id-2');
+})->with(['customers', 'products']);

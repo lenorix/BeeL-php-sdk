@@ -12,6 +12,7 @@ use Lenorix\BeelSdk\Generated\Model\ProductBulkCreateResult;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkDeleteResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsGetResponse200Data;
+use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
@@ -103,10 +104,10 @@ final readonly class CompanyProductsResource extends GeneratedResource
     /**
      * Delete several products by ID.
      *
-     * @param  array<string, mixed>  $query  Product IDs accepted by BeeL.
+     * @param  array<string, mixed>  $query  Product IDs accepted by BeeL; `ids` may be a list or a comma-separated string (at most 100).
      */
     public function deleteBulk(array $query = []): V1CompaniesCompanyIdProductsBulkDeleteResponse200Data
     {
-        return $this->execute(fn () => $this->client->deleteCompanyProductsBulk($this->companyId, $query));
+        return $this->execute(fn () => $this->client->deleteCompanyProductsBulk($this->companyId, QueryParameters::commaSeparated($query, 'ids')));
     }
 }

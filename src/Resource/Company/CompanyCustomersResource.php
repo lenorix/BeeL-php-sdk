@@ -14,6 +14,7 @@ use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersBulkPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersImportsPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersImportsPreviewPostBody;
+use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
@@ -102,11 +103,11 @@ final readonly class CompanyCustomersResource extends GeneratedResource
     /**
      * Delete several customers by ID.
      *
-     * @param  array<string, mixed>  $query  Deletion filters and IDs accepted by BeeL.
+     * @param  array<string, mixed>  $query  Deletion filters and IDs accepted by BeeL; `ids` may be a list or a comma-separated string.
      */
     public function deleteBulk(array $query = []): CustomerBulkDeleteResult
     {
-        return $this->execute(fn () => $this->client->deleteCompanyCustomersBulk($this->companyId, $query));
+        return $this->execute(fn () => $this->client->deleteCompanyCustomersBulk($this->companyId, QueryParameters::commaSeparated($query, 'ids')));
     }
 
     /**

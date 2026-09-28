@@ -56,6 +56,22 @@ final class QueryParameters
         return $query;
     }
 
+    /**
+     * Join a list given for a parameter BeeL types as one comma-separated string, such as the
+     * `ids` of a bulk delete, which the generated client would otherwise reject as an array.
+     *
+     * @param  array<string, mixed>  $query
+     * @return array<string, mixed>
+     */
+    public static function commaSeparated(array $query, string $name): array
+    {
+        if (isset($query[$name]) && is_array($query[$name])) {
+            $query[$name] = implode(',', $query[$name]);
+        }
+
+        return $query;
+    }
+
     /** Rewrite boolean parameters encoded as `1`/`0` to `true`/`false`, leaving every other byte as it was. */
     public static function booleans(string $query): string
     {

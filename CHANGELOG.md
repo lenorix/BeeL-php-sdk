@@ -2,6 +2,12 @@
 
 All notable changes to `BeeL-php-sdk` will be documented in this file.
 
+## Unreleased
+
+### Fixed
+
+- `$company->customers->deleteBulk()` and `$company->products->deleteBulk()` accept `ids` as a list, as well as the comma-separated string BeeL expects; a list threw `InvalidOptionsException` before.
+
 ## v0.7.0 - 2026-09-28
 
 Regenerated from BeeL's current OpenAPI contract (still labelled 1.9.0).
