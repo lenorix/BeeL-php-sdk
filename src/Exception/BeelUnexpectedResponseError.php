@@ -27,4 +27,14 @@ final class BeelUnexpectedResponseError extends \RuntimeException
             $statusCode,
         ));
     }
+
+    /**
+     * Structured data for logging, such as a PSR-3 context array; the request ID is what BeeL support needs.
+     *
+     * @return array{status_code: int, request_id: string|null}
+     */
+    public function context(): array
+    {
+        return ['status_code' => $this->statusCode, 'request_id' => $this->requestId];
+    }
 }

@@ -12,9 +12,15 @@ Regenerated from BeeL's current OpenAPI contract (still labelled 1.9.0).
 - `$company->invoices->preview()` throws `BeelNotReadyError` when the invoice PDF is not generated yet (HTTP `202`) instead of failing with a `TypeError`.
 - `$account->members->allGrants()` yields `MemberGrant` models, as BeeL now returns them.
 - `CreateSeriesRequest` now requires `document_type`, as BeeL does. An array without it throws `InvalidArgumentException` naming the field; a hand-built model without it fails when sent.
-- No generated class, method or signature was removed or changed: the updated contract only adds classes (`VeriFactuRecord`, `MemberGrant`, `WithholdingOptions`, the `202` send models…) and tightens validation rules and descriptions.
+- Generated models follow the updated contract (compared method by method against 0.6):
+  - removed: `VeriFactu::getChainingHash()` and `setChainingHash()`;
+  - `irpf_rate` and `default_irpf_rate` are now `float` instead of `int` (`getIrpfRate()`, `getDefaultIrpfRate()` and their setters in invoice lines, line requests and tax configuration): strict comparisons with an `int` need adjusting;
+  - now nullable: `GenerationHistoryResponse::getInvoiceId()` and `WebhookEventDataVeriFactuStatusUpdated::getPreviousStatus()`;
+  - 50 new getters and setters on existing models (such as `VoidInvoiceRequest::setIssuedInError()`, `Invoice::getReplacedInvoiceIds()`, `TaxConfiguration::getWithholdingOptions()`), and 15 new classes (`VeriFactuRecord`, `MemberGrant`, `WithholdingOptions`, the `202` send models…).
+  - No generated class or client method was removed, and the only client additions are the two new operations.
+- Code that catches `BeelApiError` does not catch the new `BeelUnexpectedResponseError`, and code that type-hints `send()`'s return as the `200` model must accept the `202` one too.
 
-- A success status the contract does not declare (BeeL sometimes adds one, as it did with `202` here) now throws `BeelUnexpectedResponseError` instead of a `BeelApiError`: the request may have succeeded, so check `getLastResponse()` before retrying.
+- A success status the contract does not declare (BeeL sometimes adds one, as it did with `202` here) now throws `BeelUnexpectedResponseError` instead of a `BeelApiError`: the request may have succeeded, so check `getLastResponse()` before retrying. It has `context()` with the status and request ID for logs.
 - `null` in a date-time field that no model allows to be null (such as `created_at` or `updated_at`) throws `InvalidDateException` instead of silently becoming the current time, as the client did before 0.5.
 
 ### Added

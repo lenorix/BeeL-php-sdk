@@ -1618,7 +1618,8 @@ it('reports an undeclared success status as unexpected, not as a failed request'
         expect($exception)->not->toBeInstanceOf(BeelApiError::class)
             ->and($exception->statusCode)->toBe(202)
             ->and($exception->requestId)->toBe('req-202')
-            ->and($exception->getMessage())->toContain('getLastResponse()');
+            ->and($exception->getMessage())->toContain('getLastResponse()')
+            ->and($exception->context())->toBe(['status_code' => 202, 'request_id' => 'req-202']);
     }
 
     expect(fn () => $invoices->get('inv-1'))->toThrow(BeelNotFoundError::class);
@@ -1653,3 +1654,32 @@ it('lists the date-time fields that no generated model allows to be null', funct
     expect($neverNullable)->not->toBeEmpty()
         ->and(DateTimeValues::NON_NULLABLE_NAMES)->toBe($neverNullable);
 });
+
+it('reports a 202 as not ready whatever body and Content-Type BeeL sends', function (string $method, array $headers, string $body) {
+    $transport = new RecordingPsrClient([new Response(202, ['Retry-After' => '6', ...$headers], $body)]);
+    $invoices = testClient($transport)->company('c')->invoices;
+    $deprecations = [];
+    $source = str_replace('\\', '/', (string) realpath(__DIR__.'/../src')).'/';
+    set_error_handler(static function (int $level, string $message, string $file) use (&$deprecations, $source): bool {
+        if (str_starts_with(str_replace('\\', '/', $file), $source)) {
+            $deprecations[] = $message;
+        }
+
+        return true;
+    }, E_DEPRECATED | E_USER_DEPRECATED);
+
+    try {
+        $method === 'preview' ? $invoices->preview('inv-1') : $invoices->getPdf('inv-1');
+        test()->fail('Expected BeelNotReadyError.');
+    } catch (BeelNotReadyError $exception) {
+        expect($exception->retryAfter)->toBe(6);
+    } finally {
+        restore_error_handler();
+    }
+
+    expect($deprecations)->toBe([]);
+})->with(['preview', 'getPdf'])->with([
+    'no Content-Type' => [[], ''],
+    'JSON, empty body' => [['Content-Type' => 'application/json'], ''],
+    'JSON, empty object' => [['Content-Type' => 'application/json'], '{}'],
+]);

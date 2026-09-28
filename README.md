@@ -490,7 +490,7 @@ The SDK follows the official [`@beel_es/sdk`](https://www.npmjs.com/package/@bee
 - **Request IDs:** `requestId` comes from the `X-Request-Id` header when present, then from `meta.request_id` in the body; the Node.js SDK reads only the body.
 - **Any endpoint:** `$beel->request()` is the equivalent of `beel.raw.GET(...)`. `$beel->raw` is the generated Jane client, which does not map errors to `BeelApiError`.
 - **Writes without a body:** they are sent as `{}` like in the Node.js SDK, but an existing `Content-Type`, such as a multipart upload, is never replaced.
-- **Success statuses:** `send()` tells a sent email (`200`) from a queued one (`202`), and an unknown success status throws `BeelUnexpectedResponseError` rather than being reported as a failure; the Node.js SDK returns the same data for both.
+- **Success statuses:** `send()` tells a sent email (`200`) from a queued one (`202`) by its return model; the Node.js SDK returns the data of any `2xx` without telling them apart. A success status the contract does not declare throws `BeelUnexpectedResponseError`, because the generated client has no model to read it into; Node returns its data.
 - **Extras:** `getLastResponse()` to read the exact response of the last call, every current endpoint has a method, including those without one in the Node.js SDK (`activations`, `invoiceCustomization`, `logo`, `requestLogs`, account imports, `templates`, `previewPdf()`), named in its style. Also `$beel->request()` for any path, `all()` iterators, per-call `withOptions()`, `BinaryDownload` for archives and exports, `$company->representation`, `BeelNotReadyError` with `Retry-After` for PDFs, `WebhookSigner`, and `$beel->me`.
 
 ## Documentation and support
