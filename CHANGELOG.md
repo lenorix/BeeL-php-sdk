@@ -33,7 +33,7 @@ Regenerated from BeeL's current OpenAPI contract (still labelled 1.9.0).
 - `$company->invoices->createSimplifiedExchange()` issues a full invoice in exchange for simplified invoices.
 - `$company->invoices->listVerifactuRecords()` lists an invoice's VeriFactu records.
 - The `payment_method` invoice filter accepts a single value as well as a list, like `status`.
-- Request arrays accept date objects (`DateTime`, `DateTimeImmutable`, Carbon…) for date-time fields, sent with their microseconds.
+- Arrays passed to resource methods accept date objects (`DateTime`, `DateTimeImmutable`, Carbon…) for date-time fields, sent with their microseconds. Date-only fields and `$beel->request()` bodies still take strings.
 
 ### Fixed
 
