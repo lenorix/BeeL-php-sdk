@@ -50,7 +50,7 @@ class ClaimTokenResultNormalizer implements DenormalizerInterface, NormalizerInt
             unset($data['claim_url']);
         }
         if (\array_key_exists('expires_at', $data)) {
-            $object->setExpiresAt((new \DateTime($data['expires_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['expires_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['expires_at']));
+            $object->setExpiresAt($this->denormalizer->denormalize($data['expires_at'], \DateTime::class, 'json', $context));
             unset($data['expires_at']);
         }
         foreach ($data as $key => $value) {
@@ -66,7 +66,7 @@ class ClaimTokenResultNormalizer implements DenormalizerInterface, NormalizerInt
         $dataArray['person_id'] = $data->getPersonId();
         $dataArray['claim_token'] = $data->getClaimToken();
         $dataArray['claim_url'] = $data->getClaimUrl();
-        $dataArray['expires_at'] = $data->getExpiresAt()->format('Y-m-d\TH:i:s.uP');
+        $dataArray['expires_at'] = $this->normalizer->normalize($data->getExpiresAt(), 'json', $context);
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;

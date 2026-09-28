@@ -117,7 +117,7 @@ class InvoiceBaseNormalizer implements DenormalizerInterface, NormalizerInterfac
             unset($data['payment_date']);
         }
         if (\array_key_exists('sent_at', $data) && $data['sent_at'] !== null) {
-            $object->setSentAt((new \DateTime($data['sent_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['sent_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['sent_at']));
+            $object->setSentAt($this->denormalizer->denormalize($data['sent_at'], \DateTime::class, 'json', $context));
             unset($data['sent_at']);
         }
         elseif (\array_key_exists('sent_at', $data) && $data['sent_at'] === null) {
@@ -125,7 +125,7 @@ class InvoiceBaseNormalizer implements DenormalizerInterface, NormalizerInterfac
             unset($data['sent_at']);
         }
         if (\array_key_exists('paid_at', $data) && $data['paid_at'] !== null) {
-            $object->setPaidAt((new \DateTime($data['paid_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['paid_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['paid_at']));
+            $object->setPaidAt($this->denormalizer->denormalize($data['paid_at'], \DateTime::class, 'json', $context));
             unset($data['paid_at']);
         }
         elseif (\array_key_exists('paid_at', $data) && $data['paid_at'] === null) {
@@ -205,7 +205,7 @@ class InvoiceBaseNormalizer implements DenormalizerInterface, NormalizerInterfac
             unset($data['void_reason']);
         }
         if (\array_key_exists('voided_at', $data) && $data['voided_at'] !== null) {
-            $object->setVoidedAt((new \DateTime($data['voided_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['voided_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['voided_at']));
+            $object->setVoidedAt($this->denormalizer->denormalize($data['voided_at'], \DateTime::class, 'json', $context));
             unset($data['voided_at']);
         }
         elseif (\array_key_exists('voided_at', $data) && $data['voided_at'] === null) {
@@ -317,7 +317,7 @@ class InvoiceBaseNormalizer implements DenormalizerInterface, NormalizerInterfac
             unset($data['email_delivery']);
         }
         if (\array_key_exists('deleted_at', $data) && $data['deleted_at'] !== null) {
-            $object->setDeletedAt((new \DateTime($data['deleted_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['deleted_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['deleted_at']));
+            $object->setDeletedAt($this->denormalizer->denormalize($data['deleted_at'], \DateTime::class, 'json', $context));
             unset($data['deleted_at']);
         }
         elseif (\array_key_exists('deleted_at', $data) && $data['deleted_at'] === null) {
@@ -357,10 +357,10 @@ class InvoiceBaseNormalizer implements DenormalizerInterface, NormalizerInterfac
             $dataArray['payment_date'] = $data->getPaymentDate()->format('Y-m-d');
         }
         if ($data->isInitialized('sentAt') && null !== $data->getSentAt()) {
-            $dataArray['sent_at'] = $data->getSentAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['sent_at'] = $this->normalizer->normalize($data->getSentAt(), 'json', $context);
         }
         if ($data->isInitialized('paidAt') && null !== $data->getPaidAt()) {
-            $dataArray['paid_at'] = $data->getPaidAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['paid_at'] = $this->normalizer->normalize($data->getPaidAt(), 'json', $context);
         }
         if ($data->isInitialized('autoEmitAfter') && null !== $data->getAutoEmitAfter()) {
             $dataArray['auto_emit_after'] = $data->getAutoEmitAfter()?->format('Y-m-d');
@@ -399,7 +399,7 @@ class InvoiceBaseNormalizer implements DenormalizerInterface, NormalizerInterfac
             $dataArray['void_reason'] = $data->getVoidReason();
         }
         if ($data->isInitialized('voidedAt') && null !== $data->getVoidedAt()) {
-            $dataArray['voided_at'] = $data->getVoidedAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['voided_at'] = $this->normalizer->normalize($data->getVoidedAt(), 'json', $context);
         }
         if ($data->isInitialized('rectifiedInvoiceId') && null !== $data->getRectifiedInvoiceId()) {
             $dataArray['rectified_invoice_id'] = $data->getRectifiedInvoiceId();
@@ -465,7 +465,7 @@ class InvoiceBaseNormalizer implements DenormalizerInterface, NormalizerInterfac
             $dataArray['email_delivery'] = $data->getEmailDelivery() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getEmailDelivery(), 'json', $context));
         }
         if ($data->isInitialized('deletedAt') && null !== $data->getDeletedAt()) {
-            $dataArray['deleted_at'] = $data->getDeletedAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['deleted_at'] = $this->normalizer->normalize($data->getDeletedAt(), 'json', $context);
         }
         foreach ($data->additionalPropertyEntries() as $key_1 => $value_5) {
             if (preg_match('/.*/', (string) $key_1)) {

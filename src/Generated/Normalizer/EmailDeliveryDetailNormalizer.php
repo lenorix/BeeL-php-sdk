@@ -89,7 +89,7 @@ class EmailDeliveryDetailNormalizer implements DenormalizerInterface, Normalizer
             unset($data['status']);
         }
         if (\array_key_exists('sent_at', $data)) {
-            $object->setSentAt((new \DateTime($data['sent_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['sent_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['sent_at']));
+            $object->setSentAt($this->denormalizer->denormalize($data['sent_at'], \DateTime::class, 'json', $context));
             unset($data['sent_at']);
         }
         if (\array_key_exists('body_available', $data)) {
@@ -163,7 +163,7 @@ class EmailDeliveryDetailNormalizer implements DenormalizerInterface, Normalizer
         }
         $dataArray['status'] = $data->getStatus();
         if ($data->isInitialized('sentAt') && null !== $data->getSentAt()) {
-            $dataArray['sent_at'] = $data->getSentAt()->format('Y-m-d\TH:i:s.uP');
+            $dataArray['sent_at'] = $this->normalizer->normalize($data->getSentAt(), 'json', $context);
         }
         $dataArray['body_available'] = $data->getBodyAvailable();
         if ($data->isInitialized('htmlBody') && null !== $data->getHtmlBody()) {

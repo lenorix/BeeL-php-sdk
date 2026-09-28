@@ -54,7 +54,7 @@ class SetInvoiceStatusRequestNormalizer implements DenormalizerInterface, Normal
             unset($data['payment_method']);
         }
         if (\array_key_exists('sent_at', $data)) {
-            $object->setSentAt((new \DateTime($data['sent_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['sent_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['sent_at']));
+            $object->setSentAt($this->denormalizer->denormalize($data['sent_at'], \DateTime::class, 'json', $context));
             unset($data['sent_at']);
         }
         foreach ($data as $key => $value) {
@@ -75,7 +75,7 @@ class SetInvoiceStatusRequestNormalizer implements DenormalizerInterface, Normal
             $dataArray['payment_method'] = $data->getPaymentMethod() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getPaymentMethod(), 'json', $context));
         }
         if ($data->isInitialized('sentAt') && null !== $data->getSentAt()) {
-            $dataArray['sent_at'] = $data->getSentAt()->format('Y-m-d\TH:i:s.uP');
+            $dataArray['sent_at'] = $this->normalizer->normalize($data->getSentAt(), 'json', $context);
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {

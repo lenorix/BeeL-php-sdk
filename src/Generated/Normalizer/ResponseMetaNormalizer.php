@@ -38,7 +38,7 @@ class ResponseMetaNormalizer implements DenormalizerInterface, NormalizerInterfa
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
         if (\array_key_exists('timestamp', $data)) {
-            $object->setTimestamp((new \DateTime($data['timestamp']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['timestamp']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['timestamp']));
+            $object->setTimestamp($this->denormalizer->denormalize($data['timestamp'], \DateTime::class, 'json', $context));
             unset($data['timestamp']);
         }
         if (\array_key_exists('request_id', $data)) {
@@ -56,7 +56,7 @@ class ResponseMetaNormalizer implements DenormalizerInterface, NormalizerInterfa
     {
         $dataArray = [];
         if ($data->isInitialized('timestamp') && null !== $data->getTimestamp()) {
-            $dataArray['timestamp'] = $data->getTimestamp()->format('Y-m-d\TH:i:s.uP');
+            $dataArray['timestamp'] = $this->normalizer->normalize($data->getTimestamp(), 'json', $context);
         }
         if ($data->isInitialized('requestId') && null !== $data->getRequestId()) {
             $dataArray['request_id'] = $data->getRequestId();

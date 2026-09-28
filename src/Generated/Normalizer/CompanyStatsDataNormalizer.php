@@ -46,7 +46,7 @@ class CompanyStatsDataNormalizer implements DenormalizerInterface, NormalizerInt
             unset($data['invoice_count']);
         }
         if (\array_key_exists('last_invoice_at', $data) && $data['last_invoice_at'] !== null) {
-            $object->setLastInvoiceAt((new \DateTime($data['last_invoice_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['last_invoice_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['last_invoice_at']));
+            $object->setLastInvoiceAt($this->denormalizer->denormalize($data['last_invoice_at'], \DateTime::class, 'json', $context));
             unset($data['last_invoice_at']);
         }
         elseif (\array_key_exists('last_invoice_at', $data) && $data['last_invoice_at'] === null) {
@@ -66,7 +66,7 @@ class CompanyStatsDataNormalizer implements DenormalizerInterface, NormalizerInt
         $dataArray['company_id'] = $data->getCompanyId();
         $dataArray['invoice_count'] = $data->getInvoiceCount();
         if ($data->isInitialized('lastInvoiceAt') && null !== $data->getLastInvoiceAt()) {
-            $dataArray['last_invoice_at'] = $data->getLastInvoiceAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['last_invoice_at'] = $this->normalizer->normalize($data->getLastInvoiceAt(), 'json', $context);
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {

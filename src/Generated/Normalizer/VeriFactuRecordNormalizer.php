@@ -58,7 +58,7 @@ class VeriFactuRecordNormalizer implements DenormalizerInterface, NormalizerInte
             unset($data['registration_number']);
         }
         if (\array_key_exists('registered_at', $data)) {
-            $object->setRegisteredAt((new \DateTime($data['registered_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['registered_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['registered_at']));
+            $object->setRegisteredAt($this->denormalizer->denormalize($data['registered_at'], \DateTime::class, 'json', $context));
             unset($data['registered_at']);
         }
         if (\array_key_exists('qr_url', $data)) {
@@ -103,7 +103,7 @@ class VeriFactuRecordNormalizer implements DenormalizerInterface, NormalizerInte
             $dataArray['registration_number'] = $data->getRegistrationNumber();
         }
         if ($data->isInitialized('registeredAt') && null !== $data->getRegisteredAt()) {
-            $dataArray['registered_at'] = $data->getRegisteredAt()->format('Y-m-d\TH:i:s.uP');
+            $dataArray['registered_at'] = $this->normalizer->normalize($data->getRegisteredAt(), 'json', $context);
         }
         if ($data->isInitialized('qrUrl') && null !== $data->getQrUrl()) {
             $dataArray['qr_url'] = $data->getQrUrl();

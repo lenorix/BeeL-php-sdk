@@ -52,7 +52,7 @@ class WebhookEventNormalizer implements DenormalizerInterface, NormalizerInterfa
             unset($data['type']);
         }
         if (\array_key_exists('created_at', $data)) {
-            $object->setCreatedAt((new \DateTime($data['created_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['created_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['created_at']));
+            $object->setCreatedAt($this->denormalizer->denormalize($data['created_at'], \DateTime::class, 'json', $context));
             unset($data['created_at']);
         }
         if (\array_key_exists('api_version', $data)) {
@@ -149,7 +149,7 @@ class WebhookEventNormalizer implements DenormalizerInterface, NormalizerInterfa
         $dataArray = [];
         $dataArray['id'] = $data->getId();
         $dataArray['type'] = $data->getType();
-        $dataArray['created_at'] = $data->getCreatedAt()->format('Y-m-d\TH:i:s.uP');
+        $dataArray['created_at'] = $this->normalizer->normalize($data->getCreatedAt(), 'json', $context);
         $dataArray['api_version'] = $data->getApiVersion();
         $dataArray['livemode'] = $data->getLivemode();
         if ($data->isInitialized('test') && null !== $data->getTest()) {

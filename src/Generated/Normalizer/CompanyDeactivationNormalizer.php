@@ -49,7 +49,7 @@ class CompanyDeactivationNormalizer implements DenormalizerInterface, Normalizer
             unset($data['environment']);
         }
         if (\array_key_exists('effective_at', $data) && $data['effective_at'] !== null) {
-            $object->setEffectiveAt((new \DateTime($data['effective_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['effective_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['effective_at']));
+            $object->setEffectiveAt($this->denormalizer->denormalize($data['effective_at'], \DateTime::class, 'json', $context));
             unset($data['effective_at']);
         }
         elseif (\array_key_exists('effective_at', $data) && $data['effective_at'] === null) {
@@ -73,7 +73,7 @@ class CompanyDeactivationNormalizer implements DenormalizerInterface, Normalizer
         $dataArray['company_id'] = $data->getCompanyId();
         $dataArray['environment'] = $data->getEnvironment();
         if ($data->isInitialized('effectiveAt') && null !== $data->getEffectiveAt()) {
-            $dataArray['effective_at'] = $data->getEffectiveAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['effective_at'] = $this->normalizer->normalize($data->getEffectiveAt(), 'json', $context);
         }
         $dataArray['already_scheduled'] = $data->getAlreadyScheduled();
         foreach ($data->additionalPropertyEntries() as $key => $value) {

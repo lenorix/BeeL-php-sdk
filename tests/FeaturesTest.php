@@ -62,7 +62,6 @@ use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceIssued;
 use Lenorix\BeelSdk\Generated\Model\WebhookSubscription;
 use Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException;
 use Lenorix\BeelSdk\Http\BinaryDownload;
-use Lenorix\BeelSdk\Http\DateTimeValues;
 use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\RequestOptions;
@@ -1291,63 +1290,6 @@ it('rejects invalid date-times in webhooks and in request arrays', function () {
         ->and($transport->requests)->toBe([]);
 });
 
-it('lists every date-time field and free-form map of the generated normalizers', function () {
-    $dates = [];
-    $free = [];
-    foreach (glob(__DIR__.'/../src/Generated/Normalizer/*.php') ?: [] as $file) {
-        $code = sourceCode($file);
-        preg_match_all('/new \\\\DateTime\(\$data\[\'([a-z_]+)\'\]\)/', $code, $matches);
-        array_push($dates, ...$matches[1]);
-        // Raw Jane output writes `new \Lenorix\...\JsonObject()`; Pint rewrites it to `new JsonObject;`.
-        preg_match_all('/new (?:\\\\[A-Za-z\\\\]+\\\\)?JsonObject(?:\(\))?;\s*foreach \(\$data\[\'([A-Za-z0-9_]+)\'\]/', $code, $matches);
-        array_push($free, ...$matches[1]);
-    }
-    $dates = array_values(array_unique($dates));
-    $free = array_values(array_unique($free));
-    sort($dates);
-    sort($free);
-
-    expect($dates)->not->toBeEmpty()
-        ->and(DateTimeValues::NAMES)->toBe($dates)
-        ->and(DateTimeValues::FREE_FORM_NAMES)->toBe($free);
-});
-
-it('never skips date-time fields of a model that shares a free-form map name', function () {
-    $normalizers = __DIR__.'/../src/Generated/Normalizer/';
-    $withDates = static function (string $model, array &$seen) use (&$withDates, $normalizers): array {
-        $file = $normalizers.$model.'Normalizer.php';
-        if (isset($seen[$model]) || ! is_file($file)) {
-            return [];
-        }
-        $seen[$model] = true;
-        $code = sourceCode($file);
-        $found = str_contains($code, 'new \\DateTime($data') ? [$model] : [];
-        preg_match_all('/([A-Za-z0-9]+)::class/', $code, $children);
-        foreach (array_unique($children[1]) as $child) {
-            array_push($found, ...$withDates($child, $seen));
-        }
-
-        return $found;
-    };
-
-    $collisions = [];
-    $models = [];
-    foreach (glob($normalizers.'*.php') ?: [] as $file) {
-        foreach (DateTimeValues::FREE_FORM_NAMES as $name) {
-            preg_match_all('/denormalize\(\$data\[\''.$name.'\'\], \\\\?(?:[A-Za-z\\\\]+\\\\)?([A-Za-z0-9]+)::class/', sourceCode($file), $matches);
-            foreach ($matches[1] as $model) {
-                $models[] = $model;
-                $seen = [];
-                array_push($collisions, ...$withDates($model, $seen));
-            }
-        }
-    }
-
-    // DateTimeValues skips these names, so a model under one of them must have no date-time fields.
-    expect($models)->not->toBeEmpty()
-        ->and($collisions)->toBe([]);
-});
-
 // Last response
 
 it('exposes the last response so exact values can be read without repeating the call', function (bool $seekable) {
@@ -1636,25 +1578,6 @@ it('rejects null in a date-time field that is never nullable, instead of reading
         ->and($invoices->get('inv-1')->getVoidedAt())->toBeNull();
 });
 
-it('lists the date-time fields that no generated model allows to be null', function () {
-    $kinds = [];
-    foreach (glob(__DIR__.'/../src/Generated/Normalizer/*Normalizer.php') ?: [] as $file) {
-        if (preg_match('/public function denormalize\(.*?\n    \}\n/s', sourceCode($file), $denormalize) !== 1) {
-            continue;
-        }
-        preg_match_all('/new \\\\DateTime\(\$data\[\'([a-z_]+)\'\]\)/', $denormalize[0], $matches);
-        foreach (array_unique($matches[1]) as $name) {
-            $nullable = preg_match('/\$data\[\''.$name.'\'\] (?:!==|===) null|null (?:!==|===) \$data\[\''.$name.'\'\]/', $denormalize[0]) === 1;
-            $kinds[$name][$nullable ? 'nullable' : 'required'] = true;
-        }
-    }
-    $neverNullable = array_keys(array_filter($kinds, static fn (array $kind): bool => ! isset($kind['nullable'])));
-    sort($neverNullable);
-
-    expect($neverNullable)->not->toBeEmpty()
-        ->and(DateTimeValues::NON_NULLABLE_NAMES)->toBe($neverNullable);
-});
-
 it('reports a 202 as not ready whatever body and Content-Type BeeL sends', function (string $method, array $headers, string $body) {
     $transport = new RecordingPsrClient([new Response(202, ['Retry-After' => '6', ...$headers], $body)]);
     $invoices = testClient($transport)->company('c')->invoices;
@@ -1727,3 +1650,34 @@ it('keeps the hand-written enums in sync with the contract', function (string $s
     ['WebhookAccountRelationship', WebhookAccountRelationship::class],
     ['WebhookEventTypeEnum', WebhookEventType::class],
 ]);
+
+it('checks null date-times per model, even for names that are nullable only in some models', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['id' => 'inv-1', 'sent_at' => null]]),
+        jsonResponse(['success' => true, 'data' => ['email_id' => 'e-1', 'sent_to' => ['a@example.test'], 'sent_at' => null]]),
+        jsonResponse(['success' => true, 'data' => ['id' => 'inv-9', 'email' => 'a@example.test', 'expires_at' => null]]),
+    ]);
+    $beel = testClient($transport);
+    $invoices = $beel->company('c')->invoices;
+
+    expect($invoices->get('inv-1')->getSentAt())->toBeNull()
+        ->and(fn () => $invoices->send('inv-1'))->toThrow(InvalidDateException::class)
+        ->and(fn () => $beel->account('a')->invitations->get('inv-9'))->toThrow(InvalidDateException::class);
+});
+
+it('routes every generated date-time through DateTimeNormalizer', function () {
+    $delegated = 0;
+    $parsedInline = [];
+    foreach (glob(__DIR__.'/../src/Generated/Normalizer/*.php') ?: [] as $file) {
+        $code = sourceCode($file);
+        $delegated += substr_count($code, '\\DateTime::class');
+        if (str_contains($code, 'new \\DateTime(') || str_contains($code, "createFromFormat('Y-m-d\\TH:i:sP'")) {
+            $parsedInline[] = basename($file);
+        }
+    }
+
+    // Without the date-time mapping in .jane-openapi, the generated code parses dates itself and
+    // the SDK's strict checks and precision handling are silently bypassed.
+    expect($delegated)->toBeGreaterThan(0)
+        ->and($parsedInline)->toBe([]);
+});

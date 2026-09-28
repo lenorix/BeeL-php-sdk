@@ -50,7 +50,7 @@ class EmailDeliveryIndicatorNormalizer implements DenormalizerInterface, Normali
             unset($data['last_status']);
         }
         if (\array_key_exists('last_sent_at', $data)) {
-            $object->setLastSentAt((new \DateTime($data['last_sent_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['last_sent_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['last_sent_at']));
+            $object->setLastSentAt($this->denormalizer->denormalize($data['last_sent_at'], \DateTime::class, 'json', $context));
             unset($data['last_sent_at']);
         }
         foreach ($data as $key => $value) {
@@ -69,7 +69,7 @@ class EmailDeliveryIndicatorNormalizer implements DenormalizerInterface, Normali
             $dataArray['last_status'] = $data->getLastStatus();
         }
         if ($data->isInitialized('lastSentAt') && null !== $data->getLastSentAt()) {
-            $dataArray['last_sent_at'] = $data->getLastSentAt()->format('Y-m-d\TH:i:s.uP');
+            $dataArray['last_sent_at'] = $this->normalizer->normalize($data->getLastSentAt(), 'json', $context);
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {

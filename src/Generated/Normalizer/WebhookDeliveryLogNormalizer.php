@@ -132,7 +132,7 @@ class WebhookDeliveryLogNormalizer implements DenormalizerInterface, NormalizerI
             unset($data['request_headers']);
         }
         if (\array_key_exists('delivered_at', $data)) {
-            $object->setDeliveredAt((new \DateTime($data['delivered_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['delivered_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['delivered_at']));
+            $object->setDeliveredAt($this->denormalizer->denormalize($data['delivered_at'], \DateTime::class, 'json', $context));
             unset($data['delivered_at']);
         }
         foreach ($data as $key_1 => $value_1) {
@@ -192,7 +192,7 @@ class WebhookDeliveryLogNormalizer implements DenormalizerInterface, NormalizerI
             $dataArray['request_headers'] = $values;
         }
         if ($data->isInitialized('deliveredAt') && null !== $data->getDeliveredAt()) {
-            $dataArray['delivered_at'] = $data->getDeliveredAt()->format('Y-m-d\TH:i:s.uP');
+            $dataArray['delivered_at'] = $this->normalizer->normalize($data->getDeliveredAt(), 'json', $context);
         }
         foreach ($data->additionalPropertyEntries() as $key_1 => $value_1) {
             if (preg_match('/.*/', (string) $key_1)) {

@@ -262,7 +262,7 @@ class CompanyCreatedDataNormalizer implements DenormalizerInterface, NormalizerI
             unset($data['default_irpf_rate']);
         }
         if (\array_key_exists('created_at', $data)) {
-            $object->setCreatedAt((new \DateTime($data['created_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['created_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['created_at']));
+            $object->setCreatedAt($this->denormalizer->denormalize($data['created_at'], \DateTime::class, 'json', $context));
             unset($data['created_at']);
         }
         if (\array_key_exists('readiness', $data) && $data['readiness'] !== null) {
@@ -388,7 +388,7 @@ class CompanyCreatedDataNormalizer implements DenormalizerInterface, NormalizerI
             $dataArray['default_irpf_rate'] = $data->getDefaultIrpfRate();
         }
         if ($data->isInitialized('createdAt') && null !== $data->getCreatedAt()) {
-            $dataArray['created_at'] = $data->getCreatedAt()->format('Y-m-d\TH:i:s.uP');
+            $dataArray['created_at'] = $this->normalizer->normalize($data->getCreatedAt(), 'json', $context);
         }
         if ($data->isInitialized('readiness') && null !== $data->getReadiness()) {
             $dataArray['readiness'] = $data->getReadiness() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getReadiness(), 'json', $context));

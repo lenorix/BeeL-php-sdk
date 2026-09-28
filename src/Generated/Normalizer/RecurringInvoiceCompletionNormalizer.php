@@ -42,7 +42,7 @@ class RecurringInvoiceCompletionNormalizer implements DenormalizerInterface, Nor
             unset($data['reason']);
         }
         if (\array_key_exists('at', $data)) {
-            $object->setAt((new \DateTime($data['at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['at']));
+            $object->setAt($this->denormalizer->denormalize($data['at'], \DateTime::class, 'json', $context));
             unset($data['at']);
         }
         foreach ($data as $key => $value) {
@@ -59,7 +59,7 @@ class RecurringInvoiceCompletionNormalizer implements DenormalizerInterface, Nor
             $dataArray['reason'] = $data->getReason();
         }
         if ($data->isInitialized('at') && null !== $data->getAt()) {
-            $dataArray['at'] = $data->getAt()->format('Y-m-d\TH:i:s.uP');
+            $dataArray['at'] = $this->normalizer->normalize($data->getAt(), 'json', $context);
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {

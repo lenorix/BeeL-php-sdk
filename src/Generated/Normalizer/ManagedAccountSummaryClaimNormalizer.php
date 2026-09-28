@@ -42,7 +42,7 @@ class ManagedAccountSummaryClaimNormalizer implements DenormalizerInterface, Nor
             unset($data['status']);
         }
         if (\array_key_exists('expires_at', $data) && $data['expires_at'] !== null) {
-            $object->setExpiresAt((new \DateTime($data['expires_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['expires_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['expires_at']));
+            $object->setExpiresAt($this->denormalizer->denormalize($data['expires_at'], \DateTime::class, 'json', $context));
             unset($data['expires_at']);
         }
         elseif (\array_key_exists('expires_at', $data) && $data['expires_at'] === null) {
@@ -61,7 +61,7 @@ class ManagedAccountSummaryClaimNormalizer implements DenormalizerInterface, Nor
         $dataArray = [];
         $dataArray['status'] = $data->getStatus();
         if ($data->isInitialized('expiresAt') && null !== $data->getExpiresAt()) {
-            $dataArray['expires_at'] = $data->getExpiresAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['expires_at'] = $this->normalizer->normalize($data->getExpiresAt(), 'json', $context);
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {

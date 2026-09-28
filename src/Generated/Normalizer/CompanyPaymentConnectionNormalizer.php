@@ -81,7 +81,7 @@ class CompanyPaymentConnectionNormalizer implements DenormalizerInterface, Norma
             unset($data['status']);
         }
         if (\array_key_exists('connected_at', $data) && $data['connected_at'] !== null) {
-            $object->setConnectedAt((new \DateTime($data['connected_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['connected_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['connected_at']));
+            $object->setConnectedAt($this->denormalizer->denormalize($data['connected_at'], \DateTime::class, 'json', $context));
             unset($data['connected_at']);
         }
         elseif (\array_key_exists('connected_at', $data) && $data['connected_at'] === null) {
@@ -89,7 +89,7 @@ class CompanyPaymentConnectionNormalizer implements DenormalizerInterface, Norma
             unset($data['connected_at']);
         }
         if (\array_key_exists('last_event_at', $data) && $data['last_event_at'] !== null) {
-            $object->setLastEventAt((new \DateTime($data['last_event_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['last_event_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['last_event_at']));
+            $object->setLastEventAt($this->denormalizer->denormalize($data['last_event_at'], \DateTime::class, 'json', $context));
             unset($data['last_event_at']);
         }
         elseif (\array_key_exists('last_event_at', $data) && $data['last_event_at'] === null) {
@@ -163,10 +163,10 @@ class CompanyPaymentConnectionNormalizer implements DenormalizerInterface, Norma
         $dataArray['environment'] = $data->getEnvironment();
         $dataArray['status'] = $data->getStatus();
         if ($data->isInitialized('connectedAt') && null !== $data->getConnectedAt()) {
-            $dataArray['connected_at'] = $data->getConnectedAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['connected_at'] = $this->normalizer->normalize($data->getConnectedAt(), 'json', $context);
         }
         if ($data->isInitialized('lastEventAt') && null !== $data->getLastEventAt()) {
-            $dataArray['last_event_at'] = $data->getLastEventAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['last_event_at'] = $this->normalizer->normalize($data->getLastEventAt(), 'json', $context);
         }
         $dataArray['auto_invoice_enabled'] = $data->getAutoInvoiceEnabled();
         $dataArray['event_source'] = $data->getEventSource();

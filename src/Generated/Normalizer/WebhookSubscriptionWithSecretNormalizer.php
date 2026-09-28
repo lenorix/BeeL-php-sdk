@@ -69,7 +69,7 @@ class WebhookSubscriptionWithSecretNormalizer implements DenormalizerInterface, 
             unset($data['deactivated_by']);
         }
         if (\array_key_exists('deactivated_at', $data) && $data['deactivated_at'] !== null) {
-            $object->setDeactivatedAt((new \DateTime($data['deactivated_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['deactivated_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['deactivated_at']));
+            $object->setDeactivatedAt($this->denormalizer->denormalize($data['deactivated_at'], \DateTime::class, 'json', $context));
             unset($data['deactivated_at']);
         }
         elseif (\array_key_exists('deactivated_at', $data) && $data['deactivated_at'] === null) {
@@ -93,7 +93,7 @@ class WebhookSubscriptionWithSecretNormalizer implements DenormalizerInterface, 
             unset($data['consecutive_failures']);
         }
         if (\array_key_exists('last_used_at', $data) && $data['last_used_at'] !== null) {
-            $object->setLastUsedAt((new \DateTime($data['last_used_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['last_used_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['last_used_at']));
+            $object->setLastUsedAt($this->denormalizer->denormalize($data['last_used_at'], \DateTime::class, 'json', $context));
             unset($data['last_used_at']);
         }
         elseif (\array_key_exists('last_used_at', $data) && $data['last_used_at'] === null) {
@@ -101,7 +101,7 @@ class WebhookSubscriptionWithSecretNormalizer implements DenormalizerInterface, 
             unset($data['last_used_at']);
         }
         if (\array_key_exists('created_at', $data)) {
-            $object->setCreatedAt((new \DateTime($data['created_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['created_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['created_at']));
+            $object->setCreatedAt($this->denormalizer->denormalize($data['created_at'], \DateTime::class, 'json', $context));
             unset($data['created_at']);
         }
         if (\array_key_exists('secret', $data)) {
@@ -141,7 +141,7 @@ class WebhookSubscriptionWithSecretNormalizer implements DenormalizerInterface, 
             $dataArray['deactivated_by'] = $data->getDeactivatedBy();
         }
         if ($data->isInitialized('deactivatedAt') && null !== $data->getDeactivatedAt()) {
-            $dataArray['deactivated_at'] = $data->getDeactivatedAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['deactivated_at'] = $this->normalizer->normalize($data->getDeactivatedAt(), 'json', $context);
         }
         if ($data->isInitialized('lastError') && null !== $data->getLastError()) {
             $dataArray['last_error'] = $data->getLastError();
@@ -153,9 +153,9 @@ class WebhookSubscriptionWithSecretNormalizer implements DenormalizerInterface, 
             $dataArray['consecutive_failures'] = $data->getConsecutiveFailures();
         }
         if ($data->isInitialized('lastUsedAt') && null !== $data->getLastUsedAt()) {
-            $dataArray['last_used_at'] = $data->getLastUsedAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['last_used_at'] = $this->normalizer->normalize($data->getLastUsedAt(), 'json', $context);
         }
-        $dataArray['created_at'] = $data->getCreatedAt()->format('Y-m-d\TH:i:s.uP');
+        $dataArray['created_at'] = $this->normalizer->normalize($data->getCreatedAt(), 'json', $context);
         if ($data->isInitialized('secret') && null !== $data->getSecret()) {
             $dataArray['secret'] = $data->getSecret();
         }

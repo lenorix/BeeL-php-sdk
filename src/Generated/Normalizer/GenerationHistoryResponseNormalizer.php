@@ -89,7 +89,7 @@ class GenerationHistoryResponseNormalizer implements DenormalizerInterface, Norm
             unset($data['requested_by_name']);
         }
         if (\array_key_exists('generated_at', $data)) {
-            $object->setGeneratedAt((new \DateTime($data['generated_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['generated_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['generated_at']));
+            $object->setGeneratedAt($this->denormalizer->denormalize($data['generated_at'], \DateTime::class, 'json', $context));
             unset($data['generated_at']);
         }
         if (\array_key_exists('scheduled_date', $data)) {
@@ -156,7 +156,7 @@ class GenerationHistoryResponseNormalizer implements DenormalizerInterface, Norm
             $dataArray['requested_by_name'] = $data->getRequestedByName();
         }
         if ($data->isInitialized('generatedAt') && null !== $data->getGeneratedAt()) {
-            $dataArray['generated_at'] = $data->getGeneratedAt()->format('Y-m-d\TH:i:s.uP');
+            $dataArray['generated_at'] = $this->normalizer->normalize($data->getGeneratedAt(), 'json', $context);
         }
         if ($data->isInitialized('scheduledDate') && null !== $data->getScheduledDate()) {
             $dataArray['scheduled_date'] = $data->getScheduledDate()->format('Y-m-d');

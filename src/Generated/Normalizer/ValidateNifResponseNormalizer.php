@@ -72,7 +72,7 @@ class ValidateNifResponseNormalizer implements DenormalizerInterface, Normalizer
             unset($data['message']);
         }
         if (\array_key_exists('validated_at', $data) && $data['validated_at'] !== null) {
-            $object->setValidatedAt((new \DateTime($data['validated_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['validated_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['validated_at']));
+            $object->setValidatedAt($this->denormalizer->denormalize($data['validated_at'], \DateTime::class, 'json', $context));
             unset($data['validated_at']);
         }
         elseif (\array_key_exists('validated_at', $data) && $data['validated_at'] === null) {
@@ -102,7 +102,7 @@ class ValidateNifResponseNormalizer implements DenormalizerInterface, Normalizer
         }
         $dataArray['message'] = $data->getMessage();
         if ($data->isInitialized('validatedAt') && null !== $data->getValidatedAt()) {
-            $dataArray['validated_at'] = $data->getValidatedAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['validated_at'] = $this->normalizer->normalize($data->getValidatedAt(), 'json', $context);
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {

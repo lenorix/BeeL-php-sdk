@@ -62,7 +62,7 @@ class VeriFactuConfigurationNormalizer implements DenormalizerInterface, Normali
             unset($data['nif_status']);
         }
         if (\array_key_exists('nif_registered_at', $data) && $data['nif_registered_at'] !== null) {
-            $object->setNifRegisteredAt((new \DateTime($data['nif_registered_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['nif_registered_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['nif_registered_at']));
+            $object->setNifRegisteredAt($this->denormalizer->denormalize($data['nif_registered_at'], \DateTime::class, 'json', $context));
             unset($data['nif_registered_at']);
         }
         elseif (\array_key_exists('nif_registered_at', $data) && $data['nif_registered_at'] === null) {
@@ -116,7 +116,7 @@ class VeriFactuConfigurationNormalizer implements DenormalizerInterface, Normali
             $dataArray['nif_status'] = $data->getNifStatus();
         }
         if ($data->isInitialized('nifRegisteredAt') && null !== $data->getNifRegisteredAt()) {
-            $dataArray['nif_registered_at'] = $data->getNifRegisteredAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['nif_registered_at'] = $this->normalizer->normalize($data->getNifRegisteredAt(), 'json', $context);
         }
         if ($data->isInitialized('status') && null !== $data->getStatus()) {
             $dataArray['status'] = $data->getStatus();

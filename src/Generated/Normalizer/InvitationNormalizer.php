@@ -50,7 +50,7 @@ class InvitationNormalizer implements DenormalizerInterface, NormalizerInterface
             unset($data['account_role']);
         }
         if (\array_key_exists('expires_at', $data)) {
-            $object->setExpiresAt((new \DateTime($data['expires_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['expires_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['expires_at']));
+            $object->setExpiresAt($this->denormalizer->denormalize($data['expires_at'], \DateTime::class, 'json', $context));
             unset($data['expires_at']);
         }
         if (\array_key_exists('token', $data)) {
@@ -78,7 +78,7 @@ class InvitationNormalizer implements DenormalizerInterface, NormalizerInterface
         $dataArray['invitation_id'] = $data->getInvitationId();
         $dataArray['invited_email'] = $data->getInvitedEmail();
         $dataArray['account_role'] = $data->getAccountRole();
-        $dataArray['expires_at'] = $data->getExpiresAt()->format('Y-m-d\TH:i:s.uP');
+        $dataArray['expires_at'] = $this->normalizer->normalize($data->getExpiresAt(), 'json', $context);
         $dataArray['token'] = $data->getToken();
         if ($data->isInitialized('invitationUrl') && null !== $data->getInvitationUrl()) {
             $dataArray['invitation_url'] = $data->getInvitationUrl();

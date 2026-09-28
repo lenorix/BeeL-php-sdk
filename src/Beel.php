@@ -15,7 +15,7 @@ use Lenorix\BeelSdk\Exception\BeelNotReadyError;
 use Lenorix\BeelSdk\Generated\Client as JaneClient;
 use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Http\BooleanQueryPlugin;
-use Lenorix\BeelSdk\Http\DateTimeGuardPlugin;
+use Lenorix\BeelSdk\Http\DateTimeNormalizer;
 use Lenorix\BeelSdk\Http\RequestOptions;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Http\RetryingClient;
@@ -117,9 +117,8 @@ final readonly class Beel
             new AddPathPlugin($uri),
             new HeaderDefaultsPlugin(['Authorization' => 'Bearer '.$apiKey]),
             new BooleanQueryPlugin,
-            new DateTimeGuardPlugin,
         ];
-        $this->raw = JaneClient::create($this->transport, $plugins, applyServerPlugins: false);
+        $this->raw = JaneClient::create($this->transport, $plugins, [new DateTimeNormalizer], applyServerPlugins: false);
         $this->api = new PluginClient($this->transport, $plugins);
 
         $this->catalogs = new CatalogsResource($this->raw, $this->responseContext);

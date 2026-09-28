@@ -46,7 +46,7 @@ class RepresentationStatusResponseDataNormalizer implements DenormalizerInterfac
             unset($data['message']);
         }
         if (\array_key_exists('updated_at', $data)) {
-            $object->setUpdatedAt((new \DateTime($data['updated_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['updated_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['updated_at']));
+            $object->setUpdatedAt($this->denormalizer->denormalize($data['updated_at'], \DateTime::class, 'json', $context));
             unset($data['updated_at']);
         }
         foreach ($data as $key => $value) {
@@ -66,7 +66,7 @@ class RepresentationStatusResponseDataNormalizer implements DenormalizerInterfac
             $dataArray['message'] = $data->getMessage();
         }
         if ($data->isInitialized('updatedAt') && null !== $data->getUpdatedAt()) {
-            $dataArray['updated_at'] = $data->getUpdatedAt()->format('Y-m-d\TH:i:s.uP');
+            $dataArray['updated_at'] = $this->normalizer->normalize($data->getUpdatedAt(), 'json', $context);
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {

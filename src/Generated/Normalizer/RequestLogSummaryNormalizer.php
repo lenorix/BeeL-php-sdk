@@ -42,7 +42,7 @@ class RequestLogSummaryNormalizer implements DenormalizerInterface, NormalizerIn
             unset($data['request_id']);
         }
         if (\array_key_exists('timestamp', $data)) {
-            $object->setTimestamp((new \DateTime($data['timestamp']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['timestamp']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['timestamp']));
+            $object->setTimestamp($this->denormalizer->denormalize($data['timestamp'], \DateTime::class, 'json', $context));
             unset($data['timestamp']);
         }
         if (\array_key_exists('http_method', $data)) {
@@ -108,7 +108,7 @@ class RequestLogSummaryNormalizer implements DenormalizerInterface, NormalizerIn
     {
         $dataArray = [];
         $dataArray['request_id'] = $data->getRequestId();
-        $dataArray['timestamp'] = $data->getTimestamp()->format('Y-m-d\TH:i:s.uP');
+        $dataArray['timestamp'] = $this->normalizer->normalize($data->getTimestamp(), 'json', $context);
         $dataArray['http_method'] = $data->getHttpMethod();
         $dataArray['http_path'] = $data->getHttpPath();
         $dataArray['http_status'] = $data->getHttpStatus();

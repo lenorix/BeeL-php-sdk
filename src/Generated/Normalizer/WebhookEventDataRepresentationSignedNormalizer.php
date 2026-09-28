@@ -50,7 +50,7 @@ class WebhookEventDataRepresentationSignedNormalizer implements DenormalizerInte
             $object->setNif($data['nif']);
         }
         if (\array_key_exists('signed_at', $data)) {
-            $object->setSignedAt((new \DateTime($data['signed_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['signed_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['signed_at']));
+            $object->setSignedAt($this->denormalizer->denormalize($data['signed_at'], \DateTime::class, 'json', $context));
         }
         return $object;
     }
@@ -61,7 +61,7 @@ class WebhookEventDataRepresentationSignedNormalizer implements DenormalizerInte
         $dataArray['external_ref'] = $data->getExternalRef();
         $dataArray['company_id'] = $data->getCompanyId();
         $dataArray['nif'] = $data->getNif();
-        $dataArray['signed_at'] = $data->getSignedAt()->format('Y-m-d\TH:i:s.uP');
+        $dataArray['signed_at'] = $this->normalizer->normalize($data->getSignedAt(), 'json', $context);
         return $dataArray;
     }
     public function getSupportedTypes(?string $format = null): array

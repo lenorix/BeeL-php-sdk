@@ -98,11 +98,11 @@ class ProductNormalizer implements DenormalizerInterface, NormalizerInterface, D
             unset($data['active']);
         }
         if (\array_key_exists('created_at', $data)) {
-            $object->setCreatedAt((new \DateTime($data['created_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['created_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['created_at']));
+            $object->setCreatedAt($this->denormalizer->denormalize($data['created_at'], \DateTime::class, 'json', $context));
             unset($data['created_at']);
         }
         if (\array_key_exists('updated_at', $data)) {
-            $object->setUpdatedAt((new \DateTime($data['updated_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['updated_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['updated_at']));
+            $object->setUpdatedAt($this->denormalizer->denormalize($data['updated_at'], \DateTime::class, 'json', $context));
             unset($data['updated_at']);
         }
         foreach ($data as $key => $value) {
@@ -138,8 +138,8 @@ class ProductNormalizer implements DenormalizerInterface, NormalizerInterface, D
             $dataArray['irpf_rate'] = $data->getIrpfRate();
         }
         $dataArray['active'] = $data->getActive();
-        $dataArray['created_at'] = $data->getCreatedAt()->format('Y-m-d\TH:i:s.uP');
-        $dataArray['updated_at'] = $data->getUpdatedAt()->format('Y-m-d\TH:i:s.uP');
+        $dataArray['created_at'] = $this->normalizer->normalize($data->getCreatedAt(), 'json', $context);
+        $dataArray['updated_at'] = $this->normalizer->normalize($data->getUpdatedAt(), 'json', $context);
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;

@@ -50,7 +50,7 @@ class V1CompaniesCompanyIdInvoicesDeliveriesPostResponse200DataNormalizer implem
             unset($data['sent_to']);
         }
         if (\array_key_exists('sent_at', $data)) {
-            $object->setSentAt((new \DateTime($data['sent_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['sent_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['sent_at']));
+            $object->setSentAt($this->denormalizer->denormalize($data['sent_at'], \DateTime::class, 'json', $context));
             unset($data['sent_at']);
         }
         if (\array_key_exists('total_invoices', $data)) {
@@ -85,7 +85,7 @@ class V1CompaniesCompanyIdInvoicesDeliveriesPostResponse200DataNormalizer implem
             $values[] = $value;
         }
         $dataArray['sent_to'] = $values;
-        $dataArray['sent_at'] = $data->getSentAt()->format('Y-m-d\TH:i:s.uP');
+        $dataArray['sent_at'] = $this->normalizer->normalize($data->getSentAt(), 'json', $context);
         $dataArray['total_invoices'] = $data->getTotalInvoices();
         $dataArray['invoices_attached'] = $data->getInvoicesAttached();
         if ($data->isInitialized('failures') && null !== $data->getFailures()) {

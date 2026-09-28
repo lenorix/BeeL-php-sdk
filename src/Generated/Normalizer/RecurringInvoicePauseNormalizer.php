@@ -42,7 +42,7 @@ class RecurringInvoicePauseNormalizer implements DenormalizerInterface, Normaliz
             unset($data['reason']);
         }
         if (\array_key_exists('since', $data)) {
-            $object->setSince((new \DateTime($data['since']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['since']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['since']));
+            $object->setSince($this->denormalizer->denormalize($data['since'], \DateTime::class, 'json', $context));
             unset($data['since']);
         }
         if (\array_key_exists('blocker', $data)) {
@@ -63,7 +63,7 @@ class RecurringInvoicePauseNormalizer implements DenormalizerInterface, Normaliz
             $dataArray['reason'] = $data->getReason();
         }
         if ($data->isInitialized('since') && null !== $data->getSince()) {
-            $dataArray['since'] = $data->getSince()->format('Y-m-d\TH:i:s.uP');
+            $dataArray['since'] = $this->normalizer->normalize($data->getSince(), 'json', $context);
         }
         if ($data->isInitialized('blocker') && null !== $data->getBlocker()) {
             $dataArray['blocker'] = $data->getBlocker();

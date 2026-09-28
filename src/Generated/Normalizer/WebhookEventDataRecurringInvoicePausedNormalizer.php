@@ -56,7 +56,7 @@ class WebhookEventDataRecurringInvoicePausedNormalizer implements DenormalizerIn
             $object->setBlocker(null);
         }
         if (\array_key_exists('since', $data)) {
-            $object->setSince((new \DateTime($data['since']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['since']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['since']));
+            $object->setSince($this->denormalizer->denormalize($data['since'], \DateTime::class, 'json', $context));
         }
         return $object;
     }
@@ -71,7 +71,7 @@ class WebhookEventDataRecurringInvoicePausedNormalizer implements DenormalizerIn
         if ($data->isInitialized('blocker') && null !== $data->getBlocker()) {
             $dataArray['blocker'] = $data->getBlocker();
         }
-        $dataArray['since'] = $data->getSince()->format('Y-m-d\TH:i:s.uP');
+        $dataArray['since'] = $this->normalizer->normalize($data->getSince(), 'json', $context);
         return $dataArray;
     }
     public function getSupportedTypes(?string $format = null): array

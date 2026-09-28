@@ -21,7 +21,11 @@ Regenerated from BeeL's current OpenAPI contract (still labelled 1.9.0).
 - Code that catches `BeelApiError` does not catch the new `BeelUnexpectedResponseError`, and code that type-hints `send()`'s return as the `200` model must accept the `202` one too.
 
 - A success status the contract does not declare (BeeL sometimes adds one, as it did with `202` here) now throws `BeelUnexpectedResponseError` instead of a `BeelApiError`: the request may have succeeded, so check `getLastResponse()` before retrying. It has `context()` with the status and request ID for logs.
-- `null` in a date-time field that no model allows to be null (such as `created_at` or `updated_at`) throws `InvalidDateException` instead of silently becoming the current time, as the client did before 0.5.
+- `null` in a date-time field the model does not allow to be null throws `InvalidDateException` instead of silently becoming the current time, as the client did before 0.5. It is checked per model, so a field such as `sent_at`, nullable in an invoice but not in a send response, is handled correctly.
+
+### Changed
+
+- Date-times are read and written by `DateTimeNormalizer`, to which the regenerated client delegates every `date-time` field. It replaces the name-based checks of 0.5 and 0.6: nothing changes for valid values (still `\DateTime` with microseconds), and invalid ones are rejected per field.
 
 ### Added
 

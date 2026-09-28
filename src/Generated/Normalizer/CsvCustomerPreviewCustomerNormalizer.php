@@ -112,11 +112,11 @@ class CsvCustomerPreviewCustomerNormalizer implements DenormalizerInterface, Nor
             unset($data['active']);
         }
         if (\array_key_exists('created_at', $data)) {
-            $object->setCreatedAt((new \DateTime($data['created_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['created_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['created_at']));
+            $object->setCreatedAt($this->denormalizer->denormalize($data['created_at'], \DateTime::class, 'json', $context));
             unset($data['created_at']);
         }
         if (\array_key_exists('updated_at', $data)) {
-            $object->setUpdatedAt((new \DateTime($data['updated_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['updated_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['updated_at']));
+            $object->setUpdatedAt($this->denormalizer->denormalize($data['updated_at'], \DateTime::class, 'json', $context));
             unset($data['updated_at']);
         }
         if (\array_key_exists('alternative_id', $data) && $data['alternative_id'] !== null) {
@@ -177,9 +177,9 @@ class CsvCustomerPreviewCustomerNormalizer implements DenormalizerInterface, Nor
         if ($data->isInitialized('active') && null !== $data->getActive()) {
             $dataArray['active'] = $data->getActive();
         }
-        $dataArray['created_at'] = $data->getCreatedAt()->format('Y-m-d\TH:i:s.uP');
+        $dataArray['created_at'] = $this->normalizer->normalize($data->getCreatedAt(), 'json', $context);
         if ($data->isInitialized('updatedAt') && null !== $data->getUpdatedAt()) {
-            $dataArray['updated_at'] = $data->getUpdatedAt()->format('Y-m-d\TH:i:s.uP');
+            $dataArray['updated_at'] = $this->normalizer->normalize($data->getUpdatedAt(), 'json', $context);
         }
         if ($data->isInitialized('alternativeId') && null !== $data->getAlternativeId()) {
             $dataArray['alternative_id'] = $data->getAlternativeId() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getAlternativeId(), 'json', $context));

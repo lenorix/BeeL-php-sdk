@@ -54,7 +54,7 @@ class WebhookEventDataInvoiceEmailSentNormalizer implements DenormalizerInterfac
             $object->setAllRecipients($values);
         }
         if (\array_key_exists('sent_at', $data)) {
-            $object->setSentAt((new \DateTime($data['sent_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['sent_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['sent_at']));
+            $object->setSentAt($this->denormalizer->denormalize($data['sent_at'], \DateTime::class, 'json', $context));
         }
         return $object;
     }
@@ -70,7 +70,7 @@ class WebhookEventDataInvoiceEmailSentNormalizer implements DenormalizerInterfac
             $values[] = $value;
         }
         $dataArray['all_recipients'] = $values;
-        $dataArray['sent_at'] = $data->getSentAt()->format('Y-m-d\TH:i:s.uP');
+        $dataArray['sent_at'] = $this->normalizer->normalize($data->getSentAt(), 'json', $context);
         return $dataArray;
     }
     public function getSupportedTypes(?string $format = null): array

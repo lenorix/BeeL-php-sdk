@@ -77,7 +77,7 @@ class ManagedAccountSummaryNormalizer implements DenormalizerInterface, Normaliz
             unset($data['representation_signed']);
         }
         if (\array_key_exists('created_at', $data)) {
-            $object->setCreatedAt((new \DateTime($data['created_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['created_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['created_at']));
+            $object->setCreatedAt($this->denormalizer->denormalize($data['created_at'], \DateTime::class, 'json', $context));
             unset($data['created_at']);
         }
         foreach ($data as $key => $value) {
@@ -102,7 +102,7 @@ class ManagedAccountSummaryNormalizer implements DenormalizerInterface, Normaliz
             $dataArray['company_id'] = $data->getCompanyId();
         }
         $dataArray['representation_signed'] = $data->getRepresentationSigned();
-        $dataArray['created_at'] = $data->getCreatedAt()->format('Y-m-d\TH:i:s.uP');
+        $dataArray['created_at'] = $this->normalizer->normalize($data->getCreatedAt(), 'json', $context);
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;

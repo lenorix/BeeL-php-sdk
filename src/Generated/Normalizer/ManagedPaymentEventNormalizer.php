@@ -229,11 +229,11 @@ class ManagedPaymentEventNormalizer implements DenormalizerInterface, Normalizer
             unset($data['retry_count']);
         }
         if (\array_key_exists('received_at', $data)) {
-            $object->setReceivedAt((new \DateTime($data['received_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['received_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['received_at']));
+            $object->setReceivedAt($this->denormalizer->denormalize($data['received_at'], \DateTime::class, 'json', $context));
             unset($data['received_at']);
         }
         if (\array_key_exists('processed_at', $data) && $data['processed_at'] !== null) {
-            $object->setProcessedAt((new \DateTime($data['processed_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['processed_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['processed_at']));
+            $object->setProcessedAt($this->denormalizer->denormalize($data['processed_at'], \DateTime::class, 'json', $context));
             unset($data['processed_at']);
         }
         elseif (\array_key_exists('processed_at', $data) && $data['processed_at'] === null) {
@@ -261,7 +261,7 @@ class ManagedPaymentEventNormalizer implements DenormalizerInterface, Normalizer
             unset($data['discarded']);
         }
         if (\array_key_exists('discarded_at', $data) && $data['discarded_at'] !== null) {
-            $object->setDiscardedAt((new \DateTime($data['discarded_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['discarded_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['discarded_at']));
+            $object->setDiscardedAt($this->denormalizer->denormalize($data['discarded_at'], \DateTime::class, 'json', $context));
             unset($data['discarded_at']);
         }
         elseif (\array_key_exists('discarded_at', $data) && $data['discarded_at'] === null) {
@@ -334,9 +334,9 @@ class ManagedPaymentEventNormalizer implements DenormalizerInterface, Normalizer
         $dataArray['retry_available'] = $data->getRetryAvailable();
         $dataArray['discard_available'] = $data->getDiscardAvailable();
         $dataArray['retry_count'] = $data->getRetryCount();
-        $dataArray['received_at'] = $data->getReceivedAt()->format('Y-m-d\TH:i:s.uP');
+        $dataArray['received_at'] = $this->normalizer->normalize($data->getReceivedAt(), 'json', $context);
         if ($data->isInitialized('processedAt') && null !== $data->getProcessedAt()) {
-            $dataArray['processed_at'] = $data->getProcessedAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['processed_at'] = $this->normalizer->normalize($data->getProcessedAt(), 'json', $context);
         }
         if ($data->isInitialized('description') && null !== $data->getDescription()) {
             $dataArray['description'] = $data->getDescription();
@@ -346,7 +346,7 @@ class ManagedPaymentEventNormalizer implements DenormalizerInterface, Normalizer
         }
         $dataArray['discarded'] = $data->getDiscarded();
         if ($data->isInitialized('discardedAt') && null !== $data->getDiscardedAt()) {
-            $dataArray['discarded_at'] = $data->getDiscardedAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['discarded_at'] = $this->normalizer->normalize($data->getDiscardedAt(), 'json', $context);
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {

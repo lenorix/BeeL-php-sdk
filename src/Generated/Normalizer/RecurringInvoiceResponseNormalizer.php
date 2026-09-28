@@ -246,7 +246,7 @@ class RecurringInvoiceResponseNormalizer implements DenormalizerInterface, Norma
             unset($data['max_invoices']);
         }
         if (\array_key_exists('last_generated_at', $data) && $data['last_generated_at'] !== null) {
-            $object->setLastGeneratedAt((new \DateTime($data['last_generated_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['last_generated_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['last_generated_at']));
+            $object->setLastGeneratedAt($this->denormalizer->denormalize($data['last_generated_at'], \DateTime::class, 'json', $context));
             unset($data['last_generated_at']);
         }
         elseif (\array_key_exists('last_generated_at', $data) && $data['last_generated_at'] === null) {
@@ -274,11 +274,11 @@ class RecurringInvoiceResponseNormalizer implements DenormalizerInterface, Norma
             unset($data['source_invoice_id']);
         }
         if (\array_key_exists('created_at', $data)) {
-            $object->setCreatedAt((new \DateTime($data['created_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['created_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['created_at']));
+            $object->setCreatedAt($this->denormalizer->denormalize($data['created_at'], \DateTime::class, 'json', $context));
             unset($data['created_at']);
         }
         if (\array_key_exists('updated_at', $data)) {
-            $object->setUpdatedAt((new \DateTime($data['updated_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['updated_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['updated_at']));
+            $object->setUpdatedAt($this->denormalizer->denormalize($data['updated_at'], \DateTime::class, 'json', $context));
             unset($data['updated_at']);
         }
         foreach ($data as $key => $value_1) {
@@ -386,7 +386,7 @@ class RecurringInvoiceResponseNormalizer implements DenormalizerInterface, Norma
             $dataArray['max_invoices'] = $data->getMaxInvoices();
         }
         if ($data->isInitialized('lastGeneratedAt') && null !== $data->getLastGeneratedAt()) {
-            $dataArray['last_generated_at'] = $data->getLastGeneratedAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['last_generated_at'] = $this->normalizer->normalize($data->getLastGeneratedAt(), 'json', $context);
         }
         if ($data->isInitialized('lastGeneratedScheduledDate') && null !== $data->getLastGeneratedScheduledDate()) {
             $dataArray['last_generated_scheduled_date'] = $data->getLastGeneratedScheduledDate()?->format('Y-m-d');
@@ -395,10 +395,10 @@ class RecurringInvoiceResponseNormalizer implements DenormalizerInterface, Norma
             $dataArray['source_invoice_id'] = $data->getSourceInvoiceId();
         }
         if ($data->isInitialized('createdAt') && null !== $data->getCreatedAt()) {
-            $dataArray['created_at'] = $data->getCreatedAt()->format('Y-m-d\TH:i:s.uP');
+            $dataArray['created_at'] = $this->normalizer->normalize($data->getCreatedAt(), 'json', $context);
         }
         if ($data->isInitialized('updatedAt') && null !== $data->getUpdatedAt()) {
-            $dataArray['updated_at'] = $data->getUpdatedAt()->format('Y-m-d\TH:i:s.uP');
+            $dataArray['updated_at'] = $this->normalizer->normalize($data->getUpdatedAt(), 'json', $context);
         }
         foreach ($data->additionalPropertyEntries() as $key => $value_1) {
             if (preg_match('/.*/', (string) $key)) {

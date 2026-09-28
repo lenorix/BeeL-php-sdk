@@ -66,7 +66,7 @@ class ManagedPaymentConnectionNormalizer implements DenormalizerInterface, Norma
             unset($data['status']);
         }
         if (\array_key_exists('connected_at', $data) && $data['connected_at'] !== null) {
-            $object->setConnectedAt((new \DateTime($data['connected_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['connected_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['connected_at']));
+            $object->setConnectedAt($this->denormalizer->denormalize($data['connected_at'], \DateTime::class, 'json', $context));
             unset($data['connected_at']);
         }
         elseif (\array_key_exists('connected_at', $data) && $data['connected_at'] === null) {
@@ -92,7 +92,7 @@ class ManagedPaymentConnectionNormalizer implements DenormalizerInterface, Norma
         $dataArray['environment'] = $data->getEnvironment();
         $dataArray['status'] = $data->getStatus();
         if ($data->isInitialized('connectedAt') && null !== $data->getConnectedAt()) {
-            $dataArray['connected_at'] = $data->getConnectedAt()?->format('Y-m-d\TH:i:s.uP');
+            $dataArray['connected_at'] = $this->normalizer->normalize($data->getConnectedAt(), 'json', $context);
         }
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {

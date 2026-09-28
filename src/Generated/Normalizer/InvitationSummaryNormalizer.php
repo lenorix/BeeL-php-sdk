@@ -54,11 +54,11 @@ class InvitationSummaryNormalizer implements DenormalizerInterface, NormalizerIn
             unset($data['status']);
         }
         if (\array_key_exists('created_at', $data)) {
-            $object->setCreatedAt((new \DateTime($data['created_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['created_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['created_at']));
+            $object->setCreatedAt($this->denormalizer->denormalize($data['created_at'], \DateTime::class, 'json', $context));
             unset($data['created_at']);
         }
         if (\array_key_exists('expires_at', $data)) {
-            $object->setExpiresAt((new \DateTime($data['expires_at']))->getTimezone()->getName() == 'Z' ? (new \DateTime($data['expires_at']))->setTimezone(new \DateTimeZone('GMT')) : new \DateTime($data['expires_at']));
+            $object->setExpiresAt($this->denormalizer->denormalize($data['expires_at'], \DateTime::class, 'json', $context));
             unset($data['expires_at']);
         }
         foreach ($data as $key => $value) {
@@ -75,8 +75,8 @@ class InvitationSummaryNormalizer implements DenormalizerInterface, NormalizerIn
         $dataArray['invited_email'] = $data->getInvitedEmail();
         $dataArray['account_role'] = $data->getAccountRole();
         $dataArray['status'] = $data->getStatus();
-        $dataArray['created_at'] = $data->getCreatedAt()->format('Y-m-d\TH:i:s.uP');
-        $dataArray['expires_at'] = $data->getExpiresAt()->format('Y-m-d\TH:i:s.uP');
+        $dataArray['created_at'] = $this->normalizer->normalize($data->getCreatedAt(), 'json', $context);
+        $dataArray['expires_at'] = $this->normalizer->normalize($data->getExpiresAt(), 'json', $context);
         foreach ($data->additionalPropertyEntries() as $key => $value) {
             if (preg_match('/.*/', (string) $key)) {
                 $dataArray[$key] = $value;
