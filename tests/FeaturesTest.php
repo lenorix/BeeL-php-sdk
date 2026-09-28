@@ -1683,3 +1683,47 @@ it('reports a 202 as not ready whatever body and Content-Type BeeL sends', funct
     'JSON, empty body' => [['Content-Type' => 'application/json'], ''],
     'JSON, empty object' => [['Content-Type' => 'application/json'], '{}'],
 ]);
+
+// Checks against the prepared OpenAPI contract the client is generated from (build/openapi.json)
+
+function openApiContract(): array
+{
+    return json_decode((string) file_get_contents(__DIR__.'/../build/openapi.json'), true, 512, JSON_THROW_ON_ERROR);
+}
+
+it('wraps every current operation of the contract in a resource method', function () {
+    $called = [];
+    foreach (array_merge(glob(__DIR__.'/../src/Resource/*.php') ?: [], glob(__DIR__.'/../src/Resource/*/*.php') ?: [], [__DIR__.'/../src/Beel.php']) as $file) {
+        preg_match_all('/client->(\w+)\(|new (\w+)\b/', sourceCode($file), $matches);
+        foreach (array_filter(array_merge($matches[1], $matches[2])) as $name) {
+            $called[lcfirst($name)] = true;
+        }
+    }
+
+    $missing = [];
+    foreach (openApiContract()['paths'] as $path => $operations) {
+        foreach ($operations as $method => $operation) {
+            if (is_array($operation) && isset($operation['operationId']) && ! ($operation['deprecated'] ?? false)
+                && ! isset($called[lcfirst($operation['operationId'])])) {
+                $missing[] = strtoupper($method).' '.$path.' '.$operation['operationId'];
+            }
+        }
+    }
+
+    expect($missing)->toBe([]);
+});
+
+it('keeps the hand-written enums in sync with the contract', function (string $schema, string $enum) {
+    $values = array_map(static fn (BackedEnum $case): string|int => $case->value, $enum::cases());
+    $contract = openApiContract()['components']['schemas'][$schema]['enum'];
+    sort($values);
+    sort($contract);
+
+    expect($values)->toBe($contract);
+})->with([
+    ['Environment', Environment::class],
+    ['VeriFactuSubmissionStatus', VeriFactuSubmissionStatus::class],
+    ['RecurringInvoicePauseReason', RecurringInvoicePauseReason::class],
+    ['WebhookAccountRelationship', WebhookAccountRelationship::class],
+    ['WebhookEventTypeEnum', WebhookEventType::class],
+]);
