@@ -104,7 +104,7 @@ class CreateCustomerRequest implements AdditionalPropertiesInterface
      * Addresses you read back are described by their own schema.
      *
      *
-     * @var Address
+     * @var Address|null
      */
     protected $address;
 
@@ -350,7 +350,7 @@ class CreateCustomerRequest implements AdditionalPropertiesInterface
      *
      * Addresses you read back are described by their own schema.
      */
-    public function getAddress(): Address
+    public function getAddress(): ?Address
     {
         return $this->address;
     }
@@ -360,7 +360,7 @@ class CreateCustomerRequest implements AdditionalPropertiesInterface
 
     Addresses you read back are described by their own schema.
      */
-    public function setAddress(Address $address): self
+    public function setAddress(?Address $address): self
     {
         $this->initialized['address'] = true;
         $this->address = $address;

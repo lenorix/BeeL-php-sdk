@@ -164,9 +164,9 @@ it('reads everything BeeL sends when it leaves out every optional property', fun
         }
     }
 
-    // Models that are optional in some places but required in others stay non-nullable, as
-    // bin/prepare-openapi.php reports: where BeeL leaves them out, check isInitialized() first.
-    $sharedModels = '/must be of type Lenorix\\\\BeelSdk\\\\Generated\\\\Model\\\\(Address|Pagination|ResponseMeta|TaxInfo), null returned/';
+    // TaxInfo is required in products and has an enum, so it stays non-nullable where it is
+    // optional, as bin/prepare-openapi.php reports: check isInitialized() first there.
+    $sharedModels = '/must be of type Lenorix\\\\BeelSdk\\\\Generated\\\\Model\\\\TaxInfo, null returned/';
     $failures = array_values(array_filter($failures, fn (string $failure) => preg_match($sharedModels, $failure) !== 1));
 
     expect($read)->toBeGreaterThan(150)

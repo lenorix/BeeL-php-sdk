@@ -55,7 +55,7 @@ class CompanyResponse implements AdditionalPropertiesInterface
     protected $data;
 
     /**
-     * @var ResponseMeta
+     * @var ResponseMeta|null
      */
     protected $meta;
 
@@ -135,12 +135,12 @@ class CompanyResponse implements AdditionalPropertiesInterface
         return $this;
     }
 
-    public function getMeta(): ResponseMeta
+    public function getMeta(): ?ResponseMeta
     {
         return $this->meta;
     }
 
-    public function setMeta(ResponseMeta $meta): self
+    public function setMeta(?ResponseMeta $meta): self
     {
         $this->initialized['meta'] = true;
         $this->meta = $meta;

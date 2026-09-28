@@ -47,7 +47,7 @@ class V1CompaniesCompanyIdCustomersBulkDeleteResponse200 implements AdditionalPr
     protected $data;
 
     /**
-     * @var ResponseMeta
+     * @var ResponseMeta|null
      */
     protected $meta;
 
@@ -111,12 +111,12 @@ class V1CompaniesCompanyIdCustomersBulkDeleteResponse200 implements AdditionalPr
         return $this;
     }
 
-    public function getMeta(): ResponseMeta
+    public function getMeta(): ?ResponseMeta
     {
         return $this->meta;
     }
 
-    public function setMeta(ResponseMeta $meta): self
+    public function setMeta(?ResponseMeta $meta): self
     {
         $this->initialized['meta'] = true;
         $this->meta = $meta;

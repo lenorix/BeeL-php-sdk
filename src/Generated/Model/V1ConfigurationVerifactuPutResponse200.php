@@ -34,7 +34,7 @@ class V1ConfigurationVerifactuPutResponse200 implements AdditionalPropertiesInte
     protected $data;
 
     /**
-     * @var ResponseMeta
+     * @var ResponseMeta|null
      */
     protected $meta;
 
@@ -72,12 +72,12 @@ class V1ConfigurationVerifactuPutResponse200 implements AdditionalPropertiesInte
         return $this;
     }
 
-    public function getMeta(): ResponseMeta
+    public function getMeta(): ?ResponseMeta
     {
         return $this->meta;
     }
 
-    public function setMeta(ResponseMeta $meta): self
+    public function setMeta(?ResponseMeta $meta): self
     {
         $this->initialized['meta'] = true;
         $this->meta = $meta;

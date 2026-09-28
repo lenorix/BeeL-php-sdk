@@ -7005,7 +7005,12 @@
                                                             }
                                                         },
                                                         "pagination": {
-                                                            "$ref": "#/components/schemas/Pagination"
+                                                            "oneOf": [
+                                                                {
+                                                                    "$ref": "#/components/schemas/Pagination"
+                                                                }
+                                                            ],
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -8042,7 +8047,12 @@
                                                             }
                                                         },
                                                         "pagination": {
-                                                            "$ref": "#/components/schemas/Pagination"
+                                                            "oneOf": [
+                                                                {
+                                                                    "$ref": "#/components/schemas/Pagination"
+                                                                }
+                                                            ],
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -21400,7 +21410,12 @@
                                                             "nullable": true
                                                         },
                                                         "pagination": {
-                                                            "$ref": "#/components/schemas/Pagination"
+                                                            "oneOf": [
+                                                                {
+                                                                    "$ref": "#/components/schemas/Pagination"
+                                                                }
+                                                            ],
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -21715,7 +21730,12 @@
                                                             "nullable": true
                                                         },
                                                         "pagination": {
-                                                            "$ref": "#/components/schemas/Pagination"
+                                                            "oneOf": [
+                                                                {
+                                                                    "$ref": "#/components/schemas/Pagination"
+                                                                }
+                                                            ],
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -22321,7 +22341,12 @@
                                                             "nullable": true
                                                         },
                                                         "pagination": {
-                                                            "$ref": "#/components/schemas/Pagination"
+                                                            "oneOf": [
+                                                                {
+                                                                    "$ref": "#/components/schemas/Pagination"
+                                                                }
+                                                            ],
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -22649,7 +22674,12 @@
                                                             "nullable": true
                                                         },
                                                         "pagination": {
-                                                            "$ref": "#/components/schemas/Pagination"
+                                                            "oneOf": [
+                                                                {
+                                                                    "$ref": "#/components/schemas/Pagination"
+                                                                }
+                                                            ],
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -24203,7 +24233,12 @@
                         "description": "The payload. An object for a single resource; an object holding the named collection\n(and its `pagination`) for a listing. Never a bare array at this level in v1.\n"
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 }
             },
@@ -24537,7 +24572,8 @@
                         "example": "ES",
                         "nullable": true
                     }
-                }
+                },
+                "nullable": true
             },
             "AddressResponse": {
                 "type": "object",
@@ -29739,7 +29775,12 @@
                         "$ref": "#/components/schemas/CompanyCreatedData"
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -29757,7 +29798,12 @@
                         "$ref": "#/components/schemas/CompanyData"
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -29790,7 +29836,12 @@
                         }
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -29818,7 +29869,12 @@
                         }
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -29847,7 +29903,12 @@
                         }
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -29889,7 +29950,12 @@
                         }
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -30032,7 +30098,12 @@
                         }
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -30176,7 +30247,12 @@
                         "$ref": "#/components/schemas/CompanyPaymentConnection"
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -30459,7 +30535,12 @@
                                 }
                             },
                             "pagination": {
-                                "$ref": "#/components/schemas/Pagination"
+                                "oneOf": [
+                                    {
+                                        "$ref": "#/components/schemas/Pagination"
+                                    }
+                                ],
+                                "nullable": true
                             },
                             "counts": {
                                 "$ref": "#/components/schemas/PaymentEventCounts"
@@ -30467,7 +30548,12 @@
                         }
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -30485,7 +30571,12 @@
                         "$ref": "#/components/schemas/ManagedPaymentEvent"
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -30549,7 +30640,12 @@
                         }
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -30654,12 +30750,22 @@
                                 }
                             },
                             "pagination": {
-                                "$ref": "#/components/schemas/Pagination"
+                                "oneOf": [
+                                    {
+                                        "$ref": "#/components/schemas/Pagination"
+                                    }
+                                ],
+                                "nullable": true
                             }
                         }
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 }
             },
@@ -30818,7 +30924,12 @@
                         "$ref": "#/components/schemas/EmailDeliveryDetail"
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 }
             },
@@ -30882,7 +30993,12 @@
                         }
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 }
             },
@@ -31902,7 +32018,12 @@
                         "$ref": "#/components/schemas/BulkOperationResult"
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 }
             },
@@ -32369,7 +32490,12 @@
                         "$ref": "#/components/schemas/InvoiceSchedule"
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 }
             },
@@ -35180,7 +35306,12 @@
                         }
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -35198,7 +35329,12 @@
                         "$ref": "#/components/schemas/IssuingReadinessData"
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -35378,7 +35514,12 @@
                         }
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -36604,7 +36745,12 @@
                         }
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 }
             },
@@ -36668,7 +36814,12 @@
                         "$ref": "#/components/schemas/RequestLogDetail"
                     },
                     "meta": {
-                        "$ref": "#/components/schemas/ResponseMeta"
+                        "oneOf": [
+                            {
+                                "$ref": "#/components/schemas/ResponseMeta"
+                            }
+                        ],
+                        "nullable": true
                     }
                 }
             },

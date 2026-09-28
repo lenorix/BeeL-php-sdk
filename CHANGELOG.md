@@ -4,6 +4,10 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 ## Unreleased
 
+### Changed
+
+- Optional `Address`, `Pagination` and `ResponseMeta` fields that BeeL leaves out read as `null` too, instead of throwing a `TypeError` (205 more getters, such as `Recipient::getAddress()`, the `getPagination()` of lists BeeL does not page and the `getMeta()` of response envelopes, are now nullable). Where BeeL requires them, as in the pagination of paged lists, they keep their types, except `Address` in the requests that require it, whose setters now accept `null`. Only an optional `TaxInfo`, such as `InvoiceLine::getMainTax()`, still needs `isInitialized()`.
+
 ### Fixed
 
 - `$company->customers->deleteBulk()` and `$company->products->deleteBulk()` accept `ids` as a list, as well as the comma-separated string BeeL expects; a list threw `InvalidOptionsException` before.

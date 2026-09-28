@@ -81,8 +81,11 @@ class UpdateCompanyRequestNormalizer implements DenormalizerAwareInterface, Deno
             $object->setTradeName(null);
             unset($data['trade_name']);
         }
-        if (\array_key_exists('address', $data)) {
+        if (\array_key_exists('address', $data) && $data['address'] !== null) {
             $object->setAddress($this->denormalizer->denormalize($data['address'], Address::class, 'json', $context));
+            unset($data['address']);
+        } elseif (\array_key_exists('address', $data) && $data['address'] === null) {
+            $object->setAddress(null);
             unset($data['address']);
         }
         if (\array_key_exists('legal_representative', $data)) {

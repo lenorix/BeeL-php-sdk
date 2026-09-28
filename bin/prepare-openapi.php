@@ -207,26 +207,64 @@ foreach (get_object_vars($document->paths) as $pathItem) {
 // of an omitted optional property throws a TypeError. Required properties keep their types, so a
 // null BeeL sends where one is not allowed is still rejected.
 //
+// What BeeL sends: successful responses and the webhook events it posts.
+$everySent = static function (callable $onProperty) use ($document, $schemas, $walk): void {
+    $visited = [];
+    foreach (get_object_vars($document->paths) as $pathItem) {
+        foreach (get_object_vars($pathItem) as $operation) {
+            foreach (get_object_vars($operation->responses ?? new stdClass) as $status => $response) {
+                if ((int) $status >= 200 && (int) $status < 300) {
+                    foreach (get_object_vars($response->content ?? new stdClass) as $media) {
+                        $walk($media->schema ?? null, [], $onProperty, static fn () => null, $visited);
+                    }
+                }
+            }
+        }
+    }
+    foreach (array_keys(get_object_vars($schemas)) as $name) {
+        if (str_starts_with($name, 'WebhookEvent')) {
+            $walk((object) ['$ref' => '#/components/schemas/'.$name], [], $onProperty, static fn () => null, $visited);
+        }
+    }
+};
 // Census first: every place each property and component is used in the whole contract.
 $everRequired = [];
 $optionalUses = [];
 $otherUses = [];
 $everySchema(
-    static function (stdClass $schema, string $property, bool $required) use (&$everRequired, &$optionalUses, &$otherUses, $component): void {
+    static function (stdClass $schema, string $property, bool $required) use (&$everRequired, &$optionalUses, $component): void {
         $key = spl_object_id($schema).'.'.$property;
         $everRequired[$key] = ($everRequired[$key] ?? false) || $required;
-        if (($name = $component($schema->properties->{$property})) !== null) {
-            $required ? $otherUses[$name] = true : $optionalUses[$name] = true;
+        if (! $required && ($name = $component($schema->properties->{$property})) !== null) {
+            $optionalUses[$name] = true;
         }
     },
     static function (string $name) use (&$otherUses): void {
         $otherUses[$name] = true;
     },
 );
-// Then what BeeL sends: successful responses and the webhook events it posts.
+$requiredInSent = [];
+$everySent(static function (stdClass $schema, string $property, bool $required) use (&$requiredInSent, $component): void {
+    if ($required && ($name = $component($schema->properties->{$property})) !== null) {
+        $requiredInSent[$name] = true;
+    }
+});
+// Jane reads a one-item `oneOf` as its model only when the object has every required key and
+// known enum values. Without enums, that only fails on an object that breaks the contract, while
+// a new enum value would make the model unreadable.
+$hasEnum = static function (string $name) use ($schemas, $component): bool {
+    foreach (get_object_vars($schemas->{$name}->properties ?? new stdClass) as $property) {
+        $target = $component($property);
+        if (isset($property->enum) || ($target !== null && isset($schemas->{$target}->enum))) {
+            return true;
+        }
+    }
+
+    return false;
+};
 $optionalMadeNullable = 0;
 $sharedComponents = [];
-$makeNullable = static function (stdClass $schema, string $property) use (&$optionalMadeNullable, &$sharedComponents, $everRequired, $optionalUses, $otherUses, $schemas, $component, $isScalar, $wrapScalarReference): void {
+$makeNullable = static function (stdClass $schema, string $property) use (&$optionalMadeNullable, &$sharedComponents, $everRequired, $optionalUses, $otherUses, $requiredInSent, $schemas, $component, $isScalar, $wrapScalarReference, $hasEnum): void {
     $propertySchema = $schema->properties->{$property};
     if (($everRequired[spl_object_id($schema).'.'.$property] ?? false) || ($propertySchema->nullable ?? false) === true) {
         return;
@@ -238,32 +276,29 @@ $makeNullable = static function (stdClass $schema, string $property) use (&$opti
     } elseif ($isScalar($name)) {
         $schema->properties->{$property} = $wrapScalarReference($propertySchema, $name);
         $optionalMadeNullable++;
-    } elseif (isset($otherUses[$name])) {
-        // Also used where it is required: making the model nullable would loosen those uses too.
-        $sharedComponents[$name] = true;
-    } elseif (($schemas->{$name}->nullable ?? false) !== true && isset($optionalUses[$name])) {
-        // Every use of this model is an optional property, so the model itself can be nullable.
+    } elseif (($schemas->{$name}->nullable ?? false) === true) {
+        return;
+    } elseif (! isset($otherUses[$name]) && ! isset($requiredInSent[$name]) && isset($optionalUses[$name])) {
+        // BeeL never sends this model where it is required, so the model itself can be nullable.
+        // Request properties that require it accept null too; BeeL still rejects one sent as null.
         $schemas->{$name}->nullable = true;
         $optionalMadeNullable++;
-    }
-};
-$visited = [];
-foreach (get_object_vars($document->paths) as $pathItem) {
-    foreach (get_object_vars($pathItem) as $operation) {
-        foreach (get_object_vars($operation->responses ?? new stdClass) as $status => $response) {
-            if ((int) $status >= 200 && (int) $status < 300) {
-                foreach (get_object_vars($response->content ?? new stdClass) as $media) {
-                    $walk($media->schema ?? null, [], $makeNullable, static fn () => null, $visited);
-                }
+    } elseif (isset($schemas->{$name}->properties) && ! isset($schemas->{$name}->allOf) && ! $hasEnum($name)) {
+        // Required elsewhere in what BeeL sends: only this use becomes nullable (see $hasEnum).
+        $wrapped = (object) ['oneOf' => [(object) ['$ref' => '#/components/schemas/'.$name]]];
+        foreach (get_object_vars($propertySchema) as $keyword => $value) {
+            if ($keyword !== '$ref') {
+                $wrapped->{$keyword} = $value;
             }
         }
+        $wrapped->nullable = true;
+        $schema->properties->{$property} = $wrapped;
+        $optionalMadeNullable++;
+    } else {
+        $sharedComponents[$name] = true;
     }
-}
-foreach (array_keys(get_object_vars($schemas)) as $name) {
-    if (str_starts_with($name, 'WebhookEvent')) {
-        $walk((object) ['$ref' => '#/components/schemas/'.$name], [], $makeNullable, static fn () => null, $visited);
-    }
-}
+};
+$everySent($makeNullable);
 ksort($sharedComponents);
 
 $json = json_encode($document, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
@@ -275,7 +310,7 @@ if ($json === false || (! is_dir(dirname($destination)) && ! mkdir(dirname($dest
 
 fwrite(STDOUT, "Wrote {$destination} ({$patched} parameter schemas given a type for Jane, {$nullableRefs} nullable references wrapped, {$envelopesCompleted} envelopes given a required `data`, {$optionalMadeNullable} optional properties or models made nullable).\n");
 if ($sharedComponents !== []) {
-    fwrite(STDOUT, 'Optional but left non-nullable, as they are also required elsewhere: '.implode(', ', array_keys($sharedComponents)).".\n");
+    fwrite(STDOUT, 'Optional but left non-nullable, as they are also required in what BeeL sends and have enums: '.implode(', ', array_keys($sharedComponents)).".\n");
 }
 if ($patched === 0 && ! isset($argv[1])) {
     fwrite(STDOUT, "BeeL's contract no longer needs the first edit: Jane can read every parameter type.\n");

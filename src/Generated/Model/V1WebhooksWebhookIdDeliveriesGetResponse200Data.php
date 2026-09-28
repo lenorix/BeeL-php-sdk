@@ -25,7 +25,7 @@ class V1WebhooksWebhookIdDeliveriesGetResponse200Data implements AdditionalPrope
     protected $deliveries;
 
     /**
-     * @var Pagination
+     * @var Pagination|null
      */
     protected $pagination;
 
@@ -48,12 +48,12 @@ class V1WebhooksWebhookIdDeliveriesGetResponse200Data implements AdditionalPrope
         return $this;
     }
 
-    public function getPagination(): Pagination
+    public function getPagination(): ?Pagination
     {
         return $this->pagination;
     }
 
-    public function setPagination(Pagination $pagination): self
+    public function setPagination(?Pagination $pagination): self
     {
         $this->initialized['pagination'] = true;
         $this->pagination = $pagination;

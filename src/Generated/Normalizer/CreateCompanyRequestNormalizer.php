@@ -65,8 +65,11 @@ class CreateCompanyRequestNormalizer implements DenormalizerAwareInterface, Deno
             $object->setEntityType($data['entity_type']);
             unset($data['entity_type']);
         }
-        if (\array_key_exists('address', $data)) {
+        if (\array_key_exists('address', $data) && $data['address'] !== null) {
             $object->setAddress($this->denormalizer->denormalize($data['address'], Address::class, 'json', $context));
+            unset($data['address']);
+        } elseif (\array_key_exists('address', $data) && $data['address'] === null) {
+            $object->setAddress(null);
             unset($data['address']);
         }
         if (\array_key_exists('legal_form', $data)) {

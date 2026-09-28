@@ -60,13 +60,20 @@ class V1ProductsSearchGetResponse200Normalizer implements DenormalizerAwareInter
             $object->setData($values);
             unset($data['data']);
         }
-        if (\array_key_exists('meta', $data)) {
-            $object->setMeta($this->denormalizer->denormalize($data['meta'], ResponseMeta::class, 'json', $context));
+        if (\array_key_exists('meta', $data) && $data['meta'] !== null) {
+            $value_1 = $data['meta'];
+            if (is_array($data['meta'])) {
+                $value_1 = $this->denormalizer->denormalize($data['meta'], ResponseMeta::class, 'json', $context);
+            }
+            $object->setMeta($value_1);
+            unset($data['meta']);
+        } elseif (\array_key_exists('meta', $data) && $data['meta'] === null) {
+            $object->setMeta(null);
             unset($data['meta']);
         }
-        foreach ($data as $key => $value_1) {
+        foreach ($data as $key => $value_2) {
             if (preg_match('/.*/', (string) $key)) {
-                $object[$key] = $value_1;
+                $object[$key] = $value_2;
             }
         }
 
@@ -85,11 +92,15 @@ class V1ProductsSearchGetResponse200Normalizer implements DenormalizerAwareInter
             $dataArray['data'] = $values;
         }
         if ($data->isInitialized('meta') && $data->getMeta() !== null) {
-            $dataArray['meta'] = $data->getMeta() === null ? null : new JsonObject($this->normalizer->normalize($data->getMeta(), 'json', $context));
+            $value_1 = $data->getMeta();
+            if (is_object($data->getMeta())) {
+                $value_1 = $data->getMeta() === null ? null : new JsonObject($this->normalizer->normalize($data->getMeta(), 'json', $context));
+            }
+            $dataArray['meta'] = $value_1;
         }
-        foreach ($data->additionalPropertyEntries() as $key => $value_1) {
+        foreach ($data->additionalPropertyEntries() as $key => $value_2) {
             if (preg_match('/.*/', (string) $key)) {
-                $dataArray[$key] = $value_1;
+                $dataArray[$key] = $value_2;
             }
         }
 

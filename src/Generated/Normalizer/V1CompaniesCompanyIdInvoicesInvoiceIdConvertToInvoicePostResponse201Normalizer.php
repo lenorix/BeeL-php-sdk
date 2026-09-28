@@ -56,13 +56,20 @@ class V1CompaniesCompanyIdInvoicesInvoiceIdConvertToInvoicePostResponse201Normal
             $object->setData($this->denormalizer->denormalize($data['data'], Invoice::class, 'json', $context));
             unset($data['data']);
         }
-        if (\array_key_exists('meta', $data)) {
-            $object->setMeta($this->denormalizer->denormalize($data['meta'], ResponseMeta::class, 'json', $context));
+        if (\array_key_exists('meta', $data) && $data['meta'] !== null) {
+            $value = $data['meta'];
+            if (is_array($data['meta'])) {
+                $value = $this->denormalizer->denormalize($data['meta'], ResponseMeta::class, 'json', $context);
+            }
+            $object->setMeta($value);
+            unset($data['meta']);
+        } elseif (\array_key_exists('meta', $data) && $data['meta'] === null) {
+            $object->setMeta(null);
             unset($data['meta']);
         }
-        foreach ($data as $key => $value) {
+        foreach ($data as $key => $value_1) {
             if (preg_match('/.*/', (string) $key)) {
-                $object[$key] = $value;
+                $object[$key] = $value_1;
             }
         }
 
@@ -77,11 +84,15 @@ class V1CompaniesCompanyIdInvoicesInvoiceIdConvertToInvoicePostResponse201Normal
             $dataArray['data'] = $data->getData() === null ? null : new JsonObject($this->normalizer->normalize($data->getData(), 'json', $context));
         }
         if ($data->isInitialized('meta') && $data->getMeta() !== null) {
-            $dataArray['meta'] = $data->getMeta() === null ? null : new JsonObject($this->normalizer->normalize($data->getMeta(), 'json', $context));
+            $value = $data->getMeta();
+            if (is_object($data->getMeta())) {
+                $value = $data->getMeta() === null ? null : new JsonObject($this->normalizer->normalize($data->getMeta(), 'json', $context));
+            }
+            $dataArray['meta'] = $value;
         }
-        foreach ($data->additionalPropertyEntries() as $key => $value) {
+        foreach ($data->additionalPropertyEntries() as $key => $value_1) {
             if (preg_match('/.*/', (string) $key)) {
-                $dataArray[$key] = $value;
+                $dataArray[$key] = $value_1;
             }
         }
 
