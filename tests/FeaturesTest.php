@@ -21,6 +21,7 @@ use Lenorix\BeelSdk\Exception\BeelNotFoundError;
 use Lenorix\BeelSdk\Exception\BeelNotReadyError;
 use Lenorix\BeelSdk\Exception\BeelPaymentRequiredError;
 use Lenorix\BeelSdk\Exception\BeelRateLimitError;
+use Lenorix\BeelSdk\Exception\BeelUnexpectedResponseError;
 use Lenorix\BeelSdk\Exception\BeelValidationError;
 use Lenorix\BeelSdk\Exception\WebhookHeaderError;
 use Lenorix\BeelSdk\Exception\WebhookPayloadError;
@@ -1050,6 +1051,15 @@ it('declares every resource return type as the generated client actually returns
                 $name,
             ))->getReturnType();
             $actualType = ltrim($actual, '?\\');
+            // Compare unions as sets: declaration order is irrelevant to PHP.
+            $sortUnion = static function (string $type): string {
+                $parts = array_map(static fn (string $part): string => ltrim($part, '\\'), explode('|', $type));
+                sort($parts);
+
+                return implode('|', $parts);
+            };
+            $actualType = $sortUnion($actualType);
+            $expected = $sortUnion($expected);
             $isNullable = str_starts_with($actual, '?');
             // Declaring void deliberately discards the response (as the Node.js SDK does for customers->deactivate()); it can never fail.
             if ($actual !== 'void' && ($actualType !== $expected || ($nullable && ! $isNullable && $expected !== 'void'))) {
@@ -1592,4 +1602,54 @@ it('lists the VeriFactu records of an invoice', function () {
         ->and($records[0]->getSubmissionStatus())->toBe('ACCEPTED')
         ->and($records[0]->getRegisteredAt()->format('u'))->toBe('123456')
         ->and($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/companies/c/invoices/inv-1/verifactu-records');
+});
+
+it('reports an undeclared success status as unexpected, not as a failed request', function () {
+    $transport = new RecordingPsrClient([
+        new Response(202, ['Content-Type' => 'application/json', 'X-Request-Id' => 'req-202'], '{"success":true,"data":{"id":"inv-1"}}'),
+        jsonResponse(['success' => false, 'error' => ['code' => 'NOT_FOUND', 'message' => 'Missing']], 404),
+    ]);
+    $invoices = testClient($transport)->company('c')->invoices;
+
+    try {
+        $invoices->get('inv-1');
+        test()->fail('Expected BeelUnexpectedResponseError.');
+    } catch (BeelUnexpectedResponseError $exception) {
+        expect($exception)->not->toBeInstanceOf(BeelApiError::class)
+            ->and($exception->statusCode)->toBe(202)
+            ->and($exception->requestId)->toBe('req-202')
+            ->and($exception->getMessage())->toContain('getLastResponse()');
+    }
+
+    expect(fn () => $invoices->get('inv-1'))->toThrow(BeelNotFoundError::class);
+});
+
+it('rejects null in a date-time field that is never nullable, instead of reading it as now', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['id' => 'inv-1', 'created_at' => null]]),
+        jsonResponse(['success' => true, 'data' => ['id' => 'inv-1', 'created_at' => '2026-09-28T10:00:00Z', 'voided_at' => null]]),
+    ]);
+    $invoices = testClient($transport)->company('c')->invoices;
+
+    expect(fn () => $invoices->get('inv-1'))->toThrow(InvalidDateException::class)
+        ->and($invoices->get('inv-1')->getVoidedAt())->toBeNull();
+});
+
+it('lists the date-time fields that no generated model allows to be null', function () {
+    $kinds = [];
+    foreach (glob(__DIR__.'/../src/Generated/Normalizer/*Normalizer.php') ?: [] as $file) {
+        if (preg_match('/public function denormalize\(.*?\n    \}\n/s', sourceCode($file), $denormalize) !== 1) {
+            continue;
+        }
+        preg_match_all('/new \\\\DateTime\(\$data\[\'([a-z_]+)\'\]\)/', $denormalize[0], $matches);
+        foreach (array_unique($matches[1]) as $name) {
+            $nullable = preg_match('/\$data\[\''.$name.'\'\] (?:!==|===) null|null (?:!==|===) \$data\[\''.$name.'\'\]/', $denormalize[0]) === 1;
+            $kinds[$name][$nullable ? 'nullable' : 'required'] = true;
+        }
+    }
+    $neverNullable = array_keys(array_filter($kinds, static fn (array $kind): bool => ! isset($kind['nullable'])));
+    sort($neverNullable);
+
+    expect($neverNullable)->not->toBeEmpty()
+        ->and(DateTimeValues::NON_NULLABLE_NAMES)->toBe($neverNullable);
 });

@@ -6,6 +6,7 @@ namespace Lenorix\BeelSdk\Resource;
 
 use Lenorix\BeelSdk\Exception\BeelApiError;
 use Lenorix\BeelSdk\Exception\BeelNotReadyError;
+use Lenorix\BeelSdk\Exception\BeelUnexpectedResponseError;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -155,6 +156,12 @@ abstract readonly class GeneratedResource
         }
 
         $httpResponse = $this->responseContext?->response();
+        // For a status the contract does not declare, the generated client reads any JSON body as an
+        // ErrorResponse. On a 2xx that would report a possible success as a failed request.
+        if ($response instanceof ErrorResponse && $httpResponse !== null
+            && $httpResponse->getStatusCode() >= 200 && $httpResponse->getStatusCode() < 300) {
+            throw new BeelUnexpectedResponseError($httpResponse->getStatusCode(), $httpResponse->getHeaderLine('X-Request-Id') ?: null);
+        }
         // An error status Jane has no model for (such as an empty 503 from a proxy) comes back as null.
         if ($response instanceof ErrorResponse || ($httpResponse !== null && $httpResponse->getStatusCode() >= 400)) {
             throw BeelApiError::fromErrorResponse(

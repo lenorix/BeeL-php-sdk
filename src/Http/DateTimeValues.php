@@ -11,7 +11,8 @@ use Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException;
  *
  * The client parses date-times with `new \DateTime()` to keep fractional seconds, but that
  * also turns `""` or words such as `"tomorrow"` into a date instead of failing. This check runs
- * before the generated client reads a payload and accepts only `null` or an RFC 3339 date-time,
+ * before the generated client reads a payload and accepts only an RFC 3339 date-time, or `null`
+ * where some model allows it,
  * as the old fixed-format parser did. It never changes any value.
  *
  * @internal
@@ -49,6 +50,25 @@ final class DateTimeValues
         'voided_at',
     ];
 
+    /**
+     * Date-time names no generated model allows to be null; null there would become the current
+     * time. Names that are nullable in some models (`expires_at`, `sent_at`) cannot be checked by
+     * name. A test keeps this list in sync.
+     */
+    public const NON_NULLABLE_NAMES = [
+        'at',
+        'created_at',
+        'delivered_at',
+        'generated_at',
+        'last_sent_at',
+        'received_at',
+        'registered_at',
+        'signed_at',
+        'since',
+        'timestamp',
+        'updated_at',
+    ];
+
     /** Free-form maps (such as `metadata`) the generated client copies without parsing; their contents are never checked. */
     public const FREE_FORM_NAMES = [
         'by_failure_reason',
@@ -73,7 +93,8 @@ final class DateTimeValues
         // Fast path: every date-time field is null or a complete RFC 3339 string.
         $valid = '"\d{4}-\d{2}-\d{2}[Tt]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:[Zz]|[+-]\d{2}:\d{2})"';
         $suspicious = '/"(?:'.implode('|', self::NAMES).')"\s*:\s*(?!null\b|'.$valid.')/';
-        if (preg_match($suspicious, $json) !== 1) {
+        $nullInRequired = '/"(?:'.implode('|', self::NON_NULLABLE_NAMES).')"\s*:\s*null\b/';
+        if (preg_match($suspicious, $json) !== 1 && preg_match($nullInRequired, $json) !== 1) {
             return;
         }
 
@@ -101,7 +122,8 @@ final class DateTimeValues
             if (! $isList && in_array($key, self::FREE_FORM_NAMES, true)) {
                 continue;
             }
-            if (! $isList && in_array($key, self::NAMES, true) && $value !== null) {
+            if (! $isList && in_array($key, self::NAMES, true)
+                && ($value !== null || in_array($key, self::NON_NULLABLE_NAMES, true))) {
                 if (! is_string($value) || preg_match(self::RFC3339, $value) !== 1) {
                     throw new InvalidDateException($value, 'RFC 3339 date-time');
                 }

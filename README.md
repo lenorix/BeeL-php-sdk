@@ -127,7 +127,7 @@ $summary = $company->fiscalSummary(['year' => 2026]);
 $readiness = $company->issuingReadiness();
 ```
 
-Right after issuing, the invoice PDF may still be generating. Then `getPdf()` and `preview()` (a preview image URL) throw `BeelNotReadyError` with BeeL's `Retry-After`, and `send()` with `attach_pdf` queues the email: it returns the `...Response202Data` model instead of `...Response200Data`, and the email goes out once the PDF exists.
+Right after issuing, the invoice PDF may still be generating. Then `getPdf()` and `preview()` (a preview image URL) throw `BeelNotReadyError` with BeeL's `Retry-After`, and `send()` with `attach_pdf` queues the email: it returns the `...Response202Data` model instead of `...Response200Data` (or check `$beel->getLastResponse()->getStatusCode() === 202`), and the email goes out once the PDF exists. A VeriFactu record rejected before reaching AEAT may lack `registered_at`, `registration_number` or `qr_url`; as with any optional field of a generated model, check `isInitialized('registeredAt')` before calling its getter.
 
 The company scope exposes `invoices`, `customers`, `products`, `series`, `recurringInvoices`, `paymentConnections`, `taxConfiguration`, `verifactuConfiguration`, `invoiceCustomization`, `logo`, `activations` and `representation`, along with company operations such as `get()`, `update()`, `delete()`, `fiscalSummary()`, and `issuingReadiness()`.
 
@@ -457,6 +457,8 @@ API errors are mapped to semantic exception classes. All extend `BeelApiError`:
 | `BeelRateLimitError` | 429 | `statusCode`, `retryAfter`, `retryAfterSeconds` |
 | `BeelApiError` | Other API errors | `statusCode`, `apiCode`, `details`, `requestId` |
 
+If BeeL answers with a success status the SDK does not know for that operation (BeeL sometimes adds one before the SDK is updated), the SDK throws `BeelUnexpectedResponseError` instead of reporting a failure: the request may have succeeded, so check `getLastResponse()` before retrying. Like `BeelNotReadyError`, it does not extend `BeelApiError`.
+
 An error without a JSON body, such as an HTML `502` or an empty `503` from a proxy, is mapped the same way, with its real `statusCode`. When BeeL sends no error code, `apiCode` falls back to the same values as the official Node.js SDK: `UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `CONFLICT`, `UNPROCESSABLE_ENTITY`, `RATE_LIMIT_EXCEEDED` or `UNKNOWN`. `BeelRateLimitError::$retryAfterSeconds` is `60` when BeeL gives no delay, also like the Node.js SDK; `retryAfter` stays `null` in that case. `BeelNotReadyError` (HTTP `202`, see [PDF downloads](#pdf-downloads)) does not extend `BeelApiError`, because it is not an error.
 
 `$exception->context()` returns `status_code`, `api_code`, `request_id` and `retry_after` as an array, ready for a PSR-3 logging context. It leaves out `details`, because validation errors echo submitted values such as NIFs or amounts; read `$exception->details` explicitly when you need them.
@@ -488,6 +490,7 @@ The SDK follows the official [`@beel_es/sdk`](https://www.npmjs.com/package/@bee
 - **Request IDs:** `requestId` comes from the `X-Request-Id` header when present, then from `meta.request_id` in the body; the Node.js SDK reads only the body.
 - **Any endpoint:** `$beel->request()` is the equivalent of `beel.raw.GET(...)`. `$beel->raw` is the generated Jane client, which does not map errors to `BeelApiError`.
 - **Writes without a body:** they are sent as `{}` like in the Node.js SDK, but an existing `Content-Type`, such as a multipart upload, is never replaced.
+- **Success statuses:** `send()` tells a sent email (`200`) from a queued one (`202`), and an unknown success status throws `BeelUnexpectedResponseError` rather than being reported as a failure; the Node.js SDK returns the same data for both.
 - **Extras:** `getLastResponse()` to read the exact response of the last call, every current endpoint has a method, including those without one in the Node.js SDK (`activations`, `invoiceCustomization`, `logo`, `requestLogs`, account imports, `templates`, `previewPdf()`), named in its style. Also `$beel->request()` for any path, `all()` iterators, per-call `withOptions()`, `BinaryDownload` for archives and exports, `$company->representation`, `BeelNotReadyError` with `Retry-After` for PDFs, `WebhookSigner`, and `$beel->me`.
 
 ## Documentation and support

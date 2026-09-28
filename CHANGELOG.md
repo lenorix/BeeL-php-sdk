@@ -14,6 +14,9 @@ Regenerated from BeeL's current OpenAPI contract (still labelled 1.9.0).
 - `CreateSeriesRequest` now requires `document_type`, as BeeL does. An array without it throws `InvalidArgumentException` naming the field; a hand-built model without it fails when sent.
 - No generated class, method or signature was removed or changed: the updated contract only adds classes (`VeriFactuRecord`, `MemberGrant`, `WithholdingOptions`, the `202` send models…) and tightens validation rules and descriptions.
 
+- A success status the contract does not declare (BeeL sometimes adds one, as it did with `202` here) now throws `BeelUnexpectedResponseError` instead of a `BeelApiError`: the request may have succeeded, so check `getLastResponse()` before retrying.
+- `null` in a date-time field that no model allows to be null (such as `created_at` or `updated_at`) throws `InvalidDateException` instead of silently becoming the current time, as the client did before 0.5.
+
 ### Added
 
 - `$company->invoices->createSimplifiedExchange()` issues a full invoice in exchange for simplified invoices.
