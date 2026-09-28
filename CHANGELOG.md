@@ -2,7 +2,7 @@
 
 All notable changes to `BeeL-php-sdk` will be documented in this file.
 
-## Unreleased
+## v0.7.0 - 2026-09-28
 
 Regenerated from BeeL's current OpenAPI contract (still labelled 1.9.0).
 
