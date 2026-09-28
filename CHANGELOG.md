@@ -26,12 +26,14 @@ Regenerated from BeeL's current OpenAPI contract (still labelled 1.9.0).
 ### Changed
 
 - Date-times are read and written by `DateTimeNormalizer`, to which the regenerated client delegates every `date-time` field. It replaces the name-based checks of 0.5 and 0.6: nothing changes for valid values (still `\DateTime` with microseconds), and invalid ones are rejected per field.
+- `$beel->request()` returns the JSON as BeeL sent it without checking date-times, since it never turns them into objects; in 0.6 it rejected invalid ones.
 
 ### Added
 
 - `$company->invoices->createSimplifiedExchange()` issues a full invoice in exchange for simplified invoices.
 - `$company->invoices->listVerifactuRecords()` lists an invoice's VeriFactu records.
 - The `payment_method` invoice filter accepts a single value as well as a list, like `status`.
+- Request arrays accept date objects (`DateTime`, `DateTimeImmutable`, Carbon…) for date-time fields, sent with their microseconds.
 
 ### Fixed
 

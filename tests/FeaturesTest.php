@@ -1681,3 +1681,11 @@ it('routes every generated date-time through DateTimeNormalizer', function () {
     expect($delegated)->toBeGreaterThan(0)
         ->and($parsedInline)->toBe([]);
 });
+
+it('accepts date-time objects in request arrays and keeps their microseconds', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => ['id' => 'inv-1']])]);
+
+    testClient($transport)->invoices->markSent('inv-1', ['sent_at' => new DateTimeImmutable('2026-09-28T10:00:00.654321+02:00')]);
+
+    expect(json_decode((string) $transport->requests[0]->getBody(), true))->toBe(['sent_at' => '2026-09-28T10:00:00.654321+02:00']);
+});

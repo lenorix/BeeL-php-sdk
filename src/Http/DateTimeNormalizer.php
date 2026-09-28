@@ -32,6 +32,10 @@ final class DateTimeNormalizer implements DenormalizerInterface, NormalizerInter
      */
     public function denormalize(mixed $data, string $type, ?string $format = null, array $context = []): \DateTime
     {
+        // Request arrays may carry date objects (DateTime, DateTimeImmutable, Carbon…); BeeL's JSON never does.
+        if ($data instanceof \DateTimeInterface) {
+            return \DateTime::createFromInterface($data);
+        }
         if (! is_string($data) || preg_match(self::RFC3339, $data) !== 1) {
             throw new InvalidDateException($data, 'RFC 3339 date-time');
         }
