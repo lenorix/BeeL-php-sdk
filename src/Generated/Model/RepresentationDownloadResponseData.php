@@ -16,44 +16,44 @@ class RepresentationDownloadResponseData implements AdditionalPropertiesInterfac
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var string
+     * @var string|null
      */
     protected $downloadUrl;
     /**
-     * @var int
+     * @var int|null
      */
     protected $expiresInSeconds;
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDownloadUrl(): string
+    public function getDownloadUrl(): ?string
     {
         return $this->downloadUrl;
     }
     /**
-     * @param string $downloadUrl
+     * @param string|null $downloadUrl
      *
      * @return self
      */
-    public function setDownloadUrl(string $downloadUrl): self
+    public function setDownloadUrl(?string $downloadUrl): self
     {
         $this->initialized['downloadUrl'] = true;
         $this->downloadUrl = $downloadUrl;
         return $this;
     }
     /**
-     * @return int
+     * @return int|null
      */
-    public function getExpiresInSeconds(): int
+    public function getExpiresInSeconds(): ?int
     {
         return $this->expiresInSeconds;
     }
     /**
-     * @param int $expiresInSeconds
+     * @param int|null $expiresInSeconds
      *
      * @return self
      */
-    public function setExpiresInSeconds(int $expiresInSeconds): self
+    public function setExpiresInSeconds(?int $expiresInSeconds): self
     {
         $this->initialized['expiresInSeconds'] = true;
         $this->expiresInSeconds = $expiresInSeconds;

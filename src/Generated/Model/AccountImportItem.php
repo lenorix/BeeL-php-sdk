@@ -55,13 +55,13 @@ class AccountImportItem implements AdditionalPropertiesInterface
     /**
      * Whether this row's NIF may be switched on in Live, decided exactly as `POST /v1/companies/{company_id}/activations` decides it. Anything other than `ENTITLED` blocks the row: the import never opens a checkout on your behalf. Absent when the row was rejected before reaching that question.
      *
-     * @var string
+     * @var string|null
      */
     protected $liveActivationVerdict;
     /**
      * The account this row produced — the same shape `POST /v1/accounts` returns, carrying `account_id`, `company_id` and the single-use `claim_token` / `claim_url` to hand to the holder. Absent in a preview (nothing was provisioned) and on a `BLOCKED` or `ERROR` row. On `ALREADY_EXISTS` it is the account that was already there, and a claim link still valid is kept: `claim_token` is `null` and `claim_link_already_issued` is `true`. **The token is shown once**: store it, or re-issue it with `POST /v1/accounts/{account_id}/claim-tokens`.
      *
-     * @var AccountImportItemAccount
+     * @var AccountImportItemAccount|null
      */
     protected $account;
     /**
@@ -73,7 +73,7 @@ class AccountImportItem implements AdditionalPropertiesInterface
     /**
      * How the shared customers file landed on **this** account. Absent in a preview, and when no customers file was sent: whether a customer is new depends on the account, and that only shows up when the import runs.
      *
-     * @var AccountImportItemCustomers
+     * @var AccountImportItemCustomers|null
      */
     protected $customers;
     /**
@@ -205,20 +205,20 @@ class AccountImportItem implements AdditionalPropertiesInterface
     /**
      * Whether this row's NIF may be switched on in Live, decided exactly as `POST /v1/companies/{company_id}/activations` decides it. Anything other than `ENTITLED` blocks the row: the import never opens a checkout on your behalf. Absent when the row was rejected before reaching that question.
      *
-     * @return string
+     * @return string|null
      */
-    public function getLiveActivationVerdict(): string
+    public function getLiveActivationVerdict(): ?string
     {
         return $this->liveActivationVerdict;
     }
     /**
      * Whether this row's NIF may be switched on in Live, decided exactly as `POST /v1/companies/{company_id}/activations` decides it. Anything other than `ENTITLED` blocks the row: the import never opens a checkout on your behalf. Absent when the row was rejected before reaching that question.
      *
-     * @param string $liveActivationVerdict
+     * @param string|null $liveActivationVerdict
      *
      * @return self
      */
-    public function setLiveActivationVerdict(string $liveActivationVerdict): self
+    public function setLiveActivationVerdict(?string $liveActivationVerdict): self
     {
         $this->initialized['liveActivationVerdict'] = true;
         $this->liveActivationVerdict = $liveActivationVerdict;
@@ -227,20 +227,20 @@ class AccountImportItem implements AdditionalPropertiesInterface
     /**
      * The account this row produced — the same shape `POST /v1/accounts` returns, carrying `account_id`, `company_id` and the single-use `claim_token` / `claim_url` to hand to the holder. Absent in a preview (nothing was provisioned) and on a `BLOCKED` or `ERROR` row. On `ALREADY_EXISTS` it is the account that was already there, and a claim link still valid is kept: `claim_token` is `null` and `claim_link_already_issued` is `true`. **The token is shown once**: store it, or re-issue it with `POST /v1/accounts/{account_id}/claim-tokens`.
      *
-     * @return AccountImportItemAccount
+     * @return AccountImportItemAccount|null
      */
-    public function getAccount(): AccountImportItemAccount
+    public function getAccount(): ?AccountImportItemAccount
     {
         return $this->account;
     }
     /**
      * The account this row produced — the same shape `POST /v1/accounts` returns, carrying `account_id`, `company_id` and the single-use `claim_token` / `claim_url` to hand to the holder. Absent in a preview (nothing was provisioned) and on a `BLOCKED` or `ERROR` row. On `ALREADY_EXISTS` it is the account that was already there, and a claim link still valid is kept: `claim_token` is `null` and `claim_link_already_issued` is `true`. **The token is shown once**: store it, or re-issue it with `POST /v1/accounts/{account_id}/claim-tokens`.
      *
-     * @param AccountImportItemAccount $account
+     * @param AccountImportItemAccount|null $account
      *
      * @return self
      */
-    public function setAccount(AccountImportItemAccount $account): self
+    public function setAccount(?AccountImportItemAccount $account): self
     {
         $this->initialized['account'] = true;
         $this->account = $account;
@@ -271,20 +271,20 @@ class AccountImportItem implements AdditionalPropertiesInterface
     /**
      * How the shared customers file landed on **this** account. Absent in a preview, and when no customers file was sent: whether a customer is new depends on the account, and that only shows up when the import runs.
      *
-     * @return AccountImportItemCustomers
+     * @return AccountImportItemCustomers|null
      */
-    public function getCustomers(): AccountImportItemCustomers
+    public function getCustomers(): ?AccountImportItemCustomers
     {
         return $this->customers;
     }
     /**
      * How the shared customers file landed on **this** account. Absent in a preview, and when no customers file was sent: whether a customer is new depends on the account, and that only shows up when the import runs.
      *
-     * @param AccountImportItemCustomers $customers
+     * @param AccountImportItemCustomers|null $customers
      *
      * @return self
      */
-    public function setCustomers(AccountImportItemCustomers $customers): self
+    public function setCustomers(?AccountImportItemCustomers $customers): self
     {
         $this->initialized['customers'] = true;
         $this->customers = $customers;

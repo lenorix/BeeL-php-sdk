@@ -20,7 +20,7 @@ class VeriFactu implements AdditionalPropertiesInterface
      * the regime of the issuing tax ID at the moment of issuance.
      * 
      *
-     * @var bool
+     * @var bool|null
      */
     protected $enabled;
     /**
@@ -29,7 +29,7 @@ class VeriFactu implements AdditionalPropertiesInterface
      * and kept whatever the AEAT answers.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $invoiceHash;
     /**
@@ -37,7 +37,7 @@ class VeriFactu implements AdditionalPropertiesInterface
      * submitted. It is not an AEAT code: quote it when you ask BeeL about the record.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $registrationNumber;
     /**
@@ -45,7 +45,7 @@ class VeriFactu implements AdditionalPropertiesInterface
      * registration is submitted, while `submission_status` is still `PENDING`.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $qrUrl;
     /**
@@ -60,36 +60,11 @@ class VeriFactu implements AdditionalPropertiesInterface
     /**
      * VeriFactu registration date and time
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $registeredAt;
     /**
-     * Submission status of an invoice's VeriFactu record to AEAT.
-     * 
-     * Single vocabulary for the whole axis: the same values are published in
-     * `verifactu.submission_status` of an invoice and accepted by the `verifactu_status`
-     * filter of `GET /v1/invoices`, so a value read from an invoice can be fed straight
-     * back into the filter.
-     * 
-     * * `PENDING` — queued, AEAT has not answered yet. A temporary AEAT server error also
-     *   stays `PENDING`: BeeL. retries it automatically, and it only becomes `REJECTED` if the
-     *   retries run out.
-     * * `ACCEPTED` — accepted by AEAT (with or without non-blocking warnings).
-     * * `VOIDED` — a cancellation record was accepted by AEAT.
-     * * `REJECTED` — rejected by AEAT, or the submission was rejected by the provider
-     *   before reaching AEAT (see `error_code` / `error_message`).
-     * * `NOT_SUBMITTED` — the invoice is issued with VeriFactu enabled but has no live
-     *   record: the submission fell through (lost event, exhausted retries) and AEAT
-     *   does not know the invoice exists. Transient right after issuing (the async
-     *   submission may still be in flight); if it persists, the registration needs to
-     *   be re-driven.
-     * 
-     * Drafts and scheduled invoices have no submission to describe yet and omit the
-     * field. Invoices with `verifactu.enabled = false` are outside this axis and are
-     * selected with the `verifactu_enabled` filter.
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $submissionStatus;
     /**
@@ -122,9 +97,9 @@ class VeriFactu implements AdditionalPropertiesInterface
      * the regime of the issuing tax ID at the moment of issuance.
      * 
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getEnabled(): bool
+    public function getEnabled(): ?bool
     {
         return $this->enabled;
     }
@@ -133,11 +108,11 @@ class VeriFactu implements AdditionalPropertiesInterface
     the regime of the issuing tax ID at the moment of issuance.
     
     *
-    * @param bool $enabled
+    * @param bool|null $enabled
     *
     * @return self
     */
-    public function setEnabled(bool $enabled): self
+    public function setEnabled(?bool $enabled): self
     {
         $this->initialized['enabled'] = true;
         $this->enabled = $enabled;
@@ -149,9 +124,9 @@ class VeriFactu implements AdditionalPropertiesInterface
      * and kept whatever the AEAT answers.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getInvoiceHash(): string
+    public function getInvoiceHash(): ?string
     {
         return $this->invoiceHash;
     }
@@ -161,11 +136,11 @@ class VeriFactu implements AdditionalPropertiesInterface
     and kept whatever the AEAT answers.
     
     *
-    * @param string $invoiceHash
+    * @param string|null $invoiceHash
     *
     * @return self
     */
-    public function setInvoiceHash(string $invoiceHash): self
+    public function setInvoiceHash(?string $invoiceHash): self
     {
         $this->initialized['invoiceHash'] = true;
         $this->invoiceHash = $invoiceHash;
@@ -176,9 +151,9 @@ class VeriFactu implements AdditionalPropertiesInterface
      * submitted. It is not an AEAT code: quote it when you ask BeeL about the record.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getRegistrationNumber(): string
+    public function getRegistrationNumber(): ?string
     {
         return $this->registrationNumber;
     }
@@ -187,11 +162,11 @@ class VeriFactu implements AdditionalPropertiesInterface
     submitted. It is not an AEAT code: quote it when you ask BeeL about the record.
     
     *
-    * @param string $registrationNumber
+    * @param string|null $registrationNumber
     *
     * @return self
     */
-    public function setRegistrationNumber(string $registrationNumber): self
+    public function setRegistrationNumber(?string $registrationNumber): self
     {
         $this->initialized['registrationNumber'] = true;
         $this->registrationNumber = $registrationNumber;
@@ -202,9 +177,9 @@ class VeriFactu implements AdditionalPropertiesInterface
      * registration is submitted, while `submission_status` is still `PENDING`.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getQrUrl(): string
+    public function getQrUrl(): ?string
     {
         return $this->qrUrl;
     }
@@ -213,11 +188,11 @@ class VeriFactu implements AdditionalPropertiesInterface
     registration is submitted, while `submission_status` is still `PENDING`.
     
     *
-    * @param string $qrUrl
+    * @param string|null $qrUrl
     *
     * @return self
     */
-    public function setQrUrl(string $qrUrl): self
+    public function setQrUrl(?string $qrUrl): self
     {
         $this->initialized['qrUrl'] = true;
         $this->qrUrl = $qrUrl;
@@ -254,88 +229,38 @@ class VeriFactu implements AdditionalPropertiesInterface
     /**
      * VeriFactu registration date and time
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getRegisteredAt(): \DateTime
+    public function getRegisteredAt(): ?\DateTime
     {
         return $this->registeredAt;
     }
     /**
      * VeriFactu registration date and time
      *
-     * @param \DateTime $registeredAt
+     * @param \DateTime|null $registeredAt
      *
      * @return self
      */
-    public function setRegisteredAt(\DateTime $registeredAt): self
+    public function setRegisteredAt(?\DateTime $registeredAt): self
     {
         $this->initialized['registeredAt'] = true;
         $this->registeredAt = $registeredAt;
         return $this;
     }
     /**
-     * Submission status of an invoice's VeriFactu record to AEAT.
-     * 
-     * Single vocabulary for the whole axis: the same values are published in
-     * `verifactu.submission_status` of an invoice and accepted by the `verifactu_status`
-     * filter of `GET /v1/invoices`, so a value read from an invoice can be fed straight
-     * back into the filter.
-     * 
-     * * `PENDING` — queued, AEAT has not answered yet. A temporary AEAT server error also
-     *   stays `PENDING`: BeeL. retries it automatically, and it only becomes `REJECTED` if the
-     *   retries run out.
-     * * `ACCEPTED` — accepted by AEAT (with or without non-blocking warnings).
-     * * `VOIDED` — a cancellation record was accepted by AEAT.
-     * * `REJECTED` — rejected by AEAT, or the submission was rejected by the provider
-     *   before reaching AEAT (see `error_code` / `error_message`).
-     * * `NOT_SUBMITTED` — the invoice is issued with VeriFactu enabled but has no live
-     *   record: the submission fell through (lost event, exhausted retries) and AEAT
-     *   does not know the invoice exists. Transient right after issuing (the async
-     *   submission may still be in flight); if it persists, the registration needs to
-     *   be re-driven.
-     * 
-     * Drafts and scheduled invoices have no submission to describe yet and omit the
-     * field. Invoices with `verifactu.enabled = false` are outside this axis and are
-     * selected with the `verifactu_enabled` filter.
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getSubmissionStatus(): string
+    public function getSubmissionStatus(): ?string
     {
         return $this->submissionStatus;
     }
     /**
-    * Submission status of an invoice's VeriFactu record to AEAT.
-    
-    Single vocabulary for the whole axis: the same values are published in
-    `verifactu.submission_status` of an invoice and accepted by the `verifactu_status`
-    filter of `GET /v1/invoices`, so a value read from an invoice can be fed straight
-    back into the filter.
-    
-    * `PENDING` — queued, AEAT has not answered yet. A temporary AEAT server error also
-     stays `PENDING`: BeeL. retries it automatically, and it only becomes `REJECTED` if the
-     retries run out.
-    * `ACCEPTED` — accepted by AEAT (with or without non-blocking warnings).
-    * `VOIDED` — a cancellation record was accepted by AEAT.
-    * `REJECTED` — rejected by AEAT, or the submission was rejected by the provider
-     before reaching AEAT (see `error_code` / `error_message`).
-    * `NOT_SUBMITTED` — the invoice is issued with VeriFactu enabled but has no live
-     record: the submission fell through (lost event, exhausted retries) and AEAT
-     does not know the invoice exists. Transient right after issuing (the async
-     submission may still be in flight); if it persists, the registration needs to
-     be re-driven.
-    
-    Drafts and scheduled invoices have no submission to describe yet and omit the
-    field. Invoices with `verifactu.enabled = false` are outside this axis and are
-    selected with the `verifactu_enabled` filter.
-    
-    *
-    * @param string $submissionStatus
-    *
-    * @return self
-    */
-    public function setSubmissionStatus(string $submissionStatus): self
+     * @param string|null $submissionStatus
+     *
+     * @return self
+     */
+    public function setSubmissionStatus(?string $submissionStatus): self
     {
         $this->initialized['submissionStatus'] = true;
         $this->submissionStatus = $submissionStatus;

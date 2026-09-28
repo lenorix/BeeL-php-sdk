@@ -16,44 +16,44 @@ class RepresentationActionResponseData implements AdditionalPropertiesInterface
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var string
+     * @var string|null
      */
     protected $status;
     /**
-     * @var string
+     * @var string|null
      */
     protected $message;
     /**
-     * @return string
+     * @return string|null
      */
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return $this->status;
     }
     /**
-     * @param string $status
+     * @param string|null $status
      *
      * @return self
      */
-    public function setStatus(string $status): self
+    public function setStatus(?string $status): self
     {
         $this->initialized['status'] = true;
         $this->status = $status;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getMessage(): string
+    public function getMessage(): ?string
     {
         return $this->message;
     }
     /**
-     * @param string $message
+     * @param string|null $message
      *
      * @return self
      */
-    public function setMessage(string $message): self
+    public function setMessage(?string $message): self
     {
         $this->initialized['message'] = true;
         $this->message = $message;

@@ -19,72 +19,72 @@ class ProductBulkCreateLegacyError implements AdditionalPropertiesInterface
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var int
+     * @var int|null
      */
     protected $index;
     /**
-     * @var string
+     * @var string|null
      */
     protected $code;
     /**
-     * @var string
+     * @var string|null
      */
     protected $name;
     /**
      * Text resolved to the language of the request. Read `products_creation[].error.code` to branch on.
      *
-     * @var string
+     * @var string|null
      */
     protected $error;
     /**
-     * @return int
+     * @return int|null
      */
-    public function getIndex(): int
+    public function getIndex(): ?int
     {
         return $this->index;
     }
     /**
-     * @param int $index
+     * @param int|null $index
      *
      * @return self
      */
-    public function setIndex(int $index): self
+    public function setIndex(?int $index): self
     {
         $this->initialized['index'] = true;
         $this->index = $index;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCode(): string
+    public function getCode(): ?string
     {
         return $this->code;
     }
     /**
-     * @param string $code
+     * @param string|null $code
      *
      * @return self
      */
-    public function setCode(string $code): self
+    public function setCode(?string $code): self
     {
         $this->initialized['code'] = true;
         $this->code = $code;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
     /**
-     * @param string $name
+     * @param string|null $name
      *
      * @return self
      */
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->initialized['name'] = true;
         $this->name = $name;
@@ -93,20 +93,20 @@ class ProductBulkCreateLegacyError implements AdditionalPropertiesInterface
     /**
      * Text resolved to the language of the request. Read `products_creation[].error.code` to branch on.
      *
-     * @return string
+     * @return string|null
      */
-    public function getError(): string
+    public function getError(): ?string
     {
         return $this->error;
     }
     /**
      * Text resolved to the language of the request. Read `products_creation[].error.code` to branch on.
      *
-     * @param string $error
+     * @param string|null $error
      *
      * @return self
      */
-    public function setError(string $error): self
+    public function setError(?string $error): self
     {
         $this->initialized['error'] = true;
         $this->error = $error;

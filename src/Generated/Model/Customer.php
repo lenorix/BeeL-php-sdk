@@ -24,17 +24,11 @@ class Customer implements AdditionalPropertiesInterface
      */
     protected $legalName;
     /**
-     * @var string
+     * @var string|null
      */
     protected $tradeName;
     /**
-     * Spanish Tax ID (9 characters, uppercase only). Structural validation:
-     * - DNI: 8 digits + 1 letter (e.g., 12345678A)
-     * - NIE: X/Y/Z + 7 digits + 1 letter (e.g., X1234567A)
-     * - CIF: Organization letter + 7 digits + 1 control digit/letter (e.g., B12345674)
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $nif;
     /**
@@ -46,20 +40,7 @@ class Customer implements AdditionalPropertiesInterface
      */
     protected $address;
     /**
-     * A phone number, as the record holds it: digits, spaces, dashes, parentheses and an
-     * optional leading `+`, up to 20 characters.
-     * 
-     * This is the schema a **response** carries, and the length above is the only rule it
-     * states. It deliberately does not repeat the character rule, because a number can reach a
-     * record through a path that predates that rule or never passed through this API at all —
-     * a payment provider's customer data, a bulk import. Read the field defensively and do not
-     * assume it parses.
-     * 
-     * What a **request** has to satisfy is `PhoneInput`, which adds the rules this API enforces
-     * on the way in.
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $phone;
     /**
@@ -82,27 +63,27 @@ class Customer implements AdditionalPropertiesInterface
      * addresses, and not to `email`; `email` is used only when `billing_emails` is empty.
      * 
      *
-     * @var list<string>
+     * @var list<string>|null
      */
     protected $billingEmails;
     /**
-     * @var string
+     * @var string|null
      */
     protected $contactPerson;
     /**
-     * @var string
+     * @var string|null
      */
     protected $notes;
     /**
-     * @var PaymentInfo
+     * @var PaymentInfo|null
      */
     protected $preferredPaymentMethod;
     /**
-     * @var float
+     * @var float|null
      */
     protected $generalDiscount = 0;
     /**
-     * @var bool
+     * @var bool|null
      */
     protected $active = true;
     /**
@@ -110,7 +91,7 @@ class Customer implements AdditionalPropertiesInterface
      */
     protected $createdAt;
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $updatedAt;
     /**
@@ -195,48 +176,36 @@ class Customer implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getTradeName(): string
+    public function getTradeName(): ?string
     {
         return $this->tradeName;
     }
     /**
-     * @param string $tradeName
+     * @param string|null $tradeName
      *
      * @return self
      */
-    public function setTradeName(string $tradeName): self
+    public function setTradeName(?string $tradeName): self
     {
         $this->initialized['tradeName'] = true;
         $this->tradeName = $tradeName;
         return $this;
     }
     /**
-     * Spanish Tax ID (9 characters, uppercase only). Structural validation:
-     * - DNI: 8 digits + 1 letter (e.g., 12345678A)
-     * - NIE: X/Y/Z + 7 digits + 1 letter (e.g., X1234567A)
-     * - CIF: Organization letter + 7 digits + 1 control digit/letter (e.g., B12345674)
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getNif(): string
+    public function getNif(): ?string
     {
         return $this->nif;
     }
     /**
-    * Spanish Tax ID (9 characters, uppercase only). Structural validation:
-    - DNI: 8 digits + 1 letter (e.g., 12345678A)
-    - NIE: X/Y/Z + 7 digits + 1 letter (e.g., X1234567A)
-    - CIF: Organization letter + 7 digits + 1 control digit/letter (e.g., B12345674)
-    
-    *
-    * @param string $nif
-    *
-    * @return self
-    */
-    public function setNif(string $nif): self
+     * @param string|null $nif
+     *
+     * @return self
+     */
+    public function setNif(?string $nif): self
     {
         $this->initialized['nif'] = true;
         $this->nif = $nif;
@@ -269,44 +238,18 @@ class Customer implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * A phone number, as the record holds it: digits, spaces, dashes, parentheses and an
-     * optional leading `+`, up to 20 characters.
-     * 
-     * This is the schema a **response** carries, and the length above is the only rule it
-     * states. It deliberately does not repeat the character rule, because a number can reach a
-     * record through a path that predates that rule or never passed through this API at all —
-     * a payment provider's customer data, a bulk import. Read the field defensively and do not
-     * assume it parses.
-     * 
-     * What a **request** has to satisfy is `PhoneInput`, which adds the rules this API enforces
-     * on the way in.
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getPhone(): string
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
     /**
-    * A phone number, as the record holds it: digits, spaces, dashes, parentheses and an
-    optional leading `+`, up to 20 characters.
-    
-    This is the schema a **response** carries, and the length above is the only rule it
-    states. It deliberately does not repeat the character rule, because a number can reach a
-    record through a path that predates that rule or never passed through this API at all —
-    a payment provider's customer data, a bulk import. Read the field defensively and do not
-    assume it parses.
-    
-    What a **request** has to satisfy is `PhoneInput`, which adds the rules this API enforces
-    on the way in.
-    
-    *
-    * @param string $phone
-    *
-    * @return self
-    */
-    public function setPhone(string $phone): self
+     * @param string|null $phone
+     *
+     * @return self
+     */
+    public function setPhone(?string $phone): self
     {
         $this->initialized['phone'] = true;
         $this->phone = $phone;
@@ -366,9 +309,9 @@ class Customer implements AdditionalPropertiesInterface
      * addresses, and not to `email`; `email` is used only when `billing_emails` is empty.
      * 
      *
-     * @return list<string>
+     * @return list<string>|null
      */
-    public function getBillingEmails(): array
+    public function getBillingEmails(): ?array
     {
         return $this->billingEmails;
     }
@@ -378,101 +321,101 @@ class Customer implements AdditionalPropertiesInterface
     addresses, and not to `email`; `email` is used only when `billing_emails` is empty.
     
     *
-    * @param list<string> $billingEmails
+    * @param list<string>|null $billingEmails
     *
     * @return self
     */
-    public function setBillingEmails(array $billingEmails): self
+    public function setBillingEmails(?array $billingEmails): self
     {
         $this->initialized['billingEmails'] = true;
         $this->billingEmails = $billingEmails;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getContactPerson(): string
+    public function getContactPerson(): ?string
     {
         return $this->contactPerson;
     }
     /**
-     * @param string $contactPerson
+     * @param string|null $contactPerson
      *
      * @return self
      */
-    public function setContactPerson(string $contactPerson): self
+    public function setContactPerson(?string $contactPerson): self
     {
         $this->initialized['contactPerson'] = true;
         $this->contactPerson = $contactPerson;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getNotes(): string
+    public function getNotes(): ?string
     {
         return $this->notes;
     }
     /**
-     * @param string $notes
+     * @param string|null $notes
      *
      * @return self
      */
-    public function setNotes(string $notes): self
+    public function setNotes(?string $notes): self
     {
         $this->initialized['notes'] = true;
         $this->notes = $notes;
         return $this;
     }
     /**
-     * @return PaymentInfo
+     * @return PaymentInfo|null
      */
-    public function getPreferredPaymentMethod(): PaymentInfo
+    public function getPreferredPaymentMethod(): ?PaymentInfo
     {
         return $this->preferredPaymentMethod;
     }
     /**
-     * @param PaymentInfo $preferredPaymentMethod
+     * @param PaymentInfo|null $preferredPaymentMethod
      *
      * @return self
      */
-    public function setPreferredPaymentMethod(PaymentInfo $preferredPaymentMethod): self
+    public function setPreferredPaymentMethod(?PaymentInfo $preferredPaymentMethod): self
     {
         $this->initialized['preferredPaymentMethod'] = true;
         $this->preferredPaymentMethod = $preferredPaymentMethod;
         return $this;
     }
     /**
-     * @return float
+     * @return float|null
      */
-    public function getGeneralDiscount(): float
+    public function getGeneralDiscount(): ?float
     {
         return $this->generalDiscount;
     }
     /**
-     * @param float $generalDiscount
+     * @param float|null $generalDiscount
      *
      * @return self
      */
-    public function setGeneralDiscount(float $generalDiscount): self
+    public function setGeneralDiscount(?float $generalDiscount): self
     {
         $this->initialized['generalDiscount'] = true;
         $this->generalDiscount = $generalDiscount;
         return $this;
     }
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function getActive(): bool
+    public function getActive(): ?bool
     {
         return $this->active;
     }
     /**
-     * @param bool $active
+     * @param bool|null $active
      *
      * @return self
      */
-    public function setActive(bool $active): self
+    public function setActive(?bool $active): self
     {
         $this->initialized['active'] = true;
         $this->active = $active;
@@ -497,18 +440,18 @@ class Customer implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
     /**
-     * @param \DateTime $updatedAt
+     * @param \DateTime|null $updatedAt
      *
      * @return self
      */
-    public function setUpdatedAt(\DateTime $updatedAt): self
+    public function setUpdatedAt(?\DateTime $updatedAt): self
     {
         $this->initialized['updatedAt'] = true;
         $this->updatedAt = $updatedAt;

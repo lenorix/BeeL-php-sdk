@@ -37,20 +37,36 @@ class InvoiceAttachmentNormalizer implements DenormalizerInterface, NormalizerIn
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('id', $data)) {
+        if (\array_key_exists('id', $data) && $data['id'] !== null) {
             $object->setId($data['id']);
             unset($data['id']);
         }
-        if (\array_key_exists('name', $data)) {
+        elseif (\array_key_exists('id', $data) && $data['id'] === null) {
+            $object->setId(null);
+            unset($data['id']);
+        }
+        if (\array_key_exists('name', $data) && $data['name'] !== null) {
             $object->setName($data['name']);
             unset($data['name']);
         }
-        if (\array_key_exists('url', $data)) {
+        elseif (\array_key_exists('name', $data) && $data['name'] === null) {
+            $object->setName(null);
+            unset($data['name']);
+        }
+        if (\array_key_exists('url', $data) && $data['url'] !== null) {
             $object->setUrl($data['url']);
             unset($data['url']);
         }
-        if (\array_key_exists('type', $data)) {
+        elseif (\array_key_exists('url', $data) && $data['url'] === null) {
+            $object->setUrl(null);
+            unset($data['url']);
+        }
+        if (\array_key_exists('type', $data) && $data['type'] !== null) {
             $object->setType($data['type']);
+            unset($data['type']);
+        }
+        elseif (\array_key_exists('type', $data) && $data['type'] === null) {
+            $object->setType(null);
             unset($data['type']);
         }
         foreach ($data as $key => $value) {

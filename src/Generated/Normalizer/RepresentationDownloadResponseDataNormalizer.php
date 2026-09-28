@@ -37,12 +37,20 @@ class RepresentationDownloadResponseDataNormalizer implements DenormalizerInterf
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('download_url', $data)) {
+        if (\array_key_exists('download_url', $data) && $data['download_url'] !== null) {
             $object->setDownloadUrl($data['download_url']);
             unset($data['download_url']);
         }
-        if (\array_key_exists('expires_in_seconds', $data)) {
+        elseif (\array_key_exists('download_url', $data) && $data['download_url'] === null) {
+            $object->setDownloadUrl(null);
+            unset($data['download_url']);
+        }
+        if (\array_key_exists('expires_in_seconds', $data) && $data['expires_in_seconds'] !== null) {
             $object->setExpiresInSeconds($data['expires_in_seconds']);
+            unset($data['expires_in_seconds']);
+        }
+        elseif (\array_key_exists('expires_in_seconds', $data) && $data['expires_in_seconds'] === null) {
+            $object->setExpiresInSeconds(null);
             unset($data['expires_in_seconds']);
         }
         foreach ($data as $key => $value) {

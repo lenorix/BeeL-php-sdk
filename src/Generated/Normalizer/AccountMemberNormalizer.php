@@ -57,12 +57,16 @@ class AccountMemberNormalizer implements DenormalizerInterface, NormalizerInterf
             $object->setAccountRole($data['account_role']);
             unset($data['account_role']);
         }
-        if (\array_key_exists('grants', $data)) {
+        if (\array_key_exists('grants', $data) && $data['grants'] !== null) {
             $values = [];
             foreach ($data['grants'] as $value) {
                 $values[] = $this->denormalizer->denormalize($value, \Lenorix\BeelSdk\Generated\Model\MemberGrant::class, 'json', $context);
             }
             $object->setGrants($values);
+            unset($data['grants']);
+        }
+        elseif (\array_key_exists('grants', $data) && $data['grants'] === null) {
+            $object->setGrants(null);
             unset($data['grants']);
         }
         if (\array_key_exists('permissions', $data)) {

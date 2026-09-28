@@ -41,12 +41,20 @@ class EmailAttachmentNormalizer implements DenormalizerInterface, NormalizerInte
             $object->setFilename($data['filename']);
             unset($data['filename']);
         }
-        if (\array_key_exists('content_type', $data)) {
+        if (\array_key_exists('content_type', $data) && $data['content_type'] !== null) {
             $object->setContentType($data['content_type']);
             unset($data['content_type']);
         }
-        if (\array_key_exists('size', $data)) {
+        elseif (\array_key_exists('content_type', $data) && $data['content_type'] === null) {
+            $object->setContentType(null);
+            unset($data['content_type']);
+        }
+        if (\array_key_exists('size', $data) && $data['size'] !== null) {
             $object->setSize($data['size']);
+            unset($data['size']);
+        }
+        elseif (\array_key_exists('size', $data) && $data['size'] === null) {
+            $object->setSize(null);
             unset($data['size']);
         }
         if (\array_key_exists('download_url', $data) && $data['download_url'] !== null) {

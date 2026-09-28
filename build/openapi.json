@@ -1483,7 +1483,12 @@
                                                                 "type": "object",
                                                                 "properties": {
                                                                     "invoice_id": {
-                                                                        "$ref": "#/components/schemas/UUID"
+                                                                        "allOf": [
+                                                                            {
+                                                                                "$ref": "#/components/schemas/UUID"
+                                                                            }
+                                                                        ],
+                                                                        "nullable": true
                                                                     },
                                                                     "error_code": {
                                                                         "type": "string",
@@ -1492,13 +1497,16 @@
                                                                             "PDF_NOT_GENERATED",
                                                                             "INVALID_STATE",
                                                                             "INTERNAL_ERROR"
-                                                                        ]
+                                                                        ],
+                                                                        "nullable": true
                                                                     },
                                                                     "error_message": {
-                                                                        "type": "string"
+                                                                        "type": "string",
+                                                                        "nullable": true
                                                                     }
                                                                 }
-                                                            }
+                                                            },
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -2037,17 +2045,24 @@
                                                     "type": "object",
                                                     "properties": {
                                                         "email_id": {
-                                                            "$ref": "#/components/schemas/UUID"
+                                                            "allOf": [
+                                                                {
+                                                                    "$ref": "#/components/schemas/UUID"
+                                                                }
+                                                            ],
+                                                            "nullable": true
                                                         },
                                                         "sent_to": {
                                                             "type": "array",
                                                             "items": {
                                                                 "$ref": "#/components/schemas/Email"
-                                                            }
+                                                            },
+                                                            "nullable": true
                                                         },
                                                         "sent_at": {
                                                             "type": "string",
-                                                            "format": "date-time"
+                                                            "format": "date-time",
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -2074,18 +2089,25 @@
                                                     "type": "object",
                                                     "properties": {
                                                         "email_id": {
-                                                            "$ref": "#/components/schemas/UUID"
+                                                            "allOf": [
+                                                                {
+                                                                    "$ref": "#/components/schemas/UUID"
+                                                                }
+                                                            ],
+                                                            "nullable": true
                                                         },
                                                         "sent_to": {
                                                             "type": "array",
                                                             "items": {
                                                                 "$ref": "#/components/schemas/Email"
-                                                            }
+                                                            },
+                                                            "nullable": true
                                                         },
                                                         "sent_at": {
                                                             "type": "string",
                                                             "format": "date-time",
-                                                            "description": "The moment this request was accepted, not the moment the email was\nsent — it has not been sent yet. See the `202` description.\n"
+                                                            "description": "The moment this request was accepted, not the moment the email was\nsent — it has not been sent yet. See the `202` description.\n",
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -4622,7 +4644,12 @@
                                                                 "type": "object",
                                                                 "properties": {
                                                                     "invoice_id": {
-                                                                        "$ref": "#/components/schemas/UUID"
+                                                                        "allOf": [
+                                                                            {
+                                                                                "$ref": "#/components/schemas/UUID"
+                                                                            }
+                                                                        ],
+                                                                        "nullable": true
                                                                     },
                                                                     "error_code": {
                                                                         "type": "string",
@@ -4631,13 +4658,16 @@
                                                                             "PDF_NOT_GENERATED",
                                                                             "INVALID_STATE",
                                                                             "INTERNAL_ERROR"
-                                                                        ]
+                                                                        ],
+                                                                        "nullable": true
                                                                     },
                                                                     "error_message": {
-                                                                        "type": "string"
+                                                                        "type": "string",
+                                                                        "nullable": true
                                                                     }
                                                                 }
-                                                            }
+                                                            },
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -5576,17 +5606,24 @@
                                                     "type": "object",
                                                     "properties": {
                                                         "email_id": {
-                                                            "$ref": "#/components/schemas/UUID"
+                                                            "allOf": [
+                                                                {
+                                                                    "$ref": "#/components/schemas/UUID"
+                                                                }
+                                                            ],
+                                                            "nullable": true
                                                         },
                                                         "sent_to": {
                                                             "type": "array",
                                                             "items": {
                                                                 "$ref": "#/components/schemas/Email"
-                                                            }
+                                                            },
+                                                            "nullable": true
                                                         },
                                                         "sent_at": {
                                                             "type": "string",
-                                                            "format": "date-time"
+                                                            "format": "date-time",
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -5613,18 +5650,25 @@
                                                     "type": "object",
                                                     "properties": {
                                                         "email_id": {
-                                                            "$ref": "#/components/schemas/UUID"
+                                                            "allOf": [
+                                                                {
+                                                                    "$ref": "#/components/schemas/UUID"
+                                                                }
+                                                            ],
+                                                            "nullable": true
                                                         },
                                                         "sent_to": {
                                                             "type": "array",
                                                             "items": {
                                                                 "$ref": "#/components/schemas/Email"
-                                                            }
+                                                            },
+                                                            "nullable": true
                                                         },
                                                         "sent_at": {
                                                             "type": "string",
                                                             "format": "date-time",
-                                                            "description": "The moment this request was accepted, not the moment the email was\nsent — it has not been sent yet. See the `202` description.\n"
+                                                            "description": "The moment this request was accepted, not the moment the email was\nsent — it has not been sent yet. See the `202` description.\n",
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -7513,7 +7557,8 @@
                                                     "properties": {
                                                         "invoice_id": {
                                                             "type": "string",
-                                                            "format": "uuid"
+                                                            "format": "uuid",
+                                                            "nullable": true
                                                         },
                                                         "next_generation": {
                                                             "type": "string",
@@ -9146,7 +9191,8 @@
                                                     "properties": {
                                                         "invoice_id": {
                                                             "type": "string",
-                                                            "format": "uuid"
+                                                            "format": "uuid",
+                                                            "nullable": true
                                                         },
                                                         "next_generation": {
                                                             "type": "string",
@@ -12535,7 +12581,8 @@
                                                             "items": {
                                                                 "type": "string",
                                                                 "format": "uuid"
-                                                            }
+                                                            },
+                                                            "nullable": true
                                                         },
                                                         "errors": {
                                                             "type": "array",
@@ -12544,27 +12591,34 @@
                                                                 "properties": {
                                                                     "product_id": {
                                                                         "type": "string",
-                                                                        "format": "uuid"
+                                                                        "format": "uuid",
+                                                                        "nullable": true
                                                                     },
                                                                     "error": {
-                                                                        "type": "string"
+                                                                        "type": "string",
+                                                                        "nullable": true
                                                                     }
                                                                 }
-                                                            }
+                                                            },
+                                                            "nullable": true
                                                         },
                                                         "summary": {
                                                             "type": "object",
                                                             "properties": {
                                                                 "total_processed": {
-                                                                    "type": "integer"
+                                                                    "type": "integer",
+                                                                    "nullable": true
                                                                 },
                                                                 "successful": {
-                                                                    "type": "integer"
+                                                                    "type": "integer",
+                                                                    "nullable": true
                                                                 },
                                                                 "failed": {
-                                                                    "type": "integer"
+                                                                    "type": "integer",
+                                                                    "nullable": true
                                                                 }
-                                                            }
+                                                            },
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -13094,7 +13148,8 @@
                                                             "items": {
                                                                 "type": "string",
                                                                 "format": "uuid"
-                                                            }
+                                                            },
+                                                            "nullable": true
                                                         },
                                                         "errors": {
                                                             "type": "array",
@@ -13103,27 +13158,34 @@
                                                                 "properties": {
                                                                     "product_id": {
                                                                         "type": "string",
-                                                                        "format": "uuid"
+                                                                        "format": "uuid",
+                                                                        "nullable": true
                                                                     },
                                                                     "error": {
-                                                                        "type": "string"
+                                                                        "type": "string",
+                                                                        "nullable": true
                                                                     }
                                                                 }
-                                                            }
+                                                            },
+                                                            "nullable": true
                                                         },
                                                         "summary": {
                                                             "type": "object",
                                                             "properties": {
                                                                 "total_processed": {
-                                                                    "type": "integer"
+                                                                    "type": "integer",
+                                                                    "nullable": true
                                                                 },
                                                                 "successful": {
-                                                                    "type": "integer"
+                                                                    "type": "integer",
+                                                                    "nullable": true
                                                                 },
                                                                 "failed": {
-                                                                    "type": "integer"
+                                                                    "type": "integer",
+                                                                    "nullable": true
                                                                 }
-                                                            }
+                                                            },
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -15962,7 +16024,8 @@
                                                                     "$ref": "#/components/schemas/Pagination"
                                                                 }
                                                             ],
-                                                            "description": "Totals of the requested page. Present ONLY when the request sent\n`page` and/or `limit`; omitted for the historical full list.\n"
+                                                            "description": "Totals of the requested page. Present ONLY when the request sent\n`page` and/or `limit`; omitted for the historical full list.\n",
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -16659,7 +16722,12 @@
                                                     "type": "object",
                                                     "properties": {
                                                         "language": {
-                                                            "$ref": "#/components/schemas/Language"
+                                                            "allOf": [
+                                                                {
+                                                                    "$ref": "#/components/schemas/Language"
+                                                                }
+                                                            ],
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -19166,7 +19234,8 @@
                                                                     "$ref": "#/components/schemas/Pagination"
                                                                 }
                                                             ],
-                                                            "description": "Totals of the requested page. Present ONLY when the request sent\n`page` and/or `limit`; omitted for the historical full list.\n"
+                                                            "description": "Totals of the requested page. Present ONLY when the request sent\n`page` and/or `limit`; omitted for the historical full list.\n",
+                                                            "nullable": true
                                                         }
                                                     }
                                                 }
@@ -21327,7 +21396,8 @@
                                                             "type": "array",
                                                             "items": {
                                                                 "$ref": "#/components/schemas/WebhookSubscription"
-                                                            }
+                                                            },
+                                                            "nullable": true
                                                         },
                                                         "pagination": {
                                                             "$ref": "#/components/schemas/Pagination"
@@ -21641,7 +21711,8 @@
                                                             "type": "array",
                                                             "items": {
                                                                 "$ref": "#/components/schemas/WebhookDeliveryLog"
-                                                            }
+                                                            },
+                                                            "nullable": true
                                                         },
                                                         "pagination": {
                                                             "$ref": "#/components/schemas/Pagination"
@@ -22246,7 +22317,8 @@
                                                             "type": "array",
                                                             "items": {
                                                                 "$ref": "#/components/schemas/WebhookSubscription"
-                                                            }
+                                                            },
+                                                            "nullable": true
                                                         },
                                                         "pagination": {
                                                             "$ref": "#/components/schemas/Pagination"
@@ -22573,7 +22645,8 @@
                                                             "type": "array",
                                                             "items": {
                                                                 "$ref": "#/components/schemas/WebhookDeliveryLog"
-                                                            }
+                                                            },
+                                                            "nullable": true
                                                         },
                                                         "pagination": {
                                                             "$ref": "#/components/schemas/Pagination"
@@ -24266,11 +24339,13 @@
                     "timestamp": {
                         "type": "string",
                         "format": "date-time",
-                        "example": "2025-01-15T10:30:00Z"
+                        "example": "2025-01-15T10:30:00Z",
+                        "nullable": true
                     },
                     "request_id": {
                         "type": "string",
-                        "example": "4bf92f3577b34da6a3ce929d0e0e4736"
+                        "example": "4bf92f3577b34da6a3ce929d0e0e4736",
+                        "nullable": true
                     }
                 }
             },
@@ -24301,10 +24376,12 @@
                         "example": 20
                     },
                     "has_next": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "has_previous": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     }
                 }
             },
@@ -24401,19 +24478,22 @@
                         "minLength": 1,
                         "maxLength": 20,
                         "description": "Street number. Optional: omit it when the address has none, or when `street` already\ncarries the address in full.\n",
-                        "example": "123"
+                        "example": "123",
+                        "nullable": true
                     },
                     "floor": {
                         "type": "string",
                         "maxLength": 10,
                         "description": "Floor or level",
-                        "example": "2º A"
+                        "example": "2º A",
+                        "nullable": true
                     },
                     "door": {
                         "type": "string",
                         "maxLength": 10,
                         "description": "Door or apartment",
-                        "example": "A"
+                        "example": "A",
+                        "nullable": true
                     },
                     "postal_code": {
                         "type": "string",
@@ -24436,7 +24516,8 @@
                         "maxLength": 100,
                         "pattern": "^[a-zA-Z0-9À-ÿ\\u0100-\\u017F\\u00B7\\u2018\\u2019\\u0060\\u00B4\\s\\.,\\-\\/'ºª°:;\"()&#]+$",
                         "description": "Province or state - Latin characters only. Required for an address in Spain\n(`country_code` `ES`, or no country at all); optional elsewhere, where many addresses\nhave none. A Spanish address without it is rejected with a `422`.\n",
-                        "example": "Madrid"
+                        "example": "Madrid",
+                        "nullable": true
                     },
                     "country": {
                         "type": "string",
@@ -24444,7 +24525,8 @@
                         "maxLength": 100,
                         "pattern": "^[a-zA-Z0-9À-ÿ\\u0100-\\u017F\\u00B7\\u2018\\u2019\\u0060\\u00B4\\s\\.,\\-\\/'ºª°:;\"()&#]+$",
                         "description": "Country of the address, as its ISO 3166-1 alpha-2 code (`GB`) or its official name\nin Spanish, English or Catalan (`Reino Unido`, `United Kingdom`, `Regne Unit`;\ncase and accents are ignored). Anything else, such as `UK`, is rejected with\n`422 COUNTRY_CODE_REQUIRED`: send `country_code` instead. If it names a different\ncountry than `country_code`, `422 COUNTRY_CODE_MISMATCH` (`España` alone yields to\na foreign `country_code`: it was the old default). What is stored and\nreturned is always the Spanish name derived from the resulting code, never the\ntext sent. With neither field present, the address is Spanish (`España`).\n",
-                        "example": "España"
+                        "example": "España",
+                        "nullable": true
                     },
                     "country_code": {
                         "type": "string",
@@ -24452,7 +24534,8 @@
                         "minLength": 2,
                         "maxLength": 2,
                         "description": "ISO 3166-1 alpha-2 country code: the canonical field that decides the country of\nthe address. It must be a real country code (`GB`, not `UK`); otherwise\n`422 COUNTRY_CODE_REQUIRED`. When it is omitted, the code comes from `country`\n(see there). With neither field present, the address is stored as `ES`.\n",
-                        "example": "ES"
+                        "example": "ES",
+                        "nullable": true
                     }
                 }
             },
@@ -24465,54 +24548,62 @@
                         "minLength": 1,
                         "maxLength": 255,
                         "description": "Full address (street, number, floor, etc.)",
-                        "example": "Calle Mayor, 123"
+                        "example": "Calle Mayor, 123",
+                        "nullable": true
                     },
                     "number": {
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 20,
                         "description": "Street number. Absent when the stored address has none.",
-                        "example": "123"
+                        "example": "123",
+                        "nullable": true
                     },
                     "floor": {
                         "type": "string",
                         "maxLength": 10,
                         "description": "Floor or level",
-                        "example": "2º A"
+                        "example": "2º A",
+                        "nullable": true
                     },
                     "door": {
                         "type": "string",
                         "maxLength": 10,
                         "description": "Door or apartment",
-                        "example": "A"
+                        "example": "A",
+                        "nullable": true
                     },
                     "postal_code": {
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 20,
                         "description": "Postal code (5 digits for Spain, free format for other countries)",
-                        "example": "28001"
+                        "example": "28001",
+                        "nullable": true
                     },
                     "city": {
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
                         "description": "City or town",
-                        "example": "Madrid"
+                        "example": "Madrid",
+                        "nullable": true
                     },
                     "province": {
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
                         "description": "Province or state. Outside Spain an address may have none.",
-                        "example": "Madrid"
+                        "example": "Madrid",
+                        "nullable": true
                     },
                     "country": {
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 100,
                         "description": "Country name: the Spanish name derived from `country_code`. Addresses stored before\nthe country was validated may hold the name as it was sent.\n",
-                        "example": "España"
+                        "example": "España",
+                        "nullable": true
                     },
                     "country_code": {
                         "type": "string",
@@ -24520,7 +24611,8 @@
                         "minLength": 2,
                         "maxLength": 2,
                         "description": "ISO 3166-1 alpha-2 country code",
-                        "example": "ES"
+                        "example": "ES",
+                        "nullable": true
                     }
                 }
             },
@@ -24789,13 +24881,24 @@
                                 "$ref": "#/components/schemas/AddressResponse"
                             }
                         ],
-                        "description": "Issuer address as stored. Optional and absent when the company has not registered its\naddress yet: an address is either complete or it is not there, so no partial address\nand no placeholder is ever returned in its place.\n"
+                        "description": "Issuer address as stored. Optional and absent when the company has not registered its\naddress yet: an address is either complete or it is not there, so no partial address\nand no placeholder is ever returned in its place.\n",
+                        "nullable": true
                     },
                     "phone": {
-                        "$ref": "#/components/schemas/Phone"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Phone"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "email": {
-                        "$ref": "#/components/schemas/Email"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Email"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "website": {
                         "type": "string",
@@ -24866,7 +24969,8 @@
                             {
                                 "description": "Alternative identifier for foreign customers (mutually exclusive with nif), when\nthe invoice identifies its recipient with one.\n"
                             }
-                        ]
+                        ],
+                        "nullable": true
                     },
                     "address": {
                         "allOf": [
@@ -24874,13 +24978,24 @@
                                 "$ref": "#/components/schemas/AddressResponse"
                             }
                         ],
-                        "description": "Recipient address as stored (optional for simplified invoices). Read shape: an\ninvoice recorded without recipient address still carries the stamped country code,\nso no field is guaranteed.\n"
+                        "description": "Recipient address as stored (optional for simplified invoices). Read shape: an\ninvoice recorded without recipient address still carries the stamped country code,\nso no field is guaranteed.\n",
+                        "nullable": true
                     },
                     "phone": {
-                        "$ref": "#/components/schemas/Phone"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Phone"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "email": {
-                        "$ref": "#/components/schemas/Email"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Email"
+                            }
+                        ],
+                        "nullable": true
                     }
                 }
             },
@@ -24896,7 +25011,8 @@
                         "type": "string",
                         "maxLength": 2000,
                         "description": "Description of the invoiced concept. Required for NORMAL lines;\noptional for SUPLIDO lines (may be empty or absent).\n",
-                        "example": "Web application development"
+                        "example": "Web application development",
+                        "nullable": true
                     },
                     "quantity": {
                         "type": "number",
@@ -24906,7 +25022,8 @@
                     "unit": {
                         "type": "string",
                         "default": "hours",
-                        "example": "hours"
+                        "example": "hours",
+                        "nullable": true
                     },
                     "unit_price": {
                         "type": "number",
@@ -24921,7 +25038,8 @@
                         "maximum": 100,
                         "default": 0,
                         "example": 10,
-                        "description": "Discount percentage applied (0-100)"
+                        "description": "Discount percentage applied (0-100)",
+                        "nullable": true
                     },
                     "main_tax": {
                         "$ref": "#/components/schemas/TaxInfo"
@@ -24929,15 +25047,21 @@
                     "equivalence_surcharge_rate": {
                         "type": "number",
                         "example": 5.2,
-                        "description": "Equivalence surcharge rate the line was issued with. It is what the invoice holds,\nnot what a request accepts (see `EquivalenceSurchargePercentage`): invoices issued\nwith VAT at 5 % before the surcharge was corrected to 0.62 keep the `0.625` they were\nissued with, because an issued invoice never changes. Their billing record declares\n0.62, as the AEAT information note on the new surcharge rates allows.\n"
+                        "description": "Equivalence surcharge rate the line was issued with. It is what the invoice holds,\nnot what a request accepts (see `EquivalenceSurchargePercentage`): invoices issued\nwith VAT at 5 % before the surcharge was corrected to 0.62 keep the `0.625` they were\nissued with, because an issued invoice never changes. Their billing record declares\n0.62, as the AEAT information note on the new surcharge rates allows.\n",
+                        "nullable": true
                     },
                     "irpf_rate": {
                         "type": "number",
                         "example": 15,
-                        "description": "Withholding (IRPF) rate the line holds. It is what the invoice holds, not what a\nrequest accepts (see `IrpfPercentage`): a line saved with a rate the table no longer\nhas keeps it, and an issued invoice never changes.\n"
+                        "description": "Withholding (IRPF) rate the line holds. It is what the invoice holds, not what a\nrequest accepts (see `IrpfPercentage`): a line saved with a rate the table no longer\nhas keeps it, and an issued invoice never changes.\n",
+                        "nullable": true
                     },
                     "exemption_reason": {
-                        "$ref": "#/components/schemas/ExemptionReason",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ExemptionReason"
+                            }
+                        ],
                         "nullable": true
                     },
                     "exemption_reason_text": {
@@ -24949,7 +25073,8 @@
                     "taxable_base": {
                         "type": "number",
                         "example": 1800,
-                        "description": "Line taxable base (after discount, can be negative in corrective invoices)"
+                        "description": "Line taxable base (after discount, can be negative in corrective invoices)",
+                        "nullable": true
                     },
                     "line_total": {
                         "type": "number",
@@ -24964,17 +25089,20 @@
                             "TOTAL_INCLUDING_TAX"
                         ],
                         "default": "UNIT_PRICE",
-                        "description": "How the line amount was entered. `UNIT_PRICE` = classic mode: the amount is\nderived from `unit_price` (`quantity × unit_price × (1 − discount / 100)`).\n`TOTAL_EXCLUDING_TAX` = total-declared\nmode: `total_excluding_tax` is the exact taxable base and `unit_price`\nis derived and informational (`total / quantity`, 4 decimals).\n`TOTAL_INCLUDING_TAX` = tax-inclusive total-declared mode:\n`total_including_tax` is what the customer paid (taxable base + VAT +\nequivalence surcharge) and the engine works the breakdown backwards so\nthe rounded amounts add up to the declared total exactly.\n"
+                        "description": "How the line amount was entered. `UNIT_PRICE` = classic mode: the amount is\nderived from `unit_price` (`quantity × unit_price × (1 − discount / 100)`).\n`TOTAL_EXCLUDING_TAX` = total-declared\nmode: `total_excluding_tax` is the exact taxable base and `unit_price`\nis derived and informational (`total / quantity`, 4 decimals).\n`TOTAL_INCLUDING_TAX` = tax-inclusive total-declared mode:\n`total_including_tax` is what the customer paid (taxable base + VAT +\nequivalence surcharge) and the engine works the breakdown backwards so\nthe rounded amounts add up to the declared total exactly.\n",
+                        "nullable": true
                     },
                     "total_excluding_tax": {
                         "type": "number",
                         "example": 1,
-                        "description": "Declared line total excluding taxes. Only present on lines with\n`pricing_mode = TOTAL_EXCLUDING_TAX`. Unlike `line_total`, it never\nincludes taxes nor subtracts IRPF withholding.\n"
+                        "description": "Declared line total excluding taxes. Only present on lines with\n`pricing_mode = TOTAL_EXCLUDING_TAX`. Unlike `line_total`, it never\nincludes taxes nor subtracts IRPF withholding.\n",
+                        "nullable": true
                     },
                     "total_including_tax": {
                         "type": "number",
                         "example": 100,
-                        "description": "Declared line total including taxes (taxable base + VAT + equivalence\nsurcharge; IRPF withholding is never subtracted). Only present on lines\nwith `pricing_mode = TOTAL_INCLUDING_TAX`. The invariant\n`taxable_base + VAT + surcharge = total_including_tax` holds exactly.\n"
+                        "description": "Declared line total including taxes (taxable base + VAT + equivalence\nsurcharge; IRPF withholding is never subtracted). Only present on lines\nwith `pricing_mode = TOTAL_INCLUDING_TAX`. The invariant\n`taxable_base + VAT + surcharge = total_including_tax` holds exactly.\n",
+                        "nullable": true
                     },
                     "line_type": {
                         "allOf": [
@@ -24983,7 +25111,8 @@
                             }
                         ],
                         "default": "NORMAL",
-                        "description": "Fiscal line type.\n- **NORMAL**: standard line; contributes to the taxable base and VAT.\n- **SUPLIDO**: payment made on behalf of the final client (art. 78.Tres.3 LIVA);\n  excluded from the taxable base, VAT and VeriFactu.\n"
+                        "description": "Fiscal line type.\n- **NORMAL**: standard line; contributes to the taxable base and VAT.\n- **SUPLIDO**: payment made on behalf of the final client (art. 78.Tres.3 LIVA);\n  excluded from the taxable base, VAT and VeriFactu.\n",
+                        "nullable": true
                     },
                     "source_invoice_reference": {
                         "type": "string",
@@ -24997,7 +25126,8 @@
                             "type": "string",
                             "format": "uuid"
                         },
-                        "description": "Ids of the issued invoices that make up the SUPLIDO. They may belong to the issuing\naccount or to accounts it manages with VIEW access. Their\nsum is the disbursement amount (never typed by hand). Audit traceability.\nOnly present on lines with line_type=SUPLIDO.\n"
+                        "description": "Ids of the issued invoices that make up the SUPLIDO. They may belong to the issuing\naccount or to accounts it manages with VIEW access. Their\nsum is the disbursement amount (never typed by hand). Audit traceability.\nOnly present on lines with line_type=SUPLIDO.\n",
+                        "nullable": true
                     }
                 }
             },
@@ -25020,7 +25150,8 @@
                         "type": "number",
                         "default": 0,
                         "example": 0,
-                        "description": "Total discounts applied (can be negative in corrective invoices)"
+                        "description": "Total discounts applied (can be negative in corrective invoices)",
+                        "nullable": true
                     },
                     "vat_breakdown": {
                         "type": "array",
@@ -25047,10 +25178,12 @@
                                 "regime_key": {
                                     "type": "string",
                                     "example": "18",
-                                    "description": "VeriFactu regime key of the rows grouped here. Rows are grouped by\n(tax type, rate, regime key), so an invoice mixing general-regime and\nequivalence-surcharge lines at the same rate yields TWO rows at\n`type: 21` that only this field tells apart (`01` vs `18`). Index by\n`(type, regime_key)`, never by `type` alone.\n"
+                                    "description": "VeriFactu regime key of the rows grouped here. Rows are grouped by\n(tax type, rate, regime key), so an invoice mixing general-regime and\nequivalence-surcharge lines at the same rate yields TWO rows at\n`type: 21` that only this field tells apart (`01` vs `18`). Index by\n`(type, regime_key)`, never by `type` alone.\n",
+                                    "nullable": true
                                 }
                             }
-                        }
+                        },
+                        "nullable": true
                     },
                     "total_vat": {
                         "type": "number",
@@ -25077,7 +25210,8 @@
                                     "type": "number"
                                 }
                             }
-                        }
+                        },
+                        "nullable": true
                     },
                     "total_equivalence_surcharge": {
                         "type": "number",
@@ -25105,7 +25239,8 @@
                                     "type": "number"
                                 }
                             }
-                        }
+                        },
+                        "nullable": true
                     },
                     "total_irpf": {
                         "type": "number",
@@ -25122,12 +25257,14 @@
                         "type": "number",
                         "default": 0,
                         "example": 0,
-                        "description": "Sum of SUPLIDO lines (payments on behalf of the client, art. 78.Tres.3 LIVA).\nExcluded from the taxable base, VAT and VeriFactu.\n"
+                        "description": "Sum of SUPLIDO lines (payments on behalf of the client, art. 78.Tres.3 LIVA).\nExcluded from the taxable base, VAT and VeriFactu.\n",
+                        "nullable": true
                     },
                     "total_to_pay": {
                         "type": "number",
                         "example": 2120,
-                        "description": "Total amount paid by the client = `invoice_total` + `total_disbursements`.\nThis is the amount on the PDF and the actual charge. When there are no\ndisbursements (suplidos) it matches `invoice_total`.\n"
+                        "description": "Total amount paid by the client = `invoice_total` + `total_disbursements`.\nThis is the amount on the PDF and the actual charge. When there are no\ndisbursements (suplidos) it matches `invoice_total`.\n",
+                        "nullable": true
                     }
                 }
             },
@@ -25140,13 +25277,24 @@
                                 "$ref": "#/components/schemas/PaymentMethod"
                             }
                         ],
-                        "description": "Preferred payment method. Omitted, `BANK_TRANSFER` applies.\nIf NONE is selected, no payment information will be shown on the invoice.\n"
+                        "description": "Preferred payment method. Omitted, `BANK_TRANSFER` applies.\nIf NONE is selected, no payment information will be shown on the invoice.\n",
+                        "nullable": true
                     },
                     "iban": {
-                        "$ref": "#/components/schemas/IBAN"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/IBAN"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "swift": {
-                        "$ref": "#/components/schemas/SWIFT"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/SWIFT"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "payment_term_days": {
                         "type": "integer",
@@ -25156,7 +25304,8 @@
                         "description": "Payment term in days. When marking an invoice as paid, every field of this object\nthat travels replaces the stored one and every omitted field keeps its current value.\n",
                         "example": 30
                     }
-                }
+                },
+                "nullable": true
             },
             "VeriFactu": {
                 "type": "object",
@@ -25164,22 +25313,26 @@
                 "properties": {
                     "enabled": {
                         "type": "boolean",
-                        "description": "Whether this invoice was registered with the AEAT under VeriFactu. Read-only: it records\nthe regime of the issuing tax ID at the moment of issuance.\n"
+                        "description": "Whether this invoice was registered with the AEAT under VeriFactu. Read-only: it records\nthe regime of the issuing tax ID at the moment of issuance.\n",
+                        "nullable": true
                     },
                     "invoice_hash": {
                         "type": "string",
                         "description": "SHA-256 hash of the registration record, as VeriFactu defines it. Present from the\nmoment the registration is submitted, while `submission_status` is still `PENDING`,\nand kept whatever the AEAT answers.\n",
-                        "example": "3A5B7C9D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B"
+                        "example": "3A5B7C9D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B",
+                        "nullable": true
                     },
                     "registration_number": {
                         "type": "string",
                         "description": "Identifier (UUID) of this record in the VeriFactu submission, assigned when it is\nsubmitted. It is not an AEAT code: quote it when you ask BeeL about the record.\n",
-                        "example": "4f8c2a1e-9b3d-4e7a-8c5f-1d2e3f4a5b6c"
+                        "example": "4f8c2a1e-9b3d-4e7a-8c5f-1d2e3f4a5b6c",
+                        "nullable": true
                     },
                     "qr_url": {
                         "type": "string",
                         "description": "AEAT verification URL encoded in the invoice QR code. Present from the moment the\nregistration is submitted, while `submission_status` is still `PENDING`.\n",
-                        "example": "https://www2.agenciatributaria.gob.es/wlpl/TIKE-CONT/ValidarQR?nif=B12345674&numserie=A%2F2025%2F0042&fecha=20-01-2025&importe=1590.00"
+                        "example": "https://www2.agenciatributaria.gob.es/wlpl/TIKE-CONT/ValidarQR?nif=B12345674&numserie=A%2F2025%2F0042&fecha=20-01-2025&importe=1590.00",
+                        "nullable": true
                     },
                     "qr_base64": {
                         "type": "string",
@@ -25190,10 +25343,16 @@
                     "registered_at": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "VeriFactu registration date and time"
+                        "description": "VeriFactu registration date and time",
+                        "nullable": true
                     },
                     "submission_status": {
-                        "$ref": "#/components/schemas/VeriFactuSubmissionStatus"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/VeriFactuSubmissionStatus"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "skip_reason": {
                         "allOf": [
@@ -25216,7 +25375,8 @@
                         "description": "Human-readable reason for the outcome. When the AEAT reported a remark or an error on the\nrecord, it is the AEAT's own description. When BeeL. decided the outcome (the submission\nwas rejected before reaching the AEAT, or BeeL. stopped waiting for a final answer), it\nis a message written by BeeL., in the language of the request.\n",
                         "example": "Factura ya existe en el sistema"
                     }
-                }
+                },
+                "nullable": true
             },
             "VeriFactuSubmissionStatus": {
                 "type": "string",
@@ -25405,7 +25565,11 @@
                                     "description": "IRPF withholding rate for this line.\n\n**Default behaviour:** if omitted, the line inherits the\naccount's default IRPF rate (configured in the tax profile,\ne.g. 15%). To issue a line **without** withholding you must\nsend `irpf_rate: 0` explicitly. On SIMPLIFIED invoices (F2)\nIRPF withholding is **not allowed** (AEAT forbids it on F2):\nsending an `irpf_rate` other than 0 is **rejected** with\n`SIMPLIFICADA_FORBIDS_IRPF` — it is not coerced to 0. Omit the\nfield or send `irpf_rate: 0` on F2 lines. On all other invoice\ntypes an explicit value is always respected.\n\nThe rate must be one the issuer can bear (see `WithholdingOptions` in the\ntax configuration). No entity pays IRPF: a legal person or a permanent\nestablishment (NIF starting with `A`, `B`, `C`, `D`, `F`, `G`, `Q`, `R`,\n`U` or `W`) only accepts `0`, `19`, `24` and `9.5` (rents in Ceuta and\nMelilla), a non-resident entity (`N`) `0`, `19` and `24`, and the State,\nan Autonomous Community or a local entity (`S`, `P`) only `0`; any other\nrate is rejected with `IRPF_RATE_NOT_FOR_CORPORATE_ISSUER`. `9.5` from an\nindividual is rejected with `IRPF_RATE_ONLY_FOR_CORPORATE_ISSUER`: under IRPF the Ceuta\nand Melilla reduced rates are `6`, `2.8` and `7.6`. Checked on creation,\non edit and again on issue; corrective invoices are not checked: they\ncorrect by differences what the original carried.\n"
                                 },
                                 "exemption_reason": {
-                                    "$ref": "#/components/schemas/ExemptionReason",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ExemptionReason"
+                                        }
+                                    ],
                                     "nullable": true
                                 },
                                 "exemption_reason_text": {
@@ -25658,7 +25822,11 @@
                                     "description": "IRPF withholding rate for this line.\n\n**Default behaviour:** if omitted, the line inherits the\naccount's default IRPF rate (configured in the tax profile,\ne.g. 15%). To issue a line **without** withholding you must\nsend `irpf_rate: 0` explicitly. On SIMPLIFIED invoices (F2)\nIRPF withholding is **not allowed** (AEAT forbids it on F2):\nsending an `irpf_rate` other than 0 is **rejected** with\n`SIMPLIFICADA_FORBIDS_IRPF` — it is not coerced to 0. Omit the\nfield or send `irpf_rate: 0` on F2 lines. On all other invoice\ntypes an explicit value is always respected.\n\nThe rate must be one the issuer can bear (see `WithholdingOptions` in the\ntax configuration). No entity pays IRPF: a legal person or a permanent\nestablishment (NIF starting with `A`, `B`, `C`, `D`, `F`, `G`, `Q`, `R`,\n`U` or `W`) only accepts `0`, `19`, `24` and `9.5` (rents in Ceuta and\nMelilla), a non-resident entity (`N`) `0`, `19` and `24`, and the State,\nan Autonomous Community or a local entity (`S`, `P`) only `0`; any other\nrate is rejected with `IRPF_RATE_NOT_FOR_CORPORATE_ISSUER`. `9.5` from an\nindividual is rejected with `IRPF_RATE_ONLY_FOR_CORPORATE_ISSUER`: under IRPF the Ceuta\nand Melilla reduced rates are `6`, `2.8` and `7.6`. Checked on creation,\non edit and again on issue; corrective invoices are not checked: they\ncorrect by differences what the original carried.\n"
                                 },
                                 "exemption_reason": {
-                                    "$ref": "#/components/schemas/ExemptionReason",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ExemptionReason"
+                                        }
+                                    ],
                                     "nullable": true
                                 },
                                 "exemption_reason_text": {
@@ -25748,21 +25916,24 @@
                         "description": "List of CC emails (optional)",
                         "example": [
                             "copy@example.com"
-                        ]
+                        ],
+                        "nullable": true
                     },
                     "subject": {
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 200,
                         "description": "Custom email subject (optional, if not specified uses a default)",
-                        "example": "Invoice 2025/0001 - Web development services"
+                        "example": "Invoice 2025/0001 - Web development services",
+                        "nullable": true
                     },
                     "message": {
                         "type": "string",
                         "minLength": 1,
                         "maxLength": 2000,
                         "description": "Custom message (optional, added to email body)",
-                        "example": "Dear customer, please find attached the invoice for the services provided. Thank you for your trust."
+                        "example": "Dear customer, please find attached the invoice for the services provided. Thank you for your trust.",
+                        "nullable": true
                     }
                 },
                 "example": {
@@ -25912,7 +26083,11 @@
                                     "description": "IRPF withholding rate for this line of the corrective invoice.\n\n**Default behaviour:** if omitted, the line inherits the rate\nof the invoice being amended — **not** the account's default\nIRPF rate from the tax profile, whose default does not apply to\ncorrective invoices: a profile that changed after the original\nwas issued must not alter what the credit note withholds. An\nexplicit value is always respected, `0` included, which is how\nyou issue a line **without** withholding. If the original\nwithholds different rates on different lines there is nothing\nunambiguous to inherit and the request fails with\n`422 CORRECTIVE_ORIGINAL_MIXED_IRPF`: send `irpf_rate` on every\nline. `SUPLIDO` lines never carry IRPF and are ignored on both\nsides. On SIMPLIFIED invoices (F2) IRPF withholding is **not\nallowed** (AEAT forbids it on F2): sending an `irpf_rate` other\nthan 0 is **rejected** with `SIMPLIFICADA_FORBIDS_IRPF` — it is\nnot coerced to 0. Omit the field or send `irpf_rate: 0` on F2\nlines.\n"
                                 },
                                 "exemption_reason": {
-                                    "$ref": "#/components/schemas/ExemptionReason",
+                                    "allOf": [
+                                        {
+                                            "$ref": "#/components/schemas/ExemptionReason"
+                                        }
+                                    ],
                                     "nullable": true
                                 },
                                 "exemption_reason_text": {
@@ -26103,10 +26278,16 @@
                     },
                     "trade_name": {
                         "type": "string",
-                        "example": "EmpresaCliente"
+                        "example": "EmpresaCliente",
+                        "nullable": true
                     },
                     "nif": {
-                        "$ref": "#/components/schemas/NIF"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/NIF"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "address": {
                         "allOf": [
@@ -26117,7 +26298,12 @@
                         "description": "Customer address as stored. Read shape: records registered before the street number\nwas collected have none, so no field is guaranteed.\n"
                     },
                     "phone": {
-                        "$ref": "#/components/schemas/Phone"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Phone"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "email": {
                         "type": "string",
@@ -26139,15 +26325,18 @@
                         "items": {
                             "$ref": "#/components/schemas/Email"
                         },
-                        "description": "Addresses that receive the customer's invoice emails. When the send request names no\n`recipients` and the invoice has no `email_config` recipients, invoices go to these\naddresses, and not to `email`; `email` is used only when `billing_emails` is empty.\n"
+                        "description": "Addresses that receive the customer's invoice emails. When the send request names no\n`recipients` and the invoice has no `email_config` recipients, invoices go to these\naddresses, and not to `email`; `email` is used only when `billing_emails` is empty.\n",
+                        "nullable": true
                     },
                     "contact_person": {
                         "type": "string",
-                        "example": "María García"
+                        "example": "María García",
+                        "nullable": true
                     },
                     "notes": {
                         "type": "string",
-                        "maxLength": 1000
+                        "maxLength": 1000,
+                        "nullable": true
                     },
                     "preferred_payment_method": {
                         "$ref": "#/components/schemas/PaymentInfo"
@@ -26156,11 +26345,13 @@
                         "type": "number",
                         "minimum": 0,
                         "maximum": 100,
-                        "default": 0
+                        "default": 0,
+                        "nullable": true
                     },
                     "active": {
                         "type": "boolean",
-                        "default": true
+                        "default": true,
+                        "nullable": true
                     },
                     "created_at": {
                         "type": "string",
@@ -26168,7 +26359,8 @@
                     },
                     "updated_at": {
                         "type": "string",
-                        "format": "date-time"
+                        "format": "date-time",
+                        "nullable": true
                     },
                     "alternative_id": {
                         "$ref": "#/components/schemas/AlternativeIdentifier"
@@ -26213,7 +26405,8 @@
                         "pattern": "^[A-Z]{2}$",
                         "minLength": 2,
                         "maxLength": 2,
-                        "description": "ISO 3166-1 alpha-2 code of the country that issued the document. Required except for\n`PASSPORT` and `NOT_REGISTERED`, where omitting it means `ES`. Constrains the allowed\n`type` values; see the VeriFactu rules on the parent schema.\n"
+                        "description": "ISO 3166-1 alpha-2 code of the country that issued the document. Required except for\n`PASSPORT` and `NOT_REGISTERED`, where omitting it means `ES`. Constrains the allowed\n`type` values; see the VeriFactu rules on the parent schema.\n",
+                        "nullable": true
                     }
                 }
             },
@@ -26737,7 +26930,8 @@
                     "description": {
                         "type": "string",
                         "description": "Detailed product/service description (optional)",
-                        "example": "Specialized technical consulting services in web development"
+                        "example": "Specialized technical consulting services in web development",
+                        "nullable": true
                     },
                     "category": {
                         "$ref": "#/components/schemas/ProductCategory"
@@ -26747,13 +26941,15 @@
                         "minimum": 0,
                         "multipleOf": 0.0001,
                         "description": "Suggested default price (optional)",
-                        "example": 85.5
+                        "example": 85.5,
+                        "nullable": true
                     },
                     "unit": {
                         "type": "string",
                         "maxLength": 50,
                         "description": "Unit of measure (optional)",
-                        "example": "hours"
+                        "example": "hours",
+                        "nullable": true
                     },
                     "main_tax": {
                         "$ref": "#/components/schemas/TaxInfo"
@@ -26764,7 +26960,8 @@
                         "maximum": 100,
                         "multipleOf": 0.01,
                         "description": "Equivalence surcharge percentage (optional)",
-                        "example": 5.2
+                        "example": 5.2,
+                        "nullable": true
                     },
                     "irpf_rate": {
                         "type": "number",
@@ -26772,7 +26969,8 @@
                         "maximum": 100,
                         "multipleOf": 0.01,
                         "description": "IRPF withholding percentage (optional)",
-                        "example": 15
+                        "example": 15,
+                        "nullable": true
                     },
                     "active": {
                         "type": "boolean",
@@ -27127,7 +27325,11 @@
                         ]
                     },
                     "default_exemption_reason": {
-                        "$ref": "#/components/schemas/ExemptionReason",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ExemptionReason"
+                            }
+                        ],
                         "nullable": true
                     },
                     "default_exemption_reason_text": {
@@ -27144,7 +27346,8 @@
                     "default_equivalence_surcharge": {
                         "type": "number",
                         "example": 5.2,
-                        "description": "Default equivalence surcharge, as the configuration holds it. It is what is stored,\nnot what a request accepts (see `EquivalenceSurchargePercentage`): a configuration\nsaved with the `0.625` surcharge of VAT at 5 %, before it was corrected to 0.62,\nis returned as `0.625` until it is updated.\n\n**Business rule**: REQUIRED if `apply_equivalence_surcharge` is `true`.\n"
+                        "description": "Default equivalence surcharge, as the configuration holds it. It is what is stored,\nnot what a request accepts (see `EquivalenceSurchargePercentage`): a configuration\nsaved with the `0.625` surcharge of VAT at 5 %, before it was corrected to 0.62,\nis returned as `0.625` until it is updated.\n\n**Business rule**: REQUIRED if `apply_equivalence_surcharge` is `true`.\n",
+                        "nullable": true
                     },
                     "apply_irpf": {
                         "type": "boolean",
@@ -27154,12 +27357,14 @@
                     "default_irpf_rate": {
                         "type": "number",
                         "example": 15,
-                        "description": "Default IRPF for new invoices, as the configuration holds it. It is what is stored,\nnot what a request accepts (see `IrpfPercentage`): a configuration saved with a rate\nthe table no longer has is returned as it is until it is updated.\n\n**Business rule**: REQUIRED if `apply_irpf` is `true` and `irpf_exempt` is `false`.\n"
+                        "description": "Default IRPF for new invoices, as the configuration holds it. It is what is stored,\nnot what a request accepts (see `IrpfPercentage`): a configuration saved with a rate\nthe table no longer has is returned as it is until it is updated.\n\n**Business rule**: REQUIRED if `apply_irpf` is `true` and `irpf_exempt` is `false`.\n",
+                        "nullable": true
                     },
                     "irpf_exempt": {
                         "type": "boolean",
                         "default": false,
-                        "description": "Whether the freelancer is exempt from IRPF withholding (e.g., business start).\n\n**Note**: When `true`, any provided `default_irpf_rate` is saved but not applied to invoices.\nThis allows pre-configuring the rate for when the exemption ends.\n"
+                        "description": "Whether the freelancer is exempt from IRPF withholding (e.g., business start).\n\n**Note**: When `true`, any provided `default_irpf_rate` is saved but not applied to invoices.\nThis allows pre-configuring the rate for when the exemption ends.\n",
+                        "nullable": true
                     },
                     "default_payment_method": {
                         "allOf": [
@@ -27168,7 +27373,8 @@
                             }
                         ],
                         "default": "BANK_TRANSFER",
-                        "description": "Default payment method for new invoices.\nIf NONE is selected, no payment information will be shown on the invoice.\n"
+                        "description": "Default payment method for new invoices.\nIf NONE is selected, no payment information will be shown on the invoice.\n",
+                        "nullable": true
                     },
                     "payment_term_days": {
                         "type": "integer",
@@ -27191,7 +27397,8 @@
                             }
                         ],
                         "readOnly": true,
-                        "description": "The withholding (IRPF) rates this company can put on its invoices, deduced from its\nNIF, and the one suggested by default. Read-only: it is ignored if sent.\n\nUse it to build the IRPF picker of this company instead of the whole list of\n`GET /v1/tax-types`, which is the same for everyone.\n"
+                        "description": "The withholding (IRPF) rates this company can put on its invoices, deduced from its\nNIF, and the one suggested by default. Read-only: it is ignored if sent.\n\nUse it to build the IRPF picker of this company instead of the whole list of\n`GET /v1/tax-types`, which is the same for everyone.\n",
+                        "nullable": true
                     }
                 }
             },
@@ -27230,7 +27437,8 @@
                         "type": "string",
                         "maxLength": 1000,
                         "example": "Series for standard invoices",
-                        "description": "Optional series description"
+                        "description": "Optional series description",
+                        "nullable": true
                     },
                     "format": {
                         "$ref": "#/components/schemas/SeriesFormat"
@@ -27245,7 +27453,8 @@
                         "maximum": 999999,
                         "default": 1,
                         "example": 1,
-                        "description": "Initial number configured for this series counter: the number the series starts from.\nIt applies only to the first period in which the series issues an invoice: with\n`counter_reset: ANNUAL` or `MONTHLY`, every later year or month starts at 1. With\n`NEVER` there is a single period, so numbering simply continues from it.\n"
+                        "description": "Initial number configured for this series counter: the number the series starts from.\nIt applies only to the first period in which the series issues an invoice: with\n`counter_reset: ANNUAL` or `MONTHLY`, every later year or month starts at 1. With\n`NEVER` there is a single period, so numbering simply continues from it.\n",
+                        "nullable": true
                     },
                     "active": {
                         "type": "boolean",
@@ -27260,23 +27469,27 @@
                     "numbering_locked": {
                         "type": "boolean",
                         "readOnly": true,
-                        "description": "`true` once this series has issued at least one invoice. From that point the\nfields that drive numbering (`code`, `format`, `counter_reset`, `initial_number`)\nare permanently locked and any attempt to change them is rejected — numbering can\nonly be adjusted **before** the first invoice of a series. Cosmetic fields\n(`name`, `description`) remain editable. To use a different numbering, create a\nnew series.\n"
+                        "description": "`true` once this series has issued at least one invoice. From that point the\nfields that drive numbering (`code`, `format`, `counter_reset`, `initial_number`)\nare permanently locked and any attempt to change them is rejected — numbering can\nonly be adjusted **before** the first invoice of a series. Cosmetic fields\n(`name`, `description`) remain editable. To use a different numbering, create a\nnew series.\n",
+                        "nullable": true
                     },
                     "created_at": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "Creation date"
+                        "description": "Creation date",
+                        "nullable": true
                     },
                     "next_number": {
                         "type": "integer",
                         "format": "int64",
                         "readOnly": true,
-                        "description": "Next invoice number that will be assigned for this series"
+                        "description": "Next invoice number that will be assigned for this series",
+                        "nullable": true
                     },
                     "updated_at": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "Last update date"
+                        "description": "Last update date",
+                        "nullable": true
                     }
                 }
             },
@@ -27623,7 +27836,11 @@
                         "description": "Default main tax configuration.\nIf provided, completely replaces the current configuration.\n\nIt travels together with `default_exemption_reason`: sending the tax without a\nreason clears the stored one (going back from 0% to 21% cannot leave an orphan\n\"art. 20 exempt\" behind), and sending only the reason applies it to the tax\nalready stored. Sending neither leaves the current declaration untouched.\n"
                     },
                     "default_exemption_reason": {
-                        "$ref": "#/components/schemas/ExemptionReason",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ExemptionReason"
+                            }
+                        ],
                         "nullable": true
                     },
                     "default_exemption_reason_text": {
@@ -27734,7 +27951,8 @@
                     "legal_name_verified": {
                         "type": "boolean",
                         "description": "Whether AEAT actually cross-checked the `legal_name` you sent.\n\n`true` only for an **individual** that was identified: AEAT matches NIF\nand name together there, so an identification is the check having\npassed.\n\nAlways `false` for a **legal entity** — its name is **not verified**.\nAEAT identifies a company by its CIF alone and returns the census name\nwithout looking at the one you sent, so `valid: true` says nothing about\nyour name. Comparing it against `legal_name` is up to you.\n\nAlso `false` whenever the census was not reached at all (`PENDING`,\n`ERROR`, or a syntactically invalid NIF).\n",
-                        "example": false
+                        "example": false,
+                        "nullable": true
                     },
                     "census_status": {
                         "allOf": [
@@ -27745,7 +27963,8 @@
                                 "description": "Census situation AEAT reported for this NIF. Absent when the census\nwas not reached (`PENDING`, `ERROR`, or a syntactically invalid NIF)\n— absent is not \"not registered\".\n"
                             }
                         ],
-                        "example": "IDENTIFIED"
+                        "example": "IDENTIFIED",
+                        "nullable": true
                     },
                     "message": {
                         "type": "string",
@@ -27858,7 +28077,12 @@
                         "example": 21
                     },
                     "regime_key": {
-                        "$ref": "#/components/schemas/RegimeKey"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/RegimeKey"
+                            }
+                        ],
+                        "nullable": true
                     }
                 },
                 "description": "Complete tax information with cross-validations:\n- IVA: real rates 4, 10, 21, and the temporary 2, 5 and 7.5 (see below for 0)\n- IGIC: 0, 3, 5, 7, 9.5, 15, 20 — here 0 is the real \"Tipo Cero\"\n- IPSI: real rates 0.5, 1, 2, 4, 8, 10 (see below for 0)\n- OTHER: any percentage between 0 and 100\n\n**0 % under IVA and IPSI is not a rate, it is the exemption sentinel.** It is accepted\non a line, but only together with an `exemption_reason` (exempt or non-subject\noperation); on its own it says nothing and the line is rejected. That is why\n`GET /v1/tax-types` publishes the IVA rates without 0: the legitimate way\nto a 0 % IVA line is through an exemption reason, which the same response also\npublishes. IGIC is different — its 0 % is a real legal rate (basic necessities) and\nneeds no reason.\n\n**IVA 5 %** (the temporary rate applied from 2022 to electricity, gas and certain\nfoodstuffs) is no longer in force for new operations. AEAT only accepts it on operations\ndated from 2022-07-01 to 2024-09-30: send the `operation_date` of that period, because\nwithout one the issue date decides and a line at 5 % is rejected with\n`422 VAT_RATE_NOT_ACCEPTED_ON_DATE`. Its equivalence surcharge pair is 0.5 up to 2022-12-31\nand 0.62 from 2023-01-01. **IVA 2 % and 7.5 %** (temporary rates of the last quarter of 2024)\nare accepted only on operations dated from 2024-10-01 to 2024-12-31, with surcharges 0.26\nand 1.\n\nException: when regime_key = \"17\" (OSS/IOSS) the invoice applies the destination\ncountry VAT instead of the Spanish one, so any percentage in the EU range [0, 27]\nis accepted regardless of the tax type set — including 0 without an exemption reason.\n",
@@ -27968,7 +28192,8 @@
                                 "$ref": "#/components/schemas/CustomerEcho"
                             }
                         ],
-                        "description": "**Echo of what was submitted**, parsed and validated. Absent when the row could not be\nparsed at all.\n\nIt is deliberately NOT a `Customer`: the same operation also runs as a rehearsal\n(`dry_run=true`), where nothing is written and there is no `id` nor `created_at` to\nreport. Typing it as `Customer` — which requires both — made the contract impossible to\nhonour in one of its two modes, and it was in fact honoured in neither. **The identifier\nof what was created travels in `customer_id`**, at row level, and only when the row\nactually created something.\n"
+                        "description": "**Echo of what was submitted**, parsed and validated. Absent when the row could not be\nparsed at all.\n\nIt is deliberately NOT a `Customer`: the same operation also runs as a rehearsal\n(`dry_run=true`), where nothing is written and there is no `id` nor `created_at` to\nreport. Typing it as `Customer` — which requires both — made the contract impossible to\nhonour in one of its two modes, and it was in fact honoured in neither. **The identifier\nof what was created travels in `customer_id`**, at row level, and only when the row\nactually created something.\n",
+                        "nullable": true
                     },
                     "customer_id": {
                         "allOf": [
@@ -27976,7 +28201,8 @@
                                 "$ref": "#/components/schemas/UUID"
                             }
                         ],
-                        "description": "Identifier of the customer this row created. **Present only when the row actually\ncreated something**: absent in a rehearsal (`dry_run=true`), absent on a row that was\nrejected, and absent on a batch that was rejected as a whole.\n\nAfter a `201`, every row carries it, and\n`GET /v1/companies/{company_id}/customers/{customer_id}` answers `200`.\n"
+                        "description": "Identifier of the customer this row created. **Present only when the row actually\ncreated something**: absent in a rehearsal (`dry_run=true`), absent on a row that was\nrejected, and absent on a batch that was rejected as a whole.\n\nAfter a `201`, every row carries it, and\n`GET /v1/companies/{company_id}/customers/{customer_id}` answers `200`.\n",
+                        "nullable": true
                     },
                     "status": {
                         "type": "string",
@@ -28124,12 +28350,14 @@
                     "importable": {
                         "type": "integer",
                         "description": "Total customers that can be imported (valid + with_warnings)",
-                        "example": 8
+                        "example": 8,
+                        "nullable": true
                     },
                     "not_importable": {
                         "type": "integer",
                         "description": "Total customers that CANNOT be imported (with_errors + duplicates + invalid_nifs)",
-                        "example": 2
+                        "example": 2,
+                        "nullable": true
                     }
                 }
             },
@@ -28138,10 +28366,12 @@
                 "properties": {
                     "id": {
                         "type": "string",
-                        "format": "uuid"
+                        "format": "uuid",
+                        "nullable": true
                     },
                     "name": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     },
                     "frequency": {
                         "type": "string",
@@ -28150,15 +28380,18 @@
                             "QUARTERLY",
                             "YEARLY"
                         ],
-                        "description": "Billing cadence of the template: `MONTHLY` every month, `QUARTERLY` every 3 months, `YEARLY` every 12 months. The day it falls on is\n`day_of_month`, the same anchor for all three. Set it when you create the template;\na template created without it is `MONTHLY`.\n\nThe cadence governs the step from the first invoice onwards, not where that first one\nlands: the first occurrence is the first `day_of_month` on or after `start_date`, found\none month at a time. A yearly template starting 15 February with `day_of_month` 10 first\ninvoices on 10 March, then every 10 March after that.\n"
+                        "description": "Billing cadence of the template: `MONTHLY` every month, `QUARTERLY` every 3 months, `YEARLY` every 12 months. The day it falls on is\n`day_of_month`, the same anchor for all three. Set it when you create the template;\na template created without it is `MONTHLY`.\n\nThe cadence governs the step from the first invoice onwards, not where that first one\nlands: the first occurrence is the first `day_of_month` on or after `start_date`, found\none month at a time. A yearly template starting 15 February with `day_of_month` 10 first\ninvoices on 10 March, then every 10 March after that.\n",
+                        "nullable": true
                     },
                     "day_of_month": {
                         "type": "integer",
-                        "description": "Day of the month the invoices are issued, as it was requested: this is the anchor of\nthe schedule, not the day the last invoice happened to land on. A month that does not\nhave that day falls back to its last day, so `next_generation` can show a different\nday than this one — a template on `31` generates on 28 February (29 in a leap year)\nand on 30 April.\n\nThe adjustment never sticks and the schedule does not drift: every generation is\nrecalculated from this value, never from the date it was adjusted to\n(31 Jan → 28 Feb → 31 Mar).\n"
+                        "description": "Day of the month the invoices are issued, as it was requested: this is the anchor of\nthe schedule, not the day the last invoice happened to land on. A month that does not\nhave that day falls back to its last day, so `next_generation` can show a different\nday than this one — a template on `31` generates on 28 February (29 in a leap year)\nand on 30 April.\n\nThe adjustment never sticks and the schedule does not drift: every generation is\nrecalculated from this value, never from the date it was adjusted to\n(31 Jan → 28 Feb → 31 Mar).\n",
+                        "nullable": true
                     },
                     "start_date": {
                         "type": "string",
-                        "format": "date"
+                        "format": "date",
+                        "nullable": true
                     },
                     "end_date": {
                         "type": "string",
@@ -28174,19 +28407,22 @@
                     "draft_in_advance": {
                         "type": "boolean",
                         "description": "Whether this template prepares a draft for review before emitting. The review window is\nfixed at 5 days: `true` creates the draft 5 days ahead, `false` goes straight to the\nemission. Either way the invoice is emitted on the scheduled `day_of_month` — what\nchanges is only whether there is a draft to look at first.\n",
-                        "example": true
+                        "example": true,
+                        "nullable": true
                     },
                     "status": {
                         "allOf": [
                             {
                                 "$ref": "#/components/schemas/RecurringInvoiceStatus"
                             }
-                        ]
+                        ],
+                        "nullable": true
                     },
                     "is_failing": {
                         "type": "boolean",
                         "description": "Whether this template is failing right now — from the FIRST failed unattended run, not\nthe third. The warning email only goes out on every 3rd consecutive retryable failure,\nso `next_generation` not moving used to be the only clue before that; this field\nsurfaces the same signal from the very first one.\n\n`true` when either an unattended run has failed at least once and the retry streak has\nnot been cleared by a successful generation yet (even while `status` is still `ACTIVE`,\nbefore any email fires), or `status` is `PAUSED` with `pause.reason =\nGENERATION_FAILURE`. Derived on every read from data already stored — it is not a new\ncolumn and nothing else changes because of it.\n",
-                        "example": false
+                        "example": false,
+                        "nullable": true
                     },
                     "pause": {
                         "$ref": "#/components/schemas/RecurringInvoicePause"
@@ -28196,13 +28432,20 @@
                     },
                     "series_id": {
                         "type": "string",
-                        "format": "uuid"
+                        "format": "uuid",
+                        "nullable": true
                     },
                     "series_code": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     },
                     "invoice_type": {
-                        "$ref": "#/components/schemas/RecurringInvoiceType"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/RecurringInvoiceType"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "customer_id": {
                         "type": "string",
@@ -28226,13 +28469,15 @@
                             {
                                 "description": "Alternative identifier of the recipient (NIF-IVA, passport, etc.), same shape as\nthe customer's own `alternative_id`. Mutually exclusive with `recipient_nif`:\n`null` when the recipient carries a Spanish `recipient_nif` instead, or when there\nis no recipient identified at all.\n"
                             }
-                        ]
+                        ],
+                        "nullable": true
                     },
                     "lines": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/InvoiceLineTemplateResponse"
-                        }
+                        },
+                        "nullable": true
                     },
                     "amount": {
                         "type": "number",
@@ -28264,13 +28509,15 @@
                         "nullable": true
                     },
                     "send_automatically": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "email_configuration": {
                         "$ref": "#/components/schemas/RecurringEmailConfigResponse"
                     },
                     "generated_invoices": {
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "max_invoices": {
                         "type": "integer",
@@ -28297,11 +28544,13 @@
                     },
                     "created_at": {
                         "type": "string",
-                        "format": "date-time"
+                        "format": "date-time",
+                        "nullable": true
                     },
                     "updated_at": {
                         "type": "string",
-                        "format": "date-time"
+                        "format": "date-time",
+                        "nullable": true
                     }
                 }
             },
@@ -28310,16 +28559,20 @@
                 "properties": {
                     "id": {
                         "type": "string",
-                        "format": "uuid"
+                        "format": "uuid",
+                        "nullable": true
                     },
                     "order": {
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "description": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     },
                     "quantity": {
-                        "type": "number"
+                        "type": "number",
+                        "nullable": true
                     },
                     "unit": {
                         "type": "string",
@@ -28327,33 +28580,44 @@
                     },
                     "unit_price": {
                         "type": "number",
-                        "description": "Unit price of the template line. In both total-declared modes\n(`pricing_mode` other than `UNIT_PRICE`) this value is **derived and\ninformational** (`total / quantity`, 4 decimals): re-multiplying it does not\nreproduce the declared total on large quantities.\n"
+                        "description": "Unit price of the template line. In both total-declared modes\n(`pricing_mode` other than `UNIT_PRICE`) this value is **derived and\ninformational** (`total / quantity`, 4 decimals): re-multiplying it does not\nreproduce the declared total on large quantities.\n",
+                        "nullable": true
                     },
                     "pricing_mode": {
-                        "$ref": "#/components/schemas/PricingMode"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/PricingMode"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "total_excluding_tax": {
                         "type": "number",
                         "example": 1,
-                        "description": "Declared line total excluding taxes. Only present on lines with\n`pricing_mode = TOTAL_EXCLUDING_TAX`. It never includes taxes nor subtracts\nIRPF withholding.\n"
+                        "description": "Declared line total excluding taxes. Only present on lines with\n`pricing_mode = TOTAL_EXCLUDING_TAX`. It never includes taxes nor subtracts\nIRPF withholding.\n",
+                        "nullable": true
                     },
                     "total_including_tax": {
                         "type": "number",
                         "example": 100,
-                        "description": "Declared line total including taxes (taxable base + VAT + equivalence\nsurcharge; IRPF withholding is never subtracted). Only present on lines with\n`pricing_mode = TOTAL_INCLUDING_TAX`. Every invoice this template generates\nreproduces it exactly.\n"
+                        "description": "Declared line total including taxes (taxable base + VAT + equivalence\nsurcharge; IRPF withholding is never subtracted). Only present on lines with\n`pricing_mode = TOTAL_INCLUDING_TAX`. Every invoice this template generates\nreproduces it exactly.\n",
+                        "nullable": true
                     },
                     "discount_percentage": {
                         "type": "number",
                         "nullable": true
                     },
                     "tax_type": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     },
                     "vat_rate": {
-                        "type": "number"
+                        "type": "number",
+                        "nullable": true
                     },
                     "regime_key": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     },
                     "equivalence_surcharge_rate": {
                         "type": "number",
@@ -28364,7 +28628,11 @@
                         "nullable": true
                     },
                     "exemption_reason": {
-                        "$ref": "#/components/schemas/ExemptionReason",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ExemptionReason"
+                            }
+                        ],
                         "nullable": true
                     },
                     "exemption_reason_text": {
@@ -28383,13 +28651,15 @@
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "nullable": true
                     },
                     "cc": {
                         "type": "array",
                         "items": {
                             "type": "string"
-                        }
+                        },
+                        "nullable": true
                     },
                     "subject": {
                         "type": "string",
@@ -28759,7 +29029,11 @@
                         "nullable": true
                     },
                     "exemption_reason": {
-                        "$ref": "#/components/schemas/ExemptionReason",
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/ExemptionReason"
+                            }
+                        ],
                         "nullable": true
                     },
                     "exemption_reason_text": {
@@ -28801,10 +29075,16 @@
                 "properties": {
                     "id": {
                         "type": "string",
-                        "format": "uuid"
+                        "format": "uuid",
+                        "nullable": true
                     },
                     "type": {
-                        "$ref": "#/components/schemas/RecurringInvoiceHistoryEntryType"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/RecurringInvoiceHistoryEntryType"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "invoice_id": {
                         "type": "string",
@@ -28839,11 +29119,13 @@
                     },
                     "generated_at": {
                         "type": "string",
-                        "format": "date-time"
+                        "format": "date-time",
+                        "nullable": true
                     },
                     "scheduled_date": {
                         "type": "string",
-                        "format": "date"
+                        "format": "date",
+                        "nullable": true
                     },
                     "invoice_number": {
                         "type": "string",
@@ -29127,7 +29409,8 @@
                     "id": {
                         "type": "string",
                         "format": "uuid",
-                        "description": "Unique company identifier."
+                        "description": "Unique company identifier.",
+                        "nullable": true
                     },
                     "access_level": {
                         "allOf": [
@@ -29135,19 +29418,23 @@
                                 "$ref": "#/components/schemas/AccessLevel"
                             }
                         ],
-                        "description": "How much access the signed-in person has to this company, so a dashboard can label it (\"read only\") and hide write actions instead of discovering the answer through a `403`. Read-only and derived from who is asking — never sent.\n**Only present when authenticating with a user session.** With an API key the field is absent: what a key may do is set by its own scopes, which are per resource (`invoices:write`, `customers:read`, …) and cannot be reduced to one of three levels. Absent therefore means \"does not apply here\", never \"no access\"."
+                        "description": "How much access the signed-in person has to this company, so a dashboard can label it (\"read only\") and hide write actions instead of discovering the answer through a `403`. Read-only and derived from who is asking — never sent.\n**Only present when authenticating with a user session.** With an API key the field is absent: what a key may do is set by its own scopes, which are per resource (`invoices:write`, `customers:read`, …) and cannot be reduced to one of three levels. Absent therefore means \"does not apply here\", never \"no access\".",
+                        "nullable": true
                     },
                     "nif": {
                         "type": "string",
-                        "description": "Spanish Tax ID (NIF/CIF). Immutable once set."
+                        "description": "Spanish Tax ID (NIF/CIF). Immutable once set.",
+                        "nullable": true
                     },
                     "legal_name": {
                         "type": "string",
-                        "description": "Legal/fiscal name of the company. Immutable once set.\n\nIt is the name that was sent when the NIF was registered, not one AEAT\nconfirmed: for a legal entity the census identifies the CIF and the name is\n**not verified**. Validate a NIF (`POST /v1/nif/validate`) to read the\nbusiness name the census actually holds.\n"
+                        "description": "Legal/fiscal name of the company. Immutable once set.\n\nIt is the name that was sent when the NIF was registered, not one AEAT\nconfirmed: for a legal entity the census identifies the CIF and the name is\n**not verified**. Validate a NIF (`POST /v1/nif/validate`) to read the\nbusiness name the census actually holds.\n",
+                        "nullable": true
                     },
                     "trade_name": {
                         "type": "string",
-                        "description": "Commercial/trade name shown in the UI and on invoices. Editable. Never empty: when no trade name has been set, it carries `legal_name`, so `trade_name == legal_name` means \"no trade name of its own\", not that one was written."
+                        "description": "Commercial/trade name shown in the UI and on invoices. Editable. Never empty: when no trade name has been set, it carries `legal_name`, so `trade_name == legal_name` means \"no trade name of its own\", not that one was written.",
+                        "nullable": true
                     },
                     "entity_type": {
                         "allOf": [
@@ -29155,11 +29442,13 @@
                                 "$ref": "#/components/schemas/EntityType"
                             }
                         ],
-                        "description": "Self-employed individual or legal entity. Immutable once set."
+                        "description": "Self-employed individual or legal entity. Immutable once set.",
+                        "nullable": true
                     },
                     "is_primary": {
                         "type": "boolean",
-                        "description": "True for the account's primary company (the owner's own NIF)."
+                        "description": "True for the account's primary company (the owner's own NIF).",
+                        "nullable": true
                     },
                     "verifactu_status": {
                         "type": "string",
@@ -29169,7 +29458,8 @@
                             "ACTIVE",
                             "ERROR"
                         ],
-                        "description": "State of the AEAT representation of this NIF, which Live submission to VeriFactu\nrequires. Part of the AEAT-emission axis — independent of `environment`.\n\n- `NOT_CONFIGURED`: no representation document, or the last one was cancelled.\n- `PENDING`: the document is generated and waits to be signed and submitted.\n- `ACTIVE`: the signed representation is in force.\n- `ERROR`: reserved; not currently returned.\n"
+                        "description": "State of the AEAT representation of this NIF, which Live submission to VeriFactu\nrequires. Part of the AEAT-emission axis — independent of `environment`.\n\n- `NOT_CONFIGURED`: no representation document, or the last one was cancelled.\n- `PENDING`: the document is generated and waits to be signed and submitted.\n- `ACTIVE`: the signed representation is in force.\n- `ERROR`: reserved; not currently returned.\n",
+                        "nullable": true
                     },
                     "environment": {
                         "allOf": [
@@ -29178,15 +29468,18 @@
                             }
                         ],
                         "deprecated": true,
-                        "description": "**Deprecated** — use `in_test` / `in_prod` instead.\n\nA company is a single env-agnostic record; what is per-mode is its\n*activation*, and a company can be activated in Test, in Live, in both, or\nin neither. This single scalar cannot express that: it collapses the pair to\none value, so it misreports any company activated in both modes. It is kept\nfor backwards compatibility and will be removed in a future version.\n\n**How the collapse is decided** — the same rule wherever this field appears\n(the single company, the account's list of companies, any of their aliases):\nthe environment of the credential you are calling with, *if* the company is\nactivated there; otherwise the environment it is really activated in. A\ncompany activated only in Test therefore reads `TEST` even to a live key: the\nscalar is never re-labelled to the environment you are looking from.\n\nThis is the data/billing axis, NOT a measure of AEAT capability.\n"
+                        "description": "**Deprecated** — use `in_test` / `in_prod` instead.\n\nA company is a single env-agnostic record; what is per-mode is its\n*activation*, and a company can be activated in Test, in Live, in both, or\nin neither. This single scalar cannot express that: it collapses the pair to\none value, so it misreports any company activated in both modes. It is kept\nfor backwards compatibility and will be removed in a future version.\n\n**How the collapse is decided** — the same rule wherever this field appears\n(the single company, the account's list of companies, any of their aliases):\nthe environment of the credential you are calling with, *if* the company is\nactivated there; otherwise the environment it is really activated in. A\ncompany activated only in Test therefore reads `TEST` even to a live key: the\nscalar is never re-labelled to the environment you are looking from.\n\nThis is the data/billing axis, NOT a measure of AEAT capability.\n",
+                        "nullable": true
                     },
                     "in_prod": {
                         "type": "boolean",
-                        "description": "Whether this company is **activated in Live** (production), regardless\nof whether the AEAT representation is already signed. Derived from the real\nactivation fact — NOT from the stamped `environment` scalar — so it stays true\neven for a NIF registered in production but not yet signed. Drives the UI's\n\"already in production\" state (no spurious \"add NIF\" prompt when the\naccount switches to Live).\n"
+                        "description": "Whether this company is **activated in Live** (production), regardless\nof whether the AEAT representation is already signed. Derived from the real\nactivation fact — NOT from the stamped `environment` scalar — so it stays true\neven for a NIF registered in production but not yet signed. Drives the UI's\n\"already in production\" state (no spurious \"add NIF\" prompt when the\naccount switches to Live).\n",
+                        "nullable": true
                     },
                     "in_test": {
                         "type": "boolean",
-                        "description": "Whether this company is **activated in Test** (sandbox). Symmetric to\n`in_prod` and derived from the same activation fact: activation is independent\nper mode, so a company may be activated in Test only, in Live only, in both, or\nin neither. A company that is not activated in the mode you are working in is\nshown *switched off* in the dashboard (visible and labelled, but not selectable)\nrather than hidden.\n"
+                        "description": "Whether this company is **activated in Test** (sandbox). Symmetric to\n`in_prod` and derived from the same activation fact: activation is independent\nper mode, so a company may be activated in Test only, in Live only, in both, or\nin neither. A company that is not activated in the mode you are working in is\nshown *switched off* in the dashboard (visible and labelled, but not selectable)\nrather than hidden.\n",
+                        "nullable": true
                     },
                     "aeat_environment": {
                         "allOf": [
@@ -29204,7 +29497,8 @@
                                 "$ref": "#/components/schemas/AccountState"
                             }
                         ],
-                        "description": "Account-level lifecycle, identical for every company of the account. AEAT emission\nadditionally requires the per-NIF representation to be signed.\n"
+                        "description": "Account-level lifecycle, identical for every company of the account. AEAT emission\nadditionally requires the per-NIF representation to be signed.\n",
+                        "nullable": true
                     },
                     "address": {
                         "type": "object",
@@ -29213,39 +29507,48 @@
                         "properties": {
                             "street": {
                                 "type": "string",
-                                "description": "Street of the fiscal address."
+                                "description": "Street of the fiscal address.",
+                                "nullable": true
                             },
                             "number": {
                                 "type": "string",
-                                "description": "Street number."
+                                "description": "Street number.",
+                                "nullable": true
                             },
                             "floor": {
                                 "type": "string",
-                                "description": "Floor or level."
+                                "description": "Floor or level.",
+                                "nullable": true
                             },
                             "door": {
                                 "type": "string",
-                                "description": "Door or apartment."
+                                "description": "Door or apartment.",
+                                "nullable": true
                             },
                             "postal_code": {
                                 "type": "string",
-                                "description": "Postal code."
+                                "description": "Postal code.",
+                                "nullable": true
                             },
                             "city": {
                                 "type": "string",
-                                "description": "City or town."
+                                "description": "City or town.",
+                                "nullable": true
                             },
                             "province": {
                                 "type": "string",
-                                "description": "Province."
+                                "description": "Province.",
+                                "nullable": true
                             },
                             "country": {
                                 "type": "string",
-                                "description": "Country name."
+                                "description": "Country name.",
+                                "nullable": true
                             },
                             "country_code": {
                                 "type": "string",
-                                "description": "ISO 3166-1 alpha-2 country code."
+                                "description": "ISO 3166-1 alpha-2 country code.",
+                                "nullable": true
                             }
                         }
                     },
@@ -29390,7 +29693,8 @@
                     "created_at": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "When the company was created (ISO 8601)."
+                        "description": "When the company was created (ISO 8601).",
+                        "nullable": true
                     },
                     "readiness": {
                         "allOf": [
@@ -29417,7 +29721,8 @@
                                 "items": {
                                     "$ref": "#/components/schemas/InvoiceSeries"
                                 },
-                                "description": "Invoice series seeded by the activation this request performed, one per\ndocument type (ordinary, simplified, corrective) — the same shape as\n`GET /v1/companies/{company_id}/series`, so no second call is needed to confirm\nwhich series the company was born with (including any custom `numbering`\nthe request carried).\n\nAn empty array when the request did not activate any mode (`activate: false`\nseeds no series). On an env-additive activation (same NIF, other environment)\nit reflects the series of the environment just activated.\n"
+                                "description": "Invoice series seeded by the activation this request performed, one per\ndocument type (ordinary, simplified, corrective) — the same shape as\n`GET /v1/companies/{company_id}/series`, so no second call is needed to confirm\nwhich series the company was born with (including any custom `numbering`\nthe request carried).\n\nAn empty array when the request did not activate any mode (`activate: false`\nseeds no series). On an env-additive activation (same NIF, other environment)\nit reflects the series of the environment just activated.\n",
+                                "nullable": true
                             }
                         }
                     }
@@ -29427,7 +29732,8 @@
                 "type": "object",
                 "properties": {
                     "success": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "data": {
                         "$ref": "#/components/schemas/CompanyCreatedData"
@@ -29435,13 +29741,17 @@
                     "meta": {
                         "$ref": "#/components/schemas/ResponseMeta"
                     }
-                }
+                },
+                "required": [
+                    "data"
+                ]
             },
             "CompanyResponse": {
                 "type": "object",
                 "properties": {
                     "success": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "data": {
                         "$ref": "#/components/schemas/CompanyData"
@@ -29449,13 +29759,17 @@
                     "meta": {
                         "$ref": "#/components/schemas/ResponseMeta"
                     }
-                }
+                },
+                "required": [
+                    "data"
+                ]
             },
             "ListCompanies200Response": {
                 "type": "object",
                 "properties": {
                     "success": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "data": {
                         "type": "object",
@@ -29478,58 +29792,74 @@
                     "meta": {
                         "$ref": "#/components/schemas/ResponseMeta"
                     }
-                }
+                },
+                "required": [
+                    "data"
+                ]
             },
             "RepresentationActionResponse": {
                 "type": "object",
                 "properties": {
                     "success": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "data": {
                         "type": "object",
                         "properties": {
                             "status": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                             },
                             "message": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                             }
                         }
                     },
                     "meta": {
                         "$ref": "#/components/schemas/ResponseMeta"
                     }
-                }
+                },
+                "required": [
+                    "data"
+                ]
             },
             "RepresentationDownloadResponse": {
                 "type": "object",
                 "properties": {
                     "success": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "data": {
                         "type": "object",
                         "properties": {
                             "download_url": {
                                 "type": "string",
-                                "format": "uri"
+                                "format": "uri",
+                                "nullable": true
                             },
                             "expires_in_seconds": {
-                                "type": "integer"
+                                "type": "integer",
+                                "nullable": true
                             }
                         }
                     },
                     "meta": {
                         "$ref": "#/components/schemas/ResponseMeta"
                     }
-                }
+                },
+                "required": [
+                    "data"
+                ]
             },
             "RepresentationStatusResponse": {
                 "type": "object",
                 "properties": {
                     "success": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "data": {
                         "type": "object",
@@ -29544,21 +29874,27 @@
                                     "ERROR",
                                     "CANCELLED"
                                 ],
-                                "description": "Stage of the AEAT representation of the company.\n\n- `NOT_STARTED`: no representation document has been generated yet.\n- `PDF_GENERATED`: the document is generated and waits for a digital signature.\n- `SUBMITTED`: returned only by the submit operation, as its acknowledgement; this\n  read never returns it.\n- `ACTIVE`: the signed document was accepted and the representation is in force,\n  so invoices of this NIF can be submitted to the AEAT in Live.\n- `ERROR`: reserved; not currently returned.\n- `CANCELLED`: the representation was cancelled. Invoices of this NIF are not\n  submitted to the AEAT in Live until a new signed document is accepted.\n"
+                                "description": "Stage of the AEAT representation of the company.\n\n- `NOT_STARTED`: no representation document has been generated yet.\n- `PDF_GENERATED`: the document is generated and waits for a digital signature.\n- `SUBMITTED`: returned only by the submit operation, as its acknowledgement; this\n  read never returns it.\n- `ACTIVE`: the signed document was accepted and the representation is in force,\n  so invoices of this NIF can be submitted to the AEAT in Live.\n- `ERROR`: reserved; not currently returned.\n- `CANCELLED`: the representation was cancelled. Invoices of this NIF are not\n  submitted to the AEAT in Live until a new signed document is accepted.\n",
+                                "nullable": true
                             },
                             "message": {
-                                "type": "string"
+                                "type": "string",
+                                "nullable": true
                             },
                             "updated_at": {
                                 "type": "string",
-                                "format": "date-time"
+                                "format": "date-time",
+                                "nullable": true
                             }
                         }
                     },
                     "meta": {
                         "$ref": "#/components/schemas/ResponseMeta"
                     }
-                }
+                },
+                "required": [
+                    "data"
+                ]
             },
             "CompanyLogo": {
                 "type": "object",
@@ -29679,7 +30015,8 @@
                 "type": "object",
                 "properties": {
                     "success": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "data": {
                         "type": "object",
@@ -29697,7 +30034,10 @@
                     "meta": {
                         "$ref": "#/components/schemas/ResponseMeta"
                     }
-                }
+                },
+                "required": [
+                    "data"
+                ]
             },
             "CompanyPaymentConnection": {
                 "type": "object",
@@ -29800,7 +30140,8 @@
                         "type": "number",
                         "format": "double",
                         "description": "Amount in EUR at or above which auto-invoicing must issue an ordinary invoice, with the\nrecipient's full fiscal data, instead of a simplified one.\n",
-                        "example": 400
+                        "example": 400,
+                        "nullable": true
                     },
                     "filter_config": {
                         "$ref": "#/components/schemas/CompanyPaymentConnectionFilters"
@@ -29828,7 +30169,8 @@
                 "type": "object",
                 "properties": {
                     "success": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "data": {
                         "$ref": "#/components/schemas/CompanyPaymentConnection"
@@ -29836,7 +30178,10 @@
                     "meta": {
                         "$ref": "#/components/schemas/ResponseMeta"
                     }
-                }
+                },
+                "required": [
+                    "data"
+                ]
             },
             "UpdateCompanyPaymentConnectionRequest": {
                 "type": "object",
@@ -30098,7 +30443,8 @@
                 "type": "object",
                 "properties": {
                     "success": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "data": {
                         "type": "object",
@@ -30123,13 +30469,17 @@
                     "meta": {
                         "$ref": "#/components/schemas/ResponseMeta"
                     }
-                }
+                },
+                "required": [
+                    "data"
+                ]
             },
             "ManagedPaymentEventResponse": {
                 "type": "object",
                 "properties": {
                     "success": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "data": {
                         "$ref": "#/components/schemas/ManagedPaymentEvent"
@@ -30137,7 +30487,10 @@
                     "meta": {
                         "$ref": "#/components/schemas/ResponseMeta"
                     }
-                }
+                },
+                "required": [
+                    "data"
+                ]
             },
             "RetryManagedPaymentEventResponse": {
                 "deprecated": true,
@@ -30179,7 +30532,8 @@
                 "type": "object",
                 "properties": {
                     "success": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "data": {
                         "type": "object",
@@ -30197,7 +30551,10 @@
                     "meta": {
                         "$ref": "#/components/schemas/ResponseMeta"
                     }
-                }
+                },
+                "required": [
+                    "data"
+                ]
             },
             "EmailDeliveryStatus": {
                 "type": "string",
@@ -30243,10 +30600,12 @@
                         "items": {
                             "type": "string"
                         },
-                        "description": "Carbon-copy addresses (CC)"
+                        "description": "Carbon-copy addresses (CC)",
+                        "nullable": true
                     },
                     "subject": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     },
                     "related_entity_type": {
                         "type": "string",
@@ -30266,7 +30625,8 @@
                     "sent_at": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "Time the email was sent"
+                        "description": "Time the email was sent",
+                        "nullable": true
                     }
                 }
             },
@@ -30335,10 +30695,12 @@
                         "items": {
                             "type": "string"
                         },
-                        "description": "Carbon-copy addresses (CC)"
+                        "description": "Carbon-copy addresses (CC)",
+                        "nullable": true
                     },
                     "subject": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     },
                     "related_entity_type": {
                         "type": "string",
@@ -30358,7 +30720,8 @@
                     "sent_at": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "Time the email was sent"
+                        "description": "Time the email was sent",
+                        "nullable": true
                     },
                     "body_available": {
                         "type": "boolean",
@@ -30379,14 +30742,16 @@
                         "description": "Email attachments (e.g. the invoice PDF). In invoice emails the actual\ncontent goes here, not in the body.\n",
                         "items": {
                             "$ref": "#/components/schemas/EmailAttachment"
-                        }
+                        },
+                        "nullable": true
                     },
                     "related_invoices": {
                         "type": "array",
                         "description": "Invoices included in a batch email (BULK_INVOICES). Each element links\nto its invoice. Absent/empty in single-entity emails.\n",
                         "items": {
                             "$ref": "#/components/schemas/RelatedInvoice"
-                        }
+                        },
+                        "nullable": true
                     }
                 }
             },
@@ -30405,11 +30770,13 @@
                     "content_type": {
                         "type": "string",
                         "description": "MIME type of the attachment",
-                        "example": "application/pdf"
+                        "example": "application/pdf",
+                        "nullable": true
                     },
                     "size": {
                         "type": "integer",
-                        "description": "Size in bytes, if known"
+                        "description": "Size in bytes, if known",
+                        "nullable": true
                     },
                     "download_url": {
                         "type": "string",
@@ -30474,12 +30841,18 @@
                         "example": 2
                     },
                     "last_status": {
-                        "$ref": "#/components/schemas/EmailDeliveryStatus"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/EmailDeliveryStatus"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "last_sent_at": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "Time of the last email sent for the entity"
+                        "description": "Time of the last email sent for the entity",
+                        "nullable": true
                     }
                 }
             },
@@ -30577,7 +30950,8 @@
                     "regime_key": {
                         "type": "string",
                         "example": "01",
-                        "description": "VeriFactu regime key of the rows grouped here. Rows are grouped by\n(tax type, rate, regime key), so an invoice mixing general-regime and OSS lines\nat the same rate yields TWO rows at `percentage: 21` that only this field tells\napart (`01` vs `17`). Index by `(tax_type, percentage, regime_key)`, never by\n`(tax_type, percentage)` alone.\n"
+                        "description": "VeriFactu regime key of the rows grouped here. Rows are grouped by\n(tax type, rate, regime key), so an invoice mixing general-regime and OSS lines\nat the same rate yields TWO rows at `percentage: 21` that only this field tells\napart (`01` vs `17`). Index by `(tax_type, percentage, regime_key)`, never by\n`(tax_type, percentage)` alone.\n",
+                        "nullable": true
                     }
                 },
                 "required": [
@@ -30682,7 +31056,8 @@
                     "customer_name": {
                         "type": "string",
                         "description": "Customer name",
-                        "example": "Empresa SL"
+                        "example": "Empresa SL",
+                        "nullable": true
                     },
                     "taxable_base": {
                         "type": "number",
@@ -30757,7 +31132,8 @@
                                 "taxable_base": 2000,
                                 "tax_amount": 140
                             }
-                        ]
+                        ],
+                        "nullable": true
                     },
                     "vat_breakdown_by_rate": {
                         "type": "object",
@@ -30769,7 +31145,8 @@
                         "description": "DEPRECATED: Use tax_breakdown instead.\n\nIndirect tax breakdown by rate (rate -> amount). It aggregates EVERY indirect tax\n(IVA, IGIC, IPSI and other rates) by percentage alone, so two different tax types at\nthe same rate collapse into a single entry and cannot be told apart. The rate key is\nalways rendered with three decimals (\"21.000\", \"0.000\").\n\n`tax_breakdown` is the replacement: it keeps `tax_type` and `percentage` separate.\n",
                         "example": {
                             "21.000": 3150
-                        }
+                        },
+                        "nullable": true
                     },
                     "surcharge_breakdown": {
                         "type": "array",
@@ -30783,13 +31160,15 @@
                                 "base": 1000,
                                 "amount": 52
                             }
-                        ]
+                        ],
+                        "nullable": true
                     },
                     "total_equivalence_surcharge": {
                         "type": "number",
                         "format": "double",
                         "description": "Total equivalence surcharge for the period. It is NOT part of `total_vat`: the surcharge\nis settled by the retailer, not by the issuer, and `total_vat` only carries the main\nindirect tax.\n",
-                        "example": 52
+                        "example": 52,
+                        "nullable": true
                     },
                     "total_irpf_withheld": {
                         "type": "number",
@@ -30833,7 +31212,8 @@
                         "items": {
                             "$ref": "#/components/schemas/InvoiceFiscalData"
                         },
-                        "description": "List of invoices included in the calculation"
+                        "description": "List of invoices included in the calculation",
+                        "nullable": true
                     },
                     "total_invoices": {
                         "type": "integer",
@@ -30905,7 +31285,8 @@
                             "companies:list"
                         ]
                     }
-                }
+                },
+                "nullable": true
             },
             "MyIdentity": {
                 "type": "object",
@@ -30950,7 +31331,8 @@
                             {
                                 "description": "Interface language of the person behind the credential. It is a preference of the person, not of a fiscal profile: the language of invoices and of e-mails are separate settings of each company."
                             }
-                        ]
+                        ],
+                        "nullable": true
                     },
                     "credential": {
                         "$ref": "#/components/schemas/MyCredential"
@@ -31054,16 +31436,20 @@
                 "properties": {
                     "id": {
                         "type": "string",
-                        "format": "uuid"
+                        "format": "uuid",
+                        "nullable": true
                     },
                     "name": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     },
                     "url": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     },
                     "type": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     }
                 }
             },
@@ -31093,10 +31479,12 @@
                         "items": {
                             "type": "string"
                         },
-                        "description": "Carbon-copy addresses (CC)"
+                        "description": "Carbon-copy addresses (CC)",
+                        "nullable": true
                     },
                     "subject": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     },
                     "status": {
                         "$ref": "#/components/schemas/EmailDeliveryStatus"
@@ -31105,7 +31493,8 @@
                         "type": "string",
                         "format": "date-time",
                         "description": "Moment the email provider ACCEPTED the message — not the moment it\nreached the mailbox. Later outcomes (delivered, bounced, opened) are\nreflected in `status` as the provider reports them.\n\nAbsent while there is no such moment: the history records decisions,\nand a `QUEUED` record has not been dispatched yet, a `REJECTED` one\nnever will be, and a `FAILED` one never got that far. Read `status`\nto tell those apart; do not read an absent `sent_at` as \"sent long\nago\". It is omitted, never sent as `null`.\n",
-                        "example": "2025-01-29T18:45:00Z"
+                        "example": "2025-01-29T18:45:00Z",
+                        "nullable": true
                     },
                     "external_message_id": {
                         "type": "string",
@@ -31142,7 +31531,8 @@
                         "description": "Translation key explaining a `REJECTED` outcome, deliberately generic. Null for the\nother statuses.\n",
                         "example": "error.email.envio_no_permitido"
                     }
-                }
+                },
+                "nullable": true
             },
             "InvoiceBase": {
                 "type": "object",
@@ -31196,7 +31586,8 @@
                         "type": "string",
                         "format": "date",
                         "description": "Payment due date (must be the same as or after `issue_date`)",
-                        "example": "2025-02-14"
+                        "example": "2025-02-14",
+                        "nullable": true
                     },
                     "valid_until": {
                         "type": "string",
@@ -31209,7 +31600,8 @@
                         "type": "string",
                         "format": "date",
                         "description": "Business date when the payment was received (e.g., the date on the bank statement).\nSet by the user when marking the invoice as paid. An invoice issued already paid gets its\n`issue_date`: one whose `total_to_pay` is 0, or one issued from a payment already\nconfirmed by a payment integration. Only present when status is PAID.\nContrast with `paid_at`, which is the system timestamp of when the status change was recorded.\n",
-                        "example": "2025-01-20"
+                        "example": "2025-01-20",
+                        "nullable": true
                     },
                     "sent_at": {
                         "type": "string",
@@ -31240,7 +31632,12 @@
                         "example": "2025-02-15"
                     },
                     "scheduled_action": {
-                        "$ref": "#/components/schemas/GenerationAction"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/GenerationAction"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "issuer": {
                         "$ref": "#/components/schemas/IssuerData"
@@ -31264,7 +31661,8 @@
                     "notes": {
                         "type": "string",
                         "maxLength": 1000,
-                        "description": "Additional observations or notes"
+                        "description": "Additional observations or notes",
+                        "nullable": true
                     },
                     "replaced_invoice_ids": {
                         "type": "array",
@@ -31272,15 +31670,22 @@
                             "type": "string",
                             "format": "uuid"
                         },
-                        "description": "Only on a full invoice issued in exchange for simplified invoices: the simplified\ninvoices it replaces, each now `VOIDED` with `void_cause` `EXCHANGED`. With VeriFactu,\nthe invoice is recorded as `F3` identifying them.\n"
+                        "description": "Only on a full invoice issued in exchange for simplified invoices: the simplified\ninvoices it replaces, each now `VOIDED` with `void_cause` `EXCHANGED`. With VeriFactu,\nthe invoice is recorded as `F3` identifying them.\n",
+                        "nullable": true
                     },
                     "void_cause": {
-                        "$ref": "#/components/schemas/VoidCause"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/VoidCause"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "void_reason": {
                         "type": "string",
                         "maxLength": 1000,
-                        "description": "Reason recorded when the invoice was voided (only for voided invoices)."
+                        "description": "Reason recorded when the invoice was voided (only for voided invoices).",
+                        "nullable": true
                     },
                     "voided_at": {
                         "type": "string",
@@ -31292,22 +31697,26 @@
                     "rectified_invoice_id": {
                         "type": "string",
                         "format": "uuid",
-                        "description": "UUID of the invoice being rectified (only for corrective invoices)"
+                        "description": "UUID of the invoice being rectified (only for corrective invoices)",
+                        "nullable": true
                     },
                     "source_proforma_id": {
                         "type": "string",
                         "format": "uuid",
-                        "description": "UUID of the source proforma this invoice was converted from\n(only for invoices created via `convert-to-invoice`).\n"
+                        "description": "UUID of the source proforma this invoice was converted from\n(only for invoices created via `convert-to-invoice`).\n",
+                        "nullable": true
                     },
                     "converted_invoice_id": {
                         "type": "string",
                         "format": "uuid",
-                        "description": "UUID of the live (non-deleted) invoice this proforma was converted into —\nthe inverse of `source_proforma_id`, derived at read time (not persisted).\nOnly present on the detail endpoint (`GET /v1/invoices/{invoice_id}`) for a proforma\nin `CONVERTED` status; never included in list rows.\n"
+                        "description": "UUID of the live (non-deleted) invoice this proforma was converted into —\nthe inverse of `source_proforma_id`, derived at read time (not persisted).\nOnly present on the detail endpoint (`GET /v1/invoices/{invoice_id}`) for a proforma\nin `CONVERTED` status; never included in list rows.\n",
+                        "nullable": true
                     },
                     "rectification_reason": {
                         "type": "string",
                         "maxLength": 500,
-                        "description": "Reason for rectification (only for corrective invoices)"
+                        "description": "Reason for rectification (only for corrective invoices)",
+                        "nullable": true
                     },
                     "recurring_invoice_id": {
                         "type": "string",
@@ -31321,10 +31730,20 @@
                         "description": "Name of the recurring invoice (denormalized for display)"
                     },
                     "rectification_type": {
-                        "$ref": "#/components/schemas/RectificationType"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/RectificationType"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "rectification_code": {
-                        "$ref": "#/components/schemas/VeriFactuRectificationCode"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/VeriFactuRectificationCode"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "external_ref": {
                         "type": "string",
@@ -31344,7 +31763,8 @@
                             "charge_id": "ch_3NqFGb2eZvKYlo2C1234CDEF",
                             "payment_provider": "STRIPE_CONNECT",
                             "external_order_id": "ORD-2025-0042"
-                        }
+                        },
+                        "nullable": true
                     },
                     "send_automatically": {
                         "type": "boolean",
@@ -31374,14 +31794,16 @@
                         "description": "Files attached to the invoice, reserved for per-invoice attachments.\n\nTo send the supporting invoices of a SUPLIDO consolidation, use\n`options.attach_source_invoices` when issuing: they travel as a ZIP attached to\nthe outgoing email, and appear on the email delivery record rather than here.\n",
                         "items": {
                             "$ref": "#/components/schemas/InvoiceAttachment"
-                        }
+                        },
+                        "nullable": true
                     },
                     "sending_history": {
                         "type": "array",
                         "description": "Emails through which this invoice was sent, oldest first. Resending\nappends a record, it never replaces the previous one, and a batch send\n(one email with several invoices) is recorded in every invoice it carried.\n\nOnly populated in single-invoice responses (`GET /v1/invoices/{invoice_id}` and\nthe lifecycle endpoints); the list endpoint omits it.\n",
                         "items": {
                             "$ref": "#/components/schemas/InvoiceSendRecord"
-                        }
+                        },
+                        "nullable": true
                     },
                     "email_delivery": {
                         "$ref": "#/components/schemas/InvoiceEmailDeliveryOutcome"
@@ -31460,7 +31882,8 @@
                                     "example": "Only draft invoices can be issued"
                                 }
                             }
-                        }
+                        },
+                        "nullable": true
                     }
                 }
             },
@@ -31795,27 +32218,32 @@
                                 "$ref": "#/components/schemas/VeriFactuSubmissionStatus"
                             }
                         ],
-                        "description": "Submission status of this record, in the same vocabulary as the invoice's\n`verifactu.submission_status`. For `operation` `VOID` the final successful state is\n`VOIDED`, not `ACCEPTED`; a rejected cancellation is `REJECTED`. On `REJECTED`,\n`error_message` gives the reason and `error_code` carries the AEAT's code when the AEAT\ngave one.\n"
+                        "description": "Submission status of this record, in the same vocabulary as the invoice's\n`verifactu.submission_status`. For `operation` `VOID` the final successful state is\n`VOIDED`, not `ACCEPTED`; a rejected cancellation is `REJECTED`. On `REJECTED`,\n`error_message` gives the reason and `error_code` carries the AEAT's code when the AEAT\ngave one.\n",
+                        "nullable": true
                     },
                     "invoice_hash": {
                         "type": "string",
                         "description": "Invoice SHA-256 hash according to VeriFactu regulations. Only on `REGISTRATION` records.",
-                        "example": "3A5B7C9D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B"
+                        "example": "3A5B7C9D1E2F3A4B5C6D7E8F9A0B1C2D3E4F5A6B7C8D9E0F1A2B3C4D5E6F7A8B",
+                        "nullable": true
                     },
                     "registration_number": {
                         "type": "string",
                         "description": "Identifier (UUID) of this record in the VeriFactu submission, assigned when it is\nsubmitted. It is not an AEAT code: quote it when you ask BeeL about the record.\n",
-                        "example": "4f8c2a1e-9b3d-4e7a-8c5f-1d2e3f4a5b6c"
+                        "example": "4f8c2a1e-9b3d-4e7a-8c5f-1d2e3f4a5b6c",
+                        "nullable": true
                     },
                     "registered_at": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "Date and time this record was created. A record rejected before reaching the AEAT\nalso has one.\n"
+                        "description": "Date and time this record was created. A record rejected before reaching the AEAT\nalso has one.\n",
+                        "nullable": true
                     },
                     "qr_url": {
                         "type": "string",
                         "description": "AEAT verification URL encoded in the invoice QR code. Only on `REGISTRATION` records.\n",
-                        "example": "https://www2.agenciatributaria.gob.es/wlpl/TIKE-CONT/ValidarQR?nif=B12345674&numserie=A%2F2025%2F0042&fecha=20-01-2025&importe=1590.00"
+                        "example": "https://www2.agenciatributaria.gob.es/wlpl/TIKE-CONT/ValidarQR?nif=B12345674&numserie=A%2F2025%2F0042&fecha=20-01-2025&importe=1590.00",
+                        "nullable": true
                     },
                     "error_code": {
                         "type": "string",
@@ -32007,16 +32435,23 @@
                 "description": "Why this schedule is paused. Present while `status` is `PAUSED`; absent otherwise, and also\nabsent for schedules paused before this was recorded.\n\n`PAUSED` covers three facts that are not interchangeable: someone paused it, a plan downgrade\npaused it, or an unattended generation failed with something waiting will not fix. A transient\nfailure (network, timeout, tax authority downtime) does NOT pause the schedule — the next run\nretries it.\n",
                 "properties": {
                     "reason": {
-                        "$ref": "#/components/schemas/RecurringInvoicePauseReason"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/RecurringInvoicePauseReason"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "since": {
                         "type": "string",
-                        "format": "date-time"
+                        "format": "date-time",
+                        "nullable": true
                     },
                     "blocker": {
                         "type": "string",
                         "description": "What blocked the emission, using the same codes the emission error returns (the `blockers[]`\nof a 422 `EMISSION_NOT_READY`). Only for `GENERATION_FAILURE`, and it may be absent when the\npermanent failure was not a readiness one. Resuming is rejected while this blocker is still\nin effect.\n",
-                        "example": "NIF_NOT_REGISTERED"
+                        "example": "NIF_NOT_REGISTERED",
+                        "nullable": true
                     }
                 }
             },
@@ -32032,12 +32467,14 @@
                             "END_DATE_REACHED",
                             "MAX_INVOICES_REACHED"
                         ],
-                        "description": "`USER` — someone completed it (`PUT .../status` to `COMPLETED`).\n`END_DATE_REACHED` — the next occurrence landed past `end_date`, so there was nothing left\nto generate. This includes automatic generation and the common close of generating, skipping\nand resuming.\n`MAX_INVOICES_REACHED` — the `max_invoices` cap ran out: the last agreed invoice was\ngenerated (or the cap was moved down to the number already generated). When a template\nexhausts its cap and its `end_date` on the very same turn this is the cause reported: the\ncap is the fact that just happened, the date is the calendar consequence that follows.\n"
+                        "description": "`USER` — someone completed it (`PUT .../status` to `COMPLETED`).\n`END_DATE_REACHED` — the next occurrence landed past `end_date`, so there was nothing left\nto generate. This includes automatic generation and the common close of generating, skipping\nand resuming.\n`MAX_INVOICES_REACHED` — the `max_invoices` cap ran out: the last agreed invoice was\ngenerated (or the cap was moved down to the number already generated). When a template\nexhausts its cap and its `end_date` on the very same turn this is the cause reported: the\ncap is the fact that just happened, the date is the calendar consequence that follows.\n",
+                        "nullable": true
                     },
                     "at": {
                         "type": "string",
                         "format": "date-time",
-                        "description": "Instant the schedule was closed."
+                        "description": "Instant the schedule was closed.",
+                        "nullable": true
                     }
                 }
             },
@@ -32452,10 +32889,16 @@
                     },
                     "trade_name": {
                         "type": "string",
-                        "example": "EmpresaCliente"
+                        "example": "EmpresaCliente",
+                        "nullable": true
                     },
                     "nif": {
-                        "$ref": "#/components/schemas/NIF"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/NIF"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "alternative_id": {
                         "$ref": "#/components/schemas/AlternativeIdentifier"
@@ -32464,7 +32907,12 @@
                         "$ref": "#/components/schemas/Address"
                     },
                     "phone": {
-                        "$ref": "#/components/schemas/Phone"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/Phone"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "email": {
                         "type": "string",
@@ -32486,15 +32934,18 @@
                         "items": {
                             "$ref": "#/components/schemas/Email"
                         },
-                        "description": "Addresses that receive the customer's invoice emails. When the send request names no\n`recipients` and the invoice has no `email_config` recipients, invoices go to these\naddresses, and not to `email`; `email` is used only when `billing_emails` is empty.\n"
+                        "description": "Addresses that receive the customer's invoice emails. When the send request names no\n`recipients` and the invoice has no `email_config` recipients, invoices go to these\naddresses, and not to `email`; `email` is used only when `billing_emails` is empty.\n",
+                        "nullable": true
                     },
                     "contact_person": {
                         "type": "string",
-                        "example": "María García"
+                        "example": "María García",
+                        "nullable": true
                     },
                     "notes": {
                         "type": "string",
-                        "maxLength": 1000
+                        "maxLength": 1000,
+                        "nullable": true
                     },
                     "preferred_payment_method": {
                         "$ref": "#/components/schemas/PaymentInfo"
@@ -32502,10 +32953,12 @@
                     "general_discount": {
                         "type": "number",
                         "minimum": 0,
-                        "maximum": 100
+                        "maximum": 100,
+                        "nullable": true
                     },
                     "active": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     }
                 }
             },
@@ -32604,7 +33057,8 @@
                                 "$ref": "#/components/schemas/CustomerBulkDeleteError"
                             }
                         ],
-                        "description": "Present only when the customer was not deleted."
+                        "description": "Present only when the customer was not deleted.",
+                        "nullable": true
                     }
                 }
             },
@@ -32735,7 +33189,8 @@
                         "description": "**Deprecated.** Projection of the entries of `customers_deletion` that were not deleted,\nin the same order. Read `customers_deletion`, which also reports the rows that worked.\n",
                         "items": {
                             "$ref": "#/components/schemas/CustomerBulkDeleteLegacyError"
-                        }
+                        },
+                        "nullable": true
                     }
                 }
             },
@@ -32958,12 +33413,14 @@
                     "code": {
                         "type": "string",
                         "description": "Echo of the `code` that was submitted, so the row can be recognised without counting positions. Absent when the product carried none.",
-                        "example": "PROD-001"
+                        "example": "PROD-001",
+                        "nullable": true
                     },
                     "name": {
                         "type": "string",
                         "description": "Echo of the `name` that was submitted.",
-                        "example": "Consultoría"
+                        "example": "Consultoría",
+                        "nullable": true
                     },
                     "status": {
                         "type": "string",
@@ -32981,7 +33438,8 @@
                                 "$ref": "#/components/schemas/UUID"
                             }
                         ],
-                        "description": "Identifier of the product this row created. **Present only when the row actually created\nsomething**; absent otherwise.\n"
+                        "description": "Identifier of the product this row created. **Present only when the row actually created\nsomething**; absent otherwise.\n",
+                        "nullable": true
                     },
                     "error": {
                         "allOf": [
@@ -32989,7 +33447,8 @@
                                 "$ref": "#/components/schemas/ProductBulkCreateError"
                             }
                         ],
-                        "description": "Present only when the product was not created."
+                        "description": "Present only when the product was not created.",
+                        "nullable": true
                     }
                 }
             },
@@ -33031,17 +33490,21 @@
                 "description": "**Deprecated.** Legacy shape of a row that was not created.",
                 "properties": {
                     "index": {
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "code": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     },
                     "name": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     },
                     "error": {
                         "type": "string",
-                        "description": "Text resolved to the language of the request. Read `products_creation[].error.code` to branch on."
+                        "description": "Text resolved to the language of the request. Read `products_creation[].error.code` to branch on.",
+                        "nullable": true
                     }
                 }
             },
@@ -33051,13 +33514,16 @@
                 "description": "**Deprecated.** Read `statistics`.",
                 "properties": {
                     "total_processed": {
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "successful": {
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     },
                     "failed": {
-                        "type": "integer"
+                        "type": "integer",
+                        "nullable": true
                     }
                 }
             },
@@ -33097,7 +33563,8 @@
                         "description": "**Deprecated.** Projection of the entries of `products_creation` that were not created,\nin the same order. Read `products_creation`, which also reports the rows that worked and\nwhose `error.code` is stable. Its `error` field used to carry a raw i18n key\n(`error.producto.duplicado`) and now carries the text resolved to the language of the\nrequest.\n",
                         "items": {
                             "$ref": "#/components/schemas/ProductBulkCreateLegacyError"
-                        }
+                        },
+                        "nullable": true
                     },
                     "summary": {
                         "allOf": [
@@ -33106,7 +33573,8 @@
                             }
                         ],
                         "deprecated": true,
-                        "description": "**Deprecated.** Read `statistics`."
+                        "description": "**Deprecated.** Read `statistics`.",
+                        "nullable": true
                     }
                 }
             },
@@ -33217,7 +33685,8 @@
                         "description": "The member's company grants (empty for OWNER/ADMIN, who have implicit access to all).",
                         "items": {
                             "$ref": "#/components/schemas/MemberGrant"
-                        }
+                        },
+                        "nullable": true
                     },
                     "permissions": {
                         "$ref": "#/components/schemas/MemberPermissions"
@@ -33474,7 +33943,8 @@
                         "description": "The id you assigned to this account in your own system when provisioning it."
                     },
                     "display_name": {
-                        "type": "string"
+                        "type": "string",
+                        "nullable": true
                     },
                     "access_level": {
                         "$ref": "#/components/schemas/AccessLevel"
@@ -34020,7 +34490,8 @@
                                 "$ref": "#/components/schemas/LiveActivationVerdict"
                             }
                         ],
-                        "description": "Whether this row's NIF may be switched on in Live, decided exactly as `POST /v1/companies/{company_id}/activations` decides it. Anything other than `ENTITLED` blocks the row: the import never opens a checkout on your behalf. Absent when the row was rejected before reaching that question."
+                        "description": "Whether this row's NIF may be switched on in Live, decided exactly as `POST /v1/companies/{company_id}/activations` decides it. Anything other than `ENTITLED` blocks the row: the import never opens a checkout on your behalf. Absent when the row was rejected before reaching that question.",
+                        "nullable": true
                     },
                     "account": {
                         "allOf": [
@@ -34028,7 +34499,8 @@
                                 "$ref": "#/components/schemas/ProvisionAccountResult"
                             }
                         ],
-                        "description": "The account this row produced — the same shape `POST /v1/accounts` returns, carrying `account_id`, `company_id` and the single-use `claim_token` / `claim_url` to hand to the holder. Absent in a preview (nothing was provisioned) and on a `BLOCKED` or `ERROR` row. On `ALREADY_EXISTS` it is the account that was already there, and a claim link still valid is kept: `claim_token` is `null` and `claim_link_already_issued` is `true`. **The token is shown once**: store it, or re-issue it with `POST /v1/accounts/{account_id}/claim-tokens`."
+                        "description": "The account this row produced — the same shape `POST /v1/accounts` returns, carrying `account_id`, `company_id` and the single-use `claim_token` / `claim_url` to hand to the holder. Absent in a preview (nothing was provisioned) and on a `BLOCKED` or `ERROR` row. On `ALREADY_EXISTS` it is the account that was already there, and a claim link still valid is kept: `claim_token` is `null` and `claim_link_already_issued` is `true`. **The token is shown once**: store it, or re-issue it with `POST /v1/accounts/{account_id}/claim-tokens`.",
+                        "nullable": true
                     },
                     "series": {
                         "type": "array",
@@ -34043,7 +34515,8 @@
                                 "$ref": "#/components/schemas/AccountImportCustomersOutcome"
                             }
                         ],
-                        "description": "How the shared customers file landed on **this** account. Absent in a preview, and when no customers file was sent: whether a customer is new depends on the account, and that only shows up when the import runs."
+                        "description": "How the shared customers file landed on **this** account. Absent in a preview, and when no customers file was sent: whether a customer is new depends on the account, and that only shows up when the import runs.",
+                        "nullable": true
                     },
                     "errors": {
                         "type": "array",
@@ -34219,7 +34692,8 @@
                                 "$ref": "#/components/schemas/AccountImportCustomersSource"
                             }
                         ],
-                        "description": "The optional customers file, checked **once** for the whole import. Absent when none was sent. What each account did with it is on its own row."
+                        "description": "The optional customers file, checked **once** for the whole import. Absent when none was sent. What each account did with it is on its own row.",
+                        "nullable": true
                     },
                     "own_company_customers": {
                         "allOf": [
@@ -34227,7 +34701,8 @@
                                 "$ref": "#/components/schemas/AccountImportCustomersOutcome"
                             }
                         ],
-                        "description": "What the shared customers file did on **your own** company, when `options.apply_customers_to_own_company` asked for it. Absent otherwise. It sits at this level and not among the rows because your company is not a row of the accounts file: it is not provisioned, not activated and not given series — only its customers are seeded.\n\nSame shape as the per-account outcome, with one difference that `metadata.is_dry_run` settles: in a preview `created` is what **would** be created, since nothing was written; in an import it is what reached the database. `already_existed` is what the company already knew either way — which is what makes re-uploading the file cheap here too.\n\n**It is deliberately not added to `statistics.customers_created`.** That counter is about the accounts you imported, and folding your own copy into it would inflate the number you reconcile your onboarding against.\n\nYour own company also **fails like a row**: if seeding it fails, the managed accounts already seeded stay exactly as they are and the failure is reported here, with its rows counted in `failed`."
+                        "description": "What the shared customers file did on **your own** company, when `options.apply_customers_to_own_company` asked for it. Absent otherwise. It sits at this level and not among the rows because your company is not a row of the accounts file: it is not provisioned, not activated and not given series — only its customers are seeded.\n\nSame shape as the per-account outcome, with one difference that `metadata.is_dry_run` settles: in a preview `created` is what **would** be created, since nothing was written; in an import it is what reached the database. `already_existed` is what the company already knew either way — which is what makes re-uploading the file cheap here too.\n\n**It is deliberately not added to `statistics.customers_created`.** That counter is about the accounts you imported, and folding your own copy into it would inflate the number you reconcile your onboarding against.\n\nYour own company also **fails like a row**: if seeding it fails, the managed accounts already seeded stay exactly as they are and the failure is reported here, with its rows counted in `failed`.",
+                        "nullable": true
                     },
                     "statistics": {
                         "$ref": "#/components/schemas/AccountImportStatistics"
@@ -34320,25 +34795,29 @@
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/TaxRegime"
-                        }
+                        },
+                        "nullable": true
                     },
                     "irpf_types": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/IrpfType"
-                        }
+                        },
+                        "nullable": true
                     },
                     "equivalence_surcharges": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/EquivalenceSurcharge"
-                        }
+                        },
+                        "nullable": true
                     },
                     "exemption_reasons": {
                         "type": "array",
                         "items": {
                             "$ref": "#/components/schemas/ExemptionReasonCatalogEntry"
-                        }
+                        },
+                        "nullable": true
                     }
                 }
             },
@@ -34422,7 +34901,8 @@
                     },
                     "provisional": {
                         "type": "boolean",
-                        "description": "Whether the default series is still **provisional**: it exists but has not\nissued any invoice yet, so its numbering (`initial_number`) can still be\nchanged. The invoice creation screen uses this to warn that numbering will\nstart at 1 before it is too late — once the first invoice is issued the\nnumbering is frozen and `initial_number` can no longer be updated.\n\nAlways `false` when `exists` is `false`.\n"
+                        "description": "Whether the default series is still **provisional**: it exists but has not\nissued any invoice yet, so its numbering (`initial_number`) can still be\nchanged. The invoice creation screen uses this to warn that numbering will\nstart at 1 before it is too late — once the first invoice is issued the\nnumbering is frozen and `initial_number` can no longer be updated.\n\nAlways `false` when `exists` is `false`.\n",
+                        "nullable": true
                     }
                 }
             },
@@ -34510,7 +34990,8 @@
                 "properties": {
                     "ready": {
                         "type": "boolean",
-                        "description": "true if the company can issue invoices (no blockers)."
+                        "description": "true if the company can issue invoices (no blockers).",
+                        "nullable": true
                     },
                     "blockers": {
                         "type": "array",
@@ -34526,7 +35007,8 @@
                                 "NIF_NOT_REGISTERED",
                                 "NIF_REPRESENTATION_REQUIRED"
                             ]
-                        }
+                        },
+                        "nullable": true
                     },
                     "verifactu": {
                         "type": "object",
@@ -34534,7 +35016,8 @@
                         "properties": {
                             "ready": {
                                 "type": "boolean",
-                                "description": "true only when the company is operationally `ready` AND its VeriFactu\ncapability chain is clean. An operational blocker (missing NIF, default\nseries, or an incomplete fiscal identity) makes this false even if the\nchain itself is complete — and, since those are not chain stages, it does\nso with an EMPTY `blockers` list here. The reason is in the top-level\n`blockers`, which is where operational blockers are reported.\n"
+                                "description": "true only when the company is operationally `ready` AND its VeriFactu\ncapability chain is clean. An operational blocker (missing NIF, default\nseries, or an incomplete fiscal identity) makes this false even if the\nchain itself is complete — and, since those are not chain stages, it does\nso with an EMPTY `blockers` list here. The reason is in the top-level\n`blockers`, which is where operational blockers are reported.\n",
+                                "nullable": true
                             },
                             "blockers": {
                                 "type": "array",
@@ -34546,9 +35029,11 @@
                                         "NIF_NOT_REGISTERED",
                                         "NIF_REPRESENTATION_REQUIRED"
                                     ]
-                                }
+                                },
+                                "nullable": true
                             }
-                        }
+                        },
+                        "nullable": true
                     }
                 }
             },
@@ -34673,7 +35158,8 @@
                 "type": "object",
                 "properties": {
                     "success": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "data": {
                         "type": "object",
@@ -34696,13 +35182,17 @@
                     "meta": {
                         "$ref": "#/components/schemas/ResponseMeta"
                     }
-                }
+                },
+                "required": [
+                    "data"
+                ]
             },
             "IssuingReadinessResponse": {
                 "type": "object",
                 "properties": {
                     "success": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "data": {
                         "$ref": "#/components/schemas/IssuingReadinessData"
@@ -34710,7 +35200,10 @@
                     "meta": {
                         "$ref": "#/components/schemas/ResponseMeta"
                     }
-                }
+                },
+                "required": [
+                    "data"
+                ]
             },
             "ActivateCompanyRequest": {
                 "type": "object",
@@ -34867,7 +35360,8 @@
                 "type": "object",
                 "properties": {
                     "success": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "data": {
                         "type": "object",
@@ -34886,7 +35380,10 @@
                     "meta": {
                         "$ref": "#/components/schemas/ResponseMeta"
                     }
-                }
+                },
+                "required": [
+                    "data"
+                ]
             },
             "PaymentConnectionEventSource": {
                 "type": "string",
@@ -34940,18 +35437,21 @@
                         "format": "double",
                         "minimum": 0,
                         "description": "Charges below this amount are skipped.",
-                        "example": 10
+                        "example": 10,
+                        "nullable": true
                     },
                     "max_amount": {
                         "type": "number",
                         "format": "double",
                         "minimum": 0,
                         "description": "Charges above this amount are skipped.",
-                        "example": 5000
+                        "example": 5000,
+                        "nullable": true
                     },
                     "only_mapped_customers": {
                         "type": "boolean",
-                        "description": "When true, only charges from customers already mapped to a BeeL customer are invoiced.\n"
+                        "description": "When true, only charges from customers already mapped to a BeeL customer are invoiced.\n",
+                        "nullable": true
                     },
                     "allowed_customer_ids": {
                         "type": "array",
@@ -34962,7 +35462,8 @@
                         "example": [
                             "cus_abc123",
                             "cus_def456"
-                        ]
+                        ],
+                        "nullable": true
                     },
                     "excluded_description_patterns": {
                         "type": "array",
@@ -34973,7 +35474,8 @@
                         "example": [
                             ".*donation.*",
                             ".*tip.*"
-                        ]
+                        ],
+                        "nullable": true
                     },
                     "required_description_patterns": {
                         "type": "array",
@@ -34983,7 +35485,8 @@
                         "description": "Regular expressions matched against the charge description. A charge must match at\nleast one of them to be invoiced.\n",
                         "example": [
                             ".*subscription.*"
-                        ]
+                        ],
+                        "nullable": true
                     },
                     "disabled_categories": {
                         "type": "array",
@@ -34993,9 +35496,11 @@
                         "description": "Charge categories opted out of auto-invoicing. An empty list, or the field left out,\nleaves every category active.\n",
                         "example": [
                             "SUBSCRIPTION"
-                        ]
+                        ],
+                        "nullable": true
                     }
-                }
+                },
+                "nullable": true
             },
             "CompanyPaymentConnectionSeries": {
                 "type": "object",
@@ -35019,7 +35524,8 @@
                         "nullable": true,
                         "description": "Series for auto-issued corrective invoices (refunds)."
                     }
-                }
+                },
+                "nullable": true
             },
             "PaymentEventStatus": {
                 "type": "string",
@@ -35148,7 +35654,8 @@
                             "$ref": "#/components/schemas/PaymentEventFailureReasonCount"
                         }
                     }
-                }
+                },
+                "nullable": true
             },
             "WebhookAccountRelationship": {
                 "type": "string",
@@ -35218,7 +35725,8 @@
                                 "$ref": "#/components/schemas/WebhookAccountRelationship"
                             }
                         ],
-                        "description": "Which accounts this subscription receives events from. Same field name and values as the `account_relationship` carried by every event envelope.\n"
+                        "description": "Which accounts this subscription receives events from. Same field name and values as the `account_relationship` carried by every event envelope.\n",
+                        "nullable": true
                     },
                     "deactivated_by": {
                         "allOf": [
@@ -35226,7 +35734,8 @@
                                 "$ref": "#/components/schemas/WebhookDeactivationCause"
                             }
                         ],
-                        "description": "Who turned this subscription off. Absent while it is active. `beel` means we paused it because the endpoint went 25 consecutive deliveries without a single success over more than 48 hours — reactivating it requires a successful test delivery first.\n"
+                        "description": "Who turned this subscription off. Absent while it is active. `beel` means we paused it because the endpoint went 25 consecutive deliveries without a single success over more than 48 hours — reactivating it requires a successful test delivery first.\n",
+                        "nullable": true
                     },
                     "deactivated_at": {
                         "type": "string",
@@ -35245,12 +35754,14 @@
                                 "$ref": "#/components/schemas/WebhookFailureCause"
                             }
                         ],
-                        "description": "Stable code for `last_error`. Cleared alongside it by the first successful delivery.\n"
+                        "description": "Stable code for `last_error`. Cleared alongside it by the first successful delivery.\n",
+                        "nullable": true
                     },
                     "consecutive_failures": {
                         "type": "integer",
                         "description": "Deliveries in a row that never got through. A delivery that exhausted its attempts counts as one. Any successful delivery resets it to zero, so a healthy endpoint with occasional blips stays near zero.\n",
-                        "example": 0
+                        "example": 0,
+                        "nullable": true
                     },
                     "last_used_at": {
                         "type": "string",
@@ -35321,7 +35832,8 @@
                 "properties": {
                     "delivery_success": {
                         "type": "boolean",
-                        "description": "Whether your endpoint responded with HTTP 2xx."
+                        "description": "Whether your endpoint responded with HTTP 2xx.",
+                        "nullable": true
                     },
                     "http_status": {
                         "type": "integer",
@@ -35330,7 +35842,8 @@
                     },
                     "duration_ms": {
                         "type": "integer",
-                        "description": "Round-trip time in milliseconds."
+                        "description": "Round-trip time in milliseconds.",
+                        "nullable": true
                     },
                     "error": {
                         "type": "string",
@@ -35343,7 +35856,8 @@
                                 "$ref": "#/components/schemas/WebhookFailureCause"
                             }
                         ],
-                        "description": "Why the delivery failed, as a stable code. Absent when `delivery_success` is true. Branch on this, never on the wording of `error`.\n"
+                        "description": "Why the delivery failed, as a stable code. Absent when `delivery_success` is true. Branch on this, never on the wording of `error`.\n",
+                        "nullable": true
                     }
                 }
             },
@@ -35358,7 +35872,8 @@
                             "secret": {
                                 "type": "string",
                                 "description": "HMAC-SHA256 signing secret. **Only returned on creation and secret rotation.**\nStore it securely — it cannot be retrieved again.\n",
-                                "example": "whsec_a3f5b2e1c9d8f7e6b5a4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2"
+                                "example": "whsec_a3f5b2e1c9d8f7e6b5a4c3d2e1f0a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4e3f2",
+                                "nullable": true
                             },
                             "test_delivery": {
                                 "allOf": [
@@ -35798,7 +36313,12 @@
                         "example": "acct-2041"
                     },
                     "account_relationship": {
-                        "$ref": "#/components/schemas/WebhookEventAccountRelationship"
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/WebhookEventAccountRelationship"
+                            }
+                        ],
+                        "nullable": true
                     },
                     "data": {
                         "oneOf": [
@@ -35876,24 +36396,29 @@
                 "properties": {
                     "id": {
                         "type": "string",
-                        "format": "uuid"
+                        "format": "uuid",
+                        "nullable": true
                     },
                     "subscription_id": {
                         "type": "string",
-                        "format": "uuid"
+                        "format": "uuid",
+                        "nullable": true
                     },
                     "webhook_event_id": {
                         "type": "string",
                         "format": "uuid",
-                        "description": "Groups all delivery attempts for the same logical event."
+                        "description": "Groups all delivery attempts for the same logical event.",
+                        "nullable": true
                     },
                     "event_type": {
                         "type": "string",
-                        "example": "verifactu.status.updated"
+                        "example": "verifactu.status.updated",
+                        "nullable": true
                     },
                     "attempt_number": {
                         "type": "integer",
-                        "description": "Sequential number of this POST within its delivery. Manual retries continue the same sequence, so this can exceed the number of automatic attempts."
+                        "description": "Sequential number of this POST within its delivery. Manual retries continue the same sequence, so this can exceed the number of automatic attempts.",
+                        "nullable": true
                     },
                     "http_status": {
                         "type": "integer",
@@ -35908,7 +36433,8 @@
                     },
                     "response_body_truncated": {
                         "type": "boolean",
-                        "description": "True when your endpoint returned more than 2048 characters and `response_body` holds only the beginning of it."
+                        "description": "True when your endpoint returned more than 2048 characters and `response_body` holds only the beginning of it.",
+                        "nullable": true
                     },
                     "response_body_length": {
                         "type": "integer",
@@ -35922,7 +36448,8 @@
                         "description": "Delivery duration in milliseconds."
                     },
                     "success": {
-                        "type": "boolean"
+                        "type": "boolean",
+                        "nullable": true
                     },
                     "error_message": {
                         "type": "string",
@@ -35951,7 +36478,8 @@
                     },
                     "delivered_at": {
                         "type": "string",
-                        "format": "date-time"
+                        "format": "date-time",
+                        "nullable": true
                     }
                 }
             },
@@ -36044,7 +36572,8 @@
                     "has_previous": {
                         "type": "boolean"
                     }
-                }
+                },
+                "nullable": true
             },
             "RequestLogListResponse": {
                 "type": "object",

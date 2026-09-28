@@ -55,7 +55,7 @@ class InvoiceSeries implements AdditionalPropertiesInterface
     /**
      * Optional series description
      *
-     * @var string
+     * @var string|null
      */
     protected $description;
     /**
@@ -102,7 +102,7 @@ class InvoiceSeries implements AdditionalPropertiesInterface
      * `NEVER` there is a single period, so numbering simply continues from it.
      * 
      *
-     * @var int
+     * @var int|null
      */
     protected $initialNumber = 1;
     /**
@@ -126,25 +126,25 @@ class InvoiceSeries implements AdditionalPropertiesInterface
      * new series.
      * 
      *
-     * @var bool
+     * @var bool|null
      */
     protected $numberingLocked;
     /**
      * Creation date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $createdAt;
     /**
      * Next invoice number that will be assigned for this series
      *
-     * @var int
+     * @var int|null
      */
     protected $nextNumber;
     /**
      * Last update date
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $updatedAt;
     /**
@@ -264,20 +264,20 @@ class InvoiceSeries implements AdditionalPropertiesInterface
     /**
      * Optional series description
      *
-     * @return string
+     * @return string|null
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
     /**
      * Optional series description
      *
-     * @param string $description
+     * @param string|null $description
      *
      * @return self
      */
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->initialized['description'] = true;
         $this->description = $description;
@@ -384,9 +384,9 @@ class InvoiceSeries implements AdditionalPropertiesInterface
      * `NEVER` there is a single period, so numbering simply continues from it.
      * 
      *
-     * @return int
+     * @return int|null
      */
-    public function getInitialNumber(): int
+    public function getInitialNumber(): ?int
     {
         return $this->initialNumber;
     }
@@ -397,11 +397,11 @@ class InvoiceSeries implements AdditionalPropertiesInterface
     `NEVER` there is a single period, so numbering simply continues from it.
     
     *
-    * @param int $initialNumber
+    * @param int|null $initialNumber
     *
     * @return self
     */
-    public function setInitialNumber(int $initialNumber): self
+    public function setInitialNumber(?int $initialNumber): self
     {
         $this->initialized['initialNumber'] = true;
         $this->initialNumber = $initialNumber;
@@ -460,9 +460,9 @@ class InvoiceSeries implements AdditionalPropertiesInterface
      * new series.
      * 
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getNumberingLocked(): bool
+    public function getNumberingLocked(): ?bool
     {
         return $this->numberingLocked;
     }
@@ -475,11 +475,11 @@ class InvoiceSeries implements AdditionalPropertiesInterface
     new series.
     
     *
-    * @param bool $numberingLocked
+    * @param bool|null $numberingLocked
     *
     * @return self
     */
-    public function setNumberingLocked(bool $numberingLocked): self
+    public function setNumberingLocked(?bool $numberingLocked): self
     {
         $this->initialized['numberingLocked'] = true;
         $this->numberingLocked = $numberingLocked;
@@ -488,20 +488,20 @@ class InvoiceSeries implements AdditionalPropertiesInterface
     /**
      * Creation date
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
     /**
      * Creation date
      *
-     * @param \DateTime $createdAt
+     * @param \DateTime|null $createdAt
      *
      * @return self
      */
-    public function setCreatedAt(\DateTime $createdAt): self
+    public function setCreatedAt(?\DateTime $createdAt): self
     {
         $this->initialized['createdAt'] = true;
         $this->createdAt = $createdAt;
@@ -510,20 +510,20 @@ class InvoiceSeries implements AdditionalPropertiesInterface
     /**
      * Next invoice number that will be assigned for this series
      *
-     * @return int
+     * @return int|null
      */
-    public function getNextNumber(): int
+    public function getNextNumber(): ?int
     {
         return $this->nextNumber;
     }
     /**
      * Next invoice number that will be assigned for this series
      *
-     * @param int $nextNumber
+     * @param int|null $nextNumber
      *
      * @return self
      */
-    public function setNextNumber(int $nextNumber): self
+    public function setNextNumber(?int $nextNumber): self
     {
         $this->initialized['nextNumber'] = true;
         $this->nextNumber = $nextNumber;
@@ -532,20 +532,20 @@ class InvoiceSeries implements AdditionalPropertiesInterface
     /**
      * Last update date
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
     /**
      * Last update date
      *
-     * @param \DateTime $updatedAt
+     * @param \DateTime|null $updatedAt
      *
      * @return self
      */
-    public function setUpdatedAt(\DateTime $updatedAt): self
+    public function setUpdatedAt(?\DateTime $updatedAt): self
     {
         $this->initialized['updatedAt'] = true;
         $this->updatedAt = $updatedAt;

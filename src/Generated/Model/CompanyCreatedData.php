@@ -18,20 +18,20 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
     /**
      * Unique company identifier.
      *
-     * @var string
+     * @var string|null
      */
     protected $id;
     /**
      * How much access the signed-in person has to this company, so a dashboard can label it ("read only") and hide write actions instead of discovering the answer through a `403`. Read-only and derived from who is asking — never sent.
      * **Only present when authenticating with a user session.** With an API key the field is absent: what a key may do is set by its own scopes, which are per resource (`invoices:write`, `customers:read`, …) and cannot be reduced to one of three levels. Absent therefore means "does not apply here", never "no access".
      *
-     * @var string
+     * @var string|null
      */
     protected $accessLevel;
     /**
      * Spanish Tax ID (NIF/CIF). Immutable once set.
      *
-     * @var string
+     * @var string|null
      */
     protected $nif;
     /**
@@ -43,25 +43,25 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
      * business name the census actually holds.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $legalName;
     /**
      * Commercial/trade name shown in the UI and on invoices. Editable. Never empty: when no trade name has been set, it carries `legal_name`, so `trade_name == legal_name` means "no trade name of its own", not that one was written.
      *
-     * @var string
+     * @var string|null
      */
     protected $tradeName;
     /**
      * Self-employed individual or legal entity. Immutable once set.
      *
-     * @var string
+     * @var string|null
      */
     protected $entityType;
     /**
      * True for the account's primary company (the owner's own NIF).
      *
-     * @var bool
+     * @var bool|null
      */
     protected $isPrimary;
     /**
@@ -74,7 +74,7 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
      * - `ERROR`: reserved; not currently returned.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $verifactuStatus;
     /**
@@ -98,7 +98,7 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
      *
      * @deprecated
      *
-     * @var string
+     * @var string|null
      */
     protected $environment;
     /**
@@ -110,7 +110,7 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
      * account switches to Live).
      * 
      *
-     * @var bool
+     * @var bool|null
      */
     protected $inProd;
     /**
@@ -122,7 +122,7 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
      * rather than hidden.
      * 
      *
-     * @var bool
+     * @var bool|null
      */
     protected $inTest;
     /**
@@ -146,7 +146,7 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
      * additionally requires the per-NIF representation to be signed.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $accountState;
     /**
@@ -314,7 +314,7 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
     /**
      * When the company was created (ISO 8601).
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $createdAt;
     /**
@@ -338,26 +338,26 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
      * it reflects the series of the environment just activated.
      * 
      *
-     * @var list<InvoiceSeries>
+     * @var list<InvoiceSeries>|null
      */
     protected $series;
     /**
      * Unique company identifier.
      *
-     * @return string
+     * @return string|null
      */
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->id;
     }
     /**
      * Unique company identifier.
      *
-     * @param string $id
+     * @param string|null $id
      *
      * @return self
      */
-    public function setId(string $id): self
+    public function setId(?string $id): self
     {
         $this->initialized['id'] = true;
         $this->id = $id;
@@ -367,9 +367,9 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
      * How much access the signed-in person has to this company, so a dashboard can label it ("read only") and hide write actions instead of discovering the answer through a `403`. Read-only and derived from who is asking — never sent.
      * **Only present when authenticating with a user session.** With an API key the field is absent: what a key may do is set by its own scopes, which are per resource (`invoices:write`, `customers:read`, …) and cannot be reduced to one of three levels. Absent therefore means "does not apply here", never "no access".
      *
-     * @return string
+     * @return string|null
      */
-    public function getAccessLevel(): string
+    public function getAccessLevel(): ?string
     {
         return $this->accessLevel;
     }
@@ -377,11 +377,11 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
     * How much access the signed-in person has to this company, so a dashboard can label it ("read only") and hide write actions instead of discovering the answer through a `403`. Read-only and derived from who is asking — never sent.
     **Only present when authenticating with a user session.** With an API key the field is absent: what a key may do is set by its own scopes, which are per resource (`invoices:write`, `customers:read`, …) and cannot be reduced to one of three levels. Absent therefore means "does not apply here", never "no access".
     *
-    * @param string $accessLevel
+    * @param string|null $accessLevel
     *
     * @return self
     */
-    public function setAccessLevel(string $accessLevel): self
+    public function setAccessLevel(?string $accessLevel): self
     {
         $this->initialized['accessLevel'] = true;
         $this->accessLevel = $accessLevel;
@@ -390,20 +390,20 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
     /**
      * Spanish Tax ID (NIF/CIF). Immutable once set.
      *
-     * @return string
+     * @return string|null
      */
-    public function getNif(): string
+    public function getNif(): ?string
     {
         return $this->nif;
     }
     /**
      * Spanish Tax ID (NIF/CIF). Immutable once set.
      *
-     * @param string $nif
+     * @param string|null $nif
      *
      * @return self
      */
-    public function setNif(string $nif): self
+    public function setNif(?string $nif): self
     {
         $this->initialized['nif'] = true;
         $this->nif = $nif;
@@ -418,9 +418,9 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
      * business name the census actually holds.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getLegalName(): string
+    public function getLegalName(): ?string
     {
         return $this->legalName;
     }
@@ -433,11 +433,11 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
     business name the census actually holds.
     
     *
-    * @param string $legalName
+    * @param string|null $legalName
     *
     * @return self
     */
-    public function setLegalName(string $legalName): self
+    public function setLegalName(?string $legalName): self
     {
         $this->initialized['legalName'] = true;
         $this->legalName = $legalName;
@@ -446,20 +446,20 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
     /**
      * Commercial/trade name shown in the UI and on invoices. Editable. Never empty: when no trade name has been set, it carries `legal_name`, so `trade_name == legal_name` means "no trade name of its own", not that one was written.
      *
-     * @return string
+     * @return string|null
      */
-    public function getTradeName(): string
+    public function getTradeName(): ?string
     {
         return $this->tradeName;
     }
     /**
      * Commercial/trade name shown in the UI and on invoices. Editable. Never empty: when no trade name has been set, it carries `legal_name`, so `trade_name == legal_name` means "no trade name of its own", not that one was written.
      *
-     * @param string $tradeName
+     * @param string|null $tradeName
      *
      * @return self
      */
-    public function setTradeName(string $tradeName): self
+    public function setTradeName(?string $tradeName): self
     {
         $this->initialized['tradeName'] = true;
         $this->tradeName = $tradeName;
@@ -468,20 +468,20 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
     /**
      * Self-employed individual or legal entity. Immutable once set.
      *
-     * @return string
+     * @return string|null
      */
-    public function getEntityType(): string
+    public function getEntityType(): ?string
     {
         return $this->entityType;
     }
     /**
      * Self-employed individual or legal entity. Immutable once set.
      *
-     * @param string $entityType
+     * @param string|null $entityType
      *
      * @return self
      */
-    public function setEntityType(string $entityType): self
+    public function setEntityType(?string $entityType): self
     {
         $this->initialized['entityType'] = true;
         $this->entityType = $entityType;
@@ -490,20 +490,20 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
     /**
      * True for the account's primary company (the owner's own NIF).
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getIsPrimary(): bool
+    public function getIsPrimary(): ?bool
     {
         return $this->isPrimary;
     }
     /**
      * True for the account's primary company (the owner's own NIF).
      *
-     * @param bool $isPrimary
+     * @param bool|null $isPrimary
      *
      * @return self
      */
-    public function setIsPrimary(bool $isPrimary): self
+    public function setIsPrimary(?bool $isPrimary): self
     {
         $this->initialized['isPrimary'] = true;
         $this->isPrimary = $isPrimary;
@@ -519,9 +519,9 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
      * - `ERROR`: reserved; not currently returned.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getVerifactuStatus(): string
+    public function getVerifactuStatus(): ?string
     {
         return $this->verifactuStatus;
     }
@@ -535,11 +535,11 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
     - `ERROR`: reserved; not currently returned.
     
     *
-    * @param string $verifactuStatus
+    * @param string|null $verifactuStatus
     *
     * @return self
     */
-    public function setVerifactuStatus(string $verifactuStatus): self
+    public function setVerifactuStatus(?string $verifactuStatus): self
     {
         $this->initialized['verifactuStatus'] = true;
         $this->verifactuStatus = $verifactuStatus;
@@ -566,9 +566,9 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
      *
      * @deprecated
      *
-     * @return string
+     * @return string|null
      */
-    public function getEnvironment(): string
+    public function getEnvironment(): ?string
     {
         return $this->environment;
     }
@@ -591,13 +591,13 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
     This is the data/billing axis, NOT a measure of AEAT capability.
     
     *
-    * @param string $environment
+    * @param string|null $environment
     *
     * @deprecated
     *
     * @return self
     */
-    public function setEnvironment(string $environment): self
+    public function setEnvironment(?string $environment): self
     {
         $this->initialized['environment'] = true;
         $this->environment = $environment;
@@ -612,9 +612,9 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
      * account switches to Live).
      * 
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getInProd(): bool
+    public function getInProd(): ?bool
     {
         return $this->inProd;
     }
@@ -627,11 +627,11 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
     account switches to Live).
     
     *
-    * @param bool $inProd
+    * @param bool|null $inProd
     *
     * @return self
     */
-    public function setInProd(bool $inProd): self
+    public function setInProd(?bool $inProd): self
     {
         $this->initialized['inProd'] = true;
         $this->inProd = $inProd;
@@ -646,9 +646,9 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
      * rather than hidden.
      * 
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getInTest(): bool
+    public function getInTest(): ?bool
     {
         return $this->inTest;
     }
@@ -661,11 +661,11 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
     rather than hidden.
     
     *
-    * @param bool $inTest
+    * @param bool|null $inTest
     *
     * @return self
     */
-    public function setInTest(bool $inTest): self
+    public function setInTest(?bool $inTest): self
     {
         $this->initialized['inTest'] = true;
         $this->inTest = $inTest;
@@ -718,9 +718,9 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
      * additionally requires the per-NIF representation to be signed.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getAccountState(): string
+    public function getAccountState(): ?string
     {
         return $this->accountState;
     }
@@ -729,11 +729,11 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
     additionally requires the per-NIF representation to be signed.
     
     *
-    * @param string $accountState
+    * @param string|null $accountState
     *
     * @return self
     */
-    public function setAccountState(string $accountState): self
+    public function setAccountState(?string $accountState): self
     {
         $this->initialized['accountState'] = true;
         $this->accountState = $accountState;
@@ -1253,20 +1253,20 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
     /**
      * When the company was created (ISO 8601).
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
     /**
      * When the company was created (ISO 8601).
      *
-     * @param \DateTime $createdAt
+     * @param \DateTime|null $createdAt
      *
      * @return self
      */
-    public function setCreatedAt(\DateTime $createdAt): self
+    public function setCreatedAt(?\DateTime $createdAt): self
     {
         $this->initialized['createdAt'] = true;
         $this->createdAt = $createdAt;
@@ -1312,9 +1312,9 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
      * it reflects the series of the environment just activated.
      * 
      *
-     * @return list<InvoiceSeries>
+     * @return list<InvoiceSeries>|null
      */
-    public function getSeries(): array
+    public function getSeries(): ?array
     {
         return $this->series;
     }
@@ -1330,11 +1330,11 @@ class CompanyCreatedData implements AdditionalPropertiesInterface
     it reflects the series of the environment just activated.
     
     *
-    * @param list<InvoiceSeries> $series
+    * @param list<InvoiceSeries>|null $series
     *
     * @return self
     */
-    public function setSeries(array $series): self
+    public function setSeries(?array $series): self
     {
         $this->initialized['series'] = true;
         $this->series = $series;

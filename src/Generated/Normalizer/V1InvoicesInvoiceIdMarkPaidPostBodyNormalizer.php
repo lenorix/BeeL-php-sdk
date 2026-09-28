@@ -45,8 +45,12 @@ class V1InvoicesInvoiceIdMarkPaidPostBodyNormalizer implements DenormalizerInter
             $object->setPaymentDate($date->setTime(0, 0, 0));
             unset($data['payment_date']);
         }
-        if (\array_key_exists('payment_method', $data)) {
+        if (\array_key_exists('payment_method', $data) && $data['payment_method'] !== null) {
             $object->setPaymentMethod($this->denormalizer->denormalize($data['payment_method'], \Lenorix\BeelSdk\Generated\Model\PaymentInfo::class, 'json', $context));
+            unset($data['payment_method']);
+        }
+        elseif (\array_key_exists('payment_method', $data) && $data['payment_method'] === null) {
+            $object->setPaymentMethod(null);
             unset($data['payment_method']);
         }
         foreach ($data as $key => $value) {

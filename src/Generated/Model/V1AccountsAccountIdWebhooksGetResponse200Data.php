@@ -16,7 +16,7 @@ class V1AccountsAccountIdWebhooksGetResponse200Data implements AdditionalPropert
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var list<WebhookSubscription>
+     * @var list<WebhookSubscription>|null
      */
     protected $webhooks;
     /**
@@ -24,18 +24,18 @@ class V1AccountsAccountIdWebhooksGetResponse200Data implements AdditionalPropert
      */
     protected $pagination;
     /**
-     * @return list<WebhookSubscription>
+     * @return list<WebhookSubscription>|null
      */
-    public function getWebhooks(): array
+    public function getWebhooks(): ?array
     {
         return $this->webhooks;
     }
     /**
-     * @param list<WebhookSubscription> $webhooks
+     * @param list<WebhookSubscription>|null $webhooks
      *
      * @return self
      */
-    public function setWebhooks(array $webhooks): self
+    public function setWebhooks(?array $webhooks): self
     {
         $this->initialized['webhooks'] = true;
         $this->webhooks = $webhooks;

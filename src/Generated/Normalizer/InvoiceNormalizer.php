@@ -88,12 +88,16 @@ class InvoiceNormalizer implements DenormalizerInterface, NormalizerInterface, D
             $object->setOperationDate(null);
             unset($data['operation_date']);
         }
-        if (\array_key_exists('due_date', $data)) {
+        if (\array_key_exists('due_date', $data) && $data['due_date'] !== null) {
             $date_2 = \DateTime::createFromFormat('Y-m-d', $data['due_date']);
             if (false === $date_2) {
                 throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['due_date'], 'Y-m-d');
             }
             $object->setDueDate($date_2->setTime(0, 0, 0));
+            unset($data['due_date']);
+        }
+        elseif (\array_key_exists('due_date', $data) && $data['due_date'] === null) {
+            $object->setDueDate(null);
             unset($data['due_date']);
         }
         if (\array_key_exists('valid_until', $data) && $data['valid_until'] !== null) {
@@ -108,12 +112,16 @@ class InvoiceNormalizer implements DenormalizerInterface, NormalizerInterface, D
             $object->setValidUntil(null);
             unset($data['valid_until']);
         }
-        if (\array_key_exists('payment_date', $data)) {
+        if (\array_key_exists('payment_date', $data) && $data['payment_date'] !== null) {
             $date_4 = \DateTime::createFromFormat('Y-m-d', $data['payment_date']);
             if (false === $date_4) {
                 throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['payment_date'], 'Y-m-d');
             }
             $object->setPaymentDate($date_4->setTime(0, 0, 0));
+            unset($data['payment_date']);
+        }
+        elseif (\array_key_exists('payment_date', $data) && $data['payment_date'] === null) {
+            $object->setPaymentDate(null);
             unset($data['payment_date']);
         }
         if (\array_key_exists('sent_at', $data) && $data['sent_at'] !== null) {
@@ -156,8 +164,12 @@ class InvoiceNormalizer implements DenormalizerInterface, NormalizerInterface, D
             $object->setScheduledFor(null);
             unset($data['scheduled_for']);
         }
-        if (\array_key_exists('scheduled_action', $data)) {
+        if (\array_key_exists('scheduled_action', $data) && $data['scheduled_action'] !== null) {
             $object->setScheduledAction($data['scheduled_action']);
+            unset($data['scheduled_action']);
+        }
+        elseif (\array_key_exists('scheduled_action', $data) && $data['scheduled_action'] === null) {
+            $object->setScheduledAction(null);
             unset($data['scheduled_action']);
         }
         if (\array_key_exists('issuer', $data)) {
@@ -180,15 +192,23 @@ class InvoiceNormalizer implements DenormalizerInterface, NormalizerInterface, D
             $object->setTotals($this->denormalizer->denormalize($data['totals'], \Lenorix\BeelSdk\Generated\Model\InvoiceTotals::class, 'json', $context));
             unset($data['totals']);
         }
-        if (\array_key_exists('payment_info', $data)) {
+        if (\array_key_exists('payment_info', $data) && $data['payment_info'] !== null) {
             $object->setPaymentInfo($this->denormalizer->denormalize($data['payment_info'], \Lenorix\BeelSdk\Generated\Model\PaymentInfo::class, 'json', $context));
             unset($data['payment_info']);
         }
-        if (\array_key_exists('notes', $data)) {
+        elseif (\array_key_exists('payment_info', $data) && $data['payment_info'] === null) {
+            $object->setPaymentInfo(null);
+            unset($data['payment_info']);
+        }
+        if (\array_key_exists('notes', $data) && $data['notes'] !== null) {
             $object->setNotes($data['notes']);
             unset($data['notes']);
         }
-        if (\array_key_exists('replaced_invoice_ids', $data)) {
+        elseif (\array_key_exists('notes', $data) && $data['notes'] === null) {
+            $object->setNotes(null);
+            unset($data['notes']);
+        }
+        if (\array_key_exists('replaced_invoice_ids', $data) && $data['replaced_invoice_ids'] !== null) {
             $values_1 = [];
             foreach ($data['replaced_invoice_ids'] as $value_1) {
                 $values_1[] = $value_1;
@@ -196,12 +216,24 @@ class InvoiceNormalizer implements DenormalizerInterface, NormalizerInterface, D
             $object->setReplacedInvoiceIds($values_1);
             unset($data['replaced_invoice_ids']);
         }
-        if (\array_key_exists('void_cause', $data)) {
+        elseif (\array_key_exists('replaced_invoice_ids', $data) && $data['replaced_invoice_ids'] === null) {
+            $object->setReplacedInvoiceIds(null);
+            unset($data['replaced_invoice_ids']);
+        }
+        if (\array_key_exists('void_cause', $data) && $data['void_cause'] !== null) {
             $object->setVoidCause($data['void_cause']);
             unset($data['void_cause']);
         }
-        if (\array_key_exists('void_reason', $data)) {
+        elseif (\array_key_exists('void_cause', $data) && $data['void_cause'] === null) {
+            $object->setVoidCause(null);
+            unset($data['void_cause']);
+        }
+        if (\array_key_exists('void_reason', $data) && $data['void_reason'] !== null) {
             $object->setVoidReason($data['void_reason']);
+            unset($data['void_reason']);
+        }
+        elseif (\array_key_exists('void_reason', $data) && $data['void_reason'] === null) {
+            $object->setVoidReason(null);
             unset($data['void_reason']);
         }
         if (\array_key_exists('voided_at', $data) && $data['voided_at'] !== null) {
@@ -212,20 +244,36 @@ class InvoiceNormalizer implements DenormalizerInterface, NormalizerInterface, D
             $object->setVoidedAt(null);
             unset($data['voided_at']);
         }
-        if (\array_key_exists('rectified_invoice_id', $data)) {
+        if (\array_key_exists('rectified_invoice_id', $data) && $data['rectified_invoice_id'] !== null) {
             $object->setRectifiedInvoiceId($data['rectified_invoice_id']);
             unset($data['rectified_invoice_id']);
         }
-        if (\array_key_exists('source_proforma_id', $data)) {
+        elseif (\array_key_exists('rectified_invoice_id', $data) && $data['rectified_invoice_id'] === null) {
+            $object->setRectifiedInvoiceId(null);
+            unset($data['rectified_invoice_id']);
+        }
+        if (\array_key_exists('source_proforma_id', $data) && $data['source_proforma_id'] !== null) {
             $object->setSourceProformaId($data['source_proforma_id']);
             unset($data['source_proforma_id']);
         }
-        if (\array_key_exists('converted_invoice_id', $data)) {
+        elseif (\array_key_exists('source_proforma_id', $data) && $data['source_proforma_id'] === null) {
+            $object->setSourceProformaId(null);
+            unset($data['source_proforma_id']);
+        }
+        if (\array_key_exists('converted_invoice_id', $data) && $data['converted_invoice_id'] !== null) {
             $object->setConvertedInvoiceId($data['converted_invoice_id']);
             unset($data['converted_invoice_id']);
         }
-        if (\array_key_exists('rectification_reason', $data)) {
+        elseif (\array_key_exists('converted_invoice_id', $data) && $data['converted_invoice_id'] === null) {
+            $object->setConvertedInvoiceId(null);
+            unset($data['converted_invoice_id']);
+        }
+        if (\array_key_exists('rectification_reason', $data) && $data['rectification_reason'] !== null) {
             $object->setRectificationReason($data['rectification_reason']);
+            unset($data['rectification_reason']);
+        }
+        elseif (\array_key_exists('rectification_reason', $data) && $data['rectification_reason'] === null) {
+            $object->setRectificationReason(null);
             unset($data['rectification_reason']);
         }
         if (\array_key_exists('recurring_invoice_id', $data) && $data['recurring_invoice_id'] !== null) {
@@ -244,12 +292,20 @@ class InvoiceNormalizer implements DenormalizerInterface, NormalizerInterface, D
             $object->setRecurringInvoiceName(null);
             unset($data['recurring_invoice_name']);
         }
-        if (\array_key_exists('rectification_type', $data)) {
+        if (\array_key_exists('rectification_type', $data) && $data['rectification_type'] !== null) {
             $object->setRectificationType($data['rectification_type']);
             unset($data['rectification_type']);
         }
-        if (\array_key_exists('rectification_code', $data)) {
+        elseif (\array_key_exists('rectification_type', $data) && $data['rectification_type'] === null) {
+            $object->setRectificationType(null);
+            unset($data['rectification_type']);
+        }
+        if (\array_key_exists('rectification_code', $data) && $data['rectification_code'] !== null) {
             $object->setRectificationCode($data['rectification_code']);
+            unset($data['rectification_code']);
+        }
+        elseif (\array_key_exists('rectification_code', $data) && $data['rectification_code'] === null) {
+            $object->setRectificationCode(null);
             unset($data['rectification_code']);
         }
         if (\array_key_exists('external_ref', $data) && $data['external_ref'] !== null) {
@@ -260,12 +316,16 @@ class InvoiceNormalizer implements DenormalizerInterface, NormalizerInterface, D
             $object->setExternalRef(null);
             unset($data['external_ref']);
         }
-        if (\array_key_exists('metadata', $data)) {
+        if (\array_key_exists('metadata', $data) && $data['metadata'] !== null) {
             $values_2 = new \Lenorix\BeelSdk\Generated\Runtime\JsonObject();
             foreach ($data['metadata'] as $key => $value_2) {
                 $values_2[$key] = $value_2;
             }
             $object->setMetadata($values_2);
+            unset($data['metadata']);
+        }
+        elseif (\array_key_exists('metadata', $data) && $data['metadata'] === null) {
+            $object->setMetadata(null);
             unset($data['metadata']);
         }
         if (\array_key_exists('send_automatically', $data) && $data['send_automatically'] !== null) {
@@ -292,11 +352,15 @@ class InvoiceNormalizer implements DenormalizerInterface, NormalizerInterface, D
             $object->setPdfDownloadUrl(null);
             unset($data['pdf_download_url']);
         }
-        if (\array_key_exists('verifactu', $data)) {
+        if (\array_key_exists('verifactu', $data) && $data['verifactu'] !== null) {
             $object->setVerifactu($this->denormalizer->denormalize($data['verifactu'], \Lenorix\BeelSdk\Generated\Model\VeriFactu::class, 'json', $context));
             unset($data['verifactu']);
         }
-        if (\array_key_exists('attachments', $data)) {
+        elseif (\array_key_exists('verifactu', $data) && $data['verifactu'] === null) {
+            $object->setVerifactu(null);
+            unset($data['verifactu']);
+        }
+        if (\array_key_exists('attachments', $data) && $data['attachments'] !== null) {
             $values_3 = [];
             foreach ($data['attachments'] as $value_3) {
                 $values_3[] = $this->denormalizer->denormalize($value_3, \Lenorix\BeelSdk\Generated\Model\InvoiceAttachment::class, 'json', $context);
@@ -304,7 +368,11 @@ class InvoiceNormalizer implements DenormalizerInterface, NormalizerInterface, D
             $object->setAttachments($values_3);
             unset($data['attachments']);
         }
-        if (\array_key_exists('sending_history', $data)) {
+        elseif (\array_key_exists('attachments', $data) && $data['attachments'] === null) {
+            $object->setAttachments(null);
+            unset($data['attachments']);
+        }
+        if (\array_key_exists('sending_history', $data) && $data['sending_history'] !== null) {
             $values_4 = [];
             foreach ($data['sending_history'] as $value_4) {
                 $values_4[] = $this->denormalizer->denormalize($value_4, \Lenorix\BeelSdk\Generated\Model\InvoiceSendRecord::class, 'json', $context);
@@ -312,8 +380,16 @@ class InvoiceNormalizer implements DenormalizerInterface, NormalizerInterface, D
             $object->setSendingHistory($values_4);
             unset($data['sending_history']);
         }
-        if (\array_key_exists('email_delivery', $data)) {
+        elseif (\array_key_exists('sending_history', $data) && $data['sending_history'] === null) {
+            $object->setSendingHistory(null);
+            unset($data['sending_history']);
+        }
+        if (\array_key_exists('email_delivery', $data) && $data['email_delivery'] !== null) {
             $object->setEmailDelivery($this->denormalizer->denormalize($data['email_delivery'], \Lenorix\BeelSdk\Generated\Model\InvoiceEmailDeliveryOutcome::class, 'json', $context));
+            unset($data['email_delivery']);
+        }
+        elseif (\array_key_exists('email_delivery', $data) && $data['email_delivery'] === null) {
+            $object->setEmailDelivery(null);
             unset($data['email_delivery']);
         }
         if (\array_key_exists('deleted_at', $data) && $data['deleted_at'] !== null) {
@@ -360,13 +436,13 @@ class InvoiceNormalizer implements DenormalizerInterface, NormalizerInterface, D
             $dataArray['operation_date'] = $data->getOperationDate()?->format('Y-m-d');
         }
         if ($data->isInitialized('dueDate') && null !== $data->getDueDate()) {
-            $dataArray['due_date'] = $data->getDueDate()->format('Y-m-d');
+            $dataArray['due_date'] = $data->getDueDate()?->format('Y-m-d');
         }
         if ($data->isInitialized('validUntil') && null !== $data->getValidUntil()) {
             $dataArray['valid_until'] = $data->getValidUntil()?->format('Y-m-d');
         }
         if ($data->isInitialized('paymentDate') && null !== $data->getPaymentDate()) {
-            $dataArray['payment_date'] = $data->getPaymentDate()->format('Y-m-d');
+            $dataArray['payment_date'] = $data->getPaymentDate()?->format('Y-m-d');
         }
         if ($data->isInitialized('sentAt') && null !== $data->getSentAt()) {
             $dataArray['sent_at'] = $this->normalizer->normalize($data->getSentAt(), 'json', $context);

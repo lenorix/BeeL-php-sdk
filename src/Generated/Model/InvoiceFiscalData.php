@@ -36,7 +36,7 @@ class InvoiceFiscalData implements AdditionalPropertiesInterface
     /**
      * Customer name
      *
-     * @var string
+     * @var string|null
      */
     protected $customerName;
     /**
@@ -132,20 +132,20 @@ class InvoiceFiscalData implements AdditionalPropertiesInterface
     /**
      * Customer name
      *
-     * @return string
+     * @return string|null
      */
-    public function getCustomerName(): string
+    public function getCustomerName(): ?string
     {
         return $this->customerName;
     }
     /**
      * Customer name
      *
-     * @param string $customerName
+     * @param string|null $customerName
      *
      * @return self
      */
-    public function setCustomerName(string $customerName): self
+    public function setCustomerName(?string $customerName): self
     {
         $this->initialized['customerName'] = true;
         $this->customerName = $customerName;

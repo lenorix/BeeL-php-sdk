@@ -20,21 +20,15 @@ class PaymentInfo implements AdditionalPropertiesInterface
      * If NONE is selected, no payment information will be shown on the invoice.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $method;
     /**
-     * IBAN (International Bank Account Number).
-     * Required when payment method is BANK_TRANSFER.
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $iban;
     /**
-     * SWIFT/BIC code
-     *
-     * @var string
+     * @var string|null
      */
     protected $swift;
     /**
@@ -50,9 +44,9 @@ class PaymentInfo implements AdditionalPropertiesInterface
      * If NONE is selected, no payment information will be shown on the invoice.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getMethod(): string
+    public function getMethod(): ?string
     {
         return $this->method;
     }
@@ -61,59 +55,47 @@ class PaymentInfo implements AdditionalPropertiesInterface
     If NONE is selected, no payment information will be shown on the invoice.
     
     *
-    * @param string $method
+    * @param string|null $method
     *
     * @return self
     */
-    public function setMethod(string $method): self
+    public function setMethod(?string $method): self
     {
         $this->initialized['method'] = true;
         $this->method = $method;
         return $this;
     }
     /**
-     * IBAN (International Bank Account Number).
-     * Required when payment method is BANK_TRANSFER.
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getIban(): string
+    public function getIban(): ?string
     {
         return $this->iban;
     }
     /**
-    * IBAN (International Bank Account Number).
-    Required when payment method is BANK_TRANSFER.
-    
-    *
-    * @param string $iban
-    *
-    * @return self
-    */
-    public function setIban(string $iban): self
+     * @param string|null $iban
+     *
+     * @return self
+     */
+    public function setIban(?string $iban): self
     {
         $this->initialized['iban'] = true;
         $this->iban = $iban;
         return $this;
     }
     /**
-     * SWIFT/BIC code
-     *
-     * @return string
+     * @return string|null
      */
-    public function getSwift(): string
+    public function getSwift(): ?string
     {
         return $this->swift;
     }
     /**
-     * SWIFT/BIC code
-     *
-     * @param string $swift
+     * @param string|null $swift
      *
      * @return self
      */
-    public function setSwift(string $swift): self
+    public function setSwift(?string $swift): self
     {
         $this->initialized['swift'] = true;
         $this->swift = $swift;

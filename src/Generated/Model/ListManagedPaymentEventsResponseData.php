@@ -33,7 +33,7 @@ class ListManagedPaymentEventsResponseData implements AdditionalPropertiesInterf
      * discarded events take part in `by_status` and `failure_reasons`.
      * 
      *
-     * @var PaymentEventCounts
+     * @var PaymentEventCounts|null
      */
     protected $counts;
     /**
@@ -82,9 +82,9 @@ class ListManagedPaymentEventsResponseData implements AdditionalPropertiesInterf
      * discarded events take part in `by_status` and `failure_reasons`.
      * 
      *
-     * @return PaymentEventCounts
+     * @return PaymentEventCounts|null
      */
-    public function getCounts(): PaymentEventCounts
+    public function getCounts(): ?PaymentEventCounts
     {
         return $this->counts;
     }
@@ -98,11 +98,11 @@ class ListManagedPaymentEventsResponseData implements AdditionalPropertiesInterf
     discarded events take part in `by_status` and `failure_reasons`.
     
     *
-    * @param PaymentEventCounts $counts
+    * @param PaymentEventCounts|null $counts
     *
     * @return self
     */
-    public function setCounts(PaymentEventCounts $counts): self
+    public function setCounts(?PaymentEventCounts $counts): self
     {
         $this->initialized['counts'] = true;
         $this->counts = $counts;

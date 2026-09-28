@@ -45,8 +45,12 @@ class V1ConfigurationSeriesGetResponse200DataNormalizer implements DenormalizerI
             $object->setSeries($values);
             unset($data['series']);
         }
-        if (\array_key_exists('pagination', $data)) {
+        if (\array_key_exists('pagination', $data) && $data['pagination'] !== null) {
             $object->setPagination($this->denormalizer->denormalize($data['pagination'], \Lenorix\BeelSdk\Generated\Model\V1ConfigurationSeriesGetResponse200DataPagination::class, 'json', $context));
+            unset($data['pagination']);
+        }
+        elseif (\array_key_exists('pagination', $data) && $data['pagination'] === null) {
+            $object->setPagination(null);
             unset($data['pagination']);
         }
         foreach ($data as $key => $value_1) {

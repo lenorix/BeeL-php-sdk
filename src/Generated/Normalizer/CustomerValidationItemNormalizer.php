@@ -41,12 +41,20 @@ class CustomerValidationItemNormalizer implements DenormalizerInterface, Normali
             $object->setIndex($data['index']);
             unset($data['index']);
         }
-        if (\array_key_exists('customer', $data)) {
+        if (\array_key_exists('customer', $data) && $data['customer'] !== null) {
             $object->setCustomer($this->denormalizer->denormalize($data['customer'], \Lenorix\BeelSdk\Generated\Model\CustomerValidationItemCustomer::class, 'json', $context));
             unset($data['customer']);
         }
-        if (\array_key_exists('customer_id', $data)) {
+        elseif (\array_key_exists('customer', $data) && $data['customer'] === null) {
+            $object->setCustomer(null);
+            unset($data['customer']);
+        }
+        if (\array_key_exists('customer_id', $data) && $data['customer_id'] !== null) {
             $object->setCustomerId($data['customer_id']);
+            unset($data['customer_id']);
+        }
+        elseif (\array_key_exists('customer_id', $data) && $data['customer_id'] === null) {
+            $object->setCustomerId(null);
             unset($data['customer_id']);
         }
         if (\array_key_exists('status', $data)) {

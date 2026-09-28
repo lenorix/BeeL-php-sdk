@@ -72,12 +72,20 @@ class CustomerValidationStatisticsNormalizer implements DenormalizerInterface, N
             $object->setSuccessRate($data['success_rate']);
             unset($data['success_rate']);
         }
-        if (\array_key_exists('importable', $data)) {
+        if (\array_key_exists('importable', $data) && $data['importable'] !== null) {
             $object->setImportable($data['importable']);
             unset($data['importable']);
         }
-        if (\array_key_exists('not_importable', $data)) {
+        elseif (\array_key_exists('importable', $data) && $data['importable'] === null) {
+            $object->setImportable(null);
+            unset($data['importable']);
+        }
+        if (\array_key_exists('not_importable', $data) && $data['not_importable'] !== null) {
             $object->setNotImportable($data['not_importable']);
+            unset($data['not_importable']);
+        }
+        elseif (\array_key_exists('not_importable', $data) && $data['not_importable'] === null) {
+            $object->setNotImportable(null);
             unset($data['not_importable']);
         }
         foreach ($data as $key => $value) {

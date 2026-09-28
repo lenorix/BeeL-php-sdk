@@ -53,7 +53,7 @@ class EmailDeliveryResponseNormalizer implements DenormalizerInterface, Normaliz
             $object->setRecipients($values);
             unset($data['recipients']);
         }
-        if (\array_key_exists('cc', $data)) {
+        if (\array_key_exists('cc', $data) && $data['cc'] !== null) {
             $values_1 = [];
             foreach ($data['cc'] as $value_1) {
                 $values_1[] = $value_1;
@@ -61,8 +61,16 @@ class EmailDeliveryResponseNormalizer implements DenormalizerInterface, Normaliz
             $object->setCc($values_1);
             unset($data['cc']);
         }
-        if (\array_key_exists('subject', $data)) {
+        elseif (\array_key_exists('cc', $data) && $data['cc'] === null) {
+            $object->setCc(null);
+            unset($data['cc']);
+        }
+        if (\array_key_exists('subject', $data) && $data['subject'] !== null) {
             $object->setSubject($data['subject']);
+            unset($data['subject']);
+        }
+        elseif (\array_key_exists('subject', $data) && $data['subject'] === null) {
+            $object->setSubject(null);
             unset($data['subject']);
         }
         if (\array_key_exists('related_entity_type', $data) && $data['related_entity_type'] !== null) {
@@ -85,8 +93,12 @@ class EmailDeliveryResponseNormalizer implements DenormalizerInterface, Normaliz
             $object->setStatus($data['status']);
             unset($data['status']);
         }
-        if (\array_key_exists('sent_at', $data)) {
+        if (\array_key_exists('sent_at', $data) && $data['sent_at'] !== null) {
             $object->setSentAt($this->denormalizer->denormalize($data['sent_at'], \DateTime::class, 'json', $context));
+            unset($data['sent_at']);
+        }
+        elseif (\array_key_exists('sent_at', $data) && $data['sent_at'] === null) {
+            $object->setSentAt(null);
             unset($data['sent_at']);
         }
         foreach ($data as $key => $value_2) {

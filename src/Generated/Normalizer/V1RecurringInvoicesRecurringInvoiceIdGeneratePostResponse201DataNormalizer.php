@@ -37,8 +37,12 @@ class V1RecurringInvoicesRecurringInvoiceIdGeneratePostResponse201DataNormalizer
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('invoice_id', $data)) {
+        if (\array_key_exists('invoice_id', $data) && $data['invoice_id'] !== null) {
             $object->setInvoiceId($data['invoice_id']);
+            unset($data['invoice_id']);
+        }
+        elseif (\array_key_exists('invoice_id', $data) && $data['invoice_id'] === null) {
+            $object->setInvoiceId(null);
             unset($data['invoice_id']);
         }
         if (\array_key_exists('next_generation', $data) && $data['next_generation'] !== null) {

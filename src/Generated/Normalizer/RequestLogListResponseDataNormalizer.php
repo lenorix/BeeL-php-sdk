@@ -45,8 +45,12 @@ class RequestLogListResponseDataNormalizer implements DenormalizerInterface, Nor
             $object->setRequestLogs($values);
             unset($data['request_logs']);
         }
-        if (\array_key_exists('pagination', $data)) {
+        if (\array_key_exists('pagination', $data) && $data['pagination'] !== null) {
             $object->setPagination($this->denormalizer->denormalize($data['pagination'], \Lenorix\BeelSdk\Generated\Model\RequestLogCursorPagination::class, 'json', $context));
+            unset($data['pagination']);
+        }
+        elseif (\array_key_exists('pagination', $data) && $data['pagination'] === null) {
+            $object->setPagination(null);
             unset($data['pagination']);
         }
         foreach ($data as $key => $value_1) {

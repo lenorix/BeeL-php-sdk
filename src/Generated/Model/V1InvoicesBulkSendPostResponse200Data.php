@@ -44,7 +44,7 @@ class V1InvoicesBulkSendPostResponse200Data implements AdditionalPropertiesInter
     /**
      * List of invoices that could not be attached
      *
-     * @var list<V1InvoicesBulkSendPostResponse200DataFailuresItem>
+     * @var list<V1InvoicesBulkSendPostResponse200DataFailuresItem>|null
      */
     protected $failures;
     /**
@@ -152,20 +152,20 @@ class V1InvoicesBulkSendPostResponse200Data implements AdditionalPropertiesInter
     /**
      * List of invoices that could not be attached
      *
-     * @return list<V1InvoicesBulkSendPostResponse200DataFailuresItem>
+     * @return list<V1InvoicesBulkSendPostResponse200DataFailuresItem>|null
      */
-    public function getFailures(): array
+    public function getFailures(): ?array
     {
         return $this->failures;
     }
     /**
      * List of invoices that could not be attached
      *
-     * @param list<V1InvoicesBulkSendPostResponse200DataFailuresItem> $failures
+     * @param list<V1InvoicesBulkSendPostResponse200DataFailuresItem>|null $failures
      *
      * @return self
      */
-    public function setFailures(array $failures): self
+    public function setFailures(?array $failures): self
     {
         $this->initialized['failures'] = true;
         $this->failures = $failures;

@@ -41,13 +41,13 @@ class VeriFactuRecord implements AdditionalPropertiesInterface
      * gave one.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $submissionStatus;
     /**
      * Invoice SHA-256 hash according to VeriFactu regulations. Only on `REGISTRATION` records.
      *
-     * @var string
+     * @var string|null
      */
     protected $invoiceHash;
     /**
@@ -55,7 +55,7 @@ class VeriFactuRecord implements AdditionalPropertiesInterface
      * submitted. It is not an AEAT code: quote it when you ask BeeL about the record.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $registrationNumber;
     /**
@@ -63,14 +63,14 @@ class VeriFactuRecord implements AdditionalPropertiesInterface
      * also has one.
      * 
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $registeredAt;
     /**
      * AEAT verification URL encoded in the invoice QR code. Only on `REGISTRATION` records.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $qrUrl;
     /**
@@ -155,9 +155,9 @@ class VeriFactuRecord implements AdditionalPropertiesInterface
      * gave one.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getSubmissionStatus(): string
+    public function getSubmissionStatus(): ?string
     {
         return $this->submissionStatus;
     }
@@ -169,11 +169,11 @@ class VeriFactuRecord implements AdditionalPropertiesInterface
     gave one.
     
     *
-    * @param string $submissionStatus
+    * @param string|null $submissionStatus
     *
     * @return self
     */
-    public function setSubmissionStatus(string $submissionStatus): self
+    public function setSubmissionStatus(?string $submissionStatus): self
     {
         $this->initialized['submissionStatus'] = true;
         $this->submissionStatus = $submissionStatus;
@@ -182,20 +182,20 @@ class VeriFactuRecord implements AdditionalPropertiesInterface
     /**
      * Invoice SHA-256 hash according to VeriFactu regulations. Only on `REGISTRATION` records.
      *
-     * @return string
+     * @return string|null
      */
-    public function getInvoiceHash(): string
+    public function getInvoiceHash(): ?string
     {
         return $this->invoiceHash;
     }
     /**
      * Invoice SHA-256 hash according to VeriFactu regulations. Only on `REGISTRATION` records.
      *
-     * @param string $invoiceHash
+     * @param string|null $invoiceHash
      *
      * @return self
      */
-    public function setInvoiceHash(string $invoiceHash): self
+    public function setInvoiceHash(?string $invoiceHash): self
     {
         $this->initialized['invoiceHash'] = true;
         $this->invoiceHash = $invoiceHash;
@@ -206,9 +206,9 @@ class VeriFactuRecord implements AdditionalPropertiesInterface
      * submitted. It is not an AEAT code: quote it when you ask BeeL about the record.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getRegistrationNumber(): string
+    public function getRegistrationNumber(): ?string
     {
         return $this->registrationNumber;
     }
@@ -217,11 +217,11 @@ class VeriFactuRecord implements AdditionalPropertiesInterface
     submitted. It is not an AEAT code: quote it when you ask BeeL about the record.
     
     *
-    * @param string $registrationNumber
+    * @param string|null $registrationNumber
     *
     * @return self
     */
-    public function setRegistrationNumber(string $registrationNumber): self
+    public function setRegistrationNumber(?string $registrationNumber): self
     {
         $this->initialized['registrationNumber'] = true;
         $this->registrationNumber = $registrationNumber;
@@ -232,9 +232,9 @@ class VeriFactuRecord implements AdditionalPropertiesInterface
      * also has one.
      * 
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getRegisteredAt(): \DateTime
+    public function getRegisteredAt(): ?\DateTime
     {
         return $this->registeredAt;
     }
@@ -243,11 +243,11 @@ class VeriFactuRecord implements AdditionalPropertiesInterface
     also has one.
     
     *
-    * @param \DateTime $registeredAt
+    * @param \DateTime|null $registeredAt
     *
     * @return self
     */
-    public function setRegisteredAt(\DateTime $registeredAt): self
+    public function setRegisteredAt(?\DateTime $registeredAt): self
     {
         $this->initialized['registeredAt'] = true;
         $this->registeredAt = $registeredAt;
@@ -257,20 +257,20 @@ class VeriFactuRecord implements AdditionalPropertiesInterface
      * AEAT verification URL encoded in the invoice QR code. Only on `REGISTRATION` records.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getQrUrl(): string
+    public function getQrUrl(): ?string
     {
         return $this->qrUrl;
     }
     /**
      * AEAT verification URL encoded in the invoice QR code. Only on `REGISTRATION` records.
      *
-     * @param string $qrUrl
+     * @param string|null $qrUrl
      *
      * @return self
      */
-    public function setQrUrl(string $qrUrl): self
+    public function setQrUrl(?string $qrUrl): self
     {
         $this->initialized['qrUrl'] = true;
         $this->qrUrl = $qrUrl;

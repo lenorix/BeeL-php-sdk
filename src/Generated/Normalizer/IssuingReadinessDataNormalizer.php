@@ -40,11 +40,15 @@ class IssuingReadinessDataNormalizer implements DenormalizerInterface, Normalize
         if (\array_key_exists('ready', $data) && \is_int($data['ready'])) {
             $data['ready'] = (bool) $data['ready'];
         }
-        if (\array_key_exists('ready', $data)) {
+        if (\array_key_exists('ready', $data) && $data['ready'] !== null) {
             $object->setReady($data['ready']);
             unset($data['ready']);
         }
-        if (\array_key_exists('blockers', $data)) {
+        elseif (\array_key_exists('ready', $data) && $data['ready'] === null) {
+            $object->setReady(null);
+            unset($data['ready']);
+        }
+        if (\array_key_exists('blockers', $data) && $data['blockers'] !== null) {
             $values = [];
             foreach ($data['blockers'] as $value) {
                 $values[] = $value;
@@ -52,8 +56,16 @@ class IssuingReadinessDataNormalizer implements DenormalizerInterface, Normalize
             $object->setBlockers($values);
             unset($data['blockers']);
         }
-        if (\array_key_exists('verifactu', $data)) {
+        elseif (\array_key_exists('blockers', $data) && $data['blockers'] === null) {
+            $object->setBlockers(null);
+            unset($data['blockers']);
+        }
+        if (\array_key_exists('verifactu', $data) && $data['verifactu'] !== null) {
             $object->setVerifactu($this->denormalizer->denormalize($data['verifactu'], \Lenorix\BeelSdk\Generated\Model\IssuingReadinessDataVerifactu::class, 'json', $context));
+            unset($data['verifactu']);
+        }
+        elseif (\array_key_exists('verifactu', $data) && $data['verifactu'] === null) {
+            $object->setVerifactu(null);
             unset($data['verifactu']);
         }
         foreach ($data as $key => $value_1) {

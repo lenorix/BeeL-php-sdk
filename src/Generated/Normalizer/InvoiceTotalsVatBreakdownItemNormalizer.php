@@ -58,8 +58,12 @@ class InvoiceTotalsVatBreakdownItemNormalizer implements DenormalizerInterface, 
             $object->setAmount($data['amount']);
             unset($data['amount']);
         }
-        if (\array_key_exists('regime_key', $data)) {
+        if (\array_key_exists('regime_key', $data) && $data['regime_key'] !== null) {
             $object->setRegimeKey($data['regime_key']);
+            unset($data['regime_key']);
+        }
+        elseif (\array_key_exists('regime_key', $data) && $data['regime_key'] === null) {
+            $object->setRegimeKey(null);
             unset($data['regime_key']);
         }
         foreach ($data as $key => $value) {

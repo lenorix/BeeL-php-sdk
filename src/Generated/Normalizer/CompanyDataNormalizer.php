@@ -49,48 +49,92 @@ class CompanyDataNormalizer implements DenormalizerInterface, NormalizerInterfac
         if (\array_key_exists('in_test', $data) && \is_int($data['in_test'])) {
             $data['in_test'] = (bool) $data['in_test'];
         }
-        if (\array_key_exists('id', $data)) {
+        if (\array_key_exists('id', $data) && $data['id'] !== null) {
             $object->setId($data['id']);
             unset($data['id']);
         }
-        if (\array_key_exists('access_level', $data)) {
+        elseif (\array_key_exists('id', $data) && $data['id'] === null) {
+            $object->setId(null);
+            unset($data['id']);
+        }
+        if (\array_key_exists('access_level', $data) && $data['access_level'] !== null) {
             $object->setAccessLevel($data['access_level']);
             unset($data['access_level']);
         }
-        if (\array_key_exists('nif', $data)) {
+        elseif (\array_key_exists('access_level', $data) && $data['access_level'] === null) {
+            $object->setAccessLevel(null);
+            unset($data['access_level']);
+        }
+        if (\array_key_exists('nif', $data) && $data['nif'] !== null) {
             $object->setNif($data['nif']);
             unset($data['nif']);
         }
-        if (\array_key_exists('legal_name', $data)) {
+        elseif (\array_key_exists('nif', $data) && $data['nif'] === null) {
+            $object->setNif(null);
+            unset($data['nif']);
+        }
+        if (\array_key_exists('legal_name', $data) && $data['legal_name'] !== null) {
             $object->setLegalName($data['legal_name']);
             unset($data['legal_name']);
         }
-        if (\array_key_exists('trade_name', $data)) {
+        elseif (\array_key_exists('legal_name', $data) && $data['legal_name'] === null) {
+            $object->setLegalName(null);
+            unset($data['legal_name']);
+        }
+        if (\array_key_exists('trade_name', $data) && $data['trade_name'] !== null) {
             $object->setTradeName($data['trade_name']);
             unset($data['trade_name']);
         }
-        if (\array_key_exists('entity_type', $data)) {
+        elseif (\array_key_exists('trade_name', $data) && $data['trade_name'] === null) {
+            $object->setTradeName(null);
+            unset($data['trade_name']);
+        }
+        if (\array_key_exists('entity_type', $data) && $data['entity_type'] !== null) {
             $object->setEntityType($data['entity_type']);
             unset($data['entity_type']);
         }
-        if (\array_key_exists('is_primary', $data)) {
+        elseif (\array_key_exists('entity_type', $data) && $data['entity_type'] === null) {
+            $object->setEntityType(null);
+            unset($data['entity_type']);
+        }
+        if (\array_key_exists('is_primary', $data) && $data['is_primary'] !== null) {
             $object->setIsPrimary($data['is_primary']);
             unset($data['is_primary']);
         }
-        if (\array_key_exists('verifactu_status', $data)) {
+        elseif (\array_key_exists('is_primary', $data) && $data['is_primary'] === null) {
+            $object->setIsPrimary(null);
+            unset($data['is_primary']);
+        }
+        if (\array_key_exists('verifactu_status', $data) && $data['verifactu_status'] !== null) {
             $object->setVerifactuStatus($data['verifactu_status']);
             unset($data['verifactu_status']);
         }
-        if (\array_key_exists('environment', $data)) {
+        elseif (\array_key_exists('verifactu_status', $data) && $data['verifactu_status'] === null) {
+            $object->setVerifactuStatus(null);
+            unset($data['verifactu_status']);
+        }
+        if (\array_key_exists('environment', $data) && $data['environment'] !== null) {
             $object->setEnvironment($data['environment']);
             unset($data['environment']);
         }
-        if (\array_key_exists('in_prod', $data)) {
+        elseif (\array_key_exists('environment', $data) && $data['environment'] === null) {
+            $object->setEnvironment(null);
+            unset($data['environment']);
+        }
+        if (\array_key_exists('in_prod', $data) && $data['in_prod'] !== null) {
             $object->setInProd($data['in_prod']);
             unset($data['in_prod']);
         }
-        if (\array_key_exists('in_test', $data)) {
+        elseif (\array_key_exists('in_prod', $data) && $data['in_prod'] === null) {
+            $object->setInProd(null);
+            unset($data['in_prod']);
+        }
+        if (\array_key_exists('in_test', $data) && $data['in_test'] !== null) {
             $object->setInTest($data['in_test']);
+            unset($data['in_test']);
+        }
+        elseif (\array_key_exists('in_test', $data) && $data['in_test'] === null) {
+            $object->setInTest(null);
             unset($data['in_test']);
         }
         if (\array_key_exists('aeat_environment', $data) && $data['aeat_environment'] !== null) {
@@ -101,8 +145,12 @@ class CompanyDataNormalizer implements DenormalizerInterface, NormalizerInterfac
             $object->setAeatEnvironment(null);
             unset($data['aeat_environment']);
         }
-        if (\array_key_exists('account_state', $data)) {
+        if (\array_key_exists('account_state', $data) && $data['account_state'] !== null) {
             $object->setAccountState($data['account_state']);
+            unset($data['account_state']);
+        }
+        elseif (\array_key_exists('account_state', $data) && $data['account_state'] === null) {
+            $object->setAccountState(null);
             unset($data['account_state']);
         }
         if (\array_key_exists('address', $data) && $data['address'] !== null) {
@@ -261,8 +309,12 @@ class CompanyDataNormalizer implements DenormalizerInterface, NormalizerInterfac
             $object->setDefaultIrpfRate(null);
             unset($data['default_irpf_rate']);
         }
-        if (\array_key_exists('created_at', $data)) {
+        if (\array_key_exists('created_at', $data) && $data['created_at'] !== null) {
             $object->setCreatedAt($this->denormalizer->denormalize($data['created_at'], \DateTime::class, 'json', $context));
+            unset($data['created_at']);
+        }
+        elseif (\array_key_exists('created_at', $data) && $data['created_at'] === null) {
+            $object->setCreatedAt(null);
             unset($data['created_at']);
         }
         if (\array_key_exists('readiness', $data) && $data['readiness'] !== null) {

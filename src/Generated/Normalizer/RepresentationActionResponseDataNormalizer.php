@@ -37,12 +37,20 @@ class RepresentationActionResponseDataNormalizer implements DenormalizerInterfac
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('status', $data)) {
+        if (\array_key_exists('status', $data) && $data['status'] !== null) {
             $object->setStatus($data['status']);
             unset($data['status']);
         }
-        if (\array_key_exists('message', $data)) {
+        elseif (\array_key_exists('status', $data) && $data['status'] === null) {
+            $object->setStatus(null);
+            unset($data['status']);
+        }
+        if (\array_key_exists('message', $data) && $data['message'] !== null) {
             $object->setMessage($data['message']);
+            unset($data['message']);
+        }
+        elseif (\array_key_exists('message', $data) && $data['message'] === null) {
+            $object->setMessage(null);
             unset($data['message']);
         }
         foreach ($data as $key => $value) {

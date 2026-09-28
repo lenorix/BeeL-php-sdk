@@ -28,7 +28,7 @@ class AccountImportResult implements AdditionalPropertiesInterface
     /**
      * The optional customers file, checked **once** for the whole import. Absent when none was sent. What each account did with it is on its own row.
      *
-     * @var AccountImportResultCustomersSource
+     * @var AccountImportResultCustomersSource|null
      */
     protected $customersSource;
     /**
@@ -40,7 +40,7 @@ class AccountImportResult implements AdditionalPropertiesInterface
      * 
      * Your own company also **fails like a row**: if seeding it fails, the managed accounts already seeded stay exactly as they are and the failure is reported here, with its rows counted in `failed`.
      *
-     * @var AccountImportResultOwnCompanyCustomers
+     * @var AccountImportResultOwnCompanyCustomers|null
      */
     protected $ownCompanyCustomers;
     /**
@@ -94,20 +94,20 @@ class AccountImportResult implements AdditionalPropertiesInterface
     /**
      * The optional customers file, checked **once** for the whole import. Absent when none was sent. What each account did with it is on its own row.
      *
-     * @return AccountImportResultCustomersSource
+     * @return AccountImportResultCustomersSource|null
      */
-    public function getCustomersSource(): AccountImportResultCustomersSource
+    public function getCustomersSource(): ?AccountImportResultCustomersSource
     {
         return $this->customersSource;
     }
     /**
      * The optional customers file, checked **once** for the whole import. Absent when none was sent. What each account did with it is on its own row.
      *
-     * @param AccountImportResultCustomersSource $customersSource
+     * @param AccountImportResultCustomersSource|null $customersSource
      *
      * @return self
      */
-    public function setCustomersSource(AccountImportResultCustomersSource $customersSource): self
+    public function setCustomersSource(?AccountImportResultCustomersSource $customersSource): self
     {
         $this->initialized['customersSource'] = true;
         $this->customersSource = $customersSource;
@@ -122,9 +122,9 @@ class AccountImportResult implements AdditionalPropertiesInterface
      * 
      * Your own company also **fails like a row**: if seeding it fails, the managed accounts already seeded stay exactly as they are and the failure is reported here, with its rows counted in `failed`.
      *
-     * @return AccountImportResultOwnCompanyCustomers
+     * @return AccountImportResultOwnCompanyCustomers|null
      */
-    public function getOwnCompanyCustomers(): AccountImportResultOwnCompanyCustomers
+    public function getOwnCompanyCustomers(): ?AccountImportResultOwnCompanyCustomers
     {
         return $this->ownCompanyCustomers;
     }
@@ -137,11 +137,11 @@ class AccountImportResult implements AdditionalPropertiesInterface
     
     Your own company also **fails like a row**: if seeding it fails, the managed accounts already seeded stay exactly as they are and the failure is reported here, with its rows counted in `failed`.
     *
-    * @param AccountImportResultOwnCompanyCustomers $ownCompanyCustomers
+    * @param AccountImportResultOwnCompanyCustomers|null $ownCompanyCustomers
     *
     * @return self
     */
-    public function setOwnCompanyCustomers(AccountImportResultOwnCompanyCustomers $ownCompanyCustomers): self
+    public function setOwnCompanyCustomers(?AccountImportResultOwnCompanyCustomers $ownCompanyCustomers): self
     {
         $this->initialized['ownCompanyCustomers'] = true;
         $this->ownCompanyCustomers = $ownCompanyCustomers;

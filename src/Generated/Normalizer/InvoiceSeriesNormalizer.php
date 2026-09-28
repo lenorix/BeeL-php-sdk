@@ -62,8 +62,12 @@ class InvoiceSeriesNormalizer implements DenormalizerInterface, NormalizerInterf
             $object->setCode($data['code']);
             unset($data['code']);
         }
-        if (\array_key_exists('description', $data)) {
+        if (\array_key_exists('description', $data) && $data['description'] !== null) {
             $object->setDescription($data['description']);
+            unset($data['description']);
+        }
+        elseif (\array_key_exists('description', $data) && $data['description'] === null) {
+            $object->setDescription(null);
             unset($data['description']);
         }
         if (\array_key_exists('format', $data)) {
@@ -74,8 +78,12 @@ class InvoiceSeriesNormalizer implements DenormalizerInterface, NormalizerInterf
             $object->setCounterReset($data['counter_reset']);
             unset($data['counter_reset']);
         }
-        if (\array_key_exists('initial_number', $data)) {
+        if (\array_key_exists('initial_number', $data) && $data['initial_number'] !== null) {
             $object->setInitialNumber($data['initial_number']);
+            unset($data['initial_number']);
+        }
+        elseif (\array_key_exists('initial_number', $data) && $data['initial_number'] === null) {
+            $object->setInitialNumber(null);
             unset($data['initial_number']);
         }
         if (\array_key_exists('active', $data)) {
@@ -86,20 +94,36 @@ class InvoiceSeriesNormalizer implements DenormalizerInterface, NormalizerInterf
             $object->setDefaultSeries($data['default_series']);
             unset($data['default_series']);
         }
-        if (\array_key_exists('numbering_locked', $data)) {
+        if (\array_key_exists('numbering_locked', $data) && $data['numbering_locked'] !== null) {
             $object->setNumberingLocked($data['numbering_locked']);
             unset($data['numbering_locked']);
         }
-        if (\array_key_exists('created_at', $data)) {
+        elseif (\array_key_exists('numbering_locked', $data) && $data['numbering_locked'] === null) {
+            $object->setNumberingLocked(null);
+            unset($data['numbering_locked']);
+        }
+        if (\array_key_exists('created_at', $data) && $data['created_at'] !== null) {
             $object->setCreatedAt($this->denormalizer->denormalize($data['created_at'], \DateTime::class, 'json', $context));
             unset($data['created_at']);
         }
-        if (\array_key_exists('next_number', $data)) {
+        elseif (\array_key_exists('created_at', $data) && $data['created_at'] === null) {
+            $object->setCreatedAt(null);
+            unset($data['created_at']);
+        }
+        if (\array_key_exists('next_number', $data) && $data['next_number'] !== null) {
             $object->setNextNumber($data['next_number']);
             unset($data['next_number']);
         }
-        if (\array_key_exists('updated_at', $data)) {
+        elseif (\array_key_exists('next_number', $data) && $data['next_number'] === null) {
+            $object->setNextNumber(null);
+            unset($data['next_number']);
+        }
+        if (\array_key_exists('updated_at', $data) && $data['updated_at'] !== null) {
             $object->setUpdatedAt($this->denormalizer->denormalize($data['updated_at'], \DateTime::class, 'json', $context));
+            unset($data['updated_at']);
+        }
+        elseif (\array_key_exists('updated_at', $data) && $data['updated_at'] === null) {
+            $object->setUpdatedAt(null);
             unset($data['updated_at']);
         }
         foreach ($data as $key => $value) {

@@ -61,12 +61,20 @@ class AccountImportItemNormalizer implements DenormalizerInterface, NormalizerIn
             $object->setStatus($data['status']);
             unset($data['status']);
         }
-        if (\array_key_exists('live_activation_verdict', $data)) {
+        if (\array_key_exists('live_activation_verdict', $data) && $data['live_activation_verdict'] !== null) {
             $object->setLiveActivationVerdict($data['live_activation_verdict']);
             unset($data['live_activation_verdict']);
         }
-        if (\array_key_exists('account', $data)) {
+        elseif (\array_key_exists('live_activation_verdict', $data) && $data['live_activation_verdict'] === null) {
+            $object->setLiveActivationVerdict(null);
+            unset($data['live_activation_verdict']);
+        }
+        if (\array_key_exists('account', $data) && $data['account'] !== null) {
             $object->setAccount($this->denormalizer->denormalize($data['account'], \Lenorix\BeelSdk\Generated\Model\AccountImportItemAccount::class, 'json', $context));
+            unset($data['account']);
+        }
+        elseif (\array_key_exists('account', $data) && $data['account'] === null) {
+            $object->setAccount(null);
             unset($data['account']);
         }
         if (\array_key_exists('series', $data)) {
@@ -77,8 +85,12 @@ class AccountImportItemNormalizer implements DenormalizerInterface, NormalizerIn
             $object->setSeries($values);
             unset($data['series']);
         }
-        if (\array_key_exists('customers', $data)) {
+        if (\array_key_exists('customers', $data) && $data['customers'] !== null) {
             $object->setCustomers($this->denormalizer->denormalize($data['customers'], \Lenorix\BeelSdk\Generated\Model\AccountImportItemCustomers::class, 'json', $context));
+            unset($data['customers']);
+        }
+        elseif (\array_key_exists('customers', $data) && $data['customers'] === null) {
+            $object->setCustomers(null);
             unset($data['customers']);
         }
         if (\array_key_exists('errors', $data)) {

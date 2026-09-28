@@ -37,12 +37,16 @@ class V1AccountsAccountIdWebhooksGetResponse200DataNormalizer implements Denorma
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('webhooks', $data)) {
+        if (\array_key_exists('webhooks', $data) && $data['webhooks'] !== null) {
             $values = [];
             foreach ($data['webhooks'] as $value) {
                 $values[] = $this->denormalizer->denormalize($value, \Lenorix\BeelSdk\Generated\Model\WebhookSubscription::class, 'json', $context);
             }
             $object->setWebhooks($values);
+            unset($data['webhooks']);
+        }
+        elseif (\array_key_exists('webhooks', $data) && $data['webhooks'] === null) {
+            $object->setWebhooks(null);
             unset($data['webhooks']);
         }
         if (\array_key_exists('pagination', $data)) {

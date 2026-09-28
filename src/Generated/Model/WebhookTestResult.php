@@ -18,7 +18,7 @@ class WebhookTestResult implements AdditionalPropertiesInterface
     /**
      * Whether your endpoint responded with HTTP 2xx.
      *
-     * @var bool
+     * @var bool|null
      */
     protected $deliverySuccess;
     /**
@@ -30,7 +30,7 @@ class WebhookTestResult implements AdditionalPropertiesInterface
     /**
      * Round-trip time in milliseconds.
      *
-     * @var int
+     * @var int|null
      */
     protected $durationMs;
     /**
@@ -43,26 +43,26 @@ class WebhookTestResult implements AdditionalPropertiesInterface
      * Why the delivery failed, as a stable code. Absent when `delivery_success` is true. Branch on this, never on the wording of `error`.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $failureCause;
     /**
      * Whether your endpoint responded with HTTP 2xx.
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getDeliverySuccess(): bool
+    public function getDeliverySuccess(): ?bool
     {
         return $this->deliverySuccess;
     }
     /**
      * Whether your endpoint responded with HTTP 2xx.
      *
-     * @param bool $deliverySuccess
+     * @param bool|null $deliverySuccess
      *
      * @return self
      */
-    public function setDeliverySuccess(bool $deliverySuccess): self
+    public function setDeliverySuccess(?bool $deliverySuccess): self
     {
         $this->initialized['deliverySuccess'] = true;
         $this->deliverySuccess = $deliverySuccess;
@@ -93,20 +93,20 @@ class WebhookTestResult implements AdditionalPropertiesInterface
     /**
      * Round-trip time in milliseconds.
      *
-     * @return int
+     * @return int|null
      */
-    public function getDurationMs(): int
+    public function getDurationMs(): ?int
     {
         return $this->durationMs;
     }
     /**
      * Round-trip time in milliseconds.
      *
-     * @param int $durationMs
+     * @param int|null $durationMs
      *
      * @return self
      */
-    public function setDurationMs(int $durationMs): self
+    public function setDurationMs(?int $durationMs): self
     {
         $this->initialized['durationMs'] = true;
         $this->durationMs = $durationMs;
@@ -138,20 +138,20 @@ class WebhookTestResult implements AdditionalPropertiesInterface
      * Why the delivery failed, as a stable code. Absent when `delivery_success` is true. Branch on this, never on the wording of `error`.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getFailureCause(): string
+    public function getFailureCause(): ?string
     {
         return $this->failureCause;
     }
     /**
      * Why the delivery failed, as a stable code. Absent when `delivery_success` is true. Branch on this, never on the wording of `error`.
      *
-     * @param string $failureCause
+     * @param string|null $failureCause
      *
      * @return self
      */
-    public function setFailureCause(string $failureCause): self
+    public function setFailureCause(?string $failureCause): self
     {
         $this->initialized['failureCause'] = true;
         $this->failureCause = $failureCause;

@@ -36,7 +36,7 @@ class FiscalSummaryResponse implements AdditionalPropertiesInterface
     /**
      * Tax breakdown by type (IVA, IGIC, IPSI) and rate. Allows a single invoice to have multiple tax types.
      *
-     * @var list<TaxBreakdownItem>
+     * @var list<TaxBreakdownItem>|null
      */
     protected $taxBreakdown;
     /**
@@ -52,7 +52,7 @@ class FiscalSummaryResponse implements AdditionalPropertiesInterface
      *
      * @deprecated
      *
-     * @var array<string, float>
+     * @var array<string, float>|null
      */
     protected $vatBreakdownByRate;
     /**
@@ -61,7 +61,7 @@ class FiscalSummaryResponse implements AdditionalPropertiesInterface
      * period carries an equivalence surcharge.
      * 
      *
-     * @var list<SurchargeBreakdownItem>
+     * @var list<SurchargeBreakdownItem>|null
      */
     protected $surchargeBreakdown;
     /**
@@ -70,7 +70,7 @@ class FiscalSummaryResponse implements AdditionalPropertiesInterface
      * indirect tax.
      * 
      *
-     * @var float
+     * @var float|null
      */
     protected $totalEquivalenceSurcharge;
     /**
@@ -112,7 +112,7 @@ class FiscalSummaryResponse implements AdditionalPropertiesInterface
     /**
      * List of invoices included in the calculation
      *
-     * @var list<InvoiceFiscalData>
+     * @var list<InvoiceFiscalData>|null
      */
     protected $invoices;
     /**
@@ -190,20 +190,20 @@ class FiscalSummaryResponse implements AdditionalPropertiesInterface
     /**
      * Tax breakdown by type (IVA, IGIC, IPSI) and rate. Allows a single invoice to have multiple tax types.
      *
-     * @return list<TaxBreakdownItem>
+     * @return list<TaxBreakdownItem>|null
      */
-    public function getTaxBreakdown(): array
+    public function getTaxBreakdown(): ?array
     {
         return $this->taxBreakdown;
     }
     /**
      * Tax breakdown by type (IVA, IGIC, IPSI) and rate. Allows a single invoice to have multiple tax types.
      *
-     * @param list<TaxBreakdownItem> $taxBreakdown
+     * @param list<TaxBreakdownItem>|null $taxBreakdown
      *
      * @return self
      */
-    public function setTaxBreakdown(array $taxBreakdown): self
+    public function setTaxBreakdown(?array $taxBreakdown): self
     {
         $this->initialized['taxBreakdown'] = true;
         $this->taxBreakdown = $taxBreakdown;
@@ -222,9 +222,9 @@ class FiscalSummaryResponse implements AdditionalPropertiesInterface
      *
      * @deprecated
      *
-     * @return array<string, float>
+     * @return array<string, float>|null
      */
-    public function getVatBreakdownByRate(): iterable
+    public function getVatBreakdownByRate(): ?iterable
     {
         return $this->vatBreakdownByRate;
     }
@@ -239,13 +239,13 @@ class FiscalSummaryResponse implements AdditionalPropertiesInterface
     `tax_breakdown` is the replacement: it keeps `tax_type` and `percentage` separate.
     
     *
-    * @param array<string, float> $vatBreakdownByRate
+    * @param array<string, float>|null $vatBreakdownByRate
     *
     * @deprecated
     *
     * @return self
     */
-    public function setVatBreakdownByRate(iterable $vatBreakdownByRate): self
+    public function setVatBreakdownByRate(?iterable $vatBreakdownByRate): self
     {
         $this->initialized['vatBreakdownByRate'] = true;
         $this->vatBreakdownByRate = $vatBreakdownByRate;
@@ -257,9 +257,9 @@ class FiscalSummaryResponse implements AdditionalPropertiesInterface
      * period carries an equivalence surcharge.
      * 
      *
-     * @return list<SurchargeBreakdownItem>
+     * @return list<SurchargeBreakdownItem>|null
      */
-    public function getSurchargeBreakdown(): array
+    public function getSurchargeBreakdown(): ?array
     {
         return $this->surchargeBreakdown;
     }
@@ -269,11 +269,11 @@ class FiscalSummaryResponse implements AdditionalPropertiesInterface
     period carries an equivalence surcharge.
     
     *
-    * @param list<SurchargeBreakdownItem> $surchargeBreakdown
+    * @param list<SurchargeBreakdownItem>|null $surchargeBreakdown
     *
     * @return self
     */
-    public function setSurchargeBreakdown(array $surchargeBreakdown): self
+    public function setSurchargeBreakdown(?array $surchargeBreakdown): self
     {
         $this->initialized['surchargeBreakdown'] = true;
         $this->surchargeBreakdown = $surchargeBreakdown;
@@ -285,9 +285,9 @@ class FiscalSummaryResponse implements AdditionalPropertiesInterface
      * indirect tax.
      * 
      *
-     * @return float
+     * @return float|null
      */
-    public function getTotalEquivalenceSurcharge(): float
+    public function getTotalEquivalenceSurcharge(): ?float
     {
         return $this->totalEquivalenceSurcharge;
     }
@@ -297,11 +297,11 @@ class FiscalSummaryResponse implements AdditionalPropertiesInterface
     indirect tax.
     
     *
-    * @param float $totalEquivalenceSurcharge
+    * @param float|null $totalEquivalenceSurcharge
     *
     * @return self
     */
-    public function setTotalEquivalenceSurcharge(float $totalEquivalenceSurcharge): self
+    public function setTotalEquivalenceSurcharge(?float $totalEquivalenceSurcharge): self
     {
         $this->initialized['totalEquivalenceSurcharge'] = true;
         $this->totalEquivalenceSurcharge = $totalEquivalenceSurcharge;
@@ -442,20 +442,20 @@ class FiscalSummaryResponse implements AdditionalPropertiesInterface
     /**
      * List of invoices included in the calculation
      *
-     * @return list<InvoiceFiscalData>
+     * @return list<InvoiceFiscalData>|null
      */
-    public function getInvoices(): array
+    public function getInvoices(): ?array
     {
         return $this->invoices;
     }
     /**
      * List of invoices included in the calculation
      *
-     * @param list<InvoiceFiscalData> $invoices
+     * @param list<InvoiceFiscalData>|null $invoices
      *
      * @return self
      */
-    public function setInvoices(array $invoices): self
+    public function setInvoices(?array $invoices): self
     {
         $this->initialized['invoices'] = true;
         $this->invoices = $invoices;

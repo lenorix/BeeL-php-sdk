@@ -16,30 +16,22 @@ class V1ConfigurationLanguagePutResponse200Data implements AdditionalPropertiesI
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * Supported languages: `es` Spanish, `en` English, `ca` Catalan.
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $language;
     /**
-     * Supported languages: `es` Spanish, `en` English, `ca` Catalan.
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getLanguage(): string
+    public function getLanguage(): ?string
     {
         return $this->language;
     }
     /**
-     * Supported languages: `es` Spanish, `en` English, `ca` Catalan.
-     *
-     * @param string $language
+     * @param string|null $language
      *
      * @return self
      */
-    public function setLanguage(string $language): self
+    public function setLanguage(?string $language): self
     {
         $this->initialized['language'] = true;
         $this->language = $language;

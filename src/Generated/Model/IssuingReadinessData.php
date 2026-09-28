@@ -18,7 +18,7 @@ class IssuingReadinessData implements AdditionalPropertiesInterface
     /**
      * true if the company can issue invoices (no blockers).
      *
-     * @var bool
+     * @var bool|null
      */
     protected $ready;
     /**
@@ -52,7 +52,7 @@ class IssuingReadinessData implements AdditionalPropertiesInterface
      *   `POST /v1/companies/{company_id}/representation/submit`. Live only.
      * 
      *
-     * @var list<string>
+     * @var list<string>|null
      */
     protected $blockers;
     /**
@@ -62,26 +62,26 @@ class IssuingReadinessData implements AdditionalPropertiesInterface
      * `verifactu.ready` coincides with `ready` (same evaluation).
      * 
      *
-     * @var IssuingReadinessDataVerifactu
+     * @var IssuingReadinessDataVerifactu|null
      */
     protected $verifactu;
     /**
      * true if the company can issue invoices (no blockers).
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getReady(): bool
+    public function getReady(): ?bool
     {
         return $this->ready;
     }
     /**
      * true if the company can issue invoices (no blockers).
      *
-     * @param bool $ready
+     * @param bool|null $ready
      *
      * @return self
      */
-    public function setReady(bool $ready): self
+    public function setReady(?bool $ready): self
     {
         $this->initialized['ready'] = true;
         $this->ready = $ready;
@@ -118,9 +118,9 @@ class IssuingReadinessData implements AdditionalPropertiesInterface
      *   `POST /v1/companies/{company_id}/representation/submit`. Live only.
      * 
      *
-     * @return list<string>
+     * @return list<string>|null
      */
-    public function getBlockers(): array
+    public function getBlockers(): ?array
     {
         return $this->blockers;
     }
@@ -155,11 +155,11 @@ class IssuingReadinessData implements AdditionalPropertiesInterface
      `POST /v1/companies/{company_id}/representation/submit`. Live only.
     
     *
-    * @param list<string> $blockers
+    * @param list<string>|null $blockers
     *
     * @return self
     */
-    public function setBlockers(array $blockers): self
+    public function setBlockers(?array $blockers): self
     {
         $this->initialized['blockers'] = true;
         $this->blockers = $blockers;
@@ -172,9 +172,9 @@ class IssuingReadinessData implements AdditionalPropertiesInterface
      * `verifactu.ready` coincides with `ready` (same evaluation).
      * 
      *
-     * @return IssuingReadinessDataVerifactu
+     * @return IssuingReadinessDataVerifactu|null
      */
-    public function getVerifactu(): IssuingReadinessDataVerifactu
+    public function getVerifactu(): ?IssuingReadinessDataVerifactu
     {
         return $this->verifactu;
     }
@@ -185,11 +185,11 @@ class IssuingReadinessData implements AdditionalPropertiesInterface
     `verifactu.ready` coincides with `ready` (same evaluation).
     
     *
-    * @param IssuingReadinessDataVerifactu $verifactu
+    * @param IssuingReadinessDataVerifactu|null $verifactu
     *
     * @return self
     */
-    public function setVerifactu(IssuingReadinessDataVerifactu $verifactu): self
+    public function setVerifactu(?IssuingReadinessDataVerifactu $verifactu): self
     {
         $this->initialized['verifactu'] = true;
         $this->verifactu = $verifactu;

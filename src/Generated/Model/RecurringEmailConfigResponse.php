@@ -16,11 +16,11 @@ class RecurringEmailConfigResponse implements AdditionalPropertiesInterface
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var list<string>
+     * @var list<string>|null
      */
     protected $recipients;
     /**
-     * @var list<string>
+     * @var list<string>|null
      */
     protected $cc;
     /**
@@ -32,36 +32,36 @@ class RecurringEmailConfigResponse implements AdditionalPropertiesInterface
      */
     protected $message;
     /**
-     * @return list<string>
+     * @return list<string>|null
      */
-    public function getRecipients(): array
+    public function getRecipients(): ?array
     {
         return $this->recipients;
     }
     /**
-     * @param list<string> $recipients
+     * @param list<string>|null $recipients
      *
      * @return self
      */
-    public function setRecipients(array $recipients): self
+    public function setRecipients(?array $recipients): self
     {
         $this->initialized['recipients'] = true;
         $this->recipients = $recipients;
         return $this;
     }
     /**
-     * @return list<string>
+     * @return list<string>|null
      */
-    public function getCc(): array
+    public function getCc(): ?array
     {
         return $this->cc;
     }
     /**
-     * @param list<string> $cc
+     * @param list<string>|null $cc
      *
      * @return self
      */
-    public function setCc(array $cc): self
+    public function setCc(?array $cc): self
     {
         $this->initialized['cc'] = true;
         $this->cc = $cc;

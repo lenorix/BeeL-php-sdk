@@ -65,8 +65,12 @@ class InvoiceFiscalDataNormalizer implements DenormalizerInterface, NormalizerIn
             $object->setIssueDate($date->setTime(0, 0, 0));
             unset($data['issue_date']);
         }
-        if (\array_key_exists('customer_name', $data)) {
+        if (\array_key_exists('customer_name', $data) && $data['customer_name'] !== null) {
             $object->setCustomerName($data['customer_name']);
+            unset($data['customer_name']);
+        }
+        elseif (\array_key_exists('customer_name', $data) && $data['customer_name'] === null) {
+            $object->setCustomerName(null);
             unset($data['customer_name']);
         }
         if (\array_key_exists('taxable_base', $data)) {

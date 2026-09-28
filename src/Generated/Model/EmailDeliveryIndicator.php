@@ -28,27 +28,13 @@ class EmailDeliveryIndicator implements AdditionalPropertiesInterface
      */
     protected $count;
     /**
-     * Status of an email.
-     * 
-     * The history records every email the system decided to send, not only the ones that
-     * went out: an email stopped by policy is listed as REJECTED rather than omitted.
-     * 
-     * - QUEUED: authorised and recorded, not dispatched yet
-     * - REJECTED: stopped by policy and never sent (terminal, not retried). In test
-     *   environments invoices may only be emailed to the account owner's own address
-     *   (`+tag` aliases included), so a message addressed elsewhere lands here
-     * - SENT: successfully sent to the provider
-     * - FAILED: sending failed
-     * - DELIVERED / BOUNCED / OPENED: reported by the provider's webhooks
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $lastStatus;
     /**
      * Time of the last email sent for the entity
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $lastSentAt;
     /**
@@ -96,46 +82,18 @@ class EmailDeliveryIndicator implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * Status of an email.
-     * 
-     * The history records every email the system decided to send, not only the ones that
-     * went out: an email stopped by policy is listed as REJECTED rather than omitted.
-     * 
-     * - QUEUED: authorised and recorded, not dispatched yet
-     * - REJECTED: stopped by policy and never sent (terminal, not retried). In test
-     *   environments invoices may only be emailed to the account owner's own address
-     *   (`+tag` aliases included), so a message addressed elsewhere lands here
-     * - SENT: successfully sent to the provider
-     * - FAILED: sending failed
-     * - DELIVERED / BOUNCED / OPENED: reported by the provider's webhooks
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getLastStatus(): string
+    public function getLastStatus(): ?string
     {
         return $this->lastStatus;
     }
     /**
-    * Status of an email.
-    
-    The history records every email the system decided to send, not only the ones that
-    went out: an email stopped by policy is listed as REJECTED rather than omitted.
-    
-    - QUEUED: authorised and recorded, not dispatched yet
-    - REJECTED: stopped by policy and never sent (terminal, not retried). In test
-     environments invoices may only be emailed to the account owner's own address
-     (`+tag` aliases included), so a message addressed elsewhere lands here
-    - SENT: successfully sent to the provider
-    - FAILED: sending failed
-    - DELIVERED / BOUNCED / OPENED: reported by the provider's webhooks
-    
-    *
-    * @param string $lastStatus
-    *
-    * @return self
-    */
-    public function setLastStatus(string $lastStatus): self
+     * @param string|null $lastStatus
+     *
+     * @return self
+     */
+    public function setLastStatus(?string $lastStatus): self
     {
         $this->initialized['lastStatus'] = true;
         $this->lastStatus = $lastStatus;
@@ -144,20 +102,20 @@ class EmailDeliveryIndicator implements AdditionalPropertiesInterface
     /**
      * Time of the last email sent for the entity
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getLastSentAt(): \DateTime
+    public function getLastSentAt(): ?\DateTime
     {
         return $this->lastSentAt;
     }
     /**
      * Time of the last email sent for the entity
      *
-     * @param \DateTime $lastSentAt
+     * @param \DateTime|null $lastSentAt
      *
      * @return self
      */
-    public function setLastSentAt(\DateTime $lastSentAt): self
+    public function setLastSentAt(?\DateTime $lastSentAt): self
     {
         $this->initialized['lastSentAt'] = true;
         $this->lastSentAt = $lastSentAt;

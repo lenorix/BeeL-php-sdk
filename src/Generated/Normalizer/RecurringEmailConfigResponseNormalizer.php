@@ -37,7 +37,7 @@ class RecurringEmailConfigResponseNormalizer implements DenormalizerInterface, N
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('recipients', $data)) {
+        if (\array_key_exists('recipients', $data) && $data['recipients'] !== null) {
             $values = [];
             foreach ($data['recipients'] as $value) {
                 $values[] = $value;
@@ -45,12 +45,20 @@ class RecurringEmailConfigResponseNormalizer implements DenormalizerInterface, N
             $object->setRecipients($values);
             unset($data['recipients']);
         }
-        if (\array_key_exists('cc', $data)) {
+        elseif (\array_key_exists('recipients', $data) && $data['recipients'] === null) {
+            $object->setRecipients(null);
+            unset($data['recipients']);
+        }
+        if (\array_key_exists('cc', $data) && $data['cc'] !== null) {
             $values_1 = [];
             foreach ($data['cc'] as $value_1) {
                 $values_1[] = $value_1;
             }
             $object->setCc($values_1);
+            unset($data['cc']);
+        }
+        elseif (\array_key_exists('cc', $data) && $data['cc'] === null) {
+            $object->setCc(null);
             unset($data['cc']);
         }
         if (\array_key_exists('subject', $data) && $data['subject'] !== null) {

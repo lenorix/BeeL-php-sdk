@@ -116,8 +116,12 @@ class CreateCustomerRequestNormalizer implements DenormalizerInterface, Normaliz
             $object->setNotes(null);
             unset($data['notes']);
         }
-        if (\array_key_exists('preferred_payment_method', $data)) {
+        if (\array_key_exists('preferred_payment_method', $data) && $data['preferred_payment_method'] !== null) {
             $object->setPreferredPaymentMethod($this->denormalizer->denormalize($data['preferred_payment_method'], \Lenorix\BeelSdk\Generated\Model\PaymentInfo::class, 'json', $context));
+            unset($data['preferred_payment_method']);
+        }
+        elseif (\array_key_exists('preferred_payment_method', $data) && $data['preferred_payment_method'] === null) {
+            $object->setPreferredPaymentMethod(null);
             unset($data['preferred_payment_method']);
         }
         if (\array_key_exists('general_discount', $data) && $data['general_discount'] !== null) {

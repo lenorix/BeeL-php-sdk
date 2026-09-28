@@ -37,12 +37,16 @@ class V1WebhooksWebhookIdDeliveriesGetResponse200DataNormalizer implements Denor
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('deliveries', $data)) {
+        if (\array_key_exists('deliveries', $data) && $data['deliveries'] !== null) {
             $values = [];
             foreach ($data['deliveries'] as $value) {
                 $values[] = $this->denormalizer->denormalize($value, \Lenorix\BeelSdk\Generated\Model\WebhookDeliveryLog::class, 'json', $context);
             }
             $object->setDeliveries($values);
+            unset($data['deliveries']);
+        }
+        elseif (\array_key_exists('deliveries', $data) && $data['deliveries'] === null) {
+            $object->setDeliveries(null);
             unset($data['deliveries']);
         }
         if (\array_key_exists('pagination', $data)) {

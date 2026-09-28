@@ -22,7 +22,7 @@ class RequestLogListResponseData implements AdditionalPropertiesInterface
     /**
      * Cursor-based pagination (keyset on _time + request_id). APL does not support cheap offset.
      *
-     * @var RequestLogCursorPagination
+     * @var RequestLogCursorPagination|null
      */
     protected $pagination;
     /**
@@ -46,20 +46,20 @@ class RequestLogListResponseData implements AdditionalPropertiesInterface
     /**
      * Cursor-based pagination (keyset on _time + request_id). APL does not support cheap offset.
      *
-     * @return RequestLogCursorPagination
+     * @return RequestLogCursorPagination|null
      */
-    public function getPagination(): RequestLogCursorPagination
+    public function getPagination(): ?RequestLogCursorPagination
     {
         return $this->pagination;
     }
     /**
      * Cursor-based pagination (keyset on _time + request_id). APL does not support cheap offset.
      *
-     * @param RequestLogCursorPagination $pagination
+     * @param RequestLogCursorPagination|null $pagination
      *
      * @return self
      */
-    public function setPagination(RequestLogCursorPagination $pagination): self
+    public function setPagination(?RequestLogCursorPagination $pagination): self
     {
         $this->initialized['pagination'] = true;
         $this->pagination = $pagination;

@@ -47,12 +47,20 @@ class CustomerEchoNormalizer implements DenormalizerInterface, NormalizerInterfa
             $object->setLegalName($data['legal_name']);
             unset($data['legal_name']);
         }
-        if (\array_key_exists('trade_name', $data)) {
+        if (\array_key_exists('trade_name', $data) && $data['trade_name'] !== null) {
             $object->setTradeName($data['trade_name']);
             unset($data['trade_name']);
         }
-        if (\array_key_exists('nif', $data)) {
+        elseif (\array_key_exists('trade_name', $data) && $data['trade_name'] === null) {
+            $object->setTradeName(null);
+            unset($data['trade_name']);
+        }
+        if (\array_key_exists('nif', $data) && $data['nif'] !== null) {
             $object->setNif($data['nif']);
+            unset($data['nif']);
+        }
+        elseif (\array_key_exists('nif', $data) && $data['nif'] === null) {
+            $object->setNif(null);
             unset($data['nif']);
         }
         if (\array_key_exists('alternative_id', $data) && $data['alternative_id'] !== null) {
@@ -67,8 +75,12 @@ class CustomerEchoNormalizer implements DenormalizerInterface, NormalizerInterfa
             $object->setAddress($this->denormalizer->denormalize($data['address'], \Lenorix\BeelSdk\Generated\Model\Address::class, 'json', $context));
             unset($data['address']);
         }
-        if (\array_key_exists('phone', $data)) {
+        if (\array_key_exists('phone', $data) && $data['phone'] !== null) {
             $object->setPhone($data['phone']);
+            unset($data['phone']);
+        }
+        elseif (\array_key_exists('phone', $data) && $data['phone'] === null) {
+            $object->setPhone(null);
             unset($data['phone']);
         }
         if (\array_key_exists('email', $data) && $data['email'] !== null) {
@@ -87,7 +99,7 @@ class CustomerEchoNormalizer implements DenormalizerInterface, NormalizerInterfa
             $object->setWebsite(null);
             unset($data['website']);
         }
-        if (\array_key_exists('billing_emails', $data)) {
+        if (\array_key_exists('billing_emails', $data) && $data['billing_emails'] !== null) {
             $values = [];
             foreach ($data['billing_emails'] as $value) {
                 $values[] = $value;
@@ -95,24 +107,48 @@ class CustomerEchoNormalizer implements DenormalizerInterface, NormalizerInterfa
             $object->setBillingEmails($values);
             unset($data['billing_emails']);
         }
-        if (\array_key_exists('contact_person', $data)) {
+        elseif (\array_key_exists('billing_emails', $data) && $data['billing_emails'] === null) {
+            $object->setBillingEmails(null);
+            unset($data['billing_emails']);
+        }
+        if (\array_key_exists('contact_person', $data) && $data['contact_person'] !== null) {
             $object->setContactPerson($data['contact_person']);
             unset($data['contact_person']);
         }
-        if (\array_key_exists('notes', $data)) {
+        elseif (\array_key_exists('contact_person', $data) && $data['contact_person'] === null) {
+            $object->setContactPerson(null);
+            unset($data['contact_person']);
+        }
+        if (\array_key_exists('notes', $data) && $data['notes'] !== null) {
             $object->setNotes($data['notes']);
             unset($data['notes']);
         }
-        if (\array_key_exists('preferred_payment_method', $data)) {
+        elseif (\array_key_exists('notes', $data) && $data['notes'] === null) {
+            $object->setNotes(null);
+            unset($data['notes']);
+        }
+        if (\array_key_exists('preferred_payment_method', $data) && $data['preferred_payment_method'] !== null) {
             $object->setPreferredPaymentMethod($this->denormalizer->denormalize($data['preferred_payment_method'], \Lenorix\BeelSdk\Generated\Model\PaymentInfo::class, 'json', $context));
             unset($data['preferred_payment_method']);
         }
-        if (\array_key_exists('general_discount', $data)) {
+        elseif (\array_key_exists('preferred_payment_method', $data) && $data['preferred_payment_method'] === null) {
+            $object->setPreferredPaymentMethod(null);
+            unset($data['preferred_payment_method']);
+        }
+        if (\array_key_exists('general_discount', $data) && $data['general_discount'] !== null) {
             $object->setGeneralDiscount($data['general_discount']);
             unset($data['general_discount']);
         }
-        if (\array_key_exists('active', $data)) {
+        elseif (\array_key_exists('general_discount', $data) && $data['general_discount'] === null) {
+            $object->setGeneralDiscount(null);
+            unset($data['general_discount']);
+        }
+        if (\array_key_exists('active', $data) && $data['active'] !== null) {
             $object->setActive($data['active']);
+            unset($data['active']);
+        }
+        elseif (\array_key_exists('active', $data) && $data['active'] === null) {
+            $object->setActive(null);
             unset($data['active']);
         }
         foreach ($data as $key => $value_1) {

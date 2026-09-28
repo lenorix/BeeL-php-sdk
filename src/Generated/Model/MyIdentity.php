@@ -38,13 +38,13 @@ class MyIdentity implements AdditionalPropertiesInterface
      */
     protected $logoUrl;
     /**
-     * @var string
+     * @var string|null
      */
     protected $language;
     /**
      * The credential this call was authenticated with. Lets a client discover, in a single request, what it is allowed to do and which environment it operates on, instead of learning it from a `403`.
      *
-     * @var MyCredential
+     * @var MyCredential|null
      */
     protected $credential;
     /**
@@ -132,18 +132,18 @@ class MyIdentity implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getLanguage(): string
+    public function getLanguage(): ?string
     {
         return $this->language;
     }
     /**
-     * @param string $language
+     * @param string|null $language
      *
      * @return self
      */
-    public function setLanguage(string $language): self
+    public function setLanguage(?string $language): self
     {
         $this->initialized['language'] = true;
         $this->language = $language;
@@ -152,20 +152,20 @@ class MyIdentity implements AdditionalPropertiesInterface
     /**
      * The credential this call was authenticated with. Lets a client discover, in a single request, what it is allowed to do and which environment it operates on, instead of learning it from a `403`.
      *
-     * @return MyCredential
+     * @return MyCredential|null
      */
-    public function getCredential(): MyCredential
+    public function getCredential(): ?MyCredential
     {
         return $this->credential;
     }
     /**
      * The credential this call was authenticated with. Lets a client discover, in a single request, what it is allowed to do and which environment it operates on, instead of learning it from a `403`.
      *
-     * @param MyCredential $credential
+     * @param MyCredential|null $credential
      *
      * @return self
      */
-    public function setCredential(MyCredential $credential): self
+    public function setCredential(?MyCredential $credential): self
     {
         $this->initialized['credential'] = true;
         $this->credential = $credential;

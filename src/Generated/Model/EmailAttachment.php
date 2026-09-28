@@ -24,13 +24,13 @@ class EmailAttachment implements AdditionalPropertiesInterface
     /**
      * MIME type of the attachment
      *
-     * @var string
+     * @var string|null
      */
     protected $contentType;
     /**
      * Size in bytes, if known
      *
-     * @var int
+     * @var int|null
      */
     protected $size;
     /**
@@ -66,20 +66,20 @@ class EmailAttachment implements AdditionalPropertiesInterface
     /**
      * MIME type of the attachment
      *
-     * @return string
+     * @return string|null
      */
-    public function getContentType(): string
+    public function getContentType(): ?string
     {
         return $this->contentType;
     }
     /**
      * MIME type of the attachment
      *
-     * @param string $contentType
+     * @param string|null $contentType
      *
      * @return self
      */
-    public function setContentType(string $contentType): self
+    public function setContentType(?string $contentType): self
     {
         $this->initialized['contentType'] = true;
         $this->contentType = $contentType;
@@ -88,20 +88,20 @@ class EmailAttachment implements AdditionalPropertiesInterface
     /**
      * Size in bytes, if known
      *
-     * @return int
+     * @return int|null
      */
-    public function getSize(): int
+    public function getSize(): ?int
     {
         return $this->size;
     }
     /**
      * Size in bytes, if known
      *
-     * @param int $size
+     * @param int|null $size
      *
      * @return self
      */
-    public function setSize(int $size): self
+    public function setSize(?int $size): self
     {
         $this->initialized['size'] = true;
         $this->size = $size;

@@ -16,88 +16,88 @@ class InvoiceAttachment implements AdditionalPropertiesInterface
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var string
+     * @var string|null
      */
     protected $id;
     /**
-     * @var string
+     * @var string|null
      */
     protected $name;
     /**
-     * @var string
+     * @var string|null
      */
     protected $url;
     /**
-     * @var string
+     * @var string|null
      */
     protected $type;
     /**
-     * @return string
+     * @return string|null
      */
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->id;
     }
     /**
-     * @param string $id
+     * @param string|null $id
      *
      * @return self
      */
-    public function setId(string $id): self
+    public function setId(?string $id): self
     {
         $this->initialized['id'] = true;
         $this->id = $id;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
     /**
-     * @param string $name
+     * @param string|null $name
      *
      * @return self
      */
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->initialized['name'] = true;
         $this->name = $name;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getUrl(): string
+    public function getUrl(): ?string
     {
         return $this->url;
     }
     /**
-     * @param string $url
+     * @param string|null $url
      *
      * @return self
      */
-    public function setUrl(string $url): self
+    public function setUrl(?string $url): self
     {
         $this->initialized['url'] = true;
         $this->url = $url;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }
     /**
-     * @param string $type
+     * @param string|null $type
      *
      * @return self
      */
-    public function setType(string $type): self
+    public function setType(?string $type): self
     {
         $this->initialized['type'] = true;
         $this->type = $type;

@@ -16,7 +16,7 @@ class V1RecurringInvoicesRecurringInvoiceIdGeneratePostResponse201Data implement
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var string
+     * @var string|null
      */
     protected $invoiceId;
     /**
@@ -30,18 +30,18 @@ class V1RecurringInvoicesRecurringInvoiceIdGeneratePostResponse201Data implement
      */
     protected $nextGeneration;
     /**
-     * @return string
+     * @return string|null
      */
-    public function getInvoiceId(): string
+    public function getInvoiceId(): ?string
     {
         return $this->invoiceId;
     }
     /**
-     * @param string $invoiceId
+     * @param string|null $invoiceId
      *
      * @return self
      */
-    public function setInvoiceId(string $invoiceId): self
+    public function setInvoiceId(?string $invoiceId): self
     {
         $this->initialized['invoiceId'] = true;
         $this->invoiceId = $invoiceId;

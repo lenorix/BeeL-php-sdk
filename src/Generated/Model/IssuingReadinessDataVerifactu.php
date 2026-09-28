@@ -24,7 +24,7 @@ class IssuingReadinessDataVerifactu implements AdditionalPropertiesInterface
      * `blockers`, which is where operational blockers are reported.
      * 
      *
-     * @var bool
+     * @var bool|null
      */
     protected $ready;
     /**
@@ -40,7 +40,7 @@ class IssuingReadinessDataVerifactu implements AdditionalPropertiesInterface
      *   appears where a signed representation is actually demanded (Live).
      * 
      *
-     * @var list<string>
+     * @var list<string>|null
      */
     protected $blockers;
     /**
@@ -52,9 +52,9 @@ class IssuingReadinessDataVerifactu implements AdditionalPropertiesInterface
      * `blockers`, which is where operational blockers are reported.
      * 
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getReady(): bool
+    public function getReady(): ?bool
     {
         return $this->ready;
     }
@@ -67,11 +67,11 @@ class IssuingReadinessDataVerifactu implements AdditionalPropertiesInterface
     `blockers`, which is where operational blockers are reported.
     
     *
-    * @param bool $ready
+    * @param bool|null $ready
     *
     * @return self
     */
-    public function setReady(bool $ready): self
+    public function setReady(?bool $ready): self
     {
         $this->initialized['ready'] = true;
         $this->ready = $ready;
@@ -90,9 +90,9 @@ class IssuingReadinessDataVerifactu implements AdditionalPropertiesInterface
      *   appears where a signed representation is actually demanded (Live).
      * 
      *
-     * @return list<string>
+     * @return list<string>|null
      */
-    public function getBlockers(): array
+    public function getBlockers(): ?array
     {
         return $this->blockers;
     }
@@ -109,11 +109,11 @@ class IssuingReadinessDataVerifactu implements AdditionalPropertiesInterface
      appears where a signed representation is actually demanded (Live).
     
     *
-    * @param list<string> $blockers
+    * @param list<string>|null $blockers
     *
     * @return self
     */
-    public function setBlockers(array $blockers): self
+    public function setBlockers(?array $blockers): self
     {
         $this->initialized['blockers'] = true;
         $this->blockers = $blockers;

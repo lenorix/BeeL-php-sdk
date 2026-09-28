@@ -65,20 +65,36 @@ class RecipientDataNormalizer implements DenormalizerInterface, NormalizerInterf
             $object->setNif(null);
             unset($data['nif']);
         }
-        if (\array_key_exists('alternative_id', $data)) {
+        if (\array_key_exists('alternative_id', $data) && $data['alternative_id'] !== null) {
             $object->setAlternativeId($this->denormalizer->denormalize($data['alternative_id'], \Lenorix\BeelSdk\Generated\Model\RecipientDataAlternativeId::class, 'json', $context));
             unset($data['alternative_id']);
         }
-        if (\array_key_exists('address', $data)) {
+        elseif (\array_key_exists('alternative_id', $data) && $data['alternative_id'] === null) {
+            $object->setAlternativeId(null);
+            unset($data['alternative_id']);
+        }
+        if (\array_key_exists('address', $data) && $data['address'] !== null) {
             $object->setAddress($this->denormalizer->denormalize($data['address'], \Lenorix\BeelSdk\Generated\Model\RecipientDataAddress::class, 'json', $context));
             unset($data['address']);
         }
-        if (\array_key_exists('phone', $data)) {
+        elseif (\array_key_exists('address', $data) && $data['address'] === null) {
+            $object->setAddress(null);
+            unset($data['address']);
+        }
+        if (\array_key_exists('phone', $data) && $data['phone'] !== null) {
             $object->setPhone($data['phone']);
             unset($data['phone']);
         }
-        if (\array_key_exists('email', $data)) {
+        elseif (\array_key_exists('phone', $data) && $data['phone'] === null) {
+            $object->setPhone(null);
+            unset($data['phone']);
+        }
+        if (\array_key_exists('email', $data) && $data['email'] !== null) {
             $object->setEmail($data['email']);
+            unset($data['email']);
+        }
+        elseif (\array_key_exists('email', $data) && $data['email'] === null) {
+            $object->setEmail(null);
             unset($data['email']);
         }
         foreach ($data as $key => $value) {

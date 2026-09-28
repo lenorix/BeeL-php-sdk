@@ -34,11 +34,11 @@ class EmailDeliveryResponse implements AdditionalPropertiesInterface
     /**
      * Carbon-copy addresses (CC)
      *
-     * @var list<string>
+     * @var list<string>|null
      */
     protected $cc;
     /**
-     * @var string
+     * @var string|null
      */
     protected $subject;
     /**
@@ -77,7 +77,7 @@ class EmailDeliveryResponse implements AdditionalPropertiesInterface
     /**
      * Time the email was sent
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $sentAt;
     /**
@@ -145,38 +145,38 @@ class EmailDeliveryResponse implements AdditionalPropertiesInterface
     /**
      * Carbon-copy addresses (CC)
      *
-     * @return list<string>
+     * @return list<string>|null
      */
-    public function getCc(): array
+    public function getCc(): ?array
     {
         return $this->cc;
     }
     /**
      * Carbon-copy addresses (CC)
      *
-     * @param list<string> $cc
+     * @param list<string>|null $cc
      *
      * @return self
      */
-    public function setCc(array $cc): self
+    public function setCc(?array $cc): self
     {
         $this->initialized['cc'] = true;
         $this->cc = $cc;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSubject(): string
+    public function getSubject(): ?string
     {
         return $this->subject;
     }
     /**
-     * @param string $subject
+     * @param string|null $subject
      *
      * @return self
      */
-    public function setSubject(string $subject): self
+    public function setSubject(?string $subject): self
     {
         $this->initialized['subject'] = true;
         $this->subject = $subject;
@@ -281,20 +281,20 @@ class EmailDeliveryResponse implements AdditionalPropertiesInterface
     /**
      * Time the email was sent
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getSentAt(): \DateTime
+    public function getSentAt(): ?\DateTime
     {
         return $this->sentAt;
     }
     /**
      * Time the email was sent
      *
-     * @param \DateTime $sentAt
+     * @param \DateTime|null $sentAt
      *
      * @return self
      */
-    public function setSentAt(\DateTime $sentAt): self
+    public function setSentAt(?\DateTime $sentAt): self
     {
         $this->initialized['sentAt'] = true;
         $this->sentAt = $sentAt;

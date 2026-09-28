@@ -49,12 +49,20 @@ class AccountImportResultNormalizer implements DenormalizerInterface, Normalizer
             $object->setAccountsValidation($values);
             unset($data['accounts_validation']);
         }
-        if (\array_key_exists('customers_source', $data)) {
+        if (\array_key_exists('customers_source', $data) && $data['customers_source'] !== null) {
             $object->setCustomersSource($this->denormalizer->denormalize($data['customers_source'], \Lenorix\BeelSdk\Generated\Model\AccountImportResultCustomersSource::class, 'json', $context));
             unset($data['customers_source']);
         }
-        if (\array_key_exists('own_company_customers', $data)) {
+        elseif (\array_key_exists('customers_source', $data) && $data['customers_source'] === null) {
+            $object->setCustomersSource(null);
+            unset($data['customers_source']);
+        }
+        if (\array_key_exists('own_company_customers', $data) && $data['own_company_customers'] !== null) {
             $object->setOwnCompanyCustomers($this->denormalizer->denormalize($data['own_company_customers'], \Lenorix\BeelSdk\Generated\Model\AccountImportResultOwnCompanyCustomers::class, 'json', $context));
+            unset($data['own_company_customers']);
+        }
+        elseif (\array_key_exists('own_company_customers', $data) && $data['own_company_customers'] === null) {
+            $object->setOwnCompanyCustomers(null);
             unset($data['own_company_customers']);
         }
         if (\array_key_exists('statistics', $data)) {

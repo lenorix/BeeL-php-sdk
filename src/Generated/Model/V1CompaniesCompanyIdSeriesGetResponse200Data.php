@@ -24,7 +24,7 @@ class V1CompaniesCompanyIdSeriesGetResponse200Data implements AdditionalProperti
      * `page` and/or `limit`; omitted for the historical full list.
      * 
      *
-     * @var V1CompaniesCompanyIdSeriesGetResponse200DataPagination
+     * @var V1CompaniesCompanyIdSeriesGetResponse200DataPagination|null
      */
     protected $pagination;
     /**
@@ -50,9 +50,9 @@ class V1CompaniesCompanyIdSeriesGetResponse200Data implements AdditionalProperti
      * `page` and/or `limit`; omitted for the historical full list.
      * 
      *
-     * @return V1CompaniesCompanyIdSeriesGetResponse200DataPagination
+     * @return V1CompaniesCompanyIdSeriesGetResponse200DataPagination|null
      */
-    public function getPagination(): V1CompaniesCompanyIdSeriesGetResponse200DataPagination
+    public function getPagination(): ?V1CompaniesCompanyIdSeriesGetResponse200DataPagination
     {
         return $this->pagination;
     }
@@ -61,11 +61,11 @@ class V1CompaniesCompanyIdSeriesGetResponse200Data implements AdditionalProperti
     `page` and/or `limit`; omitted for the historical full list.
     
     *
-    * @param V1CompaniesCompanyIdSeriesGetResponse200DataPagination $pagination
+    * @param V1CompaniesCompanyIdSeriesGetResponse200DataPagination|null $pagination
     *
     * @return self
     */
-    public function setPagination(V1CompaniesCompanyIdSeriesGetResponse200DataPagination $pagination): self
+    public function setPagination(?V1CompaniesCompanyIdSeriesGetResponse200DataPagination $pagination): self
     {
         $this->initialized['pagination'] = true;
         $this->pagination = $pagination;

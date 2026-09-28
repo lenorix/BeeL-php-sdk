@@ -45,7 +45,7 @@ class RecipientAlternativeId implements AdditionalPropertiesInterface
      * `type` values; see the VeriFactu rules on the parent schema.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $countryCode;
     /**
@@ -122,9 +122,9 @@ class RecipientAlternativeId implements AdditionalPropertiesInterface
      * `type` values; see the VeriFactu rules on the parent schema.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getCountryCode(): string
+    public function getCountryCode(): ?string
     {
         return $this->countryCode;
     }
@@ -134,11 +134,11 @@ class RecipientAlternativeId implements AdditionalPropertiesInterface
     `type` values; see the VeriFactu rules on the parent schema.
     
     *
-    * @param string $countryCode
+    * @param string|null $countryCode
     *
     * @return self
     */
-    public function setCountryCode(string $countryCode): self
+    public function setCountryCode(?string $countryCode): self
     {
         $this->initialized['countryCode'] = true;
         $this->countryCode = $countryCode;

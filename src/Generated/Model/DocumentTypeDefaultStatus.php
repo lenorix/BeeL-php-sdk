@@ -60,7 +60,7 @@ class DocumentTypeDefaultStatus implements AdditionalPropertiesInterface
      * Always `false` when `exists` is `false`.
      * 
      *
-     * @var bool
+     * @var bool|null
      */
     protected $provisional;
     /**
@@ -183,9 +183,9 @@ class DocumentTypeDefaultStatus implements AdditionalPropertiesInterface
      * Always `false` when `exists` is `false`.
      * 
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getProvisional(): bool
+    public function getProvisional(): ?bool
     {
         return $this->provisional;
     }
@@ -199,11 +199,11 @@ class DocumentTypeDefaultStatus implements AdditionalPropertiesInterface
     Always `false` when `exists` is `false`.
     
     *
-    * @param bool $provisional
+    * @param bool|null $provisional
     *
     * @return self
     */
-    public function setProvisional(bool $provisional): self
+    public function setProvisional(?bool $provisional): self
     {
         $this->initialized['provisional'] = true;
         $this->provisional = $provisional;

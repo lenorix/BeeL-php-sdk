@@ -156,46 +156,7 @@ class UpdateInvoiceRequestLinesItem implements AdditionalPropertiesInterface
      */
     protected $irpfRate;
     /**
-     * Tax exemption reason code per the Spanish VAT Law (Ley 37/1992, LIVA), with the
-     * VeriFactu code each one is reported as.
-     * 
-     * - `EXENTA_ART_20`: exempt, art. 20 (domestic operations such as medical, educational,
-     *   cultural and financial services, or housing rentals). E1.
-     * - `EXENTA_ART_21`: exempt, art. 21 (exports of goods). E2.
-     * - `EXENTA_ART_22`: exempt, art. 22 (operations treated as exports). E3.
-     * - `EXENTA_ART_24`: exempt, art. 24 (free zones, warehouses and customs regimes). E4.
-     * - `EXENTA_ART_25`: exempt, art. 25 (intra-community supplies of goods). E5.
-     * - `EXENTA_ART_26`: exempt, art. 26 (intra-community acquisitions of goods). It exempts the
-     *   buyer's acquisition, not a supply the seller invoices, so an invoice line that carries it
-     *   is rejected with `EXEMPTION_NOT_FOR_ISSUED_INVOICE`; a supply to another Member State is
-     *   `EXENTA_ART_25`.
-     * - `NO_SUJETA_ART_7_9`: not subject under art. 7 (such as the transfer of a business as
-     *   a going concern, art. 7.1º). N1.
-     * - `NO_SUJETA_LOCALIZACION`: not subject by the place-of-supply rules (intra-community
-     *   or non-EU services, arts. 69 and 70). N2.
-     * - `ISP_ART_84_2_A` … `ISP_ART_84_2_F`: reverse charge (the invoice states «inversión del
-     *   sujeto pasivo»), art. 84.Uno.2.º letters a) (supplier not established in Spain), b) (unwrought
-     *   or semi-finished gold), c) (scrap, waste and recovery materials, plastic, paper, cardboard, glass and textile waste, and semi-finished non-ferrous metal products), d) (greenhouse gas emission
-     *   allowances), e) (certain real estate supplies: in insolvency proceedings, with the exemption
-     *   waived, or enforcing a security) and f) (construction or renovation works). S2.
-     * - `ISP_ART_84_2_G`: reverse charge of letter g) (silver, platinum, palladium, mobile phones,
-     *   consoles, laptops and tablets). The law requires these supplies to be invoiced in a special
-     *   series, so an invoice line that carries it is rejected with
-     *   `REVERSE_CHARGE_CASE_NOT_SUPPORTED`.
-     * - `EXENTA_ART_140`: investment gold exemption, art. 140 bis (usually with `regime_key`
-     *   `04`). E6.
-     * - `REGIMEN_ART_129` (agriculture,
-     *   livestock and fishing, arts. 124 to 134 bis), `REGIMEN_ART_135` (second-hand goods,
-     *   art and antiques), `REGIMEN_ART_141` (travel agencies), `REGIMEN_ART_154` (equivalence
-     *   surcharge) and `REGIMEN_ART_163_DECIES` (cash basis, arts. 163 decies to 163
-     *   sexiesdecies): operations of special regimes, which VeriFactu identifies by the regime
-     *   key rather than by an exemption code. An
-     *   invoice line that carries one is rejected with `EXEMPTION_REGIME_NOT_SUPPORTED_IN_VERIFACTU`;
-     *   declare the regime with `regime_key` instead.
-     * - `OTRO`: any other provision. Requires the text in `exemption_reason_text`. E6.
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $exemptionReason;
     /**
@@ -608,96 +569,18 @@ class UpdateInvoiceRequestLinesItem implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * Tax exemption reason code per the Spanish VAT Law (Ley 37/1992, LIVA), with the
-     * VeriFactu code each one is reported as.
-     * 
-     * - `EXENTA_ART_20`: exempt, art. 20 (domestic operations such as medical, educational,
-     *   cultural and financial services, or housing rentals). E1.
-     * - `EXENTA_ART_21`: exempt, art. 21 (exports of goods). E2.
-     * - `EXENTA_ART_22`: exempt, art. 22 (operations treated as exports). E3.
-     * - `EXENTA_ART_24`: exempt, art. 24 (free zones, warehouses and customs regimes). E4.
-     * - `EXENTA_ART_25`: exempt, art. 25 (intra-community supplies of goods). E5.
-     * - `EXENTA_ART_26`: exempt, art. 26 (intra-community acquisitions of goods). It exempts the
-     *   buyer's acquisition, not a supply the seller invoices, so an invoice line that carries it
-     *   is rejected with `EXEMPTION_NOT_FOR_ISSUED_INVOICE`; a supply to another Member State is
-     *   `EXENTA_ART_25`.
-     * - `NO_SUJETA_ART_7_9`: not subject under art. 7 (such as the transfer of a business as
-     *   a going concern, art. 7.1º). N1.
-     * - `NO_SUJETA_LOCALIZACION`: not subject by the place-of-supply rules (intra-community
-     *   or non-EU services, arts. 69 and 70). N2.
-     * - `ISP_ART_84_2_A` … `ISP_ART_84_2_F`: reverse charge (the invoice states «inversión del
-     *   sujeto pasivo»), art. 84.Uno.2.º letters a) (supplier not established in Spain), b) (unwrought
-     *   or semi-finished gold), c) (scrap, waste and recovery materials, plastic, paper, cardboard, glass and textile waste, and semi-finished non-ferrous metal products), d) (greenhouse gas emission
-     *   allowances), e) (certain real estate supplies: in insolvency proceedings, with the exemption
-     *   waived, or enforcing a security) and f) (construction or renovation works). S2.
-     * - `ISP_ART_84_2_G`: reverse charge of letter g) (silver, platinum, palladium, mobile phones,
-     *   consoles, laptops and tablets). The law requires these supplies to be invoiced in a special
-     *   series, so an invoice line that carries it is rejected with
-     *   `REVERSE_CHARGE_CASE_NOT_SUPPORTED`.
-     * - `EXENTA_ART_140`: investment gold exemption, art. 140 bis (usually with `regime_key`
-     *   `04`). E6.
-     * - `REGIMEN_ART_129` (agriculture,
-     *   livestock and fishing, arts. 124 to 134 bis), `REGIMEN_ART_135` (second-hand goods,
-     *   art and antiques), `REGIMEN_ART_141` (travel agencies), `REGIMEN_ART_154` (equivalence
-     *   surcharge) and `REGIMEN_ART_163_DECIES` (cash basis, arts. 163 decies to 163
-     *   sexiesdecies): operations of special regimes, which VeriFactu identifies by the regime
-     *   key rather than by an exemption code. An
-     *   invoice line that carries one is rejected with `EXEMPTION_REGIME_NOT_SUPPORTED_IN_VERIFACTU`;
-     *   declare the regime with `regime_key` instead.
-     * - `OTRO`: any other provision. Requires the text in `exemption_reason_text`. E6.
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getExemptionReason(): string
+    public function getExemptionReason(): ?string
     {
         return $this->exemptionReason;
     }
     /**
-    * Tax exemption reason code per the Spanish VAT Law (Ley 37/1992, LIVA), with the
-    VeriFactu code each one is reported as.
-    
-    - `EXENTA_ART_20`: exempt, art. 20 (domestic operations such as medical, educational,
-     cultural and financial services, or housing rentals). E1.
-    - `EXENTA_ART_21`: exempt, art. 21 (exports of goods). E2.
-    - `EXENTA_ART_22`: exempt, art. 22 (operations treated as exports). E3.
-    - `EXENTA_ART_24`: exempt, art. 24 (free zones, warehouses and customs regimes). E4.
-    - `EXENTA_ART_25`: exempt, art. 25 (intra-community supplies of goods). E5.
-    - `EXENTA_ART_26`: exempt, art. 26 (intra-community acquisitions of goods). It exempts the
-     buyer's acquisition, not a supply the seller invoices, so an invoice line that carries it
-     is rejected with `EXEMPTION_NOT_FOR_ISSUED_INVOICE`; a supply to another Member State is
-     `EXENTA_ART_25`.
-    - `NO_SUJETA_ART_7_9`: not subject under art. 7 (such as the transfer of a business as
-     a going concern, art. 7.1º). N1.
-    - `NO_SUJETA_LOCALIZACION`: not subject by the place-of-supply rules (intra-community
-     or non-EU services, arts. 69 and 70). N2.
-    - `ISP_ART_84_2_A` … `ISP_ART_84_2_F`: reverse charge (the invoice states «inversión del
-     sujeto pasivo»), art. 84.Uno.2.º letters a) (supplier not established in Spain), b) (unwrought
-     or semi-finished gold), c) (scrap, waste and recovery materials, plastic, paper, cardboard, glass and textile waste, and semi-finished non-ferrous metal products), d) (greenhouse gas emission
-     allowances), e) (certain real estate supplies: in insolvency proceedings, with the exemption
-     waived, or enforcing a security) and f) (construction or renovation works). S2.
-    - `ISP_ART_84_2_G`: reverse charge of letter g) (silver, platinum, palladium, mobile phones,
-     consoles, laptops and tablets). The law requires these supplies to be invoiced in a special
-     series, so an invoice line that carries it is rejected with
-     `REVERSE_CHARGE_CASE_NOT_SUPPORTED`.
-    - `EXENTA_ART_140`: investment gold exemption, art. 140 bis (usually with `regime_key`
-     `04`). E6.
-    - `REGIMEN_ART_129` (agriculture,
-     livestock and fishing, arts. 124 to 134 bis), `REGIMEN_ART_135` (second-hand goods,
-     art and antiques), `REGIMEN_ART_141` (travel agencies), `REGIMEN_ART_154` (equivalence
-     surcharge) and `REGIMEN_ART_163_DECIES` (cash basis, arts. 163 decies to 163
-     sexiesdecies): operations of special regimes, which VeriFactu identifies by the regime
-     key rather than by an exemption code. An
-     invoice line that carries one is rejected with `EXEMPTION_REGIME_NOT_SUPPORTED_IN_VERIFACTU`;
-     declare the regime with `regime_key` instead.
-    - `OTRO`: any other provision. Requires the text in `exemption_reason_text`. E6.
-    
-    *
-    * @param string $exemptionReason
-    *
-    * @return self
-    */
-    public function setExemptionReason(string $exemptionReason): self
+     * @param string|null $exemptionReason
+     *
+     * @return self
+     */
+    public function setExemptionReason(?string $exemptionReason): self
     {
         $this->initialized['exemptionReason'] = true;
         $this->exemptionReason = $exemptionReason;

@@ -48,8 +48,12 @@ class ManagedAccountSummaryNormalizer implements DenormalizerInterface, Normaliz
             $object->setExternalRef($data['external_ref']);
             unset($data['external_ref']);
         }
-        if (\array_key_exists('display_name', $data)) {
+        if (\array_key_exists('display_name', $data) && $data['display_name'] !== null) {
             $object->setDisplayName($data['display_name']);
+            unset($data['display_name']);
+        }
+        elseif (\array_key_exists('display_name', $data) && $data['display_name'] === null) {
+            $object->setDisplayName(null);
             unset($data['display_name']);
         }
         if (\array_key_exists('access_level', $data)) {

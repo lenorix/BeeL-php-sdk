@@ -67,8 +67,12 @@ class DocumentTypeDefaultStatusNormalizer implements DenormalizerInterface, Norm
             $object->setCode(null);
             unset($data['code']);
         }
-        if (\array_key_exists('provisional', $data)) {
+        if (\array_key_exists('provisional', $data) && $data['provisional'] !== null) {
             $object->setProvisional($data['provisional']);
+            unset($data['provisional']);
+        }
+        elseif (\array_key_exists('provisional', $data) && $data['provisional'] === null) {
+            $object->setProvisional(null);
             unset($data['provisional']);
         }
         foreach ($data as $key => $value) {

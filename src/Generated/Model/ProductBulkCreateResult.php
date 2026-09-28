@@ -55,7 +55,7 @@ class ProductBulkCreateResult implements AdditionalPropertiesInterface
      *
      * @deprecated
      *
-     * @var list<ProductBulkCreateLegacyError>
+     * @var list<ProductBulkCreateLegacyError>|null
      */
     protected $errors;
     /**
@@ -63,7 +63,7 @@ class ProductBulkCreateResult implements AdditionalPropertiesInterface
      *
      * @deprecated
      *
-     * @var ProductBulkCreateResultSummary
+     * @var ProductBulkCreateResultSummary|null
      */
     protected $summary;
     /**
@@ -176,9 +176,9 @@ class ProductBulkCreateResult implements AdditionalPropertiesInterface
      *
      * @deprecated
      *
-     * @return list<ProductBulkCreateLegacyError>
+     * @return list<ProductBulkCreateLegacyError>|null
      */
-    public function getErrors(): array
+    public function getErrors(): ?array
     {
         return $this->errors;
     }
@@ -190,13 +190,13 @@ class ProductBulkCreateResult implements AdditionalPropertiesInterface
     request.
     
     *
-    * @param list<ProductBulkCreateLegacyError> $errors
+    * @param list<ProductBulkCreateLegacyError>|null $errors
     *
     * @deprecated
     *
     * @return self
     */
-    public function setErrors(array $errors): self
+    public function setErrors(?array $errors): self
     {
         $this->initialized['errors'] = true;
         $this->errors = $errors;
@@ -207,22 +207,22 @@ class ProductBulkCreateResult implements AdditionalPropertiesInterface
      *
      * @deprecated
      *
-     * @return ProductBulkCreateResultSummary
+     * @return ProductBulkCreateResultSummary|null
      */
-    public function getSummary(): ProductBulkCreateResultSummary
+    public function getSummary(): ?ProductBulkCreateResultSummary
     {
         return $this->summary;
     }
     /**
      * **Deprecated.** Read `statistics`.
      *
-     * @param ProductBulkCreateResultSummary $summary
+     * @param ProductBulkCreateResultSummary|null $summary
      *
      * @deprecated
      *
      * @return self
      */
-    public function setSummary(ProductBulkCreateResultSummary $summary): self
+    public function setSummary(?ProductBulkCreateResultSummary $summary): self
     {
         $this->initialized['summary'] = true;
         $this->summary = $summary;

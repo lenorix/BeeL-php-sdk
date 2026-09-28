@@ -60,12 +60,20 @@ class WebhookSubscriptionWithSecretNormalizer implements DenormalizerInterface, 
             $object->setActive($data['active']);
             unset($data['active']);
         }
-        if (\array_key_exists('account_relationship', $data)) {
+        if (\array_key_exists('account_relationship', $data) && $data['account_relationship'] !== null) {
             $object->setAccountRelationship($data['account_relationship']);
             unset($data['account_relationship']);
         }
-        if (\array_key_exists('deactivated_by', $data)) {
+        elseif (\array_key_exists('account_relationship', $data) && $data['account_relationship'] === null) {
+            $object->setAccountRelationship(null);
+            unset($data['account_relationship']);
+        }
+        if (\array_key_exists('deactivated_by', $data) && $data['deactivated_by'] !== null) {
             $object->setDeactivatedBy($data['deactivated_by']);
+            unset($data['deactivated_by']);
+        }
+        elseif (\array_key_exists('deactivated_by', $data) && $data['deactivated_by'] === null) {
+            $object->setDeactivatedBy(null);
             unset($data['deactivated_by']);
         }
         if (\array_key_exists('deactivated_at', $data) && $data['deactivated_at'] !== null) {
@@ -84,12 +92,20 @@ class WebhookSubscriptionWithSecretNormalizer implements DenormalizerInterface, 
             $object->setLastError(null);
             unset($data['last_error']);
         }
-        if (\array_key_exists('last_error_cause', $data)) {
+        if (\array_key_exists('last_error_cause', $data) && $data['last_error_cause'] !== null) {
             $object->setLastErrorCause($data['last_error_cause']);
             unset($data['last_error_cause']);
         }
-        if (\array_key_exists('consecutive_failures', $data)) {
+        elseif (\array_key_exists('last_error_cause', $data) && $data['last_error_cause'] === null) {
+            $object->setLastErrorCause(null);
+            unset($data['last_error_cause']);
+        }
+        if (\array_key_exists('consecutive_failures', $data) && $data['consecutive_failures'] !== null) {
             $object->setConsecutiveFailures($data['consecutive_failures']);
+            unset($data['consecutive_failures']);
+        }
+        elseif (\array_key_exists('consecutive_failures', $data) && $data['consecutive_failures'] === null) {
+            $object->setConsecutiveFailures(null);
             unset($data['consecutive_failures']);
         }
         if (\array_key_exists('last_used_at', $data) && $data['last_used_at'] !== null) {
@@ -104,8 +120,12 @@ class WebhookSubscriptionWithSecretNormalizer implements DenormalizerInterface, 
             $object->setCreatedAt($this->denormalizer->denormalize($data['created_at'], \DateTime::class, 'json', $context));
             unset($data['created_at']);
         }
-        if (\array_key_exists('secret', $data)) {
+        if (\array_key_exists('secret', $data) && $data['secret'] !== null) {
             $object->setSecret($data['secret']);
+            unset($data['secret']);
+        }
+        elseif (\array_key_exists('secret', $data) && $data['secret'] === null) {
+            $object->setSecret(null);
             unset($data['secret']);
         }
         if (\array_key_exists('test_delivery', $data) && $data['test_delivery'] !== null) {

@@ -37,40 +37,76 @@ class CompanyDataAddressNormalizer implements DenormalizerInterface, NormalizerI
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('street', $data)) {
+        if (\array_key_exists('street', $data) && $data['street'] !== null) {
             $object->setStreet($data['street']);
             unset($data['street']);
         }
-        if (\array_key_exists('number', $data)) {
+        elseif (\array_key_exists('street', $data) && $data['street'] === null) {
+            $object->setStreet(null);
+            unset($data['street']);
+        }
+        if (\array_key_exists('number', $data) && $data['number'] !== null) {
             $object->setNumber($data['number']);
             unset($data['number']);
         }
-        if (\array_key_exists('floor', $data)) {
+        elseif (\array_key_exists('number', $data) && $data['number'] === null) {
+            $object->setNumber(null);
+            unset($data['number']);
+        }
+        if (\array_key_exists('floor', $data) && $data['floor'] !== null) {
             $object->setFloor($data['floor']);
             unset($data['floor']);
         }
-        if (\array_key_exists('door', $data)) {
+        elseif (\array_key_exists('floor', $data) && $data['floor'] === null) {
+            $object->setFloor(null);
+            unset($data['floor']);
+        }
+        if (\array_key_exists('door', $data) && $data['door'] !== null) {
             $object->setDoor($data['door']);
             unset($data['door']);
         }
-        if (\array_key_exists('postal_code', $data)) {
+        elseif (\array_key_exists('door', $data) && $data['door'] === null) {
+            $object->setDoor(null);
+            unset($data['door']);
+        }
+        if (\array_key_exists('postal_code', $data) && $data['postal_code'] !== null) {
             $object->setPostalCode($data['postal_code']);
             unset($data['postal_code']);
         }
-        if (\array_key_exists('city', $data)) {
+        elseif (\array_key_exists('postal_code', $data) && $data['postal_code'] === null) {
+            $object->setPostalCode(null);
+            unset($data['postal_code']);
+        }
+        if (\array_key_exists('city', $data) && $data['city'] !== null) {
             $object->setCity($data['city']);
             unset($data['city']);
         }
-        if (\array_key_exists('province', $data)) {
+        elseif (\array_key_exists('city', $data) && $data['city'] === null) {
+            $object->setCity(null);
+            unset($data['city']);
+        }
+        if (\array_key_exists('province', $data) && $data['province'] !== null) {
             $object->setProvince($data['province']);
             unset($data['province']);
         }
-        if (\array_key_exists('country', $data)) {
+        elseif (\array_key_exists('province', $data) && $data['province'] === null) {
+            $object->setProvince(null);
+            unset($data['province']);
+        }
+        if (\array_key_exists('country', $data) && $data['country'] !== null) {
             $object->setCountry($data['country']);
             unset($data['country']);
         }
-        if (\array_key_exists('country_code', $data)) {
+        elseif (\array_key_exists('country', $data) && $data['country'] === null) {
+            $object->setCountry(null);
+            unset($data['country']);
+        }
+        if (\array_key_exists('country_code', $data) && $data['country_code'] !== null) {
             $object->setCountryCode($data['country_code']);
+            unset($data['country_code']);
+        }
+        elseif (\array_key_exists('country_code', $data) && $data['country_code'] === null) {
+            $object->setCountryCode(null);
             unset($data['country_code']);
         }
         foreach ($data as $key => $value) {

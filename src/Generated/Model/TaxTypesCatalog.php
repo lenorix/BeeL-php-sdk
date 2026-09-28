@@ -16,88 +16,88 @@ class TaxTypesCatalog implements AdditionalPropertiesInterface
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var list<TaxRegime>
+     * @var list<TaxRegime>|null
      */
     protected $taxRegimes;
     /**
-     * @var list<IrpfType>
+     * @var list<IrpfType>|null
      */
     protected $irpfTypes;
     /**
-     * @var list<EquivalenceSurcharge>
+     * @var list<EquivalenceSurcharge>|null
      */
     protected $equivalenceSurcharges;
     /**
-     * @var list<ExemptionReasonCatalogEntry>
+     * @var list<ExemptionReasonCatalogEntry>|null
      */
     protected $exemptionReasons;
     /**
-     * @return list<TaxRegime>
+     * @return list<TaxRegime>|null
      */
-    public function getTaxRegimes(): array
+    public function getTaxRegimes(): ?array
     {
         return $this->taxRegimes;
     }
     /**
-     * @param list<TaxRegime> $taxRegimes
+     * @param list<TaxRegime>|null $taxRegimes
      *
      * @return self
      */
-    public function setTaxRegimes(array $taxRegimes): self
+    public function setTaxRegimes(?array $taxRegimes): self
     {
         $this->initialized['taxRegimes'] = true;
         $this->taxRegimes = $taxRegimes;
         return $this;
     }
     /**
-     * @return list<IrpfType>
+     * @return list<IrpfType>|null
      */
-    public function getIrpfTypes(): array
+    public function getIrpfTypes(): ?array
     {
         return $this->irpfTypes;
     }
     /**
-     * @param list<IrpfType> $irpfTypes
+     * @param list<IrpfType>|null $irpfTypes
      *
      * @return self
      */
-    public function setIrpfTypes(array $irpfTypes): self
+    public function setIrpfTypes(?array $irpfTypes): self
     {
         $this->initialized['irpfTypes'] = true;
         $this->irpfTypes = $irpfTypes;
         return $this;
     }
     /**
-     * @return list<EquivalenceSurcharge>
+     * @return list<EquivalenceSurcharge>|null
      */
-    public function getEquivalenceSurcharges(): array
+    public function getEquivalenceSurcharges(): ?array
     {
         return $this->equivalenceSurcharges;
     }
     /**
-     * @param list<EquivalenceSurcharge> $equivalenceSurcharges
+     * @param list<EquivalenceSurcharge>|null $equivalenceSurcharges
      *
      * @return self
      */
-    public function setEquivalenceSurcharges(array $equivalenceSurcharges): self
+    public function setEquivalenceSurcharges(?array $equivalenceSurcharges): self
     {
         $this->initialized['equivalenceSurcharges'] = true;
         $this->equivalenceSurcharges = $equivalenceSurcharges;
         return $this;
     }
     /**
-     * @return list<ExemptionReasonCatalogEntry>
+     * @return list<ExemptionReasonCatalogEntry>|null
      */
-    public function getExemptionReasons(): array
+    public function getExemptionReasons(): ?array
     {
         return $this->exemptionReasons;
     }
     /**
-     * @param list<ExemptionReasonCatalogEntry> $exemptionReasons
+     * @param list<ExemptionReasonCatalogEntry>|null $exemptionReasons
      *
      * @return self
      */
-    public function setExemptionReasons(array $exemptionReasons): self
+    public function setExemptionReasons(?array $exemptionReasons): self
     {
         $this->initialized['exemptionReasons'] = true;
         $this->exemptionReasons = $exemptionReasons;

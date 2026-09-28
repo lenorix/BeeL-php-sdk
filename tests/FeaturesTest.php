@@ -1651,17 +1651,19 @@ it('keeps the hand-written enums in sync with the contract', function (string $s
     ['WebhookEventTypeEnum', WebhookEventType::class],
 ]);
 
-it('checks null date-times per model, even for names that are nullable only in some models', function () {
+it('rejects a null date-time only where the field is required', function () {
     $transport = new RecordingPsrClient([
         jsonResponse(['success' => true, 'data' => ['id' => 'inv-1', 'sent_at' => null]]),
         jsonResponse(['success' => true, 'data' => ['email_id' => 'e-1', 'sent_to' => ['a@example.test'], 'sent_at' => null]]),
+        jsonResponse(['success' => true, 'data' => ['id' => 'inv-2', 'created_at' => null]]),
         jsonResponse(['success' => true, 'data' => ['id' => 'inv-9', 'email' => 'a@example.test', 'expires_at' => null]]),
     ]);
     $beel = testClient($transport);
     $invoices = $beel->company('c')->invoices;
 
     expect($invoices->get('inv-1')->getSentAt())->toBeNull()
-        ->and(fn () => $invoices->send('inv-1'))->toThrow(InvalidDateException::class)
+        ->and($invoices->send('inv-1')->getSentAt())->toBeNull()
+        ->and(fn () => $invoices->get('inv-2'))->toThrow(InvalidDateException::class)
         ->and(fn () => $beel->account('a')->invitations->get('inv-9'))->toThrow(InvalidDateException::class);
 });
 
@@ -1688,4 +1690,18 @@ it('accepts date-time objects in request arrays and keeps their microseconds', f
     testClient($transport)->invoices->markSent('inv-1', ['sent_at' => new DateTimeImmutable('2026-09-28T10:00:00.654321+02:00')]);
 
     expect(json_decode((string) $transport->requests[0]->getBody(), true))->toBe(['sent_at' => '2026-09-28T10:00:00.654321+02:00']);
+});
+
+it('ends iteration when a page leaves out its optional list or pagination', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => []]),
+        jsonResponse(['success' => true, 'data' => []]),
+        jsonResponse(['success' => true, 'data' => ['request_logs' => []]]),
+    ]);
+    $account = testClient($transport)->account('a');
+
+    expect(iterator_to_array($account->webhooks->all()))->toBe([])
+        ->and(iterator_to_array($account->webhooks->allDeliveries('wh-1')))->toBe([])
+        ->and(iterator_to_array($account->requestLogs->all()))->toBe([])
+        ->and($transport->requests)->toHaveCount(3);
 });

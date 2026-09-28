@@ -37,12 +37,20 @@ class RecurringInvoiceCompletionNormalizer implements DenormalizerInterface, Nor
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('reason', $data)) {
+        if (\array_key_exists('reason', $data) && $data['reason'] !== null) {
             $object->setReason($data['reason']);
             unset($data['reason']);
         }
-        if (\array_key_exists('at', $data)) {
+        elseif (\array_key_exists('reason', $data) && $data['reason'] === null) {
+            $object->setReason(null);
+            unset($data['reason']);
+        }
+        if (\array_key_exists('at', $data) && $data['at'] !== null) {
             $object->setAt($this->denormalizer->denormalize($data['at'], \DateTime::class, 'json', $context));
+            unset($data['at']);
+        }
+        elseif (\array_key_exists('at', $data) && $data['at'] === null) {
+            $object->setAt(null);
             unset($data['at']);
         }
         foreach ($data as $key => $value) {

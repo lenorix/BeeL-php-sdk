@@ -16,7 +16,7 @@ class V1AccountsAccountIdWebhooksWebhookIdDeliveriesGetResponse200Data implement
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var list<WebhookDeliveryLog>
+     * @var list<WebhookDeliveryLog>|null
      */
     protected $deliveries;
     /**
@@ -24,18 +24,18 @@ class V1AccountsAccountIdWebhooksWebhookIdDeliveriesGetResponse200Data implement
      */
     protected $pagination;
     /**
-     * @return list<WebhookDeliveryLog>
+     * @return list<WebhookDeliveryLog>|null
      */
-    public function getDeliveries(): array
+    public function getDeliveries(): ?array
     {
         return $this->deliveries;
     }
     /**
-     * @param list<WebhookDeliveryLog> $deliveries
+     * @param list<WebhookDeliveryLog>|null $deliveries
      *
      * @return self
      */
-    public function setDeliveries(array $deliveries): self
+    public function setDeliveries(?array $deliveries): self
     {
         $this->initialized['deliveries'] = true;
         $this->deliveries = $deliveries;

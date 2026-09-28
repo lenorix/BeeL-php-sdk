@@ -40,20 +40,36 @@ class VeriFactuNormalizer implements DenormalizerInterface, NormalizerInterface,
         if (\array_key_exists('enabled', $data) && \is_int($data['enabled'])) {
             $data['enabled'] = (bool) $data['enabled'];
         }
-        if (\array_key_exists('enabled', $data)) {
+        if (\array_key_exists('enabled', $data) && $data['enabled'] !== null) {
             $object->setEnabled($data['enabled']);
             unset($data['enabled']);
         }
-        if (\array_key_exists('invoice_hash', $data)) {
+        elseif (\array_key_exists('enabled', $data) && $data['enabled'] === null) {
+            $object->setEnabled(null);
+            unset($data['enabled']);
+        }
+        if (\array_key_exists('invoice_hash', $data) && $data['invoice_hash'] !== null) {
             $object->setInvoiceHash($data['invoice_hash']);
             unset($data['invoice_hash']);
         }
-        if (\array_key_exists('registration_number', $data)) {
+        elseif (\array_key_exists('invoice_hash', $data) && $data['invoice_hash'] === null) {
+            $object->setInvoiceHash(null);
+            unset($data['invoice_hash']);
+        }
+        if (\array_key_exists('registration_number', $data) && $data['registration_number'] !== null) {
             $object->setRegistrationNumber($data['registration_number']);
             unset($data['registration_number']);
         }
-        if (\array_key_exists('qr_url', $data)) {
+        elseif (\array_key_exists('registration_number', $data) && $data['registration_number'] === null) {
+            $object->setRegistrationNumber(null);
+            unset($data['registration_number']);
+        }
+        if (\array_key_exists('qr_url', $data) && $data['qr_url'] !== null) {
             $object->setQrUrl($data['qr_url']);
+            unset($data['qr_url']);
+        }
+        elseif (\array_key_exists('qr_url', $data) && $data['qr_url'] === null) {
+            $object->setQrUrl(null);
             unset($data['qr_url']);
         }
         if (\array_key_exists('qr_base64', $data) && $data['qr_base64'] !== null) {
@@ -64,12 +80,20 @@ class VeriFactuNormalizer implements DenormalizerInterface, NormalizerInterface,
             $object->setQrBase64(null);
             unset($data['qr_base64']);
         }
-        if (\array_key_exists('registered_at', $data)) {
+        if (\array_key_exists('registered_at', $data) && $data['registered_at'] !== null) {
             $object->setRegisteredAt($this->denormalizer->denormalize($data['registered_at'], \DateTime::class, 'json', $context));
             unset($data['registered_at']);
         }
-        if (\array_key_exists('submission_status', $data)) {
+        elseif (\array_key_exists('registered_at', $data) && $data['registered_at'] === null) {
+            $object->setRegisteredAt(null);
+            unset($data['registered_at']);
+        }
+        if (\array_key_exists('submission_status', $data) && $data['submission_status'] !== null) {
             $object->setSubmissionStatus($data['submission_status']);
+            unset($data['submission_status']);
+        }
+        elseif (\array_key_exists('submission_status', $data) && $data['submission_status'] === null) {
+            $object->setSubmissionStatus(null);
             unset($data['submission_status']);
         }
         if (\array_key_exists('skip_reason', $data) && $data['skip_reason'] !== null) {

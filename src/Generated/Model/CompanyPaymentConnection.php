@@ -127,7 +127,7 @@ class CompanyPaymentConnection implements AdditionalPropertiesInterface
      * A series left out falls back to the company default series for that type.
      * 
      *
-     * @var CompanyPaymentConnectionSeries
+     * @var CompanyPaymentConnectionSeries|null
      */
     protected $series;
     /**
@@ -135,7 +135,7 @@ class CompanyPaymentConnection implements AdditionalPropertiesInterface
      * recipient's full fiscal data, instead of a simplified one.
      * 
      *
-     * @var float
+     * @var float|null
      */
     protected $simplificadaThreshold;
     /**
@@ -144,7 +144,7 @@ class CompanyPaymentConnection implements AdditionalPropertiesInterface
      * recorded as skipped.
      * 
      *
-     * @var CompanyPaymentConnectionFilters
+     * @var CompanyPaymentConnectionFilters|null
      */
     protected $filterConfig;
     /**
@@ -521,9 +521,9 @@ class CompanyPaymentConnection implements AdditionalPropertiesInterface
      * A series left out falls back to the company default series for that type.
      * 
      *
-     * @return CompanyPaymentConnectionSeries
+     * @return CompanyPaymentConnectionSeries|null
      */
-    public function getSeries(): CompanyPaymentConnectionSeries
+    public function getSeries(): ?CompanyPaymentConnectionSeries
     {
         return $this->series;
     }
@@ -532,11 +532,11 @@ class CompanyPaymentConnection implements AdditionalPropertiesInterface
     A series left out falls back to the company default series for that type.
     
     *
-    * @param CompanyPaymentConnectionSeries $series
+    * @param CompanyPaymentConnectionSeries|null $series
     *
     * @return self
     */
-    public function setSeries(CompanyPaymentConnectionSeries $series): self
+    public function setSeries(?CompanyPaymentConnectionSeries $series): self
     {
         $this->initialized['series'] = true;
         $this->series = $series;
@@ -547,9 +547,9 @@ class CompanyPaymentConnection implements AdditionalPropertiesInterface
      * recipient's full fiscal data, instead of a simplified one.
      * 
      *
-     * @return float
+     * @return float|null
      */
-    public function getSimplificadaThreshold(): float
+    public function getSimplificadaThreshold(): ?float
     {
         return $this->simplificadaThreshold;
     }
@@ -558,11 +558,11 @@ class CompanyPaymentConnection implements AdditionalPropertiesInterface
     recipient's full fiscal data, instead of a simplified one.
     
     *
-    * @param float $simplificadaThreshold
+    * @param float|null $simplificadaThreshold
     *
     * @return self
     */
-    public function setSimplificadaThreshold(float $simplificadaThreshold): self
+    public function setSimplificadaThreshold(?float $simplificadaThreshold): self
     {
         $this->initialized['simplificadaThreshold'] = true;
         $this->simplificadaThreshold = $simplificadaThreshold;
@@ -574,9 +574,9 @@ class CompanyPaymentConnection implements AdditionalPropertiesInterface
      * recorded as skipped.
      * 
      *
-     * @return CompanyPaymentConnectionFilters
+     * @return CompanyPaymentConnectionFilters|null
      */
-    public function getFilterConfig(): CompanyPaymentConnectionFilters
+    public function getFilterConfig(): ?CompanyPaymentConnectionFilters
     {
         return $this->filterConfig;
     }
@@ -586,11 +586,11 @@ class CompanyPaymentConnection implements AdditionalPropertiesInterface
     recorded as skipped.
     
     *
-    * @param CompanyPaymentConnectionFilters $filterConfig
+    * @param CompanyPaymentConnectionFilters|null $filterConfig
     *
     * @return self
     */
-    public function setFilterConfig(CompanyPaymentConnectionFilters $filterConfig): self
+    public function setFilterConfig(?CompanyPaymentConnectionFilters $filterConfig): self
     {
         $this->initialized['filterConfig'] = true;
         $this->filterConfig = $filterConfig;

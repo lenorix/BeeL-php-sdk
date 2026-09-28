@@ -61,20 +61,36 @@ class InvoiceLineTemplateResponseNormalizer implements DenormalizerInterface, No
         if (\array_key_exists('irpf_rate', $data) && \is_int($data['irpf_rate'])) {
             $data['irpf_rate'] = (float) $data['irpf_rate'];
         }
-        if (\array_key_exists('id', $data)) {
+        if (\array_key_exists('id', $data) && $data['id'] !== null) {
             $object->setId($data['id']);
             unset($data['id']);
         }
-        if (\array_key_exists('order', $data)) {
+        elseif (\array_key_exists('id', $data) && $data['id'] === null) {
+            $object->setId(null);
+            unset($data['id']);
+        }
+        if (\array_key_exists('order', $data) && $data['order'] !== null) {
             $object->setOrder($data['order']);
             unset($data['order']);
         }
-        if (\array_key_exists('description', $data)) {
+        elseif (\array_key_exists('order', $data) && $data['order'] === null) {
+            $object->setOrder(null);
+            unset($data['order']);
+        }
+        if (\array_key_exists('description', $data) && $data['description'] !== null) {
             $object->setDescription($data['description']);
             unset($data['description']);
         }
-        if (\array_key_exists('quantity', $data)) {
+        elseif (\array_key_exists('description', $data) && $data['description'] === null) {
+            $object->setDescription(null);
+            unset($data['description']);
+        }
+        if (\array_key_exists('quantity', $data) && $data['quantity'] !== null) {
             $object->setQuantity($data['quantity']);
+            unset($data['quantity']);
+        }
+        elseif (\array_key_exists('quantity', $data) && $data['quantity'] === null) {
+            $object->setQuantity(null);
             unset($data['quantity']);
         }
         if (\array_key_exists('unit', $data) && $data['unit'] !== null) {
@@ -85,20 +101,36 @@ class InvoiceLineTemplateResponseNormalizer implements DenormalizerInterface, No
             $object->setUnit(null);
             unset($data['unit']);
         }
-        if (\array_key_exists('unit_price', $data)) {
+        if (\array_key_exists('unit_price', $data) && $data['unit_price'] !== null) {
             $object->setUnitPrice($data['unit_price']);
             unset($data['unit_price']);
         }
-        if (\array_key_exists('pricing_mode', $data)) {
+        elseif (\array_key_exists('unit_price', $data) && $data['unit_price'] === null) {
+            $object->setUnitPrice(null);
+            unset($data['unit_price']);
+        }
+        if (\array_key_exists('pricing_mode', $data) && $data['pricing_mode'] !== null) {
             $object->setPricingMode($data['pricing_mode']);
             unset($data['pricing_mode']);
         }
-        if (\array_key_exists('total_excluding_tax', $data)) {
+        elseif (\array_key_exists('pricing_mode', $data) && $data['pricing_mode'] === null) {
+            $object->setPricingMode(null);
+            unset($data['pricing_mode']);
+        }
+        if (\array_key_exists('total_excluding_tax', $data) && $data['total_excluding_tax'] !== null) {
             $object->setTotalExcludingTax($data['total_excluding_tax']);
             unset($data['total_excluding_tax']);
         }
-        if (\array_key_exists('total_including_tax', $data)) {
+        elseif (\array_key_exists('total_excluding_tax', $data) && $data['total_excluding_tax'] === null) {
+            $object->setTotalExcludingTax(null);
+            unset($data['total_excluding_tax']);
+        }
+        if (\array_key_exists('total_including_tax', $data) && $data['total_including_tax'] !== null) {
             $object->setTotalIncludingTax($data['total_including_tax']);
+            unset($data['total_including_tax']);
+        }
+        elseif (\array_key_exists('total_including_tax', $data) && $data['total_including_tax'] === null) {
+            $object->setTotalIncludingTax(null);
             unset($data['total_including_tax']);
         }
         if (\array_key_exists('discount_percentage', $data) && $data['discount_percentage'] !== null) {
@@ -109,16 +141,28 @@ class InvoiceLineTemplateResponseNormalizer implements DenormalizerInterface, No
             $object->setDiscountPercentage(null);
             unset($data['discount_percentage']);
         }
-        if (\array_key_exists('tax_type', $data)) {
+        if (\array_key_exists('tax_type', $data) && $data['tax_type'] !== null) {
             $object->setTaxType($data['tax_type']);
             unset($data['tax_type']);
         }
-        if (\array_key_exists('vat_rate', $data)) {
+        elseif (\array_key_exists('tax_type', $data) && $data['tax_type'] === null) {
+            $object->setTaxType(null);
+            unset($data['tax_type']);
+        }
+        if (\array_key_exists('vat_rate', $data) && $data['vat_rate'] !== null) {
             $object->setVatRate($data['vat_rate']);
             unset($data['vat_rate']);
         }
-        if (\array_key_exists('regime_key', $data)) {
+        elseif (\array_key_exists('vat_rate', $data) && $data['vat_rate'] === null) {
+            $object->setVatRate(null);
+            unset($data['vat_rate']);
+        }
+        if (\array_key_exists('regime_key', $data) && $data['regime_key'] !== null) {
             $object->setRegimeKey($data['regime_key']);
+            unset($data['regime_key']);
+        }
+        elseif (\array_key_exists('regime_key', $data) && $data['regime_key'] === null) {
+            $object->setRegimeKey(null);
             unset($data['regime_key']);
         }
         if (\array_key_exists('equivalence_surcharge_rate', $data) && $data['equivalence_surcharge_rate'] !== null) {
@@ -137,8 +181,12 @@ class InvoiceLineTemplateResponseNormalizer implements DenormalizerInterface, No
             $object->setIrpfRate(null);
             unset($data['irpf_rate']);
         }
-        if (\array_key_exists('exemption_reason', $data)) {
+        if (\array_key_exists('exemption_reason', $data) && $data['exemption_reason'] !== null) {
             $object->setExemptionReason($data['exemption_reason']);
+            unset($data['exemption_reason']);
+        }
+        elseif (\array_key_exists('exemption_reason', $data) && $data['exemption_reason'] === null) {
+            $object->setExemptionReason(null);
             unset($data['exemption_reason']);
         }
         if (\array_key_exists('exemption_reason_text', $data) && $data['exemption_reason_text'] !== null) {

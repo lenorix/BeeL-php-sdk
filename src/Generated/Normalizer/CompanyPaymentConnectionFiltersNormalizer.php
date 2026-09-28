@@ -46,19 +46,31 @@ class CompanyPaymentConnectionFiltersNormalizer implements DenormalizerInterface
         if (\array_key_exists('only_mapped_customers', $data) && \is_int($data['only_mapped_customers'])) {
             $data['only_mapped_customers'] = (bool) $data['only_mapped_customers'];
         }
-        if (\array_key_exists('min_amount', $data)) {
+        if (\array_key_exists('min_amount', $data) && $data['min_amount'] !== null) {
             $object->setMinAmount($data['min_amount']);
             unset($data['min_amount']);
         }
-        if (\array_key_exists('max_amount', $data)) {
+        elseif (\array_key_exists('min_amount', $data) && $data['min_amount'] === null) {
+            $object->setMinAmount(null);
+            unset($data['min_amount']);
+        }
+        if (\array_key_exists('max_amount', $data) && $data['max_amount'] !== null) {
             $object->setMaxAmount($data['max_amount']);
             unset($data['max_amount']);
         }
-        if (\array_key_exists('only_mapped_customers', $data)) {
+        elseif (\array_key_exists('max_amount', $data) && $data['max_amount'] === null) {
+            $object->setMaxAmount(null);
+            unset($data['max_amount']);
+        }
+        if (\array_key_exists('only_mapped_customers', $data) && $data['only_mapped_customers'] !== null) {
             $object->setOnlyMappedCustomers($data['only_mapped_customers']);
             unset($data['only_mapped_customers']);
         }
-        if (\array_key_exists('allowed_customer_ids', $data)) {
+        elseif (\array_key_exists('only_mapped_customers', $data) && $data['only_mapped_customers'] === null) {
+            $object->setOnlyMappedCustomers(null);
+            unset($data['only_mapped_customers']);
+        }
+        if (\array_key_exists('allowed_customer_ids', $data) && $data['allowed_customer_ids'] !== null) {
             $values = [];
             foreach ($data['allowed_customer_ids'] as $value) {
                 $values[] = $value;
@@ -66,7 +78,11 @@ class CompanyPaymentConnectionFiltersNormalizer implements DenormalizerInterface
             $object->setAllowedCustomerIds($values);
             unset($data['allowed_customer_ids']);
         }
-        if (\array_key_exists('excluded_description_patterns', $data)) {
+        elseif (\array_key_exists('allowed_customer_ids', $data) && $data['allowed_customer_ids'] === null) {
+            $object->setAllowedCustomerIds(null);
+            unset($data['allowed_customer_ids']);
+        }
+        if (\array_key_exists('excluded_description_patterns', $data) && $data['excluded_description_patterns'] !== null) {
             $values_1 = [];
             foreach ($data['excluded_description_patterns'] as $value_1) {
                 $values_1[] = $value_1;
@@ -74,7 +90,11 @@ class CompanyPaymentConnectionFiltersNormalizer implements DenormalizerInterface
             $object->setExcludedDescriptionPatterns($values_1);
             unset($data['excluded_description_patterns']);
         }
-        if (\array_key_exists('required_description_patterns', $data)) {
+        elseif (\array_key_exists('excluded_description_patterns', $data) && $data['excluded_description_patterns'] === null) {
+            $object->setExcludedDescriptionPatterns(null);
+            unset($data['excluded_description_patterns']);
+        }
+        if (\array_key_exists('required_description_patterns', $data) && $data['required_description_patterns'] !== null) {
             $values_2 = [];
             foreach ($data['required_description_patterns'] as $value_2) {
                 $values_2[] = $value_2;
@@ -82,12 +102,20 @@ class CompanyPaymentConnectionFiltersNormalizer implements DenormalizerInterface
             $object->setRequiredDescriptionPatterns($values_2);
             unset($data['required_description_patterns']);
         }
-        if (\array_key_exists('disabled_categories', $data)) {
+        elseif (\array_key_exists('required_description_patterns', $data) && $data['required_description_patterns'] === null) {
+            $object->setRequiredDescriptionPatterns(null);
+            unset($data['required_description_patterns']);
+        }
+        if (\array_key_exists('disabled_categories', $data) && $data['disabled_categories'] !== null) {
             $values_3 = [];
             foreach ($data['disabled_categories'] as $value_3) {
                 $values_3[] = $value_3;
             }
             $object->setDisabledCategories($values_3);
+            unset($data['disabled_categories']);
+        }
+        elseif (\array_key_exists('disabled_categories', $data) && $data['disabled_categories'] === null) {
+            $object->setDisabledCategories(null);
             unset($data['disabled_categories']);
         }
         foreach ($data as $key => $value_4) {

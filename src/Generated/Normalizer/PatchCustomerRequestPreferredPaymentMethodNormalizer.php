@@ -37,16 +37,28 @@ class PatchCustomerRequestPreferredPaymentMethodNormalizer implements Denormaliz
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('method', $data)) {
+        if (\array_key_exists('method', $data) && $data['method'] !== null) {
             $object->setMethod($data['method']);
             unset($data['method']);
         }
-        if (\array_key_exists('iban', $data)) {
+        elseif (\array_key_exists('method', $data) && $data['method'] === null) {
+            $object->setMethod(null);
+            unset($data['method']);
+        }
+        if (\array_key_exists('iban', $data) && $data['iban'] !== null) {
             $object->setIban($data['iban']);
             unset($data['iban']);
         }
-        if (\array_key_exists('swift', $data)) {
+        elseif (\array_key_exists('iban', $data) && $data['iban'] === null) {
+            $object->setIban(null);
+            unset($data['iban']);
+        }
+        if (\array_key_exists('swift', $data) && $data['swift'] !== null) {
             $object->setSwift($data['swift']);
+            unset($data['swift']);
+        }
+        elseif (\array_key_exists('swift', $data) && $data['swift'] === null) {
+            $object->setSwift(null);
             unset($data['swift']);
         }
         if (\array_key_exists('payment_term_days', $data) && $data['payment_term_days'] !== null) {

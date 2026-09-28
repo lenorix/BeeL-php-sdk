@@ -49,8 +49,12 @@ class ListManagedPaymentEventsResponseDataNormalizer implements DenormalizerInte
             $object->setPagination($this->denormalizer->denormalize($data['pagination'], \Lenorix\BeelSdk\Generated\Model\Pagination::class, 'json', $context));
             unset($data['pagination']);
         }
-        if (\array_key_exists('counts', $data)) {
+        if (\array_key_exists('counts', $data) && $data['counts'] !== null) {
             $object->setCounts($this->denormalizer->denormalize($data['counts'], \Lenorix\BeelSdk\Generated\Model\PaymentEventCounts::class, 'json', $context));
+            unset($data['counts']);
+        }
+        elseif (\array_key_exists('counts', $data) && $data['counts'] === null) {
+            $object->setCounts(null);
             unset($data['counts']);
         }
         foreach ($data as $key => $value_1) {

@@ -61,12 +61,20 @@ class MyIdentityNormalizer implements DenormalizerInterface, NormalizerInterface
             $object->setLogoUrl(null);
             unset($data['logo_url']);
         }
-        if (\array_key_exists('language', $data)) {
+        if (\array_key_exists('language', $data) && $data['language'] !== null) {
             $object->setLanguage($data['language']);
             unset($data['language']);
         }
-        if (\array_key_exists('credential', $data)) {
+        elseif (\array_key_exists('language', $data) && $data['language'] === null) {
+            $object->setLanguage(null);
+            unset($data['language']);
+        }
+        if (\array_key_exists('credential', $data) && $data['credential'] !== null) {
             $object->setCredential($this->denormalizer->denormalize($data['credential'], \Lenorix\BeelSdk\Generated\Model\MyCredential::class, 'json', $context));
+            unset($data['credential']);
+        }
+        elseif (\array_key_exists('credential', $data) && $data['credential'] === null) {
+            $object->setCredential(null);
             unset($data['credential']);
         }
         foreach ($data as $key => $value) {

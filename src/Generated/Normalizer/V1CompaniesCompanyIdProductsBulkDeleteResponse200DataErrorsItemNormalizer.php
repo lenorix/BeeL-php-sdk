@@ -37,12 +37,20 @@ class V1CompaniesCompanyIdProductsBulkDeleteResponse200DataErrorsItemNormalizer 
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('product_id', $data)) {
+        if (\array_key_exists('product_id', $data) && $data['product_id'] !== null) {
             $object->setProductId($data['product_id']);
             unset($data['product_id']);
         }
-        if (\array_key_exists('error', $data)) {
+        elseif (\array_key_exists('product_id', $data) && $data['product_id'] === null) {
+            $object->setProductId(null);
+            unset($data['product_id']);
+        }
+        if (\array_key_exists('error', $data) && $data['error'] !== null) {
             $object->setError($data['error']);
+            unset($data['error']);
+        }
+        elseif (\array_key_exists('error', $data) && $data['error'] === null) {
+            $object->setError(null);
             unset($data['error']);
         }
         foreach ($data as $key => $value) {

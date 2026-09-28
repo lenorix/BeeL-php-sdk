@@ -45,8 +45,12 @@ class RecipientAlternativeIdNormalizer implements DenormalizerInterface, Normali
             $object->setNumber($data['number']);
             unset($data['number']);
         }
-        if (\array_key_exists('country_code', $data)) {
+        if (\array_key_exists('country_code', $data) && $data['country_code'] !== null) {
             $object->setCountryCode($data['country_code']);
+            unset($data['country_code']);
+        }
+        elseif (\array_key_exists('country_code', $data) && $data['country_code'] === null) {
+            $object->setCountryCode(null);
             unset($data['country_code']);
         }
         foreach ($data as $key => $value) {

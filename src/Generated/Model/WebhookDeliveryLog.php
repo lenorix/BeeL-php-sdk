@@ -16,27 +16,27 @@ class WebhookDeliveryLog implements AdditionalPropertiesInterface
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var string
+     * @var string|null
      */
     protected $id;
     /**
-     * @var string
+     * @var string|null
      */
     protected $subscriptionId;
     /**
      * Groups all delivery attempts for the same logical event.
      *
-     * @var string
+     * @var string|null
      */
     protected $webhookEventId;
     /**
-     * @var string
+     * @var string|null
      */
     protected $eventType;
     /**
      * Sequential number of this POST within its delivery. Manual retries continue the same sequence, so this can exceed the number of automatic attempts.
      *
-     * @var int
+     * @var int|null
      */
     protected $attemptNumber;
     /**
@@ -54,7 +54,7 @@ class WebhookDeliveryLog implements AdditionalPropertiesInterface
     /**
      * True when your endpoint returned more than 2048 characters and `response_body` holds only the beginning of it.
      *
-     * @var bool
+     * @var bool|null
      */
     protected $responseBodyTruncated;
     /**
@@ -70,7 +70,7 @@ class WebhookDeliveryLog implements AdditionalPropertiesInterface
      */
     protected $durationMs;
     /**
-     * @var bool
+     * @var bool|null
      */
     protected $success;
     /**
@@ -94,40 +94,40 @@ class WebhookDeliveryLog implements AdditionalPropertiesInterface
      */
     protected $requestHeaders;
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $deliveredAt;
     /**
-     * @return string
+     * @return string|null
      */
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->id;
     }
     /**
-     * @param string $id
+     * @param string|null $id
      *
      * @return self
      */
-    public function setId(string $id): self
+    public function setId(?string $id): self
     {
         $this->initialized['id'] = true;
         $this->id = $id;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSubscriptionId(): string
+    public function getSubscriptionId(): ?string
     {
         return $this->subscriptionId;
     }
     /**
-     * @param string $subscriptionId
+     * @param string|null $subscriptionId
      *
      * @return self
      */
-    public function setSubscriptionId(string $subscriptionId): self
+    public function setSubscriptionId(?string $subscriptionId): self
     {
         $this->initialized['subscriptionId'] = true;
         $this->subscriptionId = $subscriptionId;
@@ -136,38 +136,38 @@ class WebhookDeliveryLog implements AdditionalPropertiesInterface
     /**
      * Groups all delivery attempts for the same logical event.
      *
-     * @return string
+     * @return string|null
      */
-    public function getWebhookEventId(): string
+    public function getWebhookEventId(): ?string
     {
         return $this->webhookEventId;
     }
     /**
      * Groups all delivery attempts for the same logical event.
      *
-     * @param string $webhookEventId
+     * @param string|null $webhookEventId
      *
      * @return self
      */
-    public function setWebhookEventId(string $webhookEventId): self
+    public function setWebhookEventId(?string $webhookEventId): self
     {
         $this->initialized['webhookEventId'] = true;
         $this->webhookEventId = $webhookEventId;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getEventType(): string
+    public function getEventType(): ?string
     {
         return $this->eventType;
     }
     /**
-     * @param string $eventType
+     * @param string|null $eventType
      *
      * @return self
      */
-    public function setEventType(string $eventType): self
+    public function setEventType(?string $eventType): self
     {
         $this->initialized['eventType'] = true;
         $this->eventType = $eventType;
@@ -176,20 +176,20 @@ class WebhookDeliveryLog implements AdditionalPropertiesInterface
     /**
      * Sequential number of this POST within its delivery. Manual retries continue the same sequence, so this can exceed the number of automatic attempts.
      *
-     * @return int
+     * @return int|null
      */
-    public function getAttemptNumber(): int
+    public function getAttemptNumber(): ?int
     {
         return $this->attemptNumber;
     }
     /**
      * Sequential number of this POST within its delivery. Manual retries continue the same sequence, so this can exceed the number of automatic attempts.
      *
-     * @param int $attemptNumber
+     * @param int|null $attemptNumber
      *
      * @return self
      */
-    public function setAttemptNumber(int $attemptNumber): self
+    public function setAttemptNumber(?int $attemptNumber): self
     {
         $this->initialized['attemptNumber'] = true;
         $this->attemptNumber = $attemptNumber;
@@ -242,20 +242,20 @@ class WebhookDeliveryLog implements AdditionalPropertiesInterface
     /**
      * True when your endpoint returned more than 2048 characters and `response_body` holds only the beginning of it.
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getResponseBodyTruncated(): bool
+    public function getResponseBodyTruncated(): ?bool
     {
         return $this->responseBodyTruncated;
     }
     /**
      * True when your endpoint returned more than 2048 characters and `response_body` holds only the beginning of it.
      *
-     * @param bool $responseBodyTruncated
+     * @param bool|null $responseBodyTruncated
      *
      * @return self
      */
-    public function setResponseBodyTruncated(bool $responseBodyTruncated): self
+    public function setResponseBodyTruncated(?bool $responseBodyTruncated): self
     {
         $this->initialized['responseBodyTruncated'] = true;
         $this->responseBodyTruncated = $responseBodyTruncated;
@@ -306,18 +306,18 @@ class WebhookDeliveryLog implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function getSuccess(): bool
+    public function getSuccess(): ?bool
     {
         return $this->success;
     }
     /**
-     * @param bool $success
+     * @param bool|null $success
      *
      * @return self
      */
-    public function setSuccess(bool $success): self
+    public function setSuccess(?bool $success): self
     {
         $this->initialized['success'] = true;
         $this->success = $success;
@@ -394,18 +394,18 @@ class WebhookDeliveryLog implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getDeliveredAt(): \DateTime
+    public function getDeliveredAt(): ?\DateTime
     {
         return $this->deliveredAt;
     }
     /**
-     * @param \DateTime $deliveredAt
+     * @param \DateTime|null $deliveredAt
      *
      * @return self
      */
-    public function setDeliveredAt(\DateTime $deliveredAt): self
+    public function setDeliveredAt(?\DateTime $deliveredAt): self
     {
         $this->initialized['deliveredAt'] = true;
         $this->deliveredAt = $deliveredAt;

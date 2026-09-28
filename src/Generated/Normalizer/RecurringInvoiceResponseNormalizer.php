@@ -49,28 +49,48 @@ class RecurringInvoiceResponseNormalizer implements DenormalizerInterface, Norma
         if (\array_key_exists('send_automatically', $data) && \is_int($data['send_automatically'])) {
             $data['send_automatically'] = (bool) $data['send_automatically'];
         }
-        if (\array_key_exists('id', $data)) {
+        if (\array_key_exists('id', $data) && $data['id'] !== null) {
             $object->setId($data['id']);
             unset($data['id']);
         }
-        if (\array_key_exists('name', $data)) {
+        elseif (\array_key_exists('id', $data) && $data['id'] === null) {
+            $object->setId(null);
+            unset($data['id']);
+        }
+        if (\array_key_exists('name', $data) && $data['name'] !== null) {
             $object->setName($data['name']);
             unset($data['name']);
         }
-        if (\array_key_exists('frequency', $data)) {
+        elseif (\array_key_exists('name', $data) && $data['name'] === null) {
+            $object->setName(null);
+            unset($data['name']);
+        }
+        if (\array_key_exists('frequency', $data) && $data['frequency'] !== null) {
             $object->setFrequency($data['frequency']);
             unset($data['frequency']);
         }
-        if (\array_key_exists('day_of_month', $data)) {
+        elseif (\array_key_exists('frequency', $data) && $data['frequency'] === null) {
+            $object->setFrequency(null);
+            unset($data['frequency']);
+        }
+        if (\array_key_exists('day_of_month', $data) && $data['day_of_month'] !== null) {
             $object->setDayOfMonth($data['day_of_month']);
             unset($data['day_of_month']);
         }
-        if (\array_key_exists('start_date', $data)) {
+        elseif (\array_key_exists('day_of_month', $data) && $data['day_of_month'] === null) {
+            $object->setDayOfMonth(null);
+            unset($data['day_of_month']);
+        }
+        if (\array_key_exists('start_date', $data) && $data['start_date'] !== null) {
             $date = \DateTime::createFromFormat('Y-m-d', $data['start_date']);
             if (false === $date) {
                 throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['start_date'], 'Y-m-d');
             }
             $object->setStartDate($date->setTime(0, 0, 0));
+            unset($data['start_date']);
+        }
+        elseif (\array_key_exists('start_date', $data) && $data['start_date'] === null) {
+            $object->setStartDate(null);
             unset($data['start_date']);
         }
         if (\array_key_exists('end_date', $data) && $data['end_date'] !== null) {
@@ -97,16 +117,28 @@ class RecurringInvoiceResponseNormalizer implements DenormalizerInterface, Norma
             $object->setNextGeneration(null);
             unset($data['next_generation']);
         }
-        if (\array_key_exists('draft_in_advance', $data)) {
+        if (\array_key_exists('draft_in_advance', $data) && $data['draft_in_advance'] !== null) {
             $object->setDraftInAdvance($data['draft_in_advance']);
             unset($data['draft_in_advance']);
         }
-        if (\array_key_exists('status', $data)) {
+        elseif (\array_key_exists('draft_in_advance', $data) && $data['draft_in_advance'] === null) {
+            $object->setDraftInAdvance(null);
+            unset($data['draft_in_advance']);
+        }
+        if (\array_key_exists('status', $data) && $data['status'] !== null) {
             $object->setStatus($data['status']);
             unset($data['status']);
         }
-        if (\array_key_exists('is_failing', $data)) {
+        elseif (\array_key_exists('status', $data) && $data['status'] === null) {
+            $object->setStatus(null);
+            unset($data['status']);
+        }
+        if (\array_key_exists('is_failing', $data) && $data['is_failing'] !== null) {
             $object->setIsFailing($data['is_failing']);
+            unset($data['is_failing']);
+        }
+        elseif (\array_key_exists('is_failing', $data) && $data['is_failing'] === null) {
+            $object->setIsFailing(null);
             unset($data['is_failing']);
         }
         if (\array_key_exists('pause', $data) && $data['pause'] !== null) {
@@ -125,16 +157,28 @@ class RecurringInvoiceResponseNormalizer implements DenormalizerInterface, Norma
             $object->setCompletion(null);
             unset($data['completion']);
         }
-        if (\array_key_exists('series_id', $data)) {
+        if (\array_key_exists('series_id', $data) && $data['series_id'] !== null) {
             $object->setSeriesId($data['series_id']);
             unset($data['series_id']);
         }
-        if (\array_key_exists('series_code', $data)) {
+        elseif (\array_key_exists('series_id', $data) && $data['series_id'] === null) {
+            $object->setSeriesId(null);
+            unset($data['series_id']);
+        }
+        if (\array_key_exists('series_code', $data) && $data['series_code'] !== null) {
             $object->setSeriesCode($data['series_code']);
             unset($data['series_code']);
         }
-        if (\array_key_exists('invoice_type', $data)) {
+        elseif (\array_key_exists('series_code', $data) && $data['series_code'] === null) {
+            $object->setSeriesCode(null);
+            unset($data['series_code']);
+        }
+        if (\array_key_exists('invoice_type', $data) && $data['invoice_type'] !== null) {
             $object->setInvoiceType($data['invoice_type']);
+            unset($data['invoice_type']);
+        }
+        elseif (\array_key_exists('invoice_type', $data) && $data['invoice_type'] === null) {
+            $object->setInvoiceType(null);
             unset($data['invoice_type']);
         }
         if (\array_key_exists('customer_id', $data) && $data['customer_id'] !== null) {
@@ -161,16 +205,24 @@ class RecurringInvoiceResponseNormalizer implements DenormalizerInterface, Norma
             $object->setRecipientNif(null);
             unset($data['recipient_nif']);
         }
-        if (\array_key_exists('recipient_alternative_id', $data)) {
+        if (\array_key_exists('recipient_alternative_id', $data) && $data['recipient_alternative_id'] !== null) {
             $object->setRecipientAlternativeId($this->denormalizer->denormalize($data['recipient_alternative_id'], \Lenorix\BeelSdk\Generated\Model\RecurringInvoiceResponseRecipientAlternativeId::class, 'json', $context));
             unset($data['recipient_alternative_id']);
         }
-        if (\array_key_exists('lines', $data)) {
+        elseif (\array_key_exists('recipient_alternative_id', $data) && $data['recipient_alternative_id'] === null) {
+            $object->setRecipientAlternativeId(null);
+            unset($data['recipient_alternative_id']);
+        }
+        if (\array_key_exists('lines', $data) && $data['lines'] !== null) {
             $values = [];
             foreach ($data['lines'] as $value) {
                 $values[] = $this->denormalizer->denormalize($value, \Lenorix\BeelSdk\Generated\Model\InvoiceLineTemplateResponse::class, 'json', $context);
             }
             $object->setLines($values);
+            unset($data['lines']);
+        }
+        elseif (\array_key_exists('lines', $data) && $data['lines'] === null) {
+            $object->setLines(null);
             unset($data['lines']);
         }
         if (\array_key_exists('amount', $data) && $data['amount'] !== null) {
@@ -221,8 +273,12 @@ class RecurringInvoiceResponseNormalizer implements DenormalizerInterface, Norma
             $object->setNotes(null);
             unset($data['notes']);
         }
-        if (\array_key_exists('send_automatically', $data)) {
+        if (\array_key_exists('send_automatically', $data) && $data['send_automatically'] !== null) {
             $object->setSendAutomatically($data['send_automatically']);
+            unset($data['send_automatically']);
+        }
+        elseif (\array_key_exists('send_automatically', $data) && $data['send_automatically'] === null) {
+            $object->setSendAutomatically(null);
             unset($data['send_automatically']);
         }
         if (\array_key_exists('email_configuration', $data) && $data['email_configuration'] !== null) {
@@ -233,8 +289,12 @@ class RecurringInvoiceResponseNormalizer implements DenormalizerInterface, Norma
             $object->setEmailConfiguration(null);
             unset($data['email_configuration']);
         }
-        if (\array_key_exists('generated_invoices', $data)) {
+        if (\array_key_exists('generated_invoices', $data) && $data['generated_invoices'] !== null) {
             $object->setGeneratedInvoices($data['generated_invoices']);
+            unset($data['generated_invoices']);
+        }
+        elseif (\array_key_exists('generated_invoices', $data) && $data['generated_invoices'] === null) {
+            $object->setGeneratedInvoices(null);
             unset($data['generated_invoices']);
         }
         if (\array_key_exists('max_invoices', $data) && $data['max_invoices'] !== null) {
@@ -273,12 +333,20 @@ class RecurringInvoiceResponseNormalizer implements DenormalizerInterface, Norma
             $object->setSourceInvoiceId(null);
             unset($data['source_invoice_id']);
         }
-        if (\array_key_exists('created_at', $data)) {
+        if (\array_key_exists('created_at', $data) && $data['created_at'] !== null) {
             $object->setCreatedAt($this->denormalizer->denormalize($data['created_at'], \DateTime::class, 'json', $context));
             unset($data['created_at']);
         }
-        if (\array_key_exists('updated_at', $data)) {
+        elseif (\array_key_exists('created_at', $data) && $data['created_at'] === null) {
+            $object->setCreatedAt(null);
+            unset($data['created_at']);
+        }
+        if (\array_key_exists('updated_at', $data) && $data['updated_at'] !== null) {
             $object->setUpdatedAt($this->denormalizer->denormalize($data['updated_at'], \DateTime::class, 'json', $context));
+            unset($data['updated_at']);
+        }
+        elseif (\array_key_exists('updated_at', $data) && $data['updated_at'] === null) {
+            $object->setUpdatedAt(null);
             unset($data['updated_at']);
         }
         foreach ($data as $key => $value_1) {
@@ -304,7 +372,7 @@ class RecurringInvoiceResponseNormalizer implements DenormalizerInterface, Norma
             $dataArray['day_of_month'] = $data->getDayOfMonth();
         }
         if ($data->isInitialized('startDate') && null !== $data->getStartDate()) {
-            $dataArray['start_date'] = $data->getStartDate()->format('Y-m-d');
+            $dataArray['start_date'] = $data->getStartDate()?->format('Y-m-d');
         }
         if ($data->isInitialized('endDate') && null !== $data->getEndDate()) {
             $dataArray['end_date'] = $data->getEndDate()?->format('Y-m-d');

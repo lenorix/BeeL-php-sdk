@@ -45,12 +45,20 @@ class EmailDeliveryIndicatorNormalizer implements DenormalizerInterface, Normali
             $object->setCount($data['count']);
             unset($data['count']);
         }
-        if (\array_key_exists('last_status', $data)) {
+        if (\array_key_exists('last_status', $data) && $data['last_status'] !== null) {
             $object->setLastStatus($data['last_status']);
             unset($data['last_status']);
         }
-        if (\array_key_exists('last_sent_at', $data)) {
+        elseif (\array_key_exists('last_status', $data) && $data['last_status'] === null) {
+            $object->setLastStatus(null);
+            unset($data['last_status']);
+        }
+        if (\array_key_exists('last_sent_at', $data) && $data['last_sent_at'] !== null) {
             $object->setLastSentAt($this->denormalizer->denormalize($data['last_sent_at'], \DateTime::class, 'json', $context));
+            unset($data['last_sent_at']);
+        }
+        elseif (\array_key_exists('last_sent_at', $data) && $data['last_sent_at'] === null) {
+            $object->setLastSentAt(null);
             unset($data['last_sent_at']);
         }
         foreach ($data as $key => $value) {

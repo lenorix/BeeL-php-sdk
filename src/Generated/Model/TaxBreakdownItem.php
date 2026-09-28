@@ -47,7 +47,7 @@ class TaxBreakdownItem implements AdditionalPropertiesInterface
      * `(tax_type, percentage)` alone.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $regimeKey;
     /**
@@ -146,9 +146,9 @@ class TaxBreakdownItem implements AdditionalPropertiesInterface
      * `(tax_type, percentage)` alone.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getRegimeKey(): string
+    public function getRegimeKey(): ?string
     {
         return $this->regimeKey;
     }
@@ -160,11 +160,11 @@ class TaxBreakdownItem implements AdditionalPropertiesInterface
     `(tax_type, percentage)` alone.
     
     *
-    * @param string $regimeKey
+    * @param string|null $regimeKey
     *
     * @return self
     */
-    public function setRegimeKey(string $regimeKey): self
+    public function setRegimeKey(?string $regimeKey): self
     {
         $this->initialized['regimeKey'] = true;
         $this->regimeKey = $regimeKey;

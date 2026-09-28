@@ -36,7 +36,7 @@ class BulkOperationResult implements AdditionalPropertiesInterface
     /**
      * Details of the invoices that failed
      *
-     * @var list<BulkOperationResultFailuresItem>
+     * @var list<BulkOperationResultFailuresItem>|null
      */
     protected $failures;
     /**
@@ -108,20 +108,20 @@ class BulkOperationResult implements AdditionalPropertiesInterface
     /**
      * Details of the invoices that failed
      *
-     * @return list<BulkOperationResultFailuresItem>
+     * @return list<BulkOperationResultFailuresItem>|null
      */
-    public function getFailures(): array
+    public function getFailures(): ?array
     {
         return $this->failures;
     }
     /**
      * Details of the invoices that failed
      *
-     * @param list<BulkOperationResultFailuresItem> $failures
+     * @param list<BulkOperationResultFailuresItem>|null $failures
      *
      * @return self
      */
-    public function setFailures(array $failures): self
+    public function setFailures(?array $failures): self
     {
         $this->initialized['failures'] = true;
         $this->failures = $failures;

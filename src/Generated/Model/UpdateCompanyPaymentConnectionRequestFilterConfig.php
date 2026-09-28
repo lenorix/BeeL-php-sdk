@@ -18,20 +18,20 @@ class UpdateCompanyPaymentConnectionRequestFilterConfig implements AdditionalPro
     /**
      * Charges below this amount are skipped.
      *
-     * @var float
+     * @var float|null
      */
     protected $minAmount;
     /**
      * Charges above this amount are skipped.
      *
-     * @var float
+     * @var float|null
      */
     protected $maxAmount;
     /**
      * When true, only charges from customers already mapped to a BeeL customer are invoiced.
      * 
      *
-     * @var bool
+     * @var bool|null
      */
     protected $onlyMappedCustomers;
     /**
@@ -39,7 +39,7 @@ class UpdateCompanyPaymentConnectionRequestFilterConfig implements AdditionalPro
      * customer is invoiced.
      * 
      *
-     * @var list<string>
+     * @var list<string>|null
      */
     protected $allowedCustomerIds;
     /**
@@ -47,7 +47,7 @@ class UpdateCompanyPaymentConnectionRequestFilterConfig implements AdditionalPro
      * them is skipped.
      * 
      *
-     * @var list<string>
+     * @var list<string>|null
      */
     protected $excludedDescriptionPatterns;
     /**
@@ -55,7 +55,7 @@ class UpdateCompanyPaymentConnectionRequestFilterConfig implements AdditionalPro
      * least one of them to be invoiced.
      * 
      *
-     * @var list<string>
+     * @var list<string>|null
      */
     protected $requiredDescriptionPatterns;
     /**
@@ -63,26 +63,26 @@ class UpdateCompanyPaymentConnectionRequestFilterConfig implements AdditionalPro
      * leaves every category active.
      * 
      *
-     * @var list<string>
+     * @var list<string>|null
      */
     protected $disabledCategories;
     /**
      * Charges below this amount are skipped.
      *
-     * @return float
+     * @return float|null
      */
-    public function getMinAmount(): float
+    public function getMinAmount(): ?float
     {
         return $this->minAmount;
     }
     /**
      * Charges below this amount are skipped.
      *
-     * @param float $minAmount
+     * @param float|null $minAmount
      *
      * @return self
      */
-    public function setMinAmount(float $minAmount): self
+    public function setMinAmount(?float $minAmount): self
     {
         $this->initialized['minAmount'] = true;
         $this->minAmount = $minAmount;
@@ -91,20 +91,20 @@ class UpdateCompanyPaymentConnectionRequestFilterConfig implements AdditionalPro
     /**
      * Charges above this amount are skipped.
      *
-     * @return float
+     * @return float|null
      */
-    public function getMaxAmount(): float
+    public function getMaxAmount(): ?float
     {
         return $this->maxAmount;
     }
     /**
      * Charges above this amount are skipped.
      *
-     * @param float $maxAmount
+     * @param float|null $maxAmount
      *
      * @return self
      */
-    public function setMaxAmount(float $maxAmount): self
+    public function setMaxAmount(?float $maxAmount): self
     {
         $this->initialized['maxAmount'] = true;
         $this->maxAmount = $maxAmount;
@@ -114,20 +114,20 @@ class UpdateCompanyPaymentConnectionRequestFilterConfig implements AdditionalPro
      * When true, only charges from customers already mapped to a BeeL customer are invoiced.
      * 
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getOnlyMappedCustomers(): bool
+    public function getOnlyMappedCustomers(): ?bool
     {
         return $this->onlyMappedCustomers;
     }
     /**
      * When true, only charges from customers already mapped to a BeeL customer are invoiced.
      *
-     * @param bool $onlyMappedCustomers
+     * @param bool|null $onlyMappedCustomers
      *
      * @return self
      */
-    public function setOnlyMappedCustomers(bool $onlyMappedCustomers): self
+    public function setOnlyMappedCustomers(?bool $onlyMappedCustomers): self
     {
         $this->initialized['onlyMappedCustomers'] = true;
         $this->onlyMappedCustomers = $onlyMappedCustomers;
@@ -138,9 +138,9 @@ class UpdateCompanyPaymentConnectionRequestFilterConfig implements AdditionalPro
      * customer is invoiced.
      * 
      *
-     * @return list<string>
+     * @return list<string>|null
      */
-    public function getAllowedCustomerIds(): array
+    public function getAllowedCustomerIds(): ?array
     {
         return $this->allowedCustomerIds;
     }
@@ -149,11 +149,11 @@ class UpdateCompanyPaymentConnectionRequestFilterConfig implements AdditionalPro
     customer is invoiced.
     
     *
-    * @param list<string> $allowedCustomerIds
+    * @param list<string>|null $allowedCustomerIds
     *
     * @return self
     */
-    public function setAllowedCustomerIds(array $allowedCustomerIds): self
+    public function setAllowedCustomerIds(?array $allowedCustomerIds): self
     {
         $this->initialized['allowedCustomerIds'] = true;
         $this->allowedCustomerIds = $allowedCustomerIds;
@@ -164,9 +164,9 @@ class UpdateCompanyPaymentConnectionRequestFilterConfig implements AdditionalPro
      * them is skipped.
      * 
      *
-     * @return list<string>
+     * @return list<string>|null
      */
-    public function getExcludedDescriptionPatterns(): array
+    public function getExcludedDescriptionPatterns(): ?array
     {
         return $this->excludedDescriptionPatterns;
     }
@@ -175,11 +175,11 @@ class UpdateCompanyPaymentConnectionRequestFilterConfig implements AdditionalPro
     them is skipped.
     
     *
-    * @param list<string> $excludedDescriptionPatterns
+    * @param list<string>|null $excludedDescriptionPatterns
     *
     * @return self
     */
-    public function setExcludedDescriptionPatterns(array $excludedDescriptionPatterns): self
+    public function setExcludedDescriptionPatterns(?array $excludedDescriptionPatterns): self
     {
         $this->initialized['excludedDescriptionPatterns'] = true;
         $this->excludedDescriptionPatterns = $excludedDescriptionPatterns;
@@ -190,9 +190,9 @@ class UpdateCompanyPaymentConnectionRequestFilterConfig implements AdditionalPro
      * least one of them to be invoiced.
      * 
      *
-     * @return list<string>
+     * @return list<string>|null
      */
-    public function getRequiredDescriptionPatterns(): array
+    public function getRequiredDescriptionPatterns(): ?array
     {
         return $this->requiredDescriptionPatterns;
     }
@@ -201,11 +201,11 @@ class UpdateCompanyPaymentConnectionRequestFilterConfig implements AdditionalPro
     least one of them to be invoiced.
     
     *
-    * @param list<string> $requiredDescriptionPatterns
+    * @param list<string>|null $requiredDescriptionPatterns
     *
     * @return self
     */
-    public function setRequiredDescriptionPatterns(array $requiredDescriptionPatterns): self
+    public function setRequiredDescriptionPatterns(?array $requiredDescriptionPatterns): self
     {
         $this->initialized['requiredDescriptionPatterns'] = true;
         $this->requiredDescriptionPatterns = $requiredDescriptionPatterns;
@@ -216,9 +216,9 @@ class UpdateCompanyPaymentConnectionRequestFilterConfig implements AdditionalPro
      * leaves every category active.
      * 
      *
-     * @return list<string>
+     * @return list<string>|null
      */
-    public function getDisabledCategories(): array
+    public function getDisabledCategories(): ?array
     {
         return $this->disabledCategories;
     }
@@ -227,11 +227,11 @@ class UpdateCompanyPaymentConnectionRequestFilterConfig implements AdditionalPro
     leaves every category active.
     
     *
-    * @param list<string> $disabledCategories
+    * @param list<string>|null $disabledCategories
     *
     * @return self
     */
-    public function setDisabledCategories(array $disabledCategories): self
+    public function setDisabledCategories(?array $disabledCategories): self
     {
         $this->initialized['disabledCategories'] = true;
         $this->disabledCategories = $disabledCategories;

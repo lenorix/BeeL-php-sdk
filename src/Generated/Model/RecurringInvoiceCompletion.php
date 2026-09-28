@@ -26,13 +26,13 @@ class RecurringInvoiceCompletion implements AdditionalPropertiesInterface
      * cap is the fact that just happened, the date is the calendar consequence that follows.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $reason;
     /**
      * Instant the schedule was closed.
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $at;
     /**
@@ -46,9 +46,9 @@ class RecurringInvoiceCompletion implements AdditionalPropertiesInterface
      * cap is the fact that just happened, the date is the calendar consequence that follows.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getReason(): string
+    public function getReason(): ?string
     {
         return $this->reason;
     }
@@ -63,11 +63,11 @@ class RecurringInvoiceCompletion implements AdditionalPropertiesInterface
     cap is the fact that just happened, the date is the calendar consequence that follows.
     
     *
-    * @param string $reason
+    * @param string|null $reason
     *
     * @return self
     */
-    public function setReason(string $reason): self
+    public function setReason(?string $reason): self
     {
         $this->initialized['reason'] = true;
         $this->reason = $reason;
@@ -76,20 +76,20 @@ class RecurringInvoiceCompletion implements AdditionalPropertiesInterface
     /**
      * Instant the schedule was closed.
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getAt(): \DateTime
+    public function getAt(): ?\DateTime
     {
         return $this->at;
     }
     /**
      * Instant the schedule was closed.
      *
-     * @param \DateTime $at
+     * @param \DateTime|null $at
      *
      * @return self
      */
-    public function setAt(\DateTime $at): self
+    public function setAt(?\DateTime $at): self
     {
         $this->initialized['at'] = true;
         $this->at = $at;

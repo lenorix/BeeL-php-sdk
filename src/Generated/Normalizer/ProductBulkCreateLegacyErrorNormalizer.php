@@ -37,20 +37,36 @@ class ProductBulkCreateLegacyErrorNormalizer implements DenormalizerInterface, N
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('index', $data)) {
+        if (\array_key_exists('index', $data) && $data['index'] !== null) {
             $object->setIndex($data['index']);
             unset($data['index']);
         }
-        if (\array_key_exists('code', $data)) {
+        elseif (\array_key_exists('index', $data) && $data['index'] === null) {
+            $object->setIndex(null);
+            unset($data['index']);
+        }
+        if (\array_key_exists('code', $data) && $data['code'] !== null) {
             $object->setCode($data['code']);
             unset($data['code']);
         }
-        if (\array_key_exists('name', $data)) {
+        elseif (\array_key_exists('code', $data) && $data['code'] === null) {
+            $object->setCode(null);
+            unset($data['code']);
+        }
+        if (\array_key_exists('name', $data) && $data['name'] !== null) {
             $object->setName($data['name']);
             unset($data['name']);
         }
-        if (\array_key_exists('error', $data)) {
+        elseif (\array_key_exists('name', $data) && $data['name'] === null) {
+            $object->setName(null);
+            unset($data['name']);
+        }
+        if (\array_key_exists('error', $data) && $data['error'] !== null) {
             $object->setError($data['error']);
+            unset($data['error']);
+        }
+        elseif (\array_key_exists('error', $data) && $data['error'] === null) {
+            $object->setError(null);
             unset($data['error']);
         }
         foreach ($data as $key => $value) {

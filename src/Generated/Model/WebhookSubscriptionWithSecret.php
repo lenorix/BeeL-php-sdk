@@ -38,14 +38,14 @@ class WebhookSubscriptionWithSecret implements AdditionalPropertiesInterface
      * Which accounts this subscription receives events from. Same field name and values as the `account_relationship` carried by every event envelope.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $accountRelationship;
     /**
      * Who turned this subscription off. Absent while it is active. `beel` means we paused it because the endpoint went 25 consecutive deliveries without a single success over more than 48 hours — reactivating it requires a successful test delivery first.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $deactivatedBy;
     /**
@@ -65,14 +65,14 @@ class WebhookSubscriptionWithSecret implements AdditionalPropertiesInterface
      * Stable code for `last_error`. Cleared alongside it by the first successful delivery.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $lastErrorCause;
     /**
      * Deliveries in a row that never got through. A delivery that exhausted its attempts counts as one. Any successful delivery resets it to zero, so a healthy endpoint with occasional blips stays near zero.
      * 
      *
-     * @var int
+     * @var int|null
      */
     protected $consecutiveFailures;
     /**
@@ -90,7 +90,7 @@ class WebhookSubscriptionWithSecret implements AdditionalPropertiesInterface
      * Store it securely — it cannot be retrieved again.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $secret;
     /**
@@ -188,20 +188,20 @@ class WebhookSubscriptionWithSecret implements AdditionalPropertiesInterface
      * Which accounts this subscription receives events from. Same field name and values as the `account_relationship` carried by every event envelope.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getAccountRelationship(): string
+    public function getAccountRelationship(): ?string
     {
         return $this->accountRelationship;
     }
     /**
      * Which accounts this subscription receives events from. Same field name and values as the `account_relationship` carried by every event envelope.
      *
-     * @param string $accountRelationship
+     * @param string|null $accountRelationship
      *
      * @return self
      */
-    public function setAccountRelationship(string $accountRelationship): self
+    public function setAccountRelationship(?string $accountRelationship): self
     {
         $this->initialized['accountRelationship'] = true;
         $this->accountRelationship = $accountRelationship;
@@ -211,20 +211,20 @@ class WebhookSubscriptionWithSecret implements AdditionalPropertiesInterface
      * Who turned this subscription off. Absent while it is active. `beel` means we paused it because the endpoint went 25 consecutive deliveries without a single success over more than 48 hours — reactivating it requires a successful test delivery first.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getDeactivatedBy(): string
+    public function getDeactivatedBy(): ?string
     {
         return $this->deactivatedBy;
     }
     /**
      * Who turned this subscription off. Absent while it is active. `beel` means we paused it because the endpoint went 25 consecutive deliveries without a single success over more than 48 hours — reactivating it requires a successful test delivery first.
      *
-     * @param string $deactivatedBy
+     * @param string|null $deactivatedBy
      *
      * @return self
      */
-    public function setDeactivatedBy(string $deactivatedBy): self
+    public function setDeactivatedBy(?string $deactivatedBy): self
     {
         $this->initialized['deactivatedBy'] = true;
         $this->deactivatedBy = $deactivatedBy;
@@ -279,20 +279,20 @@ class WebhookSubscriptionWithSecret implements AdditionalPropertiesInterface
      * Stable code for `last_error`. Cleared alongside it by the first successful delivery.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getLastErrorCause(): string
+    public function getLastErrorCause(): ?string
     {
         return $this->lastErrorCause;
     }
     /**
      * Stable code for `last_error`. Cleared alongside it by the first successful delivery.
      *
-     * @param string $lastErrorCause
+     * @param string|null $lastErrorCause
      *
      * @return self
      */
-    public function setLastErrorCause(string $lastErrorCause): self
+    public function setLastErrorCause(?string $lastErrorCause): self
     {
         $this->initialized['lastErrorCause'] = true;
         $this->lastErrorCause = $lastErrorCause;
@@ -302,20 +302,20 @@ class WebhookSubscriptionWithSecret implements AdditionalPropertiesInterface
      * Deliveries in a row that never got through. A delivery that exhausted its attempts counts as one. Any successful delivery resets it to zero, so a healthy endpoint with occasional blips stays near zero.
      * 
      *
-     * @return int
+     * @return int|null
      */
-    public function getConsecutiveFailures(): int
+    public function getConsecutiveFailures(): ?int
     {
         return $this->consecutiveFailures;
     }
     /**
      * Deliveries in a row that never got through. A delivery that exhausted its attempts counts as one. Any successful delivery resets it to zero, so a healthy endpoint with occasional blips stays near zero.
      *
-     * @param int $consecutiveFailures
+     * @param int|null $consecutiveFailures
      *
      * @return self
      */
-    public function setConsecutiveFailures(int $consecutiveFailures): self
+    public function setConsecutiveFailures(?int $consecutiveFailures): self
     {
         $this->initialized['consecutiveFailures'] = true;
         $this->consecutiveFailures = $consecutiveFailures;
@@ -366,9 +366,9 @@ class WebhookSubscriptionWithSecret implements AdditionalPropertiesInterface
      * Store it securely — it cannot be retrieved again.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getSecret(): string
+    public function getSecret(): ?string
     {
         return $this->secret;
     }
@@ -377,11 +377,11 @@ class WebhookSubscriptionWithSecret implements AdditionalPropertiesInterface
     Store it securely — it cannot be retrieved again.
     
     *
-    * @param string $secret
+    * @param string|null $secret
     *
     * @return self
     */
-    public function setSecret(string $secret): self
+    public function setSecret(?string $secret): self
     {
         $this->initialized['secret'] = true;
         $this->secret = $secret;

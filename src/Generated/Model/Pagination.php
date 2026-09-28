@@ -43,11 +43,11 @@ class Pagination implements AdditionalPropertiesInterface
      */
     protected $itemsPerPage;
     /**
-     * @var bool
+     * @var bool|null
      */
     protected $hasNext;
     /**
-     * @var bool
+     * @var bool|null
      */
     protected $hasPrevious;
     /**
@@ -145,36 +145,36 @@ class Pagination implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function getHasNext(): bool
+    public function getHasNext(): ?bool
     {
         return $this->hasNext;
     }
     /**
-     * @param bool $hasNext
+     * @param bool|null $hasNext
      *
      * @return self
      */
-    public function setHasNext(bool $hasNext): self
+    public function setHasNext(?bool $hasNext): self
     {
         $this->initialized['hasNext'] = true;
         $this->hasNext = $hasNext;
         return $this;
     }
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function getHasPrevious(): bool
+    public function getHasPrevious(): ?bool
     {
         return $this->hasPrevious;
     }
     /**
-     * @param bool $hasPrevious
+     * @param bool|null $hasPrevious
      *
      * @return self
      */
-    public function setHasPrevious(bool $hasPrevious): self
+    public function setHasPrevious(?bool $hasPrevious): self
     {
         $this->initialized['hasPrevious'] = true;
         $this->hasPrevious = $hasPrevious;

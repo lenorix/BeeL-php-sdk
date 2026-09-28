@@ -56,8 +56,12 @@ class TaxConfigurationNormalizer implements DenormalizerInterface, NormalizerInt
             $object->setDefaultMainTax($this->denormalizer->denormalize($data['default_main_tax'], \Lenorix\BeelSdk\Generated\Model\TaxConfigurationDefaultMainTax::class, 'json', $context));
             unset($data['default_main_tax']);
         }
-        if (\array_key_exists('default_exemption_reason', $data)) {
+        if (\array_key_exists('default_exemption_reason', $data) && $data['default_exemption_reason'] !== null) {
             $object->setDefaultExemptionReason($data['default_exemption_reason']);
+            unset($data['default_exemption_reason']);
+        }
+        elseif (\array_key_exists('default_exemption_reason', $data) && $data['default_exemption_reason'] === null) {
+            $object->setDefaultExemptionReason(null);
             unset($data['default_exemption_reason']);
         }
         if (\array_key_exists('default_exemption_reason_text', $data) && $data['default_exemption_reason_text'] !== null) {
@@ -72,24 +76,40 @@ class TaxConfigurationNormalizer implements DenormalizerInterface, NormalizerInt
             $object->setApplyEquivalenceSurcharge($data['apply_equivalence_surcharge']);
             unset($data['apply_equivalence_surcharge']);
         }
-        if (\array_key_exists('default_equivalence_surcharge', $data)) {
+        if (\array_key_exists('default_equivalence_surcharge', $data) && $data['default_equivalence_surcharge'] !== null) {
             $object->setDefaultEquivalenceSurcharge($data['default_equivalence_surcharge']);
+            unset($data['default_equivalence_surcharge']);
+        }
+        elseif (\array_key_exists('default_equivalence_surcharge', $data) && $data['default_equivalence_surcharge'] === null) {
+            $object->setDefaultEquivalenceSurcharge(null);
             unset($data['default_equivalence_surcharge']);
         }
         if (\array_key_exists('apply_irpf', $data)) {
             $object->setApplyIrpf($data['apply_irpf']);
             unset($data['apply_irpf']);
         }
-        if (\array_key_exists('default_irpf_rate', $data)) {
+        if (\array_key_exists('default_irpf_rate', $data) && $data['default_irpf_rate'] !== null) {
             $object->setDefaultIrpfRate($data['default_irpf_rate']);
             unset($data['default_irpf_rate']);
         }
-        if (\array_key_exists('irpf_exempt', $data)) {
+        elseif (\array_key_exists('default_irpf_rate', $data) && $data['default_irpf_rate'] === null) {
+            $object->setDefaultIrpfRate(null);
+            unset($data['default_irpf_rate']);
+        }
+        if (\array_key_exists('irpf_exempt', $data) && $data['irpf_exempt'] !== null) {
             $object->setIrpfExempt($data['irpf_exempt']);
             unset($data['irpf_exempt']);
         }
-        if (\array_key_exists('default_payment_method', $data)) {
+        elseif (\array_key_exists('irpf_exempt', $data) && $data['irpf_exempt'] === null) {
+            $object->setIrpfExempt(null);
+            unset($data['irpf_exempt']);
+        }
+        if (\array_key_exists('default_payment_method', $data) && $data['default_payment_method'] !== null) {
             $object->setDefaultPaymentMethod($data['default_payment_method']);
+            unset($data['default_payment_method']);
+        }
+        elseif (\array_key_exists('default_payment_method', $data) && $data['default_payment_method'] === null) {
+            $object->setDefaultPaymentMethod(null);
             unset($data['default_payment_method']);
         }
         if (\array_key_exists('payment_term_days', $data) && $data['payment_term_days'] !== null) {
@@ -108,8 +128,12 @@ class TaxConfigurationNormalizer implements DenormalizerInterface, NormalizerInt
             $object->setProformaValidityDays(null);
             unset($data['proforma_validity_days']);
         }
-        if (\array_key_exists('withholding_options', $data)) {
+        if (\array_key_exists('withholding_options', $data) && $data['withholding_options'] !== null) {
             $object->setWithholdingOptions($this->denormalizer->denormalize($data['withholding_options'], \Lenorix\BeelSdk\Generated\Model\TaxConfigurationWithholdingOptions::class, 'json', $context));
+            unset($data['withholding_options']);
+        }
+        elseif (\array_key_exists('withholding_options', $data) && $data['withholding_options'] === null) {
+            $object->setWithholdingOptions(null);
             unset($data['withholding_options']);
         }
         foreach ($data as $key => $value) {

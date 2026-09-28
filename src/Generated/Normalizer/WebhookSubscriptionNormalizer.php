@@ -60,12 +60,20 @@ class WebhookSubscriptionNormalizer implements DenormalizerInterface, Normalizer
             $object->setActive($data['active']);
             unset($data['active']);
         }
-        if (\array_key_exists('account_relationship', $data)) {
+        if (\array_key_exists('account_relationship', $data) && $data['account_relationship'] !== null) {
             $object->setAccountRelationship($data['account_relationship']);
             unset($data['account_relationship']);
         }
-        if (\array_key_exists('deactivated_by', $data)) {
+        elseif (\array_key_exists('account_relationship', $data) && $data['account_relationship'] === null) {
+            $object->setAccountRelationship(null);
+            unset($data['account_relationship']);
+        }
+        if (\array_key_exists('deactivated_by', $data) && $data['deactivated_by'] !== null) {
             $object->setDeactivatedBy($data['deactivated_by']);
+            unset($data['deactivated_by']);
+        }
+        elseif (\array_key_exists('deactivated_by', $data) && $data['deactivated_by'] === null) {
+            $object->setDeactivatedBy(null);
             unset($data['deactivated_by']);
         }
         if (\array_key_exists('deactivated_at', $data) && $data['deactivated_at'] !== null) {
@@ -84,12 +92,20 @@ class WebhookSubscriptionNormalizer implements DenormalizerInterface, Normalizer
             $object->setLastError(null);
             unset($data['last_error']);
         }
-        if (\array_key_exists('last_error_cause', $data)) {
+        if (\array_key_exists('last_error_cause', $data) && $data['last_error_cause'] !== null) {
             $object->setLastErrorCause($data['last_error_cause']);
             unset($data['last_error_cause']);
         }
-        if (\array_key_exists('consecutive_failures', $data)) {
+        elseif (\array_key_exists('last_error_cause', $data) && $data['last_error_cause'] === null) {
+            $object->setLastErrorCause(null);
+            unset($data['last_error_cause']);
+        }
+        if (\array_key_exists('consecutive_failures', $data) && $data['consecutive_failures'] !== null) {
             $object->setConsecutiveFailures($data['consecutive_failures']);
+            unset($data['consecutive_failures']);
+        }
+        elseif (\array_key_exists('consecutive_failures', $data) && $data['consecutive_failures'] === null) {
+            $object->setConsecutiveFailures(null);
             unset($data['consecutive_failures']);
         }
         if (\array_key_exists('last_used_at', $data) && $data['last_used_at'] !== null) {

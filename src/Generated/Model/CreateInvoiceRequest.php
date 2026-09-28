@@ -93,7 +93,7 @@ class CreateInvoiceRequest implements AdditionalPropertiesInterface
      */
     protected $lines;
     /**
-     * @var PaymentInfo
+     * @var PaymentInfo|null
      */
     protected $paymentInfo;
     /**
@@ -362,18 +362,18 @@ class CreateInvoiceRequest implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return PaymentInfo
+     * @return PaymentInfo|null
      */
-    public function getPaymentInfo(): PaymentInfo
+    public function getPaymentInfo(): ?PaymentInfo
     {
         return $this->paymentInfo;
     }
     /**
-     * @param PaymentInfo $paymentInfo
+     * @param PaymentInfo|null $paymentInfo
      *
      * @return self
      */
-    public function setPaymentInfo(PaymentInfo $paymentInfo): self
+    public function setPaymentInfo(?PaymentInfo $paymentInfo): self
     {
         $this->initialized['paymentInfo'] = true;
         $this->paymentInfo = $paymentInfo;

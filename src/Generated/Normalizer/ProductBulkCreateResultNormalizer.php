@@ -61,7 +61,7 @@ class ProductBulkCreateResultNormalizer implements DenormalizerInterface, Normal
             $object->setCreatedProducts($values_1);
             unset($data['created_products']);
         }
-        if (\array_key_exists('errors', $data)) {
+        if (\array_key_exists('errors', $data) && $data['errors'] !== null) {
             $values_2 = [];
             foreach ($data['errors'] as $value_2) {
                 $values_2[] = $this->denormalizer->denormalize($value_2, \Lenorix\BeelSdk\Generated\Model\ProductBulkCreateLegacyError::class, 'json', $context);
@@ -69,8 +69,16 @@ class ProductBulkCreateResultNormalizer implements DenormalizerInterface, Normal
             $object->setErrors($values_2);
             unset($data['errors']);
         }
-        if (\array_key_exists('summary', $data)) {
+        elseif (\array_key_exists('errors', $data) && $data['errors'] === null) {
+            $object->setErrors(null);
+            unset($data['errors']);
+        }
+        if (\array_key_exists('summary', $data) && $data['summary'] !== null) {
             $object->setSummary($this->denormalizer->denormalize($data['summary'], \Lenorix\BeelSdk\Generated\Model\ProductBulkCreateResultSummary::class, 'json', $context));
+            unset($data['summary']);
+        }
+        elseif (\array_key_exists('summary', $data) && $data['summary'] === null) {
+            $object->setSummary(null);
             unset($data['summary']);
         }
         foreach ($data as $key => $value_3) {

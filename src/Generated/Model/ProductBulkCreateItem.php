@@ -24,13 +24,13 @@ class ProductBulkCreateItem implements AdditionalPropertiesInterface
     /**
      * Echo of the `code` that was submitted, so the row can be recognised without counting positions. Absent when the product carried none.
      *
-     * @var string
+     * @var string|null
      */
     protected $code;
     /**
      * Echo of the `name` that was submitted.
      *
-     * @var string
+     * @var string|null
      */
     protected $name;
     /**
@@ -52,13 +52,13 @@ class ProductBulkCreateItem implements AdditionalPropertiesInterface
      * something**; absent otherwise.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $productId;
     /**
      * Present only when the product was not created.
      *
-     * @var ProductBulkCreateItemError
+     * @var ProductBulkCreateItemError|null
      */
     protected $error;
     /**
@@ -86,20 +86,20 @@ class ProductBulkCreateItem implements AdditionalPropertiesInterface
     /**
      * Echo of the `code` that was submitted, so the row can be recognised without counting positions. Absent when the product carried none.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCode(): string
+    public function getCode(): ?string
     {
         return $this->code;
     }
     /**
      * Echo of the `code` that was submitted, so the row can be recognised without counting positions. Absent when the product carried none.
      *
-     * @param string $code
+     * @param string|null $code
      *
      * @return self
      */
-    public function setCode(string $code): self
+    public function setCode(?string $code): self
     {
         $this->initialized['code'] = true;
         $this->code = $code;
@@ -108,20 +108,20 @@ class ProductBulkCreateItem implements AdditionalPropertiesInterface
     /**
      * Echo of the `name` that was submitted.
      *
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
     /**
      * Echo of the `name` that was submitted.
      *
-     * @param string $name
+     * @param string|null $name
      *
      * @return self
      */
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->initialized['name'] = true;
         $this->name = $name;
@@ -170,9 +170,9 @@ class ProductBulkCreateItem implements AdditionalPropertiesInterface
      * something**; absent otherwise.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getProductId(): string
+    public function getProductId(): ?string
     {
         return $this->productId;
     }
@@ -181,11 +181,11 @@ class ProductBulkCreateItem implements AdditionalPropertiesInterface
     something**; absent otherwise.
     
     *
-    * @param string $productId
+    * @param string|null $productId
     *
     * @return self
     */
-    public function setProductId(string $productId): self
+    public function setProductId(?string $productId): self
     {
         $this->initialized['productId'] = true;
         $this->productId = $productId;
@@ -194,20 +194,20 @@ class ProductBulkCreateItem implements AdditionalPropertiesInterface
     /**
      * Present only when the product was not created.
      *
-     * @return ProductBulkCreateItemError
+     * @return ProductBulkCreateItemError|null
      */
-    public function getError(): ProductBulkCreateItemError
+    public function getError(): ?ProductBulkCreateItemError
     {
         return $this->error;
     }
     /**
      * Present only when the product was not created.
      *
-     * @param ProductBulkCreateItemError $error
+     * @param ProductBulkCreateItemError|null $error
      *
      * @return self
      */
-    public function setError(ProductBulkCreateItemError $error): self
+    public function setError(?ProductBulkCreateItemError $error): self
     {
         $this->initialized['error'] = true;
         $this->error = $error;

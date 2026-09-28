@@ -16,66 +16,66 @@ class ProductBulkCreateResultSummary implements AdditionalPropertiesInterface
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var int
+     * @var int|null
      */
     protected $totalProcessed;
     /**
-     * @var int
+     * @var int|null
      */
     protected $successful;
     /**
-     * @var int
+     * @var int|null
      */
     protected $failed;
     /**
-     * @return int
+     * @return int|null
      */
-    public function getTotalProcessed(): int
+    public function getTotalProcessed(): ?int
     {
         return $this->totalProcessed;
     }
     /**
-     * @param int $totalProcessed
+     * @param int|null $totalProcessed
      *
      * @return self
      */
-    public function setTotalProcessed(int $totalProcessed): self
+    public function setTotalProcessed(?int $totalProcessed): self
     {
         $this->initialized['totalProcessed'] = true;
         $this->totalProcessed = $totalProcessed;
         return $this;
     }
     /**
-     * @return int
+     * @return int|null
      */
-    public function getSuccessful(): int
+    public function getSuccessful(): ?int
     {
         return $this->successful;
     }
     /**
-     * @param int $successful
+     * @param int|null $successful
      *
      * @return self
      */
-    public function setSuccessful(int $successful): self
+    public function setSuccessful(?int $successful): self
     {
         $this->initialized['successful'] = true;
         $this->successful = $successful;
         return $this;
     }
     /**
-     * @return int
+     * @return int|null
      */
-    public function getFailed(): int
+    public function getFailed(): ?int
     {
         return $this->failed;
     }
     /**
-     * @param int $failed
+     * @param int|null $failed
      *
      * @return self
      */
-    public function setFailed(int $failed): self
+    public function setFailed(?int $failed): self
     {
         $this->initialized['failed'] = true;
         $this->failed = $failed;

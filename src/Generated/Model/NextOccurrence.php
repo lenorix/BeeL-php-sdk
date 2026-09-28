@@ -99,7 +99,7 @@ class NextOccurrence implements AdditionalPropertiesInterface
     /**
      * Payment due date (must be the same as or after `issue_date`)
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $dueDate;
     /**
@@ -120,7 +120,7 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * Contrast with `paid_at`, which is the system timestamp of when the status change was recorded.
      * 
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $paymentDate;
     /**
@@ -163,12 +163,7 @@ class NextOccurrence implements AdditionalPropertiesInterface
      */
     protected $scheduledFor;
     /**
-     * Action to perform when processing a scheduled invoice:
-     * - DRAFT: Create as draft for manual review
-     * - ISSUE_AND_SEND: Issue and send automatically via email
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $scheduledAction;
     /**
@@ -197,13 +192,13 @@ class NextOccurrence implements AdditionalPropertiesInterface
      */
     protected $totals;
     /**
-     * @var PaymentInfo
+     * @var PaymentInfo|null
      */
     protected $paymentInfo;
     /**
      * Additional observations or notes
      *
-     * @var string
+     * @var string|null
      */
     protected $notes;
     /**
@@ -212,30 +207,17 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * the invoice is recorded as `F3` identifying them.
      * 
      *
-     * @var list<string>
+     * @var list<string>|null
      */
     protected $replacedInvoiceIds;
     /**
-     * Why a `VOIDED` invoice reached that status:
-     * - VOID_REQUEST: Voided directly via `POST /v1/invoices/{invoice_id}/void`. The
-     *   original VeriFactu record is cancelled with the tax authority.
-     * - TOTAL_CORRECTIVE: Voided as a result of issuing a TOTAL corrective invoice over
-     *   it. The original VeriFactu record stays untouched; the corrective invoice is
-     *   reported as a new record instead.
-     * - EXCHANGED: A simplified invoice replaced by a full invoice issued in exchange for it
-     *   (`replaced_invoice_ids` of that invoice). Its VeriFactu record is not cancelled: the
-     *   exchange invoice is recorded as `F3`, identifying it as replaced.
-     * 
-     * Only present on voided invoices.
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $voidCause;
     /**
      * Reason recorded when the invoice was voided (only for voided invoices).
      *
-     * @var string
+     * @var string|null
      */
     protected $voidReason;
     /**
@@ -253,7 +235,7 @@ class NextOccurrence implements AdditionalPropertiesInterface
     /**
      * UUID of the invoice being rectified (only for corrective invoices)
      *
-     * @var string
+     * @var string|null
      */
     protected $rectifiedInvoiceId;
     /**
@@ -261,7 +243,7 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * (only for invoices created via `convert-to-invoice`).
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $sourceProformaId;
     /**
@@ -271,13 +253,13 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * in `CONVERTED` status; never included in list rows.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $convertedInvoiceId;
     /**
      * Reason for rectification (only for corrective invoices)
      *
-     * @var string
+     * @var string|null
      */
     protected $rectificationReason;
     /**
@@ -293,24 +275,11 @@ class NextOccurrence implements AdditionalPropertiesInterface
      */
     protected $recurringInvoiceName;
     /**
-     * Type of rectification applied to a corrective invoice:
-     * - TOTAL: Rectifies everything still invoiced on the original, its live correctives included (status → VOIDED)
-     * - PARTIAL: Partially corrects the original invoice (status → RECTIFIED)
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $rectificationType;
     /**
-     * Rectification codes according to VeriFactu regulations (AEAT):
-     * - R1: Error founded in law and Art. 80 One, Two and Six LIVA
-     * - R2: Article 80 Three LIVA (Bankruptcy proceedings)
-     * - R3: Article 80 Four LIVA (Uncollectable debts)
-     * - R4: Other causes
-     * - R5: Corrective of a simplified invoice - ONLY for simplified invoices
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $rectificationCode;
     /**
@@ -331,7 +300,7 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * See the "Filtering by metadata" guide for the full list and query rules.
      * 
      *
-     * @var array<string, mixed>
+     * @var array<string, mixed>|null
      */
     protected $metadata;
     /**
@@ -378,7 +347,7 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * `verifactu` as "not applicable" when the key is missing or carries no value.
      * 
      *
-     * @var VeriFactu
+     * @var VeriFactu|null
      */
     protected $verifactu;
     /**
@@ -389,7 +358,7 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * the outgoing email, and appear on the email delivery record rather than here.
      * 
      *
-     * @var list<InvoiceAttachment>
+     * @var list<InvoiceAttachment>|null
      */
     protected $attachments;
     /**
@@ -401,7 +370,7 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * the lifecycle endpoints); the list endpoint omits it.
      * 
      *
-     * @var list<InvoiceSendRecord>
+     * @var list<InvoiceSendRecord>|null
      */
     protected $sendingHistory;
     /**
@@ -413,7 +382,7 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * refused send and an invoice that never asked for one looked identical.
      * 
      *
-     * @var InvoiceEmailDeliveryOutcome
+     * @var InvoiceEmailDeliveryOutcome|null
      */
     protected $emailDelivery;
     /**
@@ -654,20 +623,20 @@ class NextOccurrence implements AdditionalPropertiesInterface
     /**
      * Payment due date (must be the same as or after `issue_date`)
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getDueDate(): \DateTime
+    public function getDueDate(): ?\DateTime
     {
         return $this->dueDate;
     }
     /**
      * Payment due date (must be the same as or after `issue_date`)
      *
-     * @param \DateTime $dueDate
+     * @param \DateTime|null $dueDate
      *
      * @return self
      */
-    public function setDueDate(\DateTime $dueDate): self
+    public function setDueDate(?\DateTime $dueDate): self
     {
         $this->initialized['dueDate'] = true;
         $this->dueDate = $dueDate;
@@ -711,9 +680,9 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * Contrast with `paid_at`, which is the system timestamp of when the status change was recorded.
      * 
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getPaymentDate(): \DateTime
+    public function getPaymentDate(): ?\DateTime
     {
         return $this->paymentDate;
     }
@@ -725,11 +694,11 @@ class NextOccurrence implements AdditionalPropertiesInterface
     Contrast with `paid_at`, which is the system timestamp of when the status change was recorded.
     
     *
-    * @param \DateTime $paymentDate
+    * @param \DateTime|null $paymentDate
     *
     * @return self
     */
-    public function setPaymentDate(\DateTime $paymentDate): self
+    public function setPaymentDate(?\DateTime $paymentDate): self
     {
         $this->initialized['paymentDate'] = true;
         $this->paymentDate = $paymentDate;
@@ -854,28 +823,18 @@ class NextOccurrence implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * Action to perform when processing a scheduled invoice:
-     * - DRAFT: Create as draft for manual review
-     * - ISSUE_AND_SEND: Issue and send automatically via email
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getScheduledAction(): string
+    public function getScheduledAction(): ?string
     {
         return $this->scheduledAction;
     }
     /**
-    * Action to perform when processing a scheduled invoice:
-    - DRAFT: Create as draft for manual review
-    - ISSUE_AND_SEND: Issue and send automatically via email
-    
-    *
-    * @param string $scheduledAction
-    *
-    * @return self
-    */
-    public function setScheduledAction(string $scheduledAction): self
+     * @param string|null $scheduledAction
+     *
+     * @return self
+     */
+    public function setScheduledAction(?string $scheduledAction): self
     {
         $this->initialized['scheduledAction'] = true;
         $this->scheduledAction = $scheduledAction;
@@ -972,18 +931,18 @@ class NextOccurrence implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return PaymentInfo
+     * @return PaymentInfo|null
      */
-    public function getPaymentInfo(): PaymentInfo
+    public function getPaymentInfo(): ?PaymentInfo
     {
         return $this->paymentInfo;
     }
     /**
-     * @param PaymentInfo $paymentInfo
+     * @param PaymentInfo|null $paymentInfo
      *
      * @return self
      */
-    public function setPaymentInfo(PaymentInfo $paymentInfo): self
+    public function setPaymentInfo(?PaymentInfo $paymentInfo): self
     {
         $this->initialized['paymentInfo'] = true;
         $this->paymentInfo = $paymentInfo;
@@ -992,20 +951,20 @@ class NextOccurrence implements AdditionalPropertiesInterface
     /**
      * Additional observations or notes
      *
-     * @return string
+     * @return string|null
      */
-    public function getNotes(): string
+    public function getNotes(): ?string
     {
         return $this->notes;
     }
     /**
      * Additional observations or notes
      *
-     * @param string $notes
+     * @param string|null $notes
      *
      * @return self
      */
-    public function setNotes(string $notes): self
+    public function setNotes(?string $notes): self
     {
         $this->initialized['notes'] = true;
         $this->notes = $notes;
@@ -1017,9 +976,9 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * the invoice is recorded as `F3` identifying them.
      * 
      *
-     * @return list<string>
+     * @return list<string>|null
      */
-    public function getReplacedInvoiceIds(): array
+    public function getReplacedInvoiceIds(): ?array
     {
         return $this->replacedInvoiceIds;
     }
@@ -1029,55 +988,29 @@ class NextOccurrence implements AdditionalPropertiesInterface
     the invoice is recorded as `F3` identifying them.
     
     *
-    * @param list<string> $replacedInvoiceIds
+    * @param list<string>|null $replacedInvoiceIds
     *
     * @return self
     */
-    public function setReplacedInvoiceIds(array $replacedInvoiceIds): self
+    public function setReplacedInvoiceIds(?array $replacedInvoiceIds): self
     {
         $this->initialized['replacedInvoiceIds'] = true;
         $this->replacedInvoiceIds = $replacedInvoiceIds;
         return $this;
     }
     /**
-     * Why a `VOIDED` invoice reached that status:
-     * - VOID_REQUEST: Voided directly via `POST /v1/invoices/{invoice_id}/void`. The
-     *   original VeriFactu record is cancelled with the tax authority.
-     * - TOTAL_CORRECTIVE: Voided as a result of issuing a TOTAL corrective invoice over
-     *   it. The original VeriFactu record stays untouched; the corrective invoice is
-     *   reported as a new record instead.
-     * - EXCHANGED: A simplified invoice replaced by a full invoice issued in exchange for it
-     *   (`replaced_invoice_ids` of that invoice). Its VeriFactu record is not cancelled: the
-     *   exchange invoice is recorded as `F3`, identifying it as replaced.
-     * 
-     * Only present on voided invoices.
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getVoidCause(): string
+    public function getVoidCause(): ?string
     {
         return $this->voidCause;
     }
     /**
-    * Why a `VOIDED` invoice reached that status:
-    - VOID_REQUEST: Voided directly via `POST /v1/invoices/{invoice_id}/void`. The
-     original VeriFactu record is cancelled with the tax authority.
-    - TOTAL_CORRECTIVE: Voided as a result of issuing a TOTAL corrective invoice over
-     it. The original VeriFactu record stays untouched; the corrective invoice is
-     reported as a new record instead.
-    - EXCHANGED: A simplified invoice replaced by a full invoice issued in exchange for it
-     (`replaced_invoice_ids` of that invoice). Its VeriFactu record is not cancelled: the
-     exchange invoice is recorded as `F3`, identifying it as replaced.
-    
-    Only present on voided invoices.
-    
-    *
-    * @param string $voidCause
-    *
-    * @return self
-    */
-    public function setVoidCause(string $voidCause): self
+     * @param string|null $voidCause
+     *
+     * @return self
+     */
+    public function setVoidCause(?string $voidCause): self
     {
         $this->initialized['voidCause'] = true;
         $this->voidCause = $voidCause;
@@ -1086,20 +1019,20 @@ class NextOccurrence implements AdditionalPropertiesInterface
     /**
      * Reason recorded when the invoice was voided (only for voided invoices).
      *
-     * @return string
+     * @return string|null
      */
-    public function getVoidReason(): string
+    public function getVoidReason(): ?string
     {
         return $this->voidReason;
     }
     /**
      * Reason recorded when the invoice was voided (only for voided invoices).
      *
-     * @param string $voidReason
+     * @param string|null $voidReason
      *
      * @return self
      */
-    public function setVoidReason(string $voidReason): self
+    public function setVoidReason(?string $voidReason): self
     {
         $this->initialized['voidReason'] = true;
         $this->voidReason = $voidReason;
@@ -1142,20 +1075,20 @@ class NextOccurrence implements AdditionalPropertiesInterface
     /**
      * UUID of the invoice being rectified (only for corrective invoices)
      *
-     * @return string
+     * @return string|null
      */
-    public function getRectifiedInvoiceId(): string
+    public function getRectifiedInvoiceId(): ?string
     {
         return $this->rectifiedInvoiceId;
     }
     /**
      * UUID of the invoice being rectified (only for corrective invoices)
      *
-     * @param string $rectifiedInvoiceId
+     * @param string|null $rectifiedInvoiceId
      *
      * @return self
      */
-    public function setRectifiedInvoiceId(string $rectifiedInvoiceId): self
+    public function setRectifiedInvoiceId(?string $rectifiedInvoiceId): self
     {
         $this->initialized['rectifiedInvoiceId'] = true;
         $this->rectifiedInvoiceId = $rectifiedInvoiceId;
@@ -1166,9 +1099,9 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * (only for invoices created via `convert-to-invoice`).
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getSourceProformaId(): string
+    public function getSourceProformaId(): ?string
     {
         return $this->sourceProformaId;
     }
@@ -1177,11 +1110,11 @@ class NextOccurrence implements AdditionalPropertiesInterface
     (only for invoices created via `convert-to-invoice`).
     
     *
-    * @param string $sourceProformaId
+    * @param string|null $sourceProformaId
     *
     * @return self
     */
-    public function setSourceProformaId(string $sourceProformaId): self
+    public function setSourceProformaId(?string $sourceProformaId): self
     {
         $this->initialized['sourceProformaId'] = true;
         $this->sourceProformaId = $sourceProformaId;
@@ -1194,9 +1127,9 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * in `CONVERTED` status; never included in list rows.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getConvertedInvoiceId(): string
+    public function getConvertedInvoiceId(): ?string
     {
         return $this->convertedInvoiceId;
     }
@@ -1207,11 +1140,11 @@ class NextOccurrence implements AdditionalPropertiesInterface
     in `CONVERTED` status; never included in list rows.
     
     *
-    * @param string $convertedInvoiceId
+    * @param string|null $convertedInvoiceId
     *
     * @return self
     */
-    public function setConvertedInvoiceId(string $convertedInvoiceId): self
+    public function setConvertedInvoiceId(?string $convertedInvoiceId): self
     {
         $this->initialized['convertedInvoiceId'] = true;
         $this->convertedInvoiceId = $convertedInvoiceId;
@@ -1220,20 +1153,20 @@ class NextOccurrence implements AdditionalPropertiesInterface
     /**
      * Reason for rectification (only for corrective invoices)
      *
-     * @return string
+     * @return string|null
      */
-    public function getRectificationReason(): string
+    public function getRectificationReason(): ?string
     {
         return $this->rectificationReason;
     }
     /**
      * Reason for rectification (only for corrective invoices)
      *
-     * @param string $rectificationReason
+     * @param string|null $rectificationReason
      *
      * @return self
      */
-    public function setRectificationReason(string $rectificationReason): self
+    public function setRectificationReason(?string $rectificationReason): self
     {
         $this->initialized['rectificationReason'] = true;
         $this->rectificationReason = $rectificationReason;
@@ -1284,62 +1217,36 @@ class NextOccurrence implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * Type of rectification applied to a corrective invoice:
-     * - TOTAL: Rectifies everything still invoiced on the original, its live correctives included (status → VOIDED)
-     * - PARTIAL: Partially corrects the original invoice (status → RECTIFIED)
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getRectificationType(): string
+    public function getRectificationType(): ?string
     {
         return $this->rectificationType;
     }
     /**
-    * Type of rectification applied to a corrective invoice:
-    - TOTAL: Rectifies everything still invoiced on the original, its live correctives included (status → VOIDED)
-    - PARTIAL: Partially corrects the original invoice (status → RECTIFIED)
-    
-    *
-    * @param string $rectificationType
-    *
-    * @return self
-    */
-    public function setRectificationType(string $rectificationType): self
+     * @param string|null $rectificationType
+     *
+     * @return self
+     */
+    public function setRectificationType(?string $rectificationType): self
     {
         $this->initialized['rectificationType'] = true;
         $this->rectificationType = $rectificationType;
         return $this;
     }
     /**
-     * Rectification codes according to VeriFactu regulations (AEAT):
-     * - R1: Error founded in law and Art. 80 One, Two and Six LIVA
-     * - R2: Article 80 Three LIVA (Bankruptcy proceedings)
-     * - R3: Article 80 Four LIVA (Uncollectable debts)
-     * - R4: Other causes
-     * - R5: Corrective of a simplified invoice - ONLY for simplified invoices
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getRectificationCode(): string
+    public function getRectificationCode(): ?string
     {
         return $this->rectificationCode;
     }
     /**
-    * Rectification codes according to VeriFactu regulations (AEAT):
-    - R1: Error founded in law and Art. 80 One, Two and Six LIVA
-    - R2: Article 80 Three LIVA (Bankruptcy proceedings)
-    - R3: Article 80 Four LIVA (Uncollectable debts)
-    - R4: Other causes
-    - R5: Corrective of a simplified invoice - ONLY for simplified invoices
-    
-    *
-    * @param string $rectificationCode
-    *
-    * @return self
-    */
-    public function setRectificationCode(string $rectificationCode): self
+     * @param string|null $rectificationCode
+     *
+     * @return self
+     */
+    public function setRectificationCode(?string $rectificationCode): self
     {
         $this->initialized['rectificationCode'] = true;
         $this->rectificationCode = $rectificationCode;
@@ -1379,9 +1286,9 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * See the "Filtering by metadata" guide for the full list and query rules.
      * 
      *
-     * @return array<string, mixed>
+     * @return array<string, mixed>|null
      */
-    public function getMetadata(): iterable
+    public function getMetadata(): ?iterable
     {
         return $this->metadata;
     }
@@ -1397,11 +1304,11 @@ class NextOccurrence implements AdditionalPropertiesInterface
     See the "Filtering by metadata" guide for the full list and query rules.
     
     *
-    * @param array<string, mixed> $metadata
+    * @param array<string, mixed>|null $metadata
     *
     * @return self
     */
-    public function setMetadata(iterable $metadata): self
+    public function setMetadata(?iterable $metadata): self
     {
         $this->initialized['metadata'] = true;
         $this->metadata = $metadata;
@@ -1511,9 +1418,9 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * `verifactu` as "not applicable" when the key is missing or carries no value.
      * 
      *
-     * @return VeriFactu
+     * @return VeriFactu|null
      */
-    public function getVerifactu(): VeriFactu
+    public function getVerifactu(): ?VeriFactu
     {
         return $this->verifactu;
     }
@@ -1531,11 +1438,11 @@ class NextOccurrence implements AdditionalPropertiesInterface
     `verifactu` as "not applicable" when the key is missing or carries no value.
     
     *
-    * @param VeriFactu $verifactu
+    * @param VeriFactu|null $verifactu
     *
     * @return self
     */
-    public function setVerifactu(VeriFactu $verifactu): self
+    public function setVerifactu(?VeriFactu $verifactu): self
     {
         $this->initialized['verifactu'] = true;
         $this->verifactu = $verifactu;
@@ -1549,9 +1456,9 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * the outgoing email, and appear on the email delivery record rather than here.
      * 
      *
-     * @return list<InvoiceAttachment>
+     * @return list<InvoiceAttachment>|null
      */
-    public function getAttachments(): array
+    public function getAttachments(): ?array
     {
         return $this->attachments;
     }
@@ -1563,11 +1470,11 @@ class NextOccurrence implements AdditionalPropertiesInterface
     the outgoing email, and appear on the email delivery record rather than here.
     
     *
-    * @param list<InvoiceAttachment> $attachments
+    * @param list<InvoiceAttachment>|null $attachments
     *
     * @return self
     */
-    public function setAttachments(array $attachments): self
+    public function setAttachments(?array $attachments): self
     {
         $this->initialized['attachments'] = true;
         $this->attachments = $attachments;
@@ -1582,9 +1489,9 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * the lifecycle endpoints); the list endpoint omits it.
      * 
      *
-     * @return list<InvoiceSendRecord>
+     * @return list<InvoiceSendRecord>|null
      */
-    public function getSendingHistory(): array
+    public function getSendingHistory(): ?array
     {
         return $this->sendingHistory;
     }
@@ -1597,11 +1504,11 @@ class NextOccurrence implements AdditionalPropertiesInterface
     the lifecycle endpoints); the list endpoint omits it.
     
     *
-    * @param list<InvoiceSendRecord> $sendingHistory
+    * @param list<InvoiceSendRecord>|null $sendingHistory
     *
     * @return self
     */
-    public function setSendingHistory(array $sendingHistory): self
+    public function setSendingHistory(?array $sendingHistory): self
     {
         $this->initialized['sendingHistory'] = true;
         $this->sendingHistory = $sendingHistory;
@@ -1616,9 +1523,9 @@ class NextOccurrence implements AdditionalPropertiesInterface
      * refused send and an invoice that never asked for one looked identical.
      * 
      *
-     * @return InvoiceEmailDeliveryOutcome
+     * @return InvoiceEmailDeliveryOutcome|null
      */
-    public function getEmailDelivery(): InvoiceEmailDeliveryOutcome
+    public function getEmailDelivery(): ?InvoiceEmailDeliveryOutcome
     {
         return $this->emailDelivery;
     }
@@ -1631,11 +1538,11 @@ class NextOccurrence implements AdditionalPropertiesInterface
     refused send and an invoice that never asked for one looked identical.
     
     *
-    * @param InvoiceEmailDeliveryOutcome $emailDelivery
+    * @param InvoiceEmailDeliveryOutcome|null $emailDelivery
     *
     * @return self
     */
-    public function setEmailDelivery(InvoiceEmailDeliveryOutcome $emailDelivery): self
+    public function setEmailDelivery(?InvoiceEmailDeliveryOutcome $emailDelivery): self
     {
         $this->initialized['emailDelivery'] = true;
         $this->emailDelivery = $emailDelivery;

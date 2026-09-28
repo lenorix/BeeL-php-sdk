@@ -16,18 +16,11 @@ class GenerationHistoryResponse implements AdditionalPropertiesInterface
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var string
+     * @var string|null
      */
     protected $id;
     /**
-     * What happened in one scheduled slot of the schedule.
-     * 
-     * Only `GENERATED` consumes the slot and produces an invoice. `FAILED`, `SKIPPED` and `PAUSED` are
-     * recorded to explain why a period has no invoice, and the slot stays free: the next run may still
-     * fill it.
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $type;
     /**
@@ -75,11 +68,11 @@ class GenerationHistoryResponse implements AdditionalPropertiesInterface
      */
     protected $requestedByName;
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $generatedAt;
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $scheduledDate;
     /**
@@ -112,50 +105,36 @@ class GenerationHistoryResponse implements AdditionalPropertiesInterface
      */
     protected $status;
     /**
-     * @return string
+     * @return string|null
      */
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->id;
     }
     /**
-     * @param string $id
+     * @param string|null $id
      *
      * @return self
      */
-    public function setId(string $id): self
+    public function setId(?string $id): self
     {
         $this->initialized['id'] = true;
         $this->id = $id;
         return $this;
     }
     /**
-     * What happened in one scheduled slot of the schedule.
-     * 
-     * Only `GENERATED` consumes the slot and produces an invoice. `FAILED`, `SKIPPED` and `PAUSED` are
-     * recorded to explain why a period has no invoice, and the slot stays free: the next run may still
-     * fill it.
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getType(): string
+    public function getType(): ?string
     {
         return $this->type;
     }
     /**
-    * What happened in one scheduled slot of the schedule.
-    
-    Only `GENERATED` consumes the slot and produces an invoice. `FAILED`, `SKIPPED` and `PAUSED` are
-    recorded to explain why a period has no invoice, and the slot stays free: the next run may still
-    fill it.
-    
-    *
-    * @param string $type
-    *
-    * @return self
-    */
-    public function setType(string $type): self
+     * @param string|null $type
+     *
+     * @return self
+     */
+    public function setType(?string $type): self
     {
         $this->initialized['type'] = true;
         $this->type = $type;
@@ -299,36 +278,36 @@ class GenerationHistoryResponse implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getGeneratedAt(): \DateTime
+    public function getGeneratedAt(): ?\DateTime
     {
         return $this->generatedAt;
     }
     /**
-     * @param \DateTime $generatedAt
+     * @param \DateTime|null $generatedAt
      *
      * @return self
      */
-    public function setGeneratedAt(\DateTime $generatedAt): self
+    public function setGeneratedAt(?\DateTime $generatedAt): self
     {
         $this->initialized['generatedAt'] = true;
         $this->generatedAt = $generatedAt;
         return $this;
     }
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getScheduledDate(): \DateTime
+    public function getScheduledDate(): ?\DateTime
     {
         return $this->scheduledDate;
     }
     /**
-     * @param \DateTime $scheduledDate
+     * @param \DateTime|null $scheduledDate
      *
      * @return self
      */
-    public function setScheduledDate(\DateTime $scheduledDate): self
+    public function setScheduledDate(?\DateTime $scheduledDate): self
     {
         $this->initialized['scheduledDate'] = true;
         $this->scheduledDate = $scheduledDate;

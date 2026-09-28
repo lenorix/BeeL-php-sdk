@@ -16,44 +16,44 @@ class V1CompaniesCompanyIdProductsBulkDeleteResponse200DataErrorsItem implements
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var string
+     * @var string|null
      */
     protected $productId;
     /**
-     * @var string
+     * @var string|null
      */
     protected $error;
     /**
-     * @return string
+     * @return string|null
      */
-    public function getProductId(): string
+    public function getProductId(): ?string
     {
         return $this->productId;
     }
     /**
-     * @param string $productId
+     * @param string|null $productId
      *
      * @return self
      */
-    public function setProductId(string $productId): self
+    public function setProductId(?string $productId): self
     {
         $this->initialized['productId'] = true;
         $this->productId = $productId;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getError(): string
+    public function getError(): ?string
     {
         return $this->error;
     }
     /**
-     * @param string $error
+     * @param string|null $error
      *
      * @return self
      */
-    public function setError(string $error): self
+    public function setError(?string $error): self
     {
         $this->initialized['error'] = true;
         $this->error = $error;

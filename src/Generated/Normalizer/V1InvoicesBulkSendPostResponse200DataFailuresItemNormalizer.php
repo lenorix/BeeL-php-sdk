@@ -37,16 +37,28 @@ class V1InvoicesBulkSendPostResponse200DataFailuresItemNormalizer implements Den
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('invoice_id', $data)) {
+        if (\array_key_exists('invoice_id', $data) && $data['invoice_id'] !== null) {
             $object->setInvoiceId($data['invoice_id']);
             unset($data['invoice_id']);
         }
-        if (\array_key_exists('error_code', $data)) {
+        elseif (\array_key_exists('invoice_id', $data) && $data['invoice_id'] === null) {
+            $object->setInvoiceId(null);
+            unset($data['invoice_id']);
+        }
+        if (\array_key_exists('error_code', $data) && $data['error_code'] !== null) {
             $object->setErrorCode($data['error_code']);
             unset($data['error_code']);
         }
-        if (\array_key_exists('error_message', $data)) {
+        elseif (\array_key_exists('error_code', $data) && $data['error_code'] === null) {
+            $object->setErrorCode(null);
+            unset($data['error_code']);
+        }
+        if (\array_key_exists('error_message', $data) && $data['error_message'] !== null) {
             $object->setErrorMessage($data['error_message']);
+            unset($data['error_message']);
+        }
+        elseif (\array_key_exists('error_message', $data) && $data['error_message'] === null) {
+            $object->setErrorMessage(null);
             unset($data['error_message']);
         }
         foreach ($data as $key => $value) {

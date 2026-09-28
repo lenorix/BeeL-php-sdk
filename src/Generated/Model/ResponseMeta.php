@@ -16,44 +16,44 @@ class ResponseMeta implements AdditionalPropertiesInterface
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $timestamp;
     /**
-     * @var string
+     * @var string|null
      */
     protected $requestId;
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getTimestamp(): \DateTime
+    public function getTimestamp(): ?\DateTime
     {
         return $this->timestamp;
     }
     /**
-     * @param \DateTime $timestamp
+     * @param \DateTime|null $timestamp
      *
      * @return self
      */
-    public function setTimestamp(\DateTime $timestamp): self
+    public function setTimestamp(?\DateTime $timestamp): self
     {
         $this->initialized['timestamp'] = true;
         $this->timestamp = $timestamp;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getRequestId(): string
+    public function getRequestId(): ?string
     {
         return $this->requestId;
     }
     /**
-     * @param string $requestId
+     * @param string|null $requestId
      *
      * @return self
      */
-    public function setRequestId(string $requestId): self
+    public function setRequestId(?string $requestId): self
     {
         $this->initialized['requestId'] = true;
         $this->requestId = $requestId;

@@ -37,59 +37,7 @@ class CreateInvoiceRequestLinesItemMainTax implements AdditionalPropertiesInterf
      */
     protected $percentage;
     /**
-     * Regime key according to VeriFactu regulations. Omitted, `01` (general regime) applies:
-     * - 01: General regime operation
-     * - 02: Export (IVA and IGIC; not IPSI, whose AEAT list is `01, 08, 11, 18, 19, 20`)
-     * - 03: Used goods, art, antiques (not accepted, see below)
-     * - 04: Investment gold
-     * - 05: Travel agencies
-     * - 06: Group of entities (not accepted, see below)
-     * - 07: Cash basis
-     * - 08: Operation subject to another indirect tax — IPSI or IGIC on an IVA line, IPSI or IVA
-     *   on an IGIC line. It is **not** the general regime of IGIC, which is `01`.
-     * - 09: Mediating agencies
-     * - 10: Third-party collections
-     * - 11: Local rental
-     * - 14: VAT pending in certifications (not accepted, see below)
-     * - 15: VAT pending successive tract
-     * - 17: OSS and IOSS
-     * - 18: Equivalence surcharge
-     * - 19: REAGYP
-     * - 20: Simplified regime
-     * 
-     * **What AEAT requires with each key** (Validaciones VERI*FACTU 3.1.3.15.6), checked on
-     * IVA and IGIC lines before the invoice is numbered. Otherwise the request is rejected with
-     * `422` and the code in brackets:
-     * - `04`: only reverse charge (an `ISP_ART_84_2_*` reason) or an exemption
-     *   (`REGIME_KEY_CLASSIFICATION_NOT_ACCEPTED`).
-     * - `08`: only `exemption_reason: NO_SUJETA_LOCALIZACION`, at 0 %
-     *   (`REGIME_KEY_CLASSIFICATION_NOT_ACCEPTED`).
-     * - `10`: only `exemption_reason: NO_SUJETA_ART_7_9`, on a `STANDARD` invoice whose
-     *   recipient has a `nif` (`REGIME_KEY_CLASSIFICATION_NOT_ACCEPTED`,
-     *   `REGIME_KEY_REQUIRES_STANDARD_INVOICE`, `REGIME_KEY_REQUIRES_RECIPIENT_NIF`).
-     * - `11` (IVA): a subject line only at 21 %, and no reverse charge
-     *   (`REGIME_KEY_REQUIRES_VAT_RATE`, `REGIME_KEY_CLASSIFICATION_NOT_ACCEPTED`).
-     * - `06` and `14` are not accepted (`REGIME_KEY_NOT_SUPPORTED`): AEAT requires with them
-     *   data the invoice does not carry (a cost-based taxable base; an operation date after the
-     *   issue date and a public-administration recipient).
-     * - `03` (used goods) is not accepted (`REGIME_KEY_NOT_SUPPORTED`): under it the invoice
-     *   must not show the tax separately (RD 1619/2012, art. 16.2.c), and it always does. The
-     *   corrective of an invoice that already carried `03` keeps it.
-     * - `05` (travel agencies) and `07` (cash basis) are accepted, and the invoice PDF carries
-     *   the mention of their regime (RD 1619/2012, art. 6.1 n and p). `07`: no reverse charge,
-     *   no non-subject reason and, of the exemptions, only art. 20 or `OTRO`
-     *   (`REGIME_KEY_CLASSIFICATION_NOT_ACCEPTED`).
-     * `GET /v1/tax-types` only offers the keys that are accepted.
-     * 
-     * **One exception to "a key you send is the key you get":** when the line ends up
-     * carrying an equivalence surcharge — whether you sent `equivalence_surcharge_rate`
-     * or it was inherited from the company's tax configuration — a `01` is rewritten to
-     * `18`, because a surcharge under the general regime is fiscally incoherent. Send
-     * `equivalence_surcharge_rate: 0` explicitly to keep `01`. See
-     * `equivalence_surcharge_rate` in the invoice line for the full rules.
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $regimeKey;
     /**
@@ -155,122 +103,18 @@ class CreateInvoiceRequestLinesItemMainTax implements AdditionalPropertiesInterf
         return $this;
     }
     /**
-     * Regime key according to VeriFactu regulations. Omitted, `01` (general regime) applies:
-     * - 01: General regime operation
-     * - 02: Export (IVA and IGIC; not IPSI, whose AEAT list is `01, 08, 11, 18, 19, 20`)
-     * - 03: Used goods, art, antiques (not accepted, see below)
-     * - 04: Investment gold
-     * - 05: Travel agencies
-     * - 06: Group of entities (not accepted, see below)
-     * - 07: Cash basis
-     * - 08: Operation subject to another indirect tax — IPSI or IGIC on an IVA line, IPSI or IVA
-     *   on an IGIC line. It is **not** the general regime of IGIC, which is `01`.
-     * - 09: Mediating agencies
-     * - 10: Third-party collections
-     * - 11: Local rental
-     * - 14: VAT pending in certifications (not accepted, see below)
-     * - 15: VAT pending successive tract
-     * - 17: OSS and IOSS
-     * - 18: Equivalence surcharge
-     * - 19: REAGYP
-     * - 20: Simplified regime
-     * 
-     * **What AEAT requires with each key** (Validaciones VERI*FACTU 3.1.3.15.6), checked on
-     * IVA and IGIC lines before the invoice is numbered. Otherwise the request is rejected with
-     * `422` and the code in brackets:
-     * - `04`: only reverse charge (an `ISP_ART_84_2_*` reason) or an exemption
-     *   (`REGIME_KEY_CLASSIFICATION_NOT_ACCEPTED`).
-     * - `08`: only `exemption_reason: NO_SUJETA_LOCALIZACION`, at 0 %
-     *   (`REGIME_KEY_CLASSIFICATION_NOT_ACCEPTED`).
-     * - `10`: only `exemption_reason: NO_SUJETA_ART_7_9`, on a `STANDARD` invoice whose
-     *   recipient has a `nif` (`REGIME_KEY_CLASSIFICATION_NOT_ACCEPTED`,
-     *   `REGIME_KEY_REQUIRES_STANDARD_INVOICE`, `REGIME_KEY_REQUIRES_RECIPIENT_NIF`).
-     * - `11` (IVA): a subject line only at 21 %, and no reverse charge
-     *   (`REGIME_KEY_REQUIRES_VAT_RATE`, `REGIME_KEY_CLASSIFICATION_NOT_ACCEPTED`).
-     * - `06` and `14` are not accepted (`REGIME_KEY_NOT_SUPPORTED`): AEAT requires with them
-     *   data the invoice does not carry (a cost-based taxable base; an operation date after the
-     *   issue date and a public-administration recipient).
-     * - `03` (used goods) is not accepted (`REGIME_KEY_NOT_SUPPORTED`): under it the invoice
-     *   must not show the tax separately (RD 1619/2012, art. 16.2.c), and it always does. The
-     *   corrective of an invoice that already carried `03` keeps it.
-     * - `05` (travel agencies) and `07` (cash basis) are accepted, and the invoice PDF carries
-     *   the mention of their regime (RD 1619/2012, art. 6.1 n and p). `07`: no reverse charge,
-     *   no non-subject reason and, of the exemptions, only art. 20 or `OTRO`
-     *   (`REGIME_KEY_CLASSIFICATION_NOT_ACCEPTED`).
-     * `GET /v1/tax-types` only offers the keys that are accepted.
-     * 
-     * **One exception to "a key you send is the key you get":** when the line ends up
-     * carrying an equivalence surcharge — whether you sent `equivalence_surcharge_rate`
-     * or it was inherited from the company's tax configuration — a `01` is rewritten to
-     * `18`, because a surcharge under the general regime is fiscally incoherent. Send
-     * `equivalence_surcharge_rate: 0` explicitly to keep `01`. See
-     * `equivalence_surcharge_rate` in the invoice line for the full rules.
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getRegimeKey(): string
+    public function getRegimeKey(): ?string
     {
         return $this->regimeKey;
     }
     /**
-    * Regime key according to VeriFactu regulations. Omitted, `01` (general regime) applies:
-    - 01: General regime operation
-    - 02: Export (IVA and IGIC; not IPSI, whose AEAT list is `01, 08, 11, 18, 19, 20`)
-    - 03: Used goods, art, antiques (not accepted, see below)
-    - 04: Investment gold
-    - 05: Travel agencies
-    - 06: Group of entities (not accepted, see below)
-    - 07: Cash basis
-    - 08: Operation subject to another indirect tax — IPSI or IGIC on an IVA line, IPSI or IVA
-     on an IGIC line. It is **not** the general regime of IGIC, which is `01`.
-    - 09: Mediating agencies
-    - 10: Third-party collections
-    - 11: Local rental
-    - 14: VAT pending in certifications (not accepted, see below)
-    - 15: VAT pending successive tract
-    - 17: OSS and IOSS
-    - 18: Equivalence surcharge
-    - 19: REAGYP
-    - 20: Simplified regime
-    
-    **What AEAT requires with each key** (Validaciones VERI*FACTU 3.1.3.15.6), checked on
-    IVA and IGIC lines before the invoice is numbered. Otherwise the request is rejected with
-    `422` and the code in brackets:
-    - `04`: only reverse charge (an `ISP_ART_84_2_*` reason) or an exemption
-     (`REGIME_KEY_CLASSIFICATION_NOT_ACCEPTED`).
-    - `08`: only `exemption_reason: NO_SUJETA_LOCALIZACION`, at 0 %
-     (`REGIME_KEY_CLASSIFICATION_NOT_ACCEPTED`).
-    - `10`: only `exemption_reason: NO_SUJETA_ART_7_9`, on a `STANDARD` invoice whose
-     recipient has a `nif` (`REGIME_KEY_CLASSIFICATION_NOT_ACCEPTED`,
-     `REGIME_KEY_REQUIRES_STANDARD_INVOICE`, `REGIME_KEY_REQUIRES_RECIPIENT_NIF`).
-    - `11` (IVA): a subject line only at 21 %, and no reverse charge
-     (`REGIME_KEY_REQUIRES_VAT_RATE`, `REGIME_KEY_CLASSIFICATION_NOT_ACCEPTED`).
-    - `06` and `14` are not accepted (`REGIME_KEY_NOT_SUPPORTED`): AEAT requires with them
-     data the invoice does not carry (a cost-based taxable base; an operation date after the
-     issue date and a public-administration recipient).
-    - `03` (used goods) is not accepted (`REGIME_KEY_NOT_SUPPORTED`): under it the invoice
-     must not show the tax separately (RD 1619/2012, art. 16.2.c), and it always does. The
-     corrective of an invoice that already carried `03` keeps it.
-    - `05` (travel agencies) and `07` (cash basis) are accepted, and the invoice PDF carries
-     the mention of their regime (RD 1619/2012, art. 6.1 n and p). `07`: no reverse charge,
-     no non-subject reason and, of the exemptions, only art. 20 or `OTRO`
-     (`REGIME_KEY_CLASSIFICATION_NOT_ACCEPTED`).
-    `GET /v1/tax-types` only offers the keys that are accepted.
-    
-    **One exception to "a key you send is the key you get":** when the line ends up
-    carrying an equivalence surcharge — whether you sent `equivalence_surcharge_rate`
-    or it was inherited from the company's tax configuration — a `01` is rewritten to
-    `18`, because a surcharge under the general regime is fiscally incoherent. Send
-    `equivalence_surcharge_rate: 0` explicitly to keep `01`. See
-    `equivalence_surcharge_rate` in the invoice line for the full rules.
-    
-    *
-    * @param string $regimeKey
-    *
-    * @return self
-    */
-    public function setRegimeKey(string $regimeKey): self
+     * @param string|null $regimeKey
+     *
+     * @return self
+     */
+    public function setRegimeKey(?string $regimeKey): self
     {
         $this->initialized['regimeKey'] = true;
         $this->regimeKey = $regimeKey;

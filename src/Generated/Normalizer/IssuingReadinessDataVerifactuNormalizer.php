@@ -40,16 +40,24 @@ class IssuingReadinessDataVerifactuNormalizer implements DenormalizerInterface, 
         if (\array_key_exists('ready', $data) && \is_int($data['ready'])) {
             $data['ready'] = (bool) $data['ready'];
         }
-        if (\array_key_exists('ready', $data)) {
+        if (\array_key_exists('ready', $data) && $data['ready'] !== null) {
             $object->setReady($data['ready']);
             unset($data['ready']);
         }
-        if (\array_key_exists('blockers', $data)) {
+        elseif (\array_key_exists('ready', $data) && $data['ready'] === null) {
+            $object->setReady(null);
+            unset($data['ready']);
+        }
+        if (\array_key_exists('blockers', $data) && $data['blockers'] !== null) {
             $values = [];
             foreach ($data['blockers'] as $value) {
                 $values[] = $value;
             }
             $object->setBlockers($values);
+            unset($data['blockers']);
+        }
+        elseif (\array_key_exists('blockers', $data) && $data['blockers'] === null) {
+            $object->setBlockers(null);
             unset($data['blockers']);
         }
         foreach ($data as $key => $value_1) {

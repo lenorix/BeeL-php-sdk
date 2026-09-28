@@ -72,11 +72,11 @@ class ValidateNifResponse implements AdditionalPropertiesInterface
      * `ERROR`, or a syntactically invalid NIF).
      * 
      *
-     * @var bool
+     * @var bool|null
      */
     protected $legalNameVerified;
     /**
-     * @var string
+     * @var string|null
      */
     protected $censusStatus;
     /**
@@ -231,9 +231,9 @@ class ValidateNifResponse implements AdditionalPropertiesInterface
      * `ERROR`, or a syntactically invalid NIF).
      * 
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getLegalNameVerified(): bool
+    public function getLegalNameVerified(): ?bool
     {
         return $this->legalNameVerified;
     }
@@ -253,29 +253,29 @@ class ValidateNifResponse implements AdditionalPropertiesInterface
     `ERROR`, or a syntactically invalid NIF).
     
     *
-    * @param bool $legalNameVerified
+    * @param bool|null $legalNameVerified
     *
     * @return self
     */
-    public function setLegalNameVerified(bool $legalNameVerified): self
+    public function setLegalNameVerified(?bool $legalNameVerified): self
     {
         $this->initialized['legalNameVerified'] = true;
         $this->legalNameVerified = $legalNameVerified;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getCensusStatus(): string
+    public function getCensusStatus(): ?string
     {
         return $this->censusStatus;
     }
     /**
-     * @param string $censusStatus
+     * @param string|null $censusStatus
      *
      * @return self
      */
-    public function setCensusStatus(string $censusStatus): self
+    public function setCensusStatus(?string $censusStatus): self
     {
         $this->initialized['censusStatus'] = true;
         $this->censusStatus = $censusStatus;

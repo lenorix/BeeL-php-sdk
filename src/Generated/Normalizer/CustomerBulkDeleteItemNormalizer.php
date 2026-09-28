@@ -49,8 +49,12 @@ class CustomerBulkDeleteItemNormalizer implements DenormalizerInterface, Normali
             $object->setStatus($data['status']);
             unset($data['status']);
         }
-        if (\array_key_exists('error', $data)) {
+        if (\array_key_exists('error', $data) && $data['error'] !== null) {
             $object->setError($this->denormalizer->denormalize($data['error'], \Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteItemError::class, 'json', $context));
+            unset($data['error']);
+        }
+        elseif (\array_key_exists('error', $data) && $data['error'] === null) {
+            $object->setError(null);
             unset($data['error']);
         }
         foreach ($data as $key => $value) {

@@ -16,16 +16,11 @@ class RecurringInvoicePause implements AdditionalPropertiesInterface
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * Who stopped the schedule. `USER` a person did, from the API or the dashboard; `DOWNGRADE` the
-     * account lost the recurring-invoices feature; `GENERATION_FAILURE` an unattended run failed with
-     * something waiting will not fix — that one carries a `blocker`.
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $reason;
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $since;
     /**
@@ -35,50 +30,40 @@ class RecurringInvoicePause implements AdditionalPropertiesInterface
      * in effect.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $blocker;
     /**
-     * Who stopped the schedule. `USER` a person did, from the API or the dashboard; `DOWNGRADE` the
-     * account lost the recurring-invoices feature; `GENERATION_FAILURE` an unattended run failed with
-     * something waiting will not fix — that one carries a `blocker`.
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getReason(): string
+    public function getReason(): ?string
     {
         return $this->reason;
     }
     /**
-    * Who stopped the schedule. `USER` a person did, from the API or the dashboard; `DOWNGRADE` the
-    account lost the recurring-invoices feature; `GENERATION_FAILURE` an unattended run failed with
-    something waiting will not fix — that one carries a `blocker`.
-    
-    *
-    * @param string $reason
-    *
-    * @return self
-    */
-    public function setReason(string $reason): self
+     * @param string|null $reason
+     *
+     * @return self
+     */
+    public function setReason(?string $reason): self
     {
         $this->initialized['reason'] = true;
         $this->reason = $reason;
         return $this;
     }
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getSince(): \DateTime
+    public function getSince(): ?\DateTime
     {
         return $this->since;
     }
     /**
-     * @param \DateTime $since
+     * @param \DateTime|null $since
      *
      * @return self
      */
-    public function setSince(\DateTime $since): self
+    public function setSince(?\DateTime $since): self
     {
         $this->initialized['since'] = true;
         $this->since = $since;
@@ -91,9 +76,9 @@ class RecurringInvoicePause implements AdditionalPropertiesInterface
      * in effect.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getBlocker(): string
+    public function getBlocker(): ?string
     {
         return $this->blocker;
     }
@@ -104,11 +89,11 @@ class RecurringInvoicePause implements AdditionalPropertiesInterface
     in effect.
     
     *
-    * @param string $blocker
+    * @param string|null $blocker
     *
     * @return self
     */
-    public function setBlocker(string $blocker): self
+    public function setBlocker(?string $blocker): self
     {
         $this->initialized['blocker'] = true;
         $this->blocker = $blocker;

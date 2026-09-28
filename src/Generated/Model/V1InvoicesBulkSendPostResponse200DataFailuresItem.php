@@ -16,72 +16,66 @@ class V1InvoicesBulkSendPostResponse200DataFailuresItem implements AdditionalPro
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * Universally Unique Identifier (UUID v4)
-     *
-     * @var string
+     * @var string|null
      */
     protected $invoiceId;
     /**
-     * @var string
+     * @var string|null
      */
     protected $errorCode;
     /**
-     * @var string
+     * @var string|null
      */
     protected $errorMessage;
     /**
-     * Universally Unique Identifier (UUID v4)
-     *
-     * @return string
+     * @return string|null
      */
-    public function getInvoiceId(): string
+    public function getInvoiceId(): ?string
     {
         return $this->invoiceId;
     }
     /**
-     * Universally Unique Identifier (UUID v4)
-     *
-     * @param string $invoiceId
+     * @param string|null $invoiceId
      *
      * @return self
      */
-    public function setInvoiceId(string $invoiceId): self
+    public function setInvoiceId(?string $invoiceId): self
     {
         $this->initialized['invoiceId'] = true;
         $this->invoiceId = $invoiceId;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getErrorCode(): string
+    public function getErrorCode(): ?string
     {
         return $this->errorCode;
     }
     /**
-     * @param string $errorCode
+     * @param string|null $errorCode
      *
      * @return self
      */
-    public function setErrorCode(string $errorCode): self
+    public function setErrorCode(?string $errorCode): self
     {
         $this->initialized['errorCode'] = true;
         $this->errorCode = $errorCode;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getErrorMessage(): string
+    public function getErrorMessage(): ?string
     {
         return $this->errorMessage;
     }
     /**
-     * @param string $errorMessage
+     * @param string|null $errorMessage
      *
      * @return self
      */
-    public function setErrorMessage(string $errorMessage): self
+    public function setErrorMessage(?string $errorMessage): self
     {
         $this->initialized['errorMessage'] = true;
         $this->errorMessage = $errorMessage;

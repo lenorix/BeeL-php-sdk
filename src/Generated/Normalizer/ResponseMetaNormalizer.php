@@ -37,12 +37,20 @@ class ResponseMetaNormalizer implements DenormalizerInterface, NormalizerInterfa
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('timestamp', $data)) {
+        if (\array_key_exists('timestamp', $data) && $data['timestamp'] !== null) {
             $object->setTimestamp($this->denormalizer->denormalize($data['timestamp'], \DateTime::class, 'json', $context));
             unset($data['timestamp']);
         }
-        if (\array_key_exists('request_id', $data)) {
+        elseif (\array_key_exists('timestamp', $data) && $data['timestamp'] === null) {
+            $object->setTimestamp(null);
+            unset($data['timestamp']);
+        }
+        if (\array_key_exists('request_id', $data) && $data['request_id'] !== null) {
             $object->setRequestId($data['request_id']);
+            unset($data['request_id']);
+        }
+        elseif (\array_key_exists('request_id', $data) && $data['request_id'] === null) {
+            $object->setRequestId(null);
             unset($data['request_id']);
         }
         foreach ($data as $key => $value) {

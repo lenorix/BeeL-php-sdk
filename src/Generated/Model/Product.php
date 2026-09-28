@@ -36,7 +36,7 @@ class Product implements AdditionalPropertiesInterface
     /**
      * Detailed product/service description (optional)
      *
-     * @var string
+     * @var string|null
      */
     protected $description;
     /**
@@ -55,13 +55,13 @@ class Product implements AdditionalPropertiesInterface
     /**
      * Suggested default price (optional)
      *
-     * @var float
+     * @var float|null
      */
     protected $defaultPrice;
     /**
      * Unit of measure (optional)
      *
-     * @var string
+     * @var string|null
      */
     protected $unit;
     /**
@@ -99,13 +99,13 @@ class Product implements AdditionalPropertiesInterface
     /**
      * Equivalence surcharge percentage (optional)
      *
-     * @var float
+     * @var float|null
      */
     protected $equivalenceSurchargeRate;
     /**
      * IRPF withholding percentage (optional)
      *
-     * @var float
+     * @var float|null
      */
     protected $irpfRate;
     /**
@@ -195,20 +195,20 @@ class Product implements AdditionalPropertiesInterface
     /**
      * Detailed product/service description (optional)
      *
-     * @return string
+     * @return string|null
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
     /**
      * Detailed product/service description (optional)
      *
-     * @param string $description
+     * @param string|null $description
      *
      * @return self
      */
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->initialized['description'] = true;
         $this->description = $description;
@@ -253,20 +253,20 @@ class Product implements AdditionalPropertiesInterface
     /**
      * Suggested default price (optional)
      *
-     * @return float
+     * @return float|null
      */
-    public function getDefaultPrice(): float
+    public function getDefaultPrice(): ?float
     {
         return $this->defaultPrice;
     }
     /**
      * Suggested default price (optional)
      *
-     * @param float $defaultPrice
+     * @param float|null $defaultPrice
      *
      * @return self
      */
-    public function setDefaultPrice(float $defaultPrice): self
+    public function setDefaultPrice(?float $defaultPrice): self
     {
         $this->initialized['defaultPrice'] = true;
         $this->defaultPrice = $defaultPrice;
@@ -275,20 +275,20 @@ class Product implements AdditionalPropertiesInterface
     /**
      * Unit of measure (optional)
      *
-     * @return string
+     * @return string|null
      */
-    public function getUnit(): string
+    public function getUnit(): ?string
     {
         return $this->unit;
     }
     /**
      * Unit of measure (optional)
      *
-     * @param string $unit
+     * @param string|null $unit
      *
      * @return self
      */
-    public function setUnit(string $unit): self
+    public function setUnit(?string $unit): self
     {
         $this->initialized['unit'] = true;
         $this->unit = $unit;
@@ -371,20 +371,20 @@ class Product implements AdditionalPropertiesInterface
     /**
      * Equivalence surcharge percentage (optional)
      *
-     * @return float
+     * @return float|null
      */
-    public function getEquivalenceSurchargeRate(): float
+    public function getEquivalenceSurchargeRate(): ?float
     {
         return $this->equivalenceSurchargeRate;
     }
     /**
      * Equivalence surcharge percentage (optional)
      *
-     * @param float $equivalenceSurchargeRate
+     * @param float|null $equivalenceSurchargeRate
      *
      * @return self
      */
-    public function setEquivalenceSurchargeRate(float $equivalenceSurchargeRate): self
+    public function setEquivalenceSurchargeRate(?float $equivalenceSurchargeRate): self
     {
         $this->initialized['equivalenceSurchargeRate'] = true;
         $this->equivalenceSurchargeRate = $equivalenceSurchargeRate;
@@ -393,20 +393,20 @@ class Product implements AdditionalPropertiesInterface
     /**
      * IRPF withholding percentage (optional)
      *
-     * @return float
+     * @return float|null
      */
-    public function getIrpfRate(): float
+    public function getIrpfRate(): ?float
     {
         return $this->irpfRate;
     }
     /**
      * IRPF withholding percentage (optional)
      *
-     * @param float $irpfRate
+     * @param float|null $irpfRate
      *
      * @return self
      */
-    public function setIrpfRate(float $irpfRate): self
+    public function setIrpfRate(?float $irpfRate): self
     {
         $this->initialized['irpfRate'] = true;
         $this->irpfRate = $irpfRate;

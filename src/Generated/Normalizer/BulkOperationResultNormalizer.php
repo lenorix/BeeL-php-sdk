@@ -49,12 +49,16 @@ class BulkOperationResultNormalizer implements DenormalizerInterface, Normalizer
             $object->setFailed($data['failed']);
             unset($data['failed']);
         }
-        if (\array_key_exists('failures', $data)) {
+        if (\array_key_exists('failures', $data) && $data['failures'] !== null) {
             $values = [];
             foreach ($data['failures'] as $value) {
                 $values[] = $this->denormalizer->denormalize($value, \Lenorix\BeelSdk\Generated\Model\BulkOperationResultFailuresItem::class, 'json', $context);
             }
             $object->setFailures($values);
+            unset($data['failures']);
+        }
+        elseif (\array_key_exists('failures', $data) && $data['failures'] === null) {
+            $object->setFailures(null);
             unset($data['failures']);
         }
         foreach ($data as $key => $value_1) {

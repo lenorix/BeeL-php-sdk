@@ -20,46 +20,7 @@ class TaxConfiguration implements AdditionalPropertiesInterface
      */
     protected $defaultMainTax;
     /**
-     * Tax exemption reason code per the Spanish VAT Law (Ley 37/1992, LIVA), with the
-     * VeriFactu code each one is reported as.
-     * 
-     * - `EXENTA_ART_20`: exempt, art. 20 (domestic operations such as medical, educational,
-     *   cultural and financial services, or housing rentals). E1.
-     * - `EXENTA_ART_21`: exempt, art. 21 (exports of goods). E2.
-     * - `EXENTA_ART_22`: exempt, art. 22 (operations treated as exports). E3.
-     * - `EXENTA_ART_24`: exempt, art. 24 (free zones, warehouses and customs regimes). E4.
-     * - `EXENTA_ART_25`: exempt, art. 25 (intra-community supplies of goods). E5.
-     * - `EXENTA_ART_26`: exempt, art. 26 (intra-community acquisitions of goods). It exempts the
-     *   buyer's acquisition, not a supply the seller invoices, so an invoice line that carries it
-     *   is rejected with `EXEMPTION_NOT_FOR_ISSUED_INVOICE`; a supply to another Member State is
-     *   `EXENTA_ART_25`.
-     * - `NO_SUJETA_ART_7_9`: not subject under art. 7 (such as the transfer of a business as
-     *   a going concern, art. 7.1º). N1.
-     * - `NO_SUJETA_LOCALIZACION`: not subject by the place-of-supply rules (intra-community
-     *   or non-EU services, arts. 69 and 70). N2.
-     * - `ISP_ART_84_2_A` … `ISP_ART_84_2_F`: reverse charge (the invoice states «inversión del
-     *   sujeto pasivo»), art. 84.Uno.2.º letters a) (supplier not established in Spain), b) (unwrought
-     *   or semi-finished gold), c) (scrap, waste and recovery materials, plastic, paper, cardboard, glass and textile waste, and semi-finished non-ferrous metal products), d) (greenhouse gas emission
-     *   allowances), e) (certain real estate supplies: in insolvency proceedings, with the exemption
-     *   waived, or enforcing a security) and f) (construction or renovation works). S2.
-     * - `ISP_ART_84_2_G`: reverse charge of letter g) (silver, platinum, palladium, mobile phones,
-     *   consoles, laptops and tablets). The law requires these supplies to be invoiced in a special
-     *   series, so an invoice line that carries it is rejected with
-     *   `REVERSE_CHARGE_CASE_NOT_SUPPORTED`.
-     * - `EXENTA_ART_140`: investment gold exemption, art. 140 bis (usually with `regime_key`
-     *   `04`). E6.
-     * - `REGIMEN_ART_129` (agriculture,
-     *   livestock and fishing, arts. 124 to 134 bis), `REGIMEN_ART_135` (second-hand goods,
-     *   art and antiques), `REGIMEN_ART_141` (travel agencies), `REGIMEN_ART_154` (equivalence
-     *   surcharge) and `REGIMEN_ART_163_DECIES` (cash basis, arts. 163 decies to 163
-     *   sexiesdecies): operations of special regimes, which VeriFactu identifies by the regime
-     *   key rather than by an exemption code. An
-     *   invoice line that carries one is rejected with `EXEMPTION_REGIME_NOT_SUPPORTED_IN_VERIFACTU`;
-     *   declare the regime with `regime_key` instead.
-     * - `OTRO`: any other provision. Requires the text in `exemption_reason_text`. E6.
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $defaultExemptionReason;
     /**
@@ -88,7 +49,7 @@ class TaxConfiguration implements AdditionalPropertiesInterface
      * **Business rule**: REQUIRED if `apply_equivalence_surcharge` is `true`.
      * 
      *
-     * @var float
+     * @var float|null
      */
     protected $defaultEquivalenceSurcharge;
     /**
@@ -112,7 +73,7 @@ class TaxConfiguration implements AdditionalPropertiesInterface
      * **Business rule**: REQUIRED if `apply_irpf` is `true` and `irpf_exempt` is `false`.
      * 
      *
-     * @var float
+     * @var float|null
      */
     protected $defaultIrpfRate;
     /**
@@ -122,7 +83,7 @@ class TaxConfiguration implements AdditionalPropertiesInterface
      * This allows pre-configuring the rate for when the exemption ends.
      * 
      *
-     * @var bool
+     * @var bool|null
      */
     protected $irpfExempt = false;
     /**
@@ -130,7 +91,7 @@ class TaxConfiguration implements AdditionalPropertiesInterface
      * If NONE is selected, no payment information will be shown on the invoice.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $defaultPaymentMethod = 'BANK_TRANSFER';
     /**
@@ -159,7 +120,7 @@ class TaxConfiguration implements AdditionalPropertiesInterface
      * `GET /v1/tax-types`, which is the same for everyone.
      * 
      *
-     * @var TaxConfigurationWithholdingOptions
+     * @var TaxConfigurationWithholdingOptions|null
      */
     protected $withholdingOptions;
     /**
@@ -181,96 +142,18 @@ class TaxConfiguration implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * Tax exemption reason code per the Spanish VAT Law (Ley 37/1992, LIVA), with the
-     * VeriFactu code each one is reported as.
-     * 
-     * - `EXENTA_ART_20`: exempt, art. 20 (domestic operations such as medical, educational,
-     *   cultural and financial services, or housing rentals). E1.
-     * - `EXENTA_ART_21`: exempt, art. 21 (exports of goods). E2.
-     * - `EXENTA_ART_22`: exempt, art. 22 (operations treated as exports). E3.
-     * - `EXENTA_ART_24`: exempt, art. 24 (free zones, warehouses and customs regimes). E4.
-     * - `EXENTA_ART_25`: exempt, art. 25 (intra-community supplies of goods). E5.
-     * - `EXENTA_ART_26`: exempt, art. 26 (intra-community acquisitions of goods). It exempts the
-     *   buyer's acquisition, not a supply the seller invoices, so an invoice line that carries it
-     *   is rejected with `EXEMPTION_NOT_FOR_ISSUED_INVOICE`; a supply to another Member State is
-     *   `EXENTA_ART_25`.
-     * - `NO_SUJETA_ART_7_9`: not subject under art. 7 (such as the transfer of a business as
-     *   a going concern, art. 7.1º). N1.
-     * - `NO_SUJETA_LOCALIZACION`: not subject by the place-of-supply rules (intra-community
-     *   or non-EU services, arts. 69 and 70). N2.
-     * - `ISP_ART_84_2_A` … `ISP_ART_84_2_F`: reverse charge (the invoice states «inversión del
-     *   sujeto pasivo»), art. 84.Uno.2.º letters a) (supplier not established in Spain), b) (unwrought
-     *   or semi-finished gold), c) (scrap, waste and recovery materials, plastic, paper, cardboard, glass and textile waste, and semi-finished non-ferrous metal products), d) (greenhouse gas emission
-     *   allowances), e) (certain real estate supplies: in insolvency proceedings, with the exemption
-     *   waived, or enforcing a security) and f) (construction or renovation works). S2.
-     * - `ISP_ART_84_2_G`: reverse charge of letter g) (silver, platinum, palladium, mobile phones,
-     *   consoles, laptops and tablets). The law requires these supplies to be invoiced in a special
-     *   series, so an invoice line that carries it is rejected with
-     *   `REVERSE_CHARGE_CASE_NOT_SUPPORTED`.
-     * - `EXENTA_ART_140`: investment gold exemption, art. 140 bis (usually with `regime_key`
-     *   `04`). E6.
-     * - `REGIMEN_ART_129` (agriculture,
-     *   livestock and fishing, arts. 124 to 134 bis), `REGIMEN_ART_135` (second-hand goods,
-     *   art and antiques), `REGIMEN_ART_141` (travel agencies), `REGIMEN_ART_154` (equivalence
-     *   surcharge) and `REGIMEN_ART_163_DECIES` (cash basis, arts. 163 decies to 163
-     *   sexiesdecies): operations of special regimes, which VeriFactu identifies by the regime
-     *   key rather than by an exemption code. An
-     *   invoice line that carries one is rejected with `EXEMPTION_REGIME_NOT_SUPPORTED_IN_VERIFACTU`;
-     *   declare the regime with `regime_key` instead.
-     * - `OTRO`: any other provision. Requires the text in `exemption_reason_text`. E6.
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getDefaultExemptionReason(): string
+    public function getDefaultExemptionReason(): ?string
     {
         return $this->defaultExemptionReason;
     }
     /**
-    * Tax exemption reason code per the Spanish VAT Law (Ley 37/1992, LIVA), with the
-    VeriFactu code each one is reported as.
-    
-    - `EXENTA_ART_20`: exempt, art. 20 (domestic operations such as medical, educational,
-     cultural and financial services, or housing rentals). E1.
-    - `EXENTA_ART_21`: exempt, art. 21 (exports of goods). E2.
-    - `EXENTA_ART_22`: exempt, art. 22 (operations treated as exports). E3.
-    - `EXENTA_ART_24`: exempt, art. 24 (free zones, warehouses and customs regimes). E4.
-    - `EXENTA_ART_25`: exempt, art. 25 (intra-community supplies of goods). E5.
-    - `EXENTA_ART_26`: exempt, art. 26 (intra-community acquisitions of goods). It exempts the
-     buyer's acquisition, not a supply the seller invoices, so an invoice line that carries it
-     is rejected with `EXEMPTION_NOT_FOR_ISSUED_INVOICE`; a supply to another Member State is
-     `EXENTA_ART_25`.
-    - `NO_SUJETA_ART_7_9`: not subject under art. 7 (such as the transfer of a business as
-     a going concern, art. 7.1º). N1.
-    - `NO_SUJETA_LOCALIZACION`: not subject by the place-of-supply rules (intra-community
-     or non-EU services, arts. 69 and 70). N2.
-    - `ISP_ART_84_2_A` … `ISP_ART_84_2_F`: reverse charge (the invoice states «inversión del
-     sujeto pasivo»), art. 84.Uno.2.º letters a) (supplier not established in Spain), b) (unwrought
-     or semi-finished gold), c) (scrap, waste and recovery materials, plastic, paper, cardboard, glass and textile waste, and semi-finished non-ferrous metal products), d) (greenhouse gas emission
-     allowances), e) (certain real estate supplies: in insolvency proceedings, with the exemption
-     waived, or enforcing a security) and f) (construction or renovation works). S2.
-    - `ISP_ART_84_2_G`: reverse charge of letter g) (silver, platinum, palladium, mobile phones,
-     consoles, laptops and tablets). The law requires these supplies to be invoiced in a special
-     series, so an invoice line that carries it is rejected with
-     `REVERSE_CHARGE_CASE_NOT_SUPPORTED`.
-    - `EXENTA_ART_140`: investment gold exemption, art. 140 bis (usually with `regime_key`
-     `04`). E6.
-    - `REGIMEN_ART_129` (agriculture,
-     livestock and fishing, arts. 124 to 134 bis), `REGIMEN_ART_135` (second-hand goods,
-     art and antiques), `REGIMEN_ART_141` (travel agencies), `REGIMEN_ART_154` (equivalence
-     surcharge) and `REGIMEN_ART_163_DECIES` (cash basis, arts. 163 decies to 163
-     sexiesdecies): operations of special regimes, which VeriFactu identifies by the regime
-     key rather than by an exemption code. An
-     invoice line that carries one is rejected with `EXEMPTION_REGIME_NOT_SUPPORTED_IN_VERIFACTU`;
-     declare the regime with `regime_key` instead.
-    - `OTRO`: any other provision. Requires the text in `exemption_reason_text`. E6.
-    
-    *
-    * @param string $defaultExemptionReason
-    *
-    * @return self
-    */
-    public function setDefaultExemptionReason(string $defaultExemptionReason): self
+     * @param string|null $defaultExemptionReason
+     *
+     * @return self
+     */
+    public function setDefaultExemptionReason(?string $defaultExemptionReason): self
     {
         $this->initialized['defaultExemptionReason'] = true;
         $this->defaultExemptionReason = $defaultExemptionReason;
@@ -337,9 +220,9 @@ class TaxConfiguration implements AdditionalPropertiesInterface
      * **Business rule**: REQUIRED if `apply_equivalence_surcharge` is `true`.
      * 
      *
-     * @return float
+     * @return float|null
      */
-    public function getDefaultEquivalenceSurcharge(): float
+    public function getDefaultEquivalenceSurcharge(): ?float
     {
         return $this->defaultEquivalenceSurcharge;
     }
@@ -352,11 +235,11 @@ class TaxConfiguration implements AdditionalPropertiesInterface
     **Business rule**: REQUIRED if `apply_equivalence_surcharge` is `true`.
     
     *
-    * @param float $defaultEquivalenceSurcharge
+    * @param float|null $defaultEquivalenceSurcharge
     *
     * @return self
     */
-    public function setDefaultEquivalenceSurcharge(float $defaultEquivalenceSurcharge): self
+    public function setDefaultEquivalenceSurcharge(?float $defaultEquivalenceSurcharge): self
     {
         $this->initialized['defaultEquivalenceSurcharge'] = true;
         $this->defaultEquivalenceSurcharge = $defaultEquivalenceSurcharge;
@@ -406,9 +289,9 @@ class TaxConfiguration implements AdditionalPropertiesInterface
      * **Business rule**: REQUIRED if `apply_irpf` is `true` and `irpf_exempt` is `false`.
      * 
      *
-     * @return float
+     * @return float|null
      */
-    public function getDefaultIrpfRate(): float
+    public function getDefaultIrpfRate(): ?float
     {
         return $this->defaultIrpfRate;
     }
@@ -420,11 +303,11 @@ class TaxConfiguration implements AdditionalPropertiesInterface
     **Business rule**: REQUIRED if `apply_irpf` is `true` and `irpf_exempt` is `false`.
     
     *
-    * @param float $defaultIrpfRate
+    * @param float|null $defaultIrpfRate
     *
     * @return self
     */
-    public function setDefaultIrpfRate(float $defaultIrpfRate): self
+    public function setDefaultIrpfRate(?float $defaultIrpfRate): self
     {
         $this->initialized['defaultIrpfRate'] = true;
         $this->defaultIrpfRate = $defaultIrpfRate;
@@ -437,9 +320,9 @@ class TaxConfiguration implements AdditionalPropertiesInterface
      * This allows pre-configuring the rate for when the exemption ends.
      * 
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getIrpfExempt(): bool
+    public function getIrpfExempt(): ?bool
     {
         return $this->irpfExempt;
     }
@@ -450,11 +333,11 @@ class TaxConfiguration implements AdditionalPropertiesInterface
     This allows pre-configuring the rate for when the exemption ends.
     
     *
-    * @param bool $irpfExempt
+    * @param bool|null $irpfExempt
     *
     * @return self
     */
-    public function setIrpfExempt(bool $irpfExempt): self
+    public function setIrpfExempt(?bool $irpfExempt): self
     {
         $this->initialized['irpfExempt'] = true;
         $this->irpfExempt = $irpfExempt;
@@ -465,9 +348,9 @@ class TaxConfiguration implements AdditionalPropertiesInterface
      * If NONE is selected, no payment information will be shown on the invoice.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getDefaultPaymentMethod(): string
+    public function getDefaultPaymentMethod(): ?string
     {
         return $this->defaultPaymentMethod;
     }
@@ -476,11 +359,11 @@ class TaxConfiguration implements AdditionalPropertiesInterface
     If NONE is selected, no payment information will be shown on the invoice.
     
     *
-    * @param string $defaultPaymentMethod
+    * @param string|null $defaultPaymentMethod
     *
     * @return self
     */
-    public function setDefaultPaymentMethod(string $defaultPaymentMethod): self
+    public function setDefaultPaymentMethod(?string $defaultPaymentMethod): self
     {
         $this->initialized['defaultPaymentMethod'] = true;
         $this->defaultPaymentMethod = $defaultPaymentMethod;
@@ -550,9 +433,9 @@ class TaxConfiguration implements AdditionalPropertiesInterface
      * `GET /v1/tax-types`, which is the same for everyone.
      * 
      *
-     * @return TaxConfigurationWithholdingOptions
+     * @return TaxConfigurationWithholdingOptions|null
      */
-    public function getWithholdingOptions(): TaxConfigurationWithholdingOptions
+    public function getWithholdingOptions(): ?TaxConfigurationWithholdingOptions
     {
         return $this->withholdingOptions;
     }
@@ -564,11 +447,11 @@ class TaxConfiguration implements AdditionalPropertiesInterface
     `GET /v1/tax-types`, which is the same for everyone.
     
     *
-    * @param TaxConfigurationWithholdingOptions $withholdingOptions
+    * @param TaxConfigurationWithholdingOptions|null $withholdingOptions
     *
     * @return self
     */
-    public function setWithholdingOptions(TaxConfigurationWithholdingOptions $withholdingOptions): self
+    public function setWithholdingOptions(?TaxConfigurationWithholdingOptions $withholdingOptions): self
     {
         $this->initialized['withholdingOptions'] = true;
         $this->withholdingOptions = $withholdingOptions;

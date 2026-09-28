@@ -46,7 +46,7 @@ class RecipientData implements AdditionalPropertiesInterface
      */
     protected $nif;
     /**
-     * @var RecipientDataAlternativeId
+     * @var RecipientDataAlternativeId|null
      */
     protected $alternativeId;
     /**
@@ -55,30 +55,15 @@ class RecipientData implements AdditionalPropertiesInterface
      * so no field is guaranteed.
      * 
      *
-     * @var RecipientDataAddress
+     * @var RecipientDataAddress|null
      */
     protected $address;
     /**
-     * A phone number, as the record holds it: digits, spaces, dashes, parentheses and an
-     * optional leading `+`, up to 20 characters.
-     * 
-     * This is the schema a **response** carries, and the length above is the only rule it
-     * states. It deliberately does not repeat the character rule, because a number can reach a
-     * record through a path that predates that rule or never passed through this API at all —
-     * a payment provider's customer data, a bulk import. Read the field defensively and do not
-     * assume it parses.
-     * 
-     * What a **request** has to satisfy is `PhoneInput`, which adds the rules this API enforces
-     * on the way in.
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $phone;
     /**
-     * Email address (minimum valid email is 5 chars, e.g. a@b.co)
-     *
-     * @var string
+     * @var string|null
      */
     protected $email;
     /**
@@ -182,18 +167,18 @@ class RecipientData implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return RecipientDataAlternativeId
+     * @return RecipientDataAlternativeId|null
      */
-    public function getAlternativeId(): RecipientDataAlternativeId
+    public function getAlternativeId(): ?RecipientDataAlternativeId
     {
         return $this->alternativeId;
     }
     /**
-     * @param RecipientDataAlternativeId $alternativeId
+     * @param RecipientDataAlternativeId|null $alternativeId
      *
      * @return self
      */
-    public function setAlternativeId(RecipientDataAlternativeId $alternativeId): self
+    public function setAlternativeId(?RecipientDataAlternativeId $alternativeId): self
     {
         $this->initialized['alternativeId'] = true;
         $this->alternativeId = $alternativeId;
@@ -205,9 +190,9 @@ class RecipientData implements AdditionalPropertiesInterface
      * so no field is guaranteed.
      * 
      *
-     * @return RecipientDataAddress
+     * @return RecipientDataAddress|null
      */
-    public function getAddress(): RecipientDataAddress
+    public function getAddress(): ?RecipientDataAddress
     {
         return $this->address;
     }
@@ -217,77 +202,47 @@ class RecipientData implements AdditionalPropertiesInterface
     so no field is guaranteed.
     
     *
-    * @param RecipientDataAddress $address
+    * @param RecipientDataAddress|null $address
     *
     * @return self
     */
-    public function setAddress(RecipientDataAddress $address): self
+    public function setAddress(?RecipientDataAddress $address): self
     {
         $this->initialized['address'] = true;
         $this->address = $address;
         return $this;
     }
     /**
-     * A phone number, as the record holds it: digits, spaces, dashes, parentheses and an
-     * optional leading `+`, up to 20 characters.
-     * 
-     * This is the schema a **response** carries, and the length above is the only rule it
-     * states. It deliberately does not repeat the character rule, because a number can reach a
-     * record through a path that predates that rule or never passed through this API at all —
-     * a payment provider's customer data, a bulk import. Read the field defensively and do not
-     * assume it parses.
-     * 
-     * What a **request** has to satisfy is `PhoneInput`, which adds the rules this API enforces
-     * on the way in.
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getPhone(): string
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
     /**
-    * A phone number, as the record holds it: digits, spaces, dashes, parentheses and an
-    optional leading `+`, up to 20 characters.
-    
-    This is the schema a **response** carries, and the length above is the only rule it
-    states. It deliberately does not repeat the character rule, because a number can reach a
-    record through a path that predates that rule or never passed through this API at all —
-    a payment provider's customer data, a bulk import. Read the field defensively and do not
-    assume it parses.
-    
-    What a **request** has to satisfy is `PhoneInput`, which adds the rules this API enforces
-    on the way in.
-    
-    *
-    * @param string $phone
-    *
-    * @return self
-    */
-    public function setPhone(string $phone): self
+     * @param string|null $phone
+     *
+     * @return self
+     */
+    public function setPhone(?string $phone): self
     {
         $this->initialized['phone'] = true;
         $this->phone = $phone;
         return $this;
     }
     /**
-     * Email address (minimum valid email is 5 chars, e.g. a@b.co)
-     *
-     * @return string
+     * @return string|null
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
     /**
-     * Email address (minimum valid email is 5 chars, e.g. a@b.co)
-     *
-     * @param string $email
+     * @param string|null $email
      *
      * @return self
      */
-    public function setEmail(string $email): self
+    public function setEmail(?string $email): self
     {
         $this->initialized['email'] = true;
         $this->email = $email;

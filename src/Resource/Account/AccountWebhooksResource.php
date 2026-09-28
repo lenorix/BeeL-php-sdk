@@ -45,7 +45,7 @@ final readonly class AccountWebhooksResource extends GeneratedResource
     {
         return $this->paginate(
             fn (array $query): V1AccountsAccountIdWebhooksGetResponse200Data => $this->list($query),
-            static fn (V1AccountsAccountIdWebhooksGetResponse200Data $page): array => $page->getWebhooks(),
+            static fn (V1AccountsAccountIdWebhooksGetResponse200Data $page): array => $page->getWebhooks() ?? [],
             $query,
         );
     }
@@ -111,7 +111,7 @@ final readonly class AccountWebhooksResource extends GeneratedResource
     {
         return $this->paginate(
             fn (array $query): V1AccountsAccountIdWebhooksWebhookIdDeliveriesGetResponse200Data => $this->listDeliveries($webhookId, $query),
-            static fn (V1AccountsAccountIdWebhooksWebhookIdDeliveriesGetResponse200Data $page): array => $page->getDeliveries(),
+            static fn (V1AccountsAccountIdWebhooksWebhookIdDeliveriesGetResponse200Data $page): array => $page->getDeliveries() ?? [],
             $query,
         );
     }

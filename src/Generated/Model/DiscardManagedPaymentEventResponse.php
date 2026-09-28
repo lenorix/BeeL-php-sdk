@@ -16,7 +16,7 @@ class DiscardManagedPaymentEventResponse implements AdditionalPropertiesInterfac
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var bool
+     * @var bool|null
      */
     protected $success;
     /**
@@ -30,18 +30,18 @@ class DiscardManagedPaymentEventResponse implements AdditionalPropertiesInterfac
      */
     protected $meta;
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function getSuccess(): bool
+    public function getSuccess(): ?bool
     {
         return $this->success;
     }
     /**
-     * @param bool $success
+     * @param bool|null $success
      *
      * @return self
      */
-    public function setSuccess(bool $success): self
+    public function setSuccess(?bool $success): self
     {
         $this->initialized['success'] = true;
         $this->success = $success;

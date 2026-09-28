@@ -70,13 +70,13 @@ class CustomerValidationStatistics implements AdditionalPropertiesInterface
     /**
      * Total customers that can be imported (valid + with_warnings)
      *
-     * @var int
+     * @var int|null
      */
     protected $importable;
     /**
      * Total customers that CANNOT be imported (with_errors + duplicates + invalid_nifs)
      *
-     * @var int
+     * @var int|null
      */
     protected $notImportable;
     /**
@@ -266,20 +266,20 @@ class CustomerValidationStatistics implements AdditionalPropertiesInterface
     /**
      * Total customers that can be imported (valid + with_warnings)
      *
-     * @return int
+     * @return int|null
      */
-    public function getImportable(): int
+    public function getImportable(): ?int
     {
         return $this->importable;
     }
     /**
      * Total customers that can be imported (valid + with_warnings)
      *
-     * @param int $importable
+     * @param int|null $importable
      *
      * @return self
      */
-    public function setImportable(int $importable): self
+    public function setImportable(?int $importable): self
     {
         $this->initialized['importable'] = true;
         $this->importable = $importable;
@@ -288,20 +288,20 @@ class CustomerValidationStatistics implements AdditionalPropertiesInterface
     /**
      * Total customers that CANNOT be imported (with_errors + duplicates + invalid_nifs)
      *
-     * @return int
+     * @return int|null
      */
-    public function getNotImportable(): int
+    public function getNotImportable(): ?int
     {
         return $this->notImportable;
     }
     /**
      * Total customers that CANNOT be imported (with_errors + duplicates + invalid_nifs)
      *
-     * @param int $notImportable
+     * @param int|null $notImportable
      *
      * @return self
      */
-    public function setNotImportable(int $notImportable): self
+    public function setNotImportable(?int $notImportable): self
     {
         $this->initialized['notImportable'] = true;
         $this->notImportable = $notImportable;

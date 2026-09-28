@@ -26,19 +26,19 @@ class LegalRepresentativeAddress implements AdditionalPropertiesInterface
      * carries the address in full.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $number;
     /**
      * Floor or level
      *
-     * @var string
+     * @var string|null
      */
     protected $floor;
     /**
      * Door or apartment
      *
-     * @var string
+     * @var string|null
      */
     protected $door;
     /**
@@ -59,7 +59,7 @@ class LegalRepresentativeAddress implements AdditionalPropertiesInterface
      * have none. A Spanish address without it is rejected with a `422`.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $province;
     /**
@@ -73,7 +73,7 @@ class LegalRepresentativeAddress implements AdditionalPropertiesInterface
      * text sent. With neither field present, the address is Spanish (`España`).
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $country;
     /**
@@ -83,7 +83,7 @@ class LegalRepresentativeAddress implements AdditionalPropertiesInterface
      * (see there). With neither field present, the address is stored as `ES`.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $countryCode;
     /**
@@ -113,9 +113,9 @@ class LegalRepresentativeAddress implements AdditionalPropertiesInterface
      * carries the address in full.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getNumber(): string
+    public function getNumber(): ?string
     {
         return $this->number;
     }
@@ -124,11 +124,11 @@ class LegalRepresentativeAddress implements AdditionalPropertiesInterface
     carries the address in full.
     
     *
-    * @param string $number
+    * @param string|null $number
     *
     * @return self
     */
-    public function setNumber(string $number): self
+    public function setNumber(?string $number): self
     {
         $this->initialized['number'] = true;
         $this->number = $number;
@@ -137,20 +137,20 @@ class LegalRepresentativeAddress implements AdditionalPropertiesInterface
     /**
      * Floor or level
      *
-     * @return string
+     * @return string|null
      */
-    public function getFloor(): string
+    public function getFloor(): ?string
     {
         return $this->floor;
     }
     /**
      * Floor or level
      *
-     * @param string $floor
+     * @param string|null $floor
      *
      * @return self
      */
-    public function setFloor(string $floor): self
+    public function setFloor(?string $floor): self
     {
         $this->initialized['floor'] = true;
         $this->floor = $floor;
@@ -159,20 +159,20 @@ class LegalRepresentativeAddress implements AdditionalPropertiesInterface
     /**
      * Door or apartment
      *
-     * @return string
+     * @return string|null
      */
-    public function getDoor(): string
+    public function getDoor(): ?string
     {
         return $this->door;
     }
     /**
      * Door or apartment
      *
-     * @param string $door
+     * @param string|null $door
      *
      * @return self
      */
-    public function setDoor(string $door): self
+    public function setDoor(?string $door): self
     {
         $this->initialized['door'] = true;
         $this->door = $door;
@@ -228,9 +228,9 @@ class LegalRepresentativeAddress implements AdditionalPropertiesInterface
      * have none. A Spanish address without it is rejected with a `422`.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getProvince(): string
+    public function getProvince(): ?string
     {
         return $this->province;
     }
@@ -240,11 +240,11 @@ class LegalRepresentativeAddress implements AdditionalPropertiesInterface
     have none. A Spanish address without it is rejected with a `422`.
     
     *
-    * @param string $province
+    * @param string|null $province
     *
     * @return self
     */
-    public function setProvince(string $province): self
+    public function setProvince(?string $province): self
     {
         $this->initialized['province'] = true;
         $this->province = $province;
@@ -261,9 +261,9 @@ class LegalRepresentativeAddress implements AdditionalPropertiesInterface
      * text sent. With neither field present, the address is Spanish (`España`).
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getCountry(): string
+    public function getCountry(): ?string
     {
         return $this->country;
     }
@@ -278,11 +278,11 @@ class LegalRepresentativeAddress implements AdditionalPropertiesInterface
     text sent. With neither field present, the address is Spanish (`España`).
     
     *
-    * @param string $country
+    * @param string|null $country
     *
     * @return self
     */
-    public function setCountry(string $country): self
+    public function setCountry(?string $country): self
     {
         $this->initialized['country'] = true;
         $this->country = $country;
@@ -295,9 +295,9 @@ class LegalRepresentativeAddress implements AdditionalPropertiesInterface
      * (see there). With neither field present, the address is stored as `ES`.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getCountryCode(): string
+    public function getCountryCode(): ?string
     {
         return $this->countryCode;
     }
@@ -308,11 +308,11 @@ class LegalRepresentativeAddress implements AdditionalPropertiesInterface
     (see there). With neither field present, the address is stored as `ES`.
     
     *
-    * @param string $countryCode
+    * @param string|null $countryCode
     *
     * @return self
     */
-    public function setCountryCode(string $countryCode): self
+    public function setCountryCode(?string $countryCode): self
     {
         $this->initialized['countryCode'] = true;
         $this->countryCode = $countryCode;

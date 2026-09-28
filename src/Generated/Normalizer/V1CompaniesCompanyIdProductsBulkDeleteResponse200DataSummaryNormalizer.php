@@ -37,16 +37,28 @@ class V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummaryNormalizer imp
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('total_processed', $data)) {
+        if (\array_key_exists('total_processed', $data) && $data['total_processed'] !== null) {
             $object->setTotalProcessed($data['total_processed']);
             unset($data['total_processed']);
         }
-        if (\array_key_exists('successful', $data)) {
+        elseif (\array_key_exists('total_processed', $data) && $data['total_processed'] === null) {
+            $object->setTotalProcessed(null);
+            unset($data['total_processed']);
+        }
+        if (\array_key_exists('successful', $data) && $data['successful'] !== null) {
             $object->setSuccessful($data['successful']);
             unset($data['successful']);
         }
-        if (\array_key_exists('failed', $data)) {
+        elseif (\array_key_exists('successful', $data) && $data['successful'] === null) {
+            $object->setSuccessful(null);
+            unset($data['successful']);
+        }
+        if (\array_key_exists('failed', $data) && $data['failed'] !== null) {
             $object->setFailed($data['failed']);
+            unset($data['failed']);
+        }
+        elseif (\array_key_exists('failed', $data) && $data['failed'] === null) {
+            $object->setFailed(null);
             unset($data['failed']);
         }
         foreach ($data as $key => $value) {

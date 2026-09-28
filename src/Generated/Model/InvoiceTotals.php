@@ -24,11 +24,11 @@ class InvoiceTotals implements AdditionalPropertiesInterface
     /**
      * Total discounts applied (can be negative in corrective invoices)
      *
-     * @var float
+     * @var float|null
      */
     protected $totalDiscounts = 0;
     /**
-     * @var list<InvoiceTotalsVatBreakdownItem>
+     * @var list<InvoiceTotalsVatBreakdownItem>|null
      */
     protected $vatBreakdown;
     /**
@@ -40,7 +40,7 @@ class InvoiceTotals implements AdditionalPropertiesInterface
      */
     protected $totalVat;
     /**
-     * @var list<InvoiceTotalsSurchargeBreakdownItem>
+     * @var list<InvoiceTotalsSurchargeBreakdownItem>|null
      */
     protected $surchargeBreakdown;
     /**
@@ -50,7 +50,7 @@ class InvoiceTotals implements AdditionalPropertiesInterface
      */
     protected $totalEquivalenceSurcharge = 0;
     /**
-     * @var list<InvoiceTotalsIrpfBreakdownItem>
+     * @var list<InvoiceTotalsIrpfBreakdownItem>|null
      */
     protected $irpfBreakdown;
     /**
@@ -70,7 +70,7 @@ class InvoiceTotals implements AdditionalPropertiesInterface
      * Excluded from the taxable base, VAT and VeriFactu.
      * 
      *
-     * @var float
+     * @var float|null
      */
     protected $totalDisbursements = 0;
     /**
@@ -79,7 +79,7 @@ class InvoiceTotals implements AdditionalPropertiesInterface
      * disbursements (suplidos) it matches `invoice_total`.
      * 
      *
-     * @var float
+     * @var float|null
      */
     protected $totalToPay;
     /**
@@ -107,38 +107,38 @@ class InvoiceTotals implements AdditionalPropertiesInterface
     /**
      * Total discounts applied (can be negative in corrective invoices)
      *
-     * @return float
+     * @return float|null
      */
-    public function getTotalDiscounts(): float
+    public function getTotalDiscounts(): ?float
     {
         return $this->totalDiscounts;
     }
     /**
      * Total discounts applied (can be negative in corrective invoices)
      *
-     * @param float $totalDiscounts
+     * @param float|null $totalDiscounts
      *
      * @return self
      */
-    public function setTotalDiscounts(float $totalDiscounts): self
+    public function setTotalDiscounts(?float $totalDiscounts): self
     {
         $this->initialized['totalDiscounts'] = true;
         $this->totalDiscounts = $totalDiscounts;
         return $this;
     }
     /**
-     * @return list<InvoiceTotalsVatBreakdownItem>
+     * @return list<InvoiceTotalsVatBreakdownItem>|null
      */
-    public function getVatBreakdown(): array
+    public function getVatBreakdown(): ?array
     {
         return $this->vatBreakdown;
     }
     /**
-     * @param list<InvoiceTotalsVatBreakdownItem> $vatBreakdown
+     * @param list<InvoiceTotalsVatBreakdownItem>|null $vatBreakdown
      *
      * @return self
      */
-    public function setVatBreakdown(array $vatBreakdown): self
+    public function setVatBreakdown(?array $vatBreakdown): self
     {
         $this->initialized['vatBreakdown'] = true;
         $this->vatBreakdown = $vatBreakdown;
@@ -171,18 +171,18 @@ class InvoiceTotals implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return list<InvoiceTotalsSurchargeBreakdownItem>
+     * @return list<InvoiceTotalsSurchargeBreakdownItem>|null
      */
-    public function getSurchargeBreakdown(): array
+    public function getSurchargeBreakdown(): ?array
     {
         return $this->surchargeBreakdown;
     }
     /**
-     * @param list<InvoiceTotalsSurchargeBreakdownItem> $surchargeBreakdown
+     * @param list<InvoiceTotalsSurchargeBreakdownItem>|null $surchargeBreakdown
      *
      * @return self
      */
-    public function setSurchargeBreakdown(array $surchargeBreakdown): self
+    public function setSurchargeBreakdown(?array $surchargeBreakdown): self
     {
         $this->initialized['surchargeBreakdown'] = true;
         $this->surchargeBreakdown = $surchargeBreakdown;
@@ -211,18 +211,18 @@ class InvoiceTotals implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return list<InvoiceTotalsIrpfBreakdownItem>
+     * @return list<InvoiceTotalsIrpfBreakdownItem>|null
      */
-    public function getIrpfBreakdown(): array
+    public function getIrpfBreakdown(): ?array
     {
         return $this->irpfBreakdown;
     }
     /**
-     * @param list<InvoiceTotalsIrpfBreakdownItem> $irpfBreakdown
+     * @param list<InvoiceTotalsIrpfBreakdownItem>|null $irpfBreakdown
      *
      * @return self
      */
-    public function setIrpfBreakdown(array $irpfBreakdown): self
+    public function setIrpfBreakdown(?array $irpfBreakdown): self
     {
         $this->initialized['irpfBreakdown'] = true;
         $this->irpfBreakdown = $irpfBreakdown;
@@ -277,9 +277,9 @@ class InvoiceTotals implements AdditionalPropertiesInterface
      * Excluded from the taxable base, VAT and VeriFactu.
      * 
      *
-     * @return float
+     * @return float|null
      */
-    public function getTotalDisbursements(): float
+    public function getTotalDisbursements(): ?float
     {
         return $this->totalDisbursements;
     }
@@ -288,11 +288,11 @@ class InvoiceTotals implements AdditionalPropertiesInterface
     Excluded from the taxable base, VAT and VeriFactu.
     
     *
-    * @param float $totalDisbursements
+    * @param float|null $totalDisbursements
     *
     * @return self
     */
-    public function setTotalDisbursements(float $totalDisbursements): self
+    public function setTotalDisbursements(?float $totalDisbursements): self
     {
         $this->initialized['totalDisbursements'] = true;
         $this->totalDisbursements = $totalDisbursements;
@@ -304,9 +304,9 @@ class InvoiceTotals implements AdditionalPropertiesInterface
      * disbursements (suplidos) it matches `invoice_total`.
      * 
      *
-     * @return float
+     * @return float|null
      */
-    public function getTotalToPay(): float
+    public function getTotalToPay(): ?float
     {
         return $this->totalToPay;
     }
@@ -316,11 +316,11 @@ class InvoiceTotals implements AdditionalPropertiesInterface
     disbursements (suplidos) it matches `invoice_total`.
     
     *
-    * @param float $totalToPay
+    * @param float|null $totalToPay
     *
     * @return self
     */
-    public function setTotalToPay(float $totalToPay): self
+    public function setTotalToPay(?float $totalToPay): self
     {
         $this->initialized['totalToPay'] = true;
         $this->totalToPay = $totalToPay;

@@ -56,7 +56,7 @@ class EmailDeliveryDetailNormalizer implements DenormalizerInterface, Normalizer
             $object->setRecipients($values);
             unset($data['recipients']);
         }
-        if (\array_key_exists('cc', $data)) {
+        if (\array_key_exists('cc', $data) && $data['cc'] !== null) {
             $values_1 = [];
             foreach ($data['cc'] as $value_1) {
                 $values_1[] = $value_1;
@@ -64,8 +64,16 @@ class EmailDeliveryDetailNormalizer implements DenormalizerInterface, Normalizer
             $object->setCc($values_1);
             unset($data['cc']);
         }
-        if (\array_key_exists('subject', $data)) {
+        elseif (\array_key_exists('cc', $data) && $data['cc'] === null) {
+            $object->setCc(null);
+            unset($data['cc']);
+        }
+        if (\array_key_exists('subject', $data) && $data['subject'] !== null) {
             $object->setSubject($data['subject']);
+            unset($data['subject']);
+        }
+        elseif (\array_key_exists('subject', $data) && $data['subject'] === null) {
+            $object->setSubject(null);
             unset($data['subject']);
         }
         if (\array_key_exists('related_entity_type', $data) && $data['related_entity_type'] !== null) {
@@ -88,8 +96,12 @@ class EmailDeliveryDetailNormalizer implements DenormalizerInterface, Normalizer
             $object->setStatus($data['status']);
             unset($data['status']);
         }
-        if (\array_key_exists('sent_at', $data)) {
+        if (\array_key_exists('sent_at', $data) && $data['sent_at'] !== null) {
             $object->setSentAt($this->denormalizer->denormalize($data['sent_at'], \DateTime::class, 'json', $context));
+            unset($data['sent_at']);
+        }
+        elseif (\array_key_exists('sent_at', $data) && $data['sent_at'] === null) {
+            $object->setSentAt(null);
             unset($data['sent_at']);
         }
         if (\array_key_exists('body_available', $data)) {
@@ -112,7 +124,7 @@ class EmailDeliveryDetailNormalizer implements DenormalizerInterface, Normalizer
             $object->setTextBody(null);
             unset($data['text_body']);
         }
-        if (\array_key_exists('attachments', $data)) {
+        if (\array_key_exists('attachments', $data) && $data['attachments'] !== null) {
             $values_2 = [];
             foreach ($data['attachments'] as $value_2) {
                 $values_2[] = $this->denormalizer->denormalize($value_2, \Lenorix\BeelSdk\Generated\Model\EmailAttachment::class, 'json', $context);
@@ -120,12 +132,20 @@ class EmailDeliveryDetailNormalizer implements DenormalizerInterface, Normalizer
             $object->setAttachments($values_2);
             unset($data['attachments']);
         }
-        if (\array_key_exists('related_invoices', $data)) {
+        elseif (\array_key_exists('attachments', $data) && $data['attachments'] === null) {
+            $object->setAttachments(null);
+            unset($data['attachments']);
+        }
+        if (\array_key_exists('related_invoices', $data) && $data['related_invoices'] !== null) {
             $values_3 = [];
             foreach ($data['related_invoices'] as $value_3) {
                 $values_3[] = $this->denormalizer->denormalize($value_3, \Lenorix\BeelSdk\Generated\Model\RelatedInvoice::class, 'json', $context);
             }
             $object->setRelatedInvoices($values_3);
+            unset($data['related_invoices']);
+        }
+        elseif (\array_key_exists('related_invoices', $data) && $data['related_invoices'] === null) {
+            $object->setRelatedInvoices(null);
             unset($data['related_invoices']);
         }
         foreach ($data as $key => $value_4) {

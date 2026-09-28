@@ -37,7 +37,7 @@ class V1CompaniesCompanyIdProductsBulkDeleteResponse200DataNormalizer implements
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('deleted_products', $data)) {
+        if (\array_key_exists('deleted_products', $data) && $data['deleted_products'] !== null) {
             $values = [];
             foreach ($data['deleted_products'] as $value) {
                 $values[] = $value;
@@ -45,7 +45,11 @@ class V1CompaniesCompanyIdProductsBulkDeleteResponse200DataNormalizer implements
             $object->setDeletedProducts($values);
             unset($data['deleted_products']);
         }
-        if (\array_key_exists('errors', $data)) {
+        elseif (\array_key_exists('deleted_products', $data) && $data['deleted_products'] === null) {
+            $object->setDeletedProducts(null);
+            unset($data['deleted_products']);
+        }
+        if (\array_key_exists('errors', $data) && $data['errors'] !== null) {
             $values_1 = [];
             foreach ($data['errors'] as $value_1) {
                 $values_1[] = $this->denormalizer->denormalize($value_1, \Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkDeleteResponse200DataErrorsItem::class, 'json', $context);
@@ -53,8 +57,16 @@ class V1CompaniesCompanyIdProductsBulkDeleteResponse200DataNormalizer implements
             $object->setErrors($values_1);
             unset($data['errors']);
         }
-        if (\array_key_exists('summary', $data)) {
+        elseif (\array_key_exists('errors', $data) && $data['errors'] === null) {
+            $object->setErrors(null);
+            unset($data['errors']);
+        }
+        if (\array_key_exists('summary', $data) && $data['summary'] !== null) {
             $object->setSummary($this->denormalizer->denormalize($data['summary'], \Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary::class, 'json', $context));
+            unset($data['summary']);
+        }
+        elseif (\array_key_exists('summary', $data) && $data['summary'] === null) {
+            $object->setSummary(null);
             unset($data['summary']);
         }
         foreach ($data as $key => $value_2) {

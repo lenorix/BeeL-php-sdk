@@ -40,12 +40,20 @@ class GenerationHistoryResponseNormalizer implements DenormalizerInterface, Norm
         if (\array_key_exists('total', $data) && \is_int($data['total'])) {
             $data['total'] = (float) $data['total'];
         }
-        if (\array_key_exists('id', $data)) {
+        if (\array_key_exists('id', $data) && $data['id'] !== null) {
             $object->setId($data['id']);
             unset($data['id']);
         }
-        if (\array_key_exists('type', $data)) {
+        elseif (\array_key_exists('id', $data) && $data['id'] === null) {
+            $object->setId(null);
+            unset($data['id']);
+        }
+        if (\array_key_exists('type', $data) && $data['type'] !== null) {
             $object->setType($data['type']);
+            unset($data['type']);
+        }
+        elseif (\array_key_exists('type', $data) && $data['type'] === null) {
+            $object->setType(null);
             unset($data['type']);
         }
         if (\array_key_exists('invoice_id', $data) && $data['invoice_id'] !== null) {
@@ -88,16 +96,24 @@ class GenerationHistoryResponseNormalizer implements DenormalizerInterface, Norm
             $object->setRequestedByName(null);
             unset($data['requested_by_name']);
         }
-        if (\array_key_exists('generated_at', $data)) {
+        if (\array_key_exists('generated_at', $data) && $data['generated_at'] !== null) {
             $object->setGeneratedAt($this->denormalizer->denormalize($data['generated_at'], \DateTime::class, 'json', $context));
             unset($data['generated_at']);
         }
-        if (\array_key_exists('scheduled_date', $data)) {
+        elseif (\array_key_exists('generated_at', $data) && $data['generated_at'] === null) {
+            $object->setGeneratedAt(null);
+            unset($data['generated_at']);
+        }
+        if (\array_key_exists('scheduled_date', $data) && $data['scheduled_date'] !== null) {
             $date = \DateTime::createFromFormat('Y-m-d', $data['scheduled_date']);
             if (false === $date) {
                 throw new \Lenorix\BeelSdk\Generated\Runtime\Normalizer\InvalidDateException($data['scheduled_date'], 'Y-m-d');
             }
             $object->setScheduledDate($date->setTime(0, 0, 0));
+            unset($data['scheduled_date']);
+        }
+        elseif (\array_key_exists('scheduled_date', $data) && $data['scheduled_date'] === null) {
+            $object->setScheduledDate(null);
             unset($data['scheduled_date']);
         }
         if (\array_key_exists('invoice_number', $data) && $data['invoice_number'] !== null) {
@@ -159,7 +175,7 @@ class GenerationHistoryResponseNormalizer implements DenormalizerInterface, Norm
             $dataArray['generated_at'] = $this->normalizer->normalize($data->getGeneratedAt(), 'json', $context);
         }
         if ($data->isInitialized('scheduledDate') && null !== $data->getScheduledDate()) {
-            $dataArray['scheduled_date'] = $data->getScheduledDate()->format('Y-m-d');
+            $dataArray['scheduled_date'] = $data->getScheduledDate()?->format('Y-m-d');
         }
         if ($data->isInitialized('invoiceNumber') && null !== $data->getInvoiceNumber()) {
             $dataArray['invoice_number'] = $data->getInvoiceNumber();

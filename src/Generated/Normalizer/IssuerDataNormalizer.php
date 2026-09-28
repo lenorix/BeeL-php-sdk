@@ -53,16 +53,28 @@ class IssuerDataNormalizer implements DenormalizerInterface, NormalizerInterface
             $object->setNif($data['nif']);
             unset($data['nif']);
         }
-        if (\array_key_exists('address', $data)) {
+        if (\array_key_exists('address', $data) && $data['address'] !== null) {
             $object->setAddress($this->denormalizer->denormalize($data['address'], \Lenorix\BeelSdk\Generated\Model\IssuerDataAddress::class, 'json', $context));
             unset($data['address']);
         }
-        if (\array_key_exists('phone', $data)) {
+        elseif (\array_key_exists('address', $data) && $data['address'] === null) {
+            $object->setAddress(null);
+            unset($data['address']);
+        }
+        if (\array_key_exists('phone', $data) && $data['phone'] !== null) {
             $object->setPhone($data['phone']);
             unset($data['phone']);
         }
-        if (\array_key_exists('email', $data)) {
+        elseif (\array_key_exists('phone', $data) && $data['phone'] === null) {
+            $object->setPhone(null);
+            unset($data['phone']);
+        }
+        if (\array_key_exists('email', $data) && $data['email'] !== null) {
             $object->setEmail($data['email']);
+            unset($data['email']);
+        }
+        elseif (\array_key_exists('email', $data) && $data['email'] === null) {
+            $object->setEmail(null);
             unset($data['email']);
         }
         if (\array_key_exists('website', $data) && $data['website'] !== null) {

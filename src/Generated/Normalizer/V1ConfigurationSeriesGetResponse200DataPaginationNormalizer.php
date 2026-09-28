@@ -59,12 +59,20 @@ class V1ConfigurationSeriesGetResponse200DataPaginationNormalizer implements Den
             $object->setItemsPerPage($data['items_per_page']);
             unset($data['items_per_page']);
         }
-        if (\array_key_exists('has_next', $data)) {
+        if (\array_key_exists('has_next', $data) && $data['has_next'] !== null) {
             $object->setHasNext($data['has_next']);
             unset($data['has_next']);
         }
-        if (\array_key_exists('has_previous', $data)) {
+        elseif (\array_key_exists('has_next', $data) && $data['has_next'] === null) {
+            $object->setHasNext(null);
+            unset($data['has_next']);
+        }
+        if (\array_key_exists('has_previous', $data) && $data['has_previous'] !== null) {
             $object->setHasPrevious($data['has_previous']);
+            unset($data['has_previous']);
+        }
+        elseif (\array_key_exists('has_previous', $data) && $data['has_previous'] === null) {
+            $object->setHasPrevious(null);
             unset($data['has_previous']);
         }
         foreach ($data as $key => $value) {

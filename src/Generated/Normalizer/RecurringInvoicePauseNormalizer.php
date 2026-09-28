@@ -37,16 +37,28 @@ class RecurringInvoicePauseNormalizer implements DenormalizerInterface, Normaliz
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('reason', $data)) {
+        if (\array_key_exists('reason', $data) && $data['reason'] !== null) {
             $object->setReason($data['reason']);
             unset($data['reason']);
         }
-        if (\array_key_exists('since', $data)) {
+        elseif (\array_key_exists('reason', $data) && $data['reason'] === null) {
+            $object->setReason(null);
+            unset($data['reason']);
+        }
+        if (\array_key_exists('since', $data) && $data['since'] !== null) {
             $object->setSince($this->denormalizer->denormalize($data['since'], \DateTime::class, 'json', $context));
             unset($data['since']);
         }
-        if (\array_key_exists('blocker', $data)) {
+        elseif (\array_key_exists('since', $data) && $data['since'] === null) {
+            $object->setSince(null);
+            unset($data['since']);
+        }
+        if (\array_key_exists('blocker', $data) && $data['blocker'] !== null) {
             $object->setBlocker($data['blocker']);
+            unset($data['blocker']);
+        }
+        elseif (\array_key_exists('blocker', $data) && $data['blocker'] === null) {
+            $object->setBlocker(null);
             unset($data['blocker']);
         }
         foreach ($data as $key => $value) {

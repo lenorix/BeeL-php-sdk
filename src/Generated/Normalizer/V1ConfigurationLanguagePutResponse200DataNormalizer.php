@@ -37,8 +37,12 @@ class V1ConfigurationLanguagePutResponse200DataNormalizer implements Denormalize
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('language', $data)) {
+        if (\array_key_exists('language', $data) && $data['language'] !== null) {
             $object->setLanguage($data['language']);
+            unset($data['language']);
+        }
+        elseif (\array_key_exists('language', $data) && $data['language'] === null) {
+            $object->setLanguage(null);
             unset($data['language']);
         }
         foreach ($data as $key => $value) {

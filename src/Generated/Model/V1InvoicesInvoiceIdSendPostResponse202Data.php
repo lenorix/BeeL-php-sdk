@@ -16,13 +16,11 @@ class V1InvoicesInvoiceIdSendPostResponse202Data implements AdditionalProperties
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * Universally Unique Identifier (UUID v4)
-     *
-     * @var string
+     * @var string|null
      */
     protected $emailId;
     /**
-     * @var list<string>
+     * @var list<string>|null
      */
     protected $sentTo;
     /**
@@ -30,44 +28,40 @@ class V1InvoicesInvoiceIdSendPostResponse202Data implements AdditionalProperties
      * sent — it has not been sent yet. See the `202` description.
      * 
      *
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $sentAt;
     /**
-     * Universally Unique Identifier (UUID v4)
-     *
-     * @return string
+     * @return string|null
      */
-    public function getEmailId(): string
+    public function getEmailId(): ?string
     {
         return $this->emailId;
     }
     /**
-     * Universally Unique Identifier (UUID v4)
-     *
-     * @param string $emailId
+     * @param string|null $emailId
      *
      * @return self
      */
-    public function setEmailId(string $emailId): self
+    public function setEmailId(?string $emailId): self
     {
         $this->initialized['emailId'] = true;
         $this->emailId = $emailId;
         return $this;
     }
     /**
-     * @return list<string>
+     * @return list<string>|null
      */
-    public function getSentTo(): array
+    public function getSentTo(): ?array
     {
         return $this->sentTo;
     }
     /**
-     * @param list<string> $sentTo
+     * @param list<string>|null $sentTo
      *
      * @return self
      */
-    public function setSentTo(array $sentTo): self
+    public function setSentTo(?array $sentTo): self
     {
         $this->initialized['sentTo'] = true;
         $this->sentTo = $sentTo;
@@ -78,9 +72,9 @@ class V1InvoicesInvoiceIdSendPostResponse202Data implements AdditionalProperties
      * sent — it has not been sent yet. See the `202` description.
      * 
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getSentAt(): \DateTime
+    public function getSentAt(): ?\DateTime
     {
         return $this->sentAt;
     }
@@ -89,11 +83,11 @@ class V1InvoicesInvoiceIdSendPostResponse202Data implements AdditionalProperties
     sent — it has not been sent yet. See the `202` description.
     
     *
-    * @param \DateTime $sentAt
+    * @param \DateTime|null $sentAt
     *
     * @return self
     */
-    public function setSentAt(\DateTime $sentAt): self
+    public function setSentAt(?\DateTime $sentAt): self
     {
         $this->initialized['sentAt'] = true;
         $this->sentAt = $sentAt;

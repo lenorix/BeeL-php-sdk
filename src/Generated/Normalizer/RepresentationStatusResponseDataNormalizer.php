@@ -37,16 +37,28 @@ class RepresentationStatusResponseDataNormalizer implements DenormalizerInterfac
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('status', $data)) {
+        if (\array_key_exists('status', $data) && $data['status'] !== null) {
             $object->setStatus($data['status']);
             unset($data['status']);
         }
-        if (\array_key_exists('message', $data)) {
+        elseif (\array_key_exists('status', $data) && $data['status'] === null) {
+            $object->setStatus(null);
+            unset($data['status']);
+        }
+        if (\array_key_exists('message', $data) && $data['message'] !== null) {
             $object->setMessage($data['message']);
             unset($data['message']);
         }
-        if (\array_key_exists('updated_at', $data)) {
+        elseif (\array_key_exists('message', $data) && $data['message'] === null) {
+            $object->setMessage(null);
+            unset($data['message']);
+        }
+        if (\array_key_exists('updated_at', $data) && $data['updated_at'] !== null) {
             $object->setUpdatedAt($this->denormalizer->denormalize($data['updated_at'], \DateTime::class, 'json', $context));
+            unset($data['updated_at']);
+        }
+        elseif (\array_key_exists('updated_at', $data) && $data['updated_at'] === null) {
+            $object->setUpdatedAt(null);
             unset($data['updated_at']);
         }
         foreach ($data as $key => $value) {

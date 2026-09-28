@@ -37,11 +37,15 @@ class V1InvoicesInvoiceIdSendPostResponse202DataNormalizer implements Denormaliz
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('email_id', $data)) {
+        if (\array_key_exists('email_id', $data) && $data['email_id'] !== null) {
             $object->setEmailId($data['email_id']);
             unset($data['email_id']);
         }
-        if (\array_key_exists('sent_to', $data)) {
+        elseif (\array_key_exists('email_id', $data) && $data['email_id'] === null) {
+            $object->setEmailId(null);
+            unset($data['email_id']);
+        }
+        if (\array_key_exists('sent_to', $data) && $data['sent_to'] !== null) {
             $values = [];
             foreach ($data['sent_to'] as $value) {
                 $values[] = $value;
@@ -49,8 +53,16 @@ class V1InvoicesInvoiceIdSendPostResponse202DataNormalizer implements Denormaliz
             $object->setSentTo($values);
             unset($data['sent_to']);
         }
-        if (\array_key_exists('sent_at', $data)) {
+        elseif (\array_key_exists('sent_to', $data) && $data['sent_to'] === null) {
+            $object->setSentTo(null);
+            unset($data['sent_to']);
+        }
+        if (\array_key_exists('sent_at', $data) && $data['sent_at'] !== null) {
             $object->setSentAt($this->denormalizer->denormalize($data['sent_at'], \DateTime::class, 'json', $context));
+            unset($data['sent_at']);
+        }
+        elseif (\array_key_exists('sent_at', $data) && $data['sent_at'] === null) {
+            $object->setSentAt(null);
             unset($data['sent_at']);
         }
         foreach ($data as $key => $value_1) {

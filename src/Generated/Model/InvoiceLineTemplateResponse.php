@@ -16,19 +16,19 @@ class InvoiceLineTemplateResponse implements AdditionalPropertiesInterface
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var string
+     * @var string|null
      */
     protected $id;
     /**
-     * @var int
+     * @var int|null
      */
     protected $order;
     /**
-     * @var string
+     * @var string|null
      */
     protected $description;
     /**
-     * @var float
+     * @var float|null
      */
     protected $quantity;
     /**
@@ -42,28 +42,11 @@ class InvoiceLineTemplateResponse implements AdditionalPropertiesInterface
      * reproduce the declared total on large quantities.
      * 
      *
-     * @var float
+     * @var float|null
      */
     protected $unitPrice;
     /**
-     * How the line amount was entered.
-     * 
-     * - `UNIT_PRICE`: classic mode — the amount is derived from `unit_price`
-     *   (`quantity × unit_price × (1 − discount / 100)`).
-     * - `TOTAL_EXCLUDING_TAX`: total-declared mode — `total_excluding_tax` is the exact
-     *   taxable base and `unit_price` is derived and informational
-     *   (`total / quantity`, 4 decimals).
-     * - `TOTAL_INCLUDING_TAX`: tax-inclusive total-declared mode —
-     *   `total_including_tax` is what the customer paid (taxable base + VAT +
-     *   equivalence surcharge) and the engine works the breakdown backwards so the
-     *   rounded amounts add up to the declared total exactly.
-     * 
-     * In both total-declared modes re-multiplying the derived `unit_price` does NOT
-     * reproduce the declared total on large quantities (1.00 € ÷ 300 units → 0.0033 ×
-     * 300 = 0.99), which is precisely why the declared total is the source of truth.
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $pricingMode;
     /**
@@ -72,7 +55,7 @@ class InvoiceLineTemplateResponse implements AdditionalPropertiesInterface
      * IRPF withholding.
      * 
      *
-     * @var float
+     * @var float|null
      */
     protected $totalExcludingTax;
     /**
@@ -82,7 +65,7 @@ class InvoiceLineTemplateResponse implements AdditionalPropertiesInterface
      * reproduces it exactly.
      * 
      *
-     * @var float
+     * @var float|null
      */
     protected $totalIncludingTax;
     /**
@@ -90,15 +73,15 @@ class InvoiceLineTemplateResponse implements AdditionalPropertiesInterface
      */
     protected $discountPercentage;
     /**
-     * @var string
+     * @var string|null
      */
     protected $taxType;
     /**
-     * @var float
+     * @var float|null
      */
     protected $vatRate;
     /**
-     * @var string
+     * @var string|null
      */
     protected $regimeKey;
     /**
@@ -110,46 +93,7 @@ class InvoiceLineTemplateResponse implements AdditionalPropertiesInterface
      */
     protected $irpfRate;
     /**
-     * Tax exemption reason code per the Spanish VAT Law (Ley 37/1992, LIVA), with the
-     * VeriFactu code each one is reported as.
-     * 
-     * - `EXENTA_ART_20`: exempt, art. 20 (domestic operations such as medical, educational,
-     *   cultural and financial services, or housing rentals). E1.
-     * - `EXENTA_ART_21`: exempt, art. 21 (exports of goods). E2.
-     * - `EXENTA_ART_22`: exempt, art. 22 (operations treated as exports). E3.
-     * - `EXENTA_ART_24`: exempt, art. 24 (free zones, warehouses and customs regimes). E4.
-     * - `EXENTA_ART_25`: exempt, art. 25 (intra-community supplies of goods). E5.
-     * - `EXENTA_ART_26`: exempt, art. 26 (intra-community acquisitions of goods). It exempts the
-     *   buyer's acquisition, not a supply the seller invoices, so an invoice line that carries it
-     *   is rejected with `EXEMPTION_NOT_FOR_ISSUED_INVOICE`; a supply to another Member State is
-     *   `EXENTA_ART_25`.
-     * - `NO_SUJETA_ART_7_9`: not subject under art. 7 (such as the transfer of a business as
-     *   a going concern, art. 7.1º). N1.
-     * - `NO_SUJETA_LOCALIZACION`: not subject by the place-of-supply rules (intra-community
-     *   or non-EU services, arts. 69 and 70). N2.
-     * - `ISP_ART_84_2_A` … `ISP_ART_84_2_F`: reverse charge (the invoice states «inversión del
-     *   sujeto pasivo»), art. 84.Uno.2.º letters a) (supplier not established in Spain), b) (unwrought
-     *   or semi-finished gold), c) (scrap, waste and recovery materials, plastic, paper, cardboard, glass and textile waste, and semi-finished non-ferrous metal products), d) (greenhouse gas emission
-     *   allowances), e) (certain real estate supplies: in insolvency proceedings, with the exemption
-     *   waived, or enforcing a security) and f) (construction or renovation works). S2.
-     * - `ISP_ART_84_2_G`: reverse charge of letter g) (silver, platinum, palladium, mobile phones,
-     *   consoles, laptops and tablets). The law requires these supplies to be invoiced in a special
-     *   series, so an invoice line that carries it is rejected with
-     *   `REVERSE_CHARGE_CASE_NOT_SUPPORTED`.
-     * - `EXENTA_ART_140`: investment gold exemption, art. 140 bis (usually with `regime_key`
-     *   `04`). E6.
-     * - `REGIMEN_ART_129` (agriculture,
-     *   livestock and fishing, arts. 124 to 134 bis), `REGIMEN_ART_135` (second-hand goods,
-     *   art and antiques), `REGIMEN_ART_141` (travel agencies), `REGIMEN_ART_154` (equivalence
-     *   surcharge) and `REGIMEN_ART_163_DECIES` (cash basis, arts. 163 decies to 163
-     *   sexiesdecies): operations of special regimes, which VeriFactu identifies by the regime
-     *   key rather than by an exemption code. An
-     *   invoice line that carries one is rejected with `EXEMPTION_REGIME_NOT_SUPPORTED_IN_VERIFACTU`;
-     *   declare the regime with `regime_key` instead.
-     * - `OTRO`: any other provision. Requires the text in `exemption_reason_text`. E6.
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $exemptionReason;
     /**
@@ -159,72 +103,72 @@ class InvoiceLineTemplateResponse implements AdditionalPropertiesInterface
      */
     protected $exemptionReasonText;
     /**
-     * @return string
+     * @return string|null
      */
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->id;
     }
     /**
-     * @param string $id
+     * @param string|null $id
      *
      * @return self
      */
-    public function setId(string $id): self
+    public function setId(?string $id): self
     {
         $this->initialized['id'] = true;
         $this->id = $id;
         return $this;
     }
     /**
-     * @return int
+     * @return int|null
      */
-    public function getOrder(): int
+    public function getOrder(): ?int
     {
         return $this->order;
     }
     /**
-     * @param int $order
+     * @param int|null $order
      *
      * @return self
      */
-    public function setOrder(int $order): self
+    public function setOrder(?int $order): self
     {
         $this->initialized['order'] = true;
         $this->order = $order;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
     /**
-     * @param string $description
+     * @param string|null $description
      *
      * @return self
      */
-    public function setDescription(string $description): self
+    public function setDescription(?string $description): self
     {
         $this->initialized['description'] = true;
         $this->description = $description;
         return $this;
     }
     /**
-     * @return float
+     * @return float|null
      */
-    public function getQuantity(): float
+    public function getQuantity(): ?float
     {
         return $this->quantity;
     }
     /**
-     * @param float $quantity
+     * @param float|null $quantity
      *
      * @return self
      */
-    public function setQuantity(float $quantity): self
+    public function setQuantity(?float $quantity): self
     {
         $this->initialized['quantity'] = true;
         $this->quantity = $quantity;
@@ -255,9 +199,9 @@ class InvoiceLineTemplateResponse implements AdditionalPropertiesInterface
      * reproduce the declared total on large quantities.
      * 
      *
-     * @return float
+     * @return float|null
      */
-    public function getUnitPrice(): float
+    public function getUnitPrice(): ?float
     {
         return $this->unitPrice;
     }
@@ -268,63 +212,29 @@ class InvoiceLineTemplateResponse implements AdditionalPropertiesInterface
     reproduce the declared total on large quantities.
     
     *
-    * @param float $unitPrice
+    * @param float|null $unitPrice
     *
     * @return self
     */
-    public function setUnitPrice(float $unitPrice): self
+    public function setUnitPrice(?float $unitPrice): self
     {
         $this->initialized['unitPrice'] = true;
         $this->unitPrice = $unitPrice;
         return $this;
     }
     /**
-     * How the line amount was entered.
-     * 
-     * - `UNIT_PRICE`: classic mode — the amount is derived from `unit_price`
-     *   (`quantity × unit_price × (1 − discount / 100)`).
-     * - `TOTAL_EXCLUDING_TAX`: total-declared mode — `total_excluding_tax` is the exact
-     *   taxable base and `unit_price` is derived and informational
-     *   (`total / quantity`, 4 decimals).
-     * - `TOTAL_INCLUDING_TAX`: tax-inclusive total-declared mode —
-     *   `total_including_tax` is what the customer paid (taxable base + VAT +
-     *   equivalence surcharge) and the engine works the breakdown backwards so the
-     *   rounded amounts add up to the declared total exactly.
-     * 
-     * In both total-declared modes re-multiplying the derived `unit_price` does NOT
-     * reproduce the declared total on large quantities (1.00 € ÷ 300 units → 0.0033 ×
-     * 300 = 0.99), which is precisely why the declared total is the source of truth.
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getPricingMode(): string
+    public function getPricingMode(): ?string
     {
         return $this->pricingMode;
     }
     /**
-    * How the line amount was entered.
-    
-    - `UNIT_PRICE`: classic mode — the amount is derived from `unit_price`
-     (`quantity × unit_price × (1 − discount / 100)`).
-    - `TOTAL_EXCLUDING_TAX`: total-declared mode — `total_excluding_tax` is the exact
-     taxable base and `unit_price` is derived and informational
-     (`total / quantity`, 4 decimals).
-    - `TOTAL_INCLUDING_TAX`: tax-inclusive total-declared mode —
-     `total_including_tax` is what the customer paid (taxable base + VAT +
-     equivalence surcharge) and the engine works the breakdown backwards so the
-     rounded amounts add up to the declared total exactly.
-    
-    In both total-declared modes re-multiplying the derived `unit_price` does NOT
-    reproduce the declared total on large quantities (1.00 € ÷ 300 units → 0.0033 ×
-    300 = 0.99), which is precisely why the declared total is the source of truth.
-    
-    *
-    * @param string $pricingMode
-    *
-    * @return self
-    */
-    public function setPricingMode(string $pricingMode): self
+     * @param string|null $pricingMode
+     *
+     * @return self
+     */
+    public function setPricingMode(?string $pricingMode): self
     {
         $this->initialized['pricingMode'] = true;
         $this->pricingMode = $pricingMode;
@@ -336,9 +246,9 @@ class InvoiceLineTemplateResponse implements AdditionalPropertiesInterface
      * IRPF withholding.
      * 
      *
-     * @return float
+     * @return float|null
      */
-    public function getTotalExcludingTax(): float
+    public function getTotalExcludingTax(): ?float
     {
         return $this->totalExcludingTax;
     }
@@ -348,11 +258,11 @@ class InvoiceLineTemplateResponse implements AdditionalPropertiesInterface
     IRPF withholding.
     
     *
-    * @param float $totalExcludingTax
+    * @param float|null $totalExcludingTax
     *
     * @return self
     */
-    public function setTotalExcludingTax(float $totalExcludingTax): self
+    public function setTotalExcludingTax(?float $totalExcludingTax): self
     {
         $this->initialized['totalExcludingTax'] = true;
         $this->totalExcludingTax = $totalExcludingTax;
@@ -365,9 +275,9 @@ class InvoiceLineTemplateResponse implements AdditionalPropertiesInterface
      * reproduces it exactly.
      * 
      *
-     * @return float
+     * @return float|null
      */
-    public function getTotalIncludingTax(): float
+    public function getTotalIncludingTax(): ?float
     {
         return $this->totalIncludingTax;
     }
@@ -378,11 +288,11 @@ class InvoiceLineTemplateResponse implements AdditionalPropertiesInterface
     reproduces it exactly.
     
     *
-    * @param float $totalIncludingTax
+    * @param float|null $totalIncludingTax
     *
     * @return self
     */
-    public function setTotalIncludingTax(float $totalIncludingTax): self
+    public function setTotalIncludingTax(?float $totalIncludingTax): self
     {
         $this->initialized['totalIncludingTax'] = true;
         $this->totalIncludingTax = $totalIncludingTax;
@@ -407,54 +317,54 @@ class InvoiceLineTemplateResponse implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getTaxType(): string
+    public function getTaxType(): ?string
     {
         return $this->taxType;
     }
     /**
-     * @param string $taxType
+     * @param string|null $taxType
      *
      * @return self
      */
-    public function setTaxType(string $taxType): self
+    public function setTaxType(?string $taxType): self
     {
         $this->initialized['taxType'] = true;
         $this->taxType = $taxType;
         return $this;
     }
     /**
-     * @return float
+     * @return float|null
      */
-    public function getVatRate(): float
+    public function getVatRate(): ?float
     {
         return $this->vatRate;
     }
     /**
-     * @param float $vatRate
+     * @param float|null $vatRate
      *
      * @return self
      */
-    public function setVatRate(float $vatRate): self
+    public function setVatRate(?float $vatRate): self
     {
         $this->initialized['vatRate'] = true;
         $this->vatRate = $vatRate;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getRegimeKey(): string
+    public function getRegimeKey(): ?string
     {
         return $this->regimeKey;
     }
     /**
-     * @param string $regimeKey
+     * @param string|null $regimeKey
      *
      * @return self
      */
-    public function setRegimeKey(string $regimeKey): self
+    public function setRegimeKey(?string $regimeKey): self
     {
         $this->initialized['regimeKey'] = true;
         $this->regimeKey = $regimeKey;
@@ -497,96 +407,18 @@ class InvoiceLineTemplateResponse implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * Tax exemption reason code per the Spanish VAT Law (Ley 37/1992, LIVA), with the
-     * VeriFactu code each one is reported as.
-     * 
-     * - `EXENTA_ART_20`: exempt, art. 20 (domestic operations such as medical, educational,
-     *   cultural and financial services, or housing rentals). E1.
-     * - `EXENTA_ART_21`: exempt, art. 21 (exports of goods). E2.
-     * - `EXENTA_ART_22`: exempt, art. 22 (operations treated as exports). E3.
-     * - `EXENTA_ART_24`: exempt, art. 24 (free zones, warehouses and customs regimes). E4.
-     * - `EXENTA_ART_25`: exempt, art. 25 (intra-community supplies of goods). E5.
-     * - `EXENTA_ART_26`: exempt, art. 26 (intra-community acquisitions of goods). It exempts the
-     *   buyer's acquisition, not a supply the seller invoices, so an invoice line that carries it
-     *   is rejected with `EXEMPTION_NOT_FOR_ISSUED_INVOICE`; a supply to another Member State is
-     *   `EXENTA_ART_25`.
-     * - `NO_SUJETA_ART_7_9`: not subject under art. 7 (such as the transfer of a business as
-     *   a going concern, art. 7.1º). N1.
-     * - `NO_SUJETA_LOCALIZACION`: not subject by the place-of-supply rules (intra-community
-     *   or non-EU services, arts. 69 and 70). N2.
-     * - `ISP_ART_84_2_A` … `ISP_ART_84_2_F`: reverse charge (the invoice states «inversión del
-     *   sujeto pasivo»), art. 84.Uno.2.º letters a) (supplier not established in Spain), b) (unwrought
-     *   or semi-finished gold), c) (scrap, waste and recovery materials, plastic, paper, cardboard, glass and textile waste, and semi-finished non-ferrous metal products), d) (greenhouse gas emission
-     *   allowances), e) (certain real estate supplies: in insolvency proceedings, with the exemption
-     *   waived, or enforcing a security) and f) (construction or renovation works). S2.
-     * - `ISP_ART_84_2_G`: reverse charge of letter g) (silver, platinum, palladium, mobile phones,
-     *   consoles, laptops and tablets). The law requires these supplies to be invoiced in a special
-     *   series, so an invoice line that carries it is rejected with
-     *   `REVERSE_CHARGE_CASE_NOT_SUPPORTED`.
-     * - `EXENTA_ART_140`: investment gold exemption, art. 140 bis (usually with `regime_key`
-     *   `04`). E6.
-     * - `REGIMEN_ART_129` (agriculture,
-     *   livestock and fishing, arts. 124 to 134 bis), `REGIMEN_ART_135` (second-hand goods,
-     *   art and antiques), `REGIMEN_ART_141` (travel agencies), `REGIMEN_ART_154` (equivalence
-     *   surcharge) and `REGIMEN_ART_163_DECIES` (cash basis, arts. 163 decies to 163
-     *   sexiesdecies): operations of special regimes, which VeriFactu identifies by the regime
-     *   key rather than by an exemption code. An
-     *   invoice line that carries one is rejected with `EXEMPTION_REGIME_NOT_SUPPORTED_IN_VERIFACTU`;
-     *   declare the regime with `regime_key` instead.
-     * - `OTRO`: any other provision. Requires the text in `exemption_reason_text`. E6.
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getExemptionReason(): string
+    public function getExemptionReason(): ?string
     {
         return $this->exemptionReason;
     }
     /**
-    * Tax exemption reason code per the Spanish VAT Law (Ley 37/1992, LIVA), with the
-    VeriFactu code each one is reported as.
-    
-    - `EXENTA_ART_20`: exempt, art. 20 (domestic operations such as medical, educational,
-     cultural and financial services, or housing rentals). E1.
-    - `EXENTA_ART_21`: exempt, art. 21 (exports of goods). E2.
-    - `EXENTA_ART_22`: exempt, art. 22 (operations treated as exports). E3.
-    - `EXENTA_ART_24`: exempt, art. 24 (free zones, warehouses and customs regimes). E4.
-    - `EXENTA_ART_25`: exempt, art. 25 (intra-community supplies of goods). E5.
-    - `EXENTA_ART_26`: exempt, art. 26 (intra-community acquisitions of goods). It exempts the
-     buyer's acquisition, not a supply the seller invoices, so an invoice line that carries it
-     is rejected with `EXEMPTION_NOT_FOR_ISSUED_INVOICE`; a supply to another Member State is
-     `EXENTA_ART_25`.
-    - `NO_SUJETA_ART_7_9`: not subject under art. 7 (such as the transfer of a business as
-     a going concern, art. 7.1º). N1.
-    - `NO_SUJETA_LOCALIZACION`: not subject by the place-of-supply rules (intra-community
-     or non-EU services, arts. 69 and 70). N2.
-    - `ISP_ART_84_2_A` … `ISP_ART_84_2_F`: reverse charge (the invoice states «inversión del
-     sujeto pasivo»), art. 84.Uno.2.º letters a) (supplier not established in Spain), b) (unwrought
-     or semi-finished gold), c) (scrap, waste and recovery materials, plastic, paper, cardboard, glass and textile waste, and semi-finished non-ferrous metal products), d) (greenhouse gas emission
-     allowances), e) (certain real estate supplies: in insolvency proceedings, with the exemption
-     waived, or enforcing a security) and f) (construction or renovation works). S2.
-    - `ISP_ART_84_2_G`: reverse charge of letter g) (silver, platinum, palladium, mobile phones,
-     consoles, laptops and tablets). The law requires these supplies to be invoiced in a special
-     series, so an invoice line that carries it is rejected with
-     `REVERSE_CHARGE_CASE_NOT_SUPPORTED`.
-    - `EXENTA_ART_140`: investment gold exemption, art. 140 bis (usually with `regime_key`
-     `04`). E6.
-    - `REGIMEN_ART_129` (agriculture,
-     livestock and fishing, arts. 124 to 134 bis), `REGIMEN_ART_135` (second-hand goods,
-     art and antiques), `REGIMEN_ART_141` (travel agencies), `REGIMEN_ART_154` (equivalence
-     surcharge) and `REGIMEN_ART_163_DECIES` (cash basis, arts. 163 decies to 163
-     sexiesdecies): operations of special regimes, which VeriFactu identifies by the regime
-     key rather than by an exemption code. An
-     invoice line that carries one is rejected with `EXEMPTION_REGIME_NOT_SUPPORTED_IN_VERIFACTU`;
-     declare the regime with `regime_key` instead.
-    - `OTRO`: any other provision. Requires the text in `exemption_reason_text`. E6.
-    
-    *
-    * @param string $exemptionReason
-    *
-    * @return self
-    */
-    public function setExemptionReason(string $exemptionReason): self
+     * @param string|null $exemptionReason
+     *
+     * @return self
+     */
+    public function setExemptionReason(?string $exemptionReason): self
     {
         $this->initialized['exemptionReason'] = true;
         $this->exemptionReason = $exemptionReason;

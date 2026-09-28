@@ -56,8 +56,12 @@ class UpdateTaxConfigurationRequestNormalizer implements DenormalizerInterface, 
             $object->setDefaultMainTax($this->denormalizer->denormalize($data['default_main_tax'], \Lenorix\BeelSdk\Generated\Model\UpdateTaxConfigurationRequestDefaultMainTax::class, 'json', $context));
             unset($data['default_main_tax']);
         }
-        if (\array_key_exists('default_exemption_reason', $data)) {
+        if (\array_key_exists('default_exemption_reason', $data) && $data['default_exemption_reason'] !== null) {
             $object->setDefaultExemptionReason($data['default_exemption_reason']);
+            unset($data['default_exemption_reason']);
+        }
+        elseif (\array_key_exists('default_exemption_reason', $data) && $data['default_exemption_reason'] === null) {
+            $object->setDefaultExemptionReason(null);
             unset($data['default_exemption_reason']);
         }
         if (\array_key_exists('default_exemption_reason_text', $data) && $data['default_exemption_reason_text'] !== null) {

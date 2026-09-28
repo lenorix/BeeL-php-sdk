@@ -45,24 +45,44 @@ class VeriFactuRecordNormalizer implements DenormalizerInterface, NormalizerInte
             $object->setOperation($data['operation']);
             unset($data['operation']);
         }
-        if (\array_key_exists('submission_status', $data)) {
+        if (\array_key_exists('submission_status', $data) && $data['submission_status'] !== null) {
             $object->setSubmissionStatus($data['submission_status']);
             unset($data['submission_status']);
         }
-        if (\array_key_exists('invoice_hash', $data)) {
+        elseif (\array_key_exists('submission_status', $data) && $data['submission_status'] === null) {
+            $object->setSubmissionStatus(null);
+            unset($data['submission_status']);
+        }
+        if (\array_key_exists('invoice_hash', $data) && $data['invoice_hash'] !== null) {
             $object->setInvoiceHash($data['invoice_hash']);
             unset($data['invoice_hash']);
         }
-        if (\array_key_exists('registration_number', $data)) {
+        elseif (\array_key_exists('invoice_hash', $data) && $data['invoice_hash'] === null) {
+            $object->setInvoiceHash(null);
+            unset($data['invoice_hash']);
+        }
+        if (\array_key_exists('registration_number', $data) && $data['registration_number'] !== null) {
             $object->setRegistrationNumber($data['registration_number']);
             unset($data['registration_number']);
         }
-        if (\array_key_exists('registered_at', $data)) {
+        elseif (\array_key_exists('registration_number', $data) && $data['registration_number'] === null) {
+            $object->setRegistrationNumber(null);
+            unset($data['registration_number']);
+        }
+        if (\array_key_exists('registered_at', $data) && $data['registered_at'] !== null) {
             $object->setRegisteredAt($this->denormalizer->denormalize($data['registered_at'], \DateTime::class, 'json', $context));
             unset($data['registered_at']);
         }
-        if (\array_key_exists('qr_url', $data)) {
+        elseif (\array_key_exists('registered_at', $data) && $data['registered_at'] === null) {
+            $object->setRegisteredAt(null);
+            unset($data['registered_at']);
+        }
+        if (\array_key_exists('qr_url', $data) && $data['qr_url'] !== null) {
             $object->setQrUrl($data['qr_url']);
+            unset($data['qr_url']);
+        }
+        elseif (\array_key_exists('qr_url', $data) && $data['qr_url'] === null) {
+            $object->setQrUrl(null);
             unset($data['qr_url']);
         }
         if (\array_key_exists('error_code', $data) && $data['error_code'] !== null) {

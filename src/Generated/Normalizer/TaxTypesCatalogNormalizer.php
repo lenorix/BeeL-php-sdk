@@ -37,7 +37,7 @@ class TaxTypesCatalogNormalizer implements DenormalizerInterface, NormalizerInte
         if (isset($data['$recursiveRef'])) {
             return new Reference($data['$recursiveRef'], $context['document-origin']);
         }
-        if (\array_key_exists('tax_regimes', $data)) {
+        if (\array_key_exists('tax_regimes', $data) && $data['tax_regimes'] !== null) {
             $values = [];
             foreach ($data['tax_regimes'] as $value) {
                 $values[] = $this->denormalizer->denormalize($value, \Lenorix\BeelSdk\Generated\Model\TaxRegime::class, 'json', $context);
@@ -45,7 +45,11 @@ class TaxTypesCatalogNormalizer implements DenormalizerInterface, NormalizerInte
             $object->setTaxRegimes($values);
             unset($data['tax_regimes']);
         }
-        if (\array_key_exists('irpf_types', $data)) {
+        elseif (\array_key_exists('tax_regimes', $data) && $data['tax_regimes'] === null) {
+            $object->setTaxRegimes(null);
+            unset($data['tax_regimes']);
+        }
+        if (\array_key_exists('irpf_types', $data) && $data['irpf_types'] !== null) {
             $values_1 = [];
             foreach ($data['irpf_types'] as $value_1) {
                 $values_1[] = $this->denormalizer->denormalize($value_1, \Lenorix\BeelSdk\Generated\Model\IrpfType::class, 'json', $context);
@@ -53,7 +57,11 @@ class TaxTypesCatalogNormalizer implements DenormalizerInterface, NormalizerInte
             $object->setIrpfTypes($values_1);
             unset($data['irpf_types']);
         }
-        if (\array_key_exists('equivalence_surcharges', $data)) {
+        elseif (\array_key_exists('irpf_types', $data) && $data['irpf_types'] === null) {
+            $object->setIrpfTypes(null);
+            unset($data['irpf_types']);
+        }
+        if (\array_key_exists('equivalence_surcharges', $data) && $data['equivalence_surcharges'] !== null) {
             $values_2 = [];
             foreach ($data['equivalence_surcharges'] as $value_2) {
                 $values_2[] = $this->denormalizer->denormalize($value_2, \Lenorix\BeelSdk\Generated\Model\EquivalenceSurcharge::class, 'json', $context);
@@ -61,12 +69,20 @@ class TaxTypesCatalogNormalizer implements DenormalizerInterface, NormalizerInte
             $object->setEquivalenceSurcharges($values_2);
             unset($data['equivalence_surcharges']);
         }
-        if (\array_key_exists('exemption_reasons', $data)) {
+        elseif (\array_key_exists('equivalence_surcharges', $data) && $data['equivalence_surcharges'] === null) {
+            $object->setEquivalenceSurcharges(null);
+            unset($data['equivalence_surcharges']);
+        }
+        if (\array_key_exists('exemption_reasons', $data) && $data['exemption_reasons'] !== null) {
             $values_3 = [];
             foreach ($data['exemption_reasons'] as $value_3) {
                 $values_3[] = $this->denormalizer->denormalize($value_3, \Lenorix\BeelSdk\Generated\Model\ExemptionReasonCatalogEntry::class, 'json', $context);
             }
             $object->setExemptionReasons($values_3);
+            unset($data['exemption_reasons']);
+        }
+        elseif (\array_key_exists('exemption_reasons', $data) && $data['exemption_reasons'] === null) {
+            $object->setExemptionReasons(null);
             unset($data['exemption_reasons']);
         }
         foreach ($data as $key => $value_4) {

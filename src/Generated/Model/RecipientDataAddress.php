@@ -18,43 +18,43 @@ class RecipientDataAddress implements AdditionalPropertiesInterface
     /**
      * Full address (street, number, floor, etc.)
      *
-     * @var string
+     * @var string|null
      */
     protected $street;
     /**
      * Street number. Absent when the stored address has none.
      *
-     * @var string
+     * @var string|null
      */
     protected $number;
     /**
      * Floor or level
      *
-     * @var string
+     * @var string|null
      */
     protected $floor;
     /**
      * Door or apartment
      *
-     * @var string
+     * @var string|null
      */
     protected $door;
     /**
      * Postal code (5 digits for Spain, free format for other countries)
      *
-     * @var string
+     * @var string|null
      */
     protected $postalCode;
     /**
      * City or town
      *
-     * @var string
+     * @var string|null
      */
     protected $city;
     /**
      * Province or state. Outside Spain an address may have none.
      *
-     * @var string
+     * @var string|null
      */
     protected $province;
     /**
@@ -62,32 +62,32 @@ class RecipientDataAddress implements AdditionalPropertiesInterface
      * the country was validated may hold the name as it was sent.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $country;
     /**
      * ISO 3166-1 alpha-2 country code
      *
-     * @var string
+     * @var string|null
      */
     protected $countryCode;
     /**
      * Full address (street, number, floor, etc.)
      *
-     * @return string
+     * @return string|null
      */
-    public function getStreet(): string
+    public function getStreet(): ?string
     {
         return $this->street;
     }
     /**
      * Full address (street, number, floor, etc.)
      *
-     * @param string $street
+     * @param string|null $street
      *
      * @return self
      */
-    public function setStreet(string $street): self
+    public function setStreet(?string $street): self
     {
         $this->initialized['street'] = true;
         $this->street = $street;
@@ -96,20 +96,20 @@ class RecipientDataAddress implements AdditionalPropertiesInterface
     /**
      * Street number. Absent when the stored address has none.
      *
-     * @return string
+     * @return string|null
      */
-    public function getNumber(): string
+    public function getNumber(): ?string
     {
         return $this->number;
     }
     /**
      * Street number. Absent when the stored address has none.
      *
-     * @param string $number
+     * @param string|null $number
      *
      * @return self
      */
-    public function setNumber(string $number): self
+    public function setNumber(?string $number): self
     {
         $this->initialized['number'] = true;
         $this->number = $number;
@@ -118,20 +118,20 @@ class RecipientDataAddress implements AdditionalPropertiesInterface
     /**
      * Floor or level
      *
-     * @return string
+     * @return string|null
      */
-    public function getFloor(): string
+    public function getFloor(): ?string
     {
         return $this->floor;
     }
     /**
      * Floor or level
      *
-     * @param string $floor
+     * @param string|null $floor
      *
      * @return self
      */
-    public function setFloor(string $floor): self
+    public function setFloor(?string $floor): self
     {
         $this->initialized['floor'] = true;
         $this->floor = $floor;
@@ -140,20 +140,20 @@ class RecipientDataAddress implements AdditionalPropertiesInterface
     /**
      * Door or apartment
      *
-     * @return string
+     * @return string|null
      */
-    public function getDoor(): string
+    public function getDoor(): ?string
     {
         return $this->door;
     }
     /**
      * Door or apartment
      *
-     * @param string $door
+     * @param string|null $door
      *
      * @return self
      */
-    public function setDoor(string $door): self
+    public function setDoor(?string $door): self
     {
         $this->initialized['door'] = true;
         $this->door = $door;
@@ -162,20 +162,20 @@ class RecipientDataAddress implements AdditionalPropertiesInterface
     /**
      * Postal code (5 digits for Spain, free format for other countries)
      *
-     * @return string
+     * @return string|null
      */
-    public function getPostalCode(): string
+    public function getPostalCode(): ?string
     {
         return $this->postalCode;
     }
     /**
      * Postal code (5 digits for Spain, free format for other countries)
      *
-     * @param string $postalCode
+     * @param string|null $postalCode
      *
      * @return self
      */
-    public function setPostalCode(string $postalCode): self
+    public function setPostalCode(?string $postalCode): self
     {
         $this->initialized['postalCode'] = true;
         $this->postalCode = $postalCode;
@@ -184,20 +184,20 @@ class RecipientDataAddress implements AdditionalPropertiesInterface
     /**
      * City or town
      *
-     * @return string
+     * @return string|null
      */
-    public function getCity(): string
+    public function getCity(): ?string
     {
         return $this->city;
     }
     /**
      * City or town
      *
-     * @param string $city
+     * @param string|null $city
      *
      * @return self
      */
-    public function setCity(string $city): self
+    public function setCity(?string $city): self
     {
         $this->initialized['city'] = true;
         $this->city = $city;
@@ -206,20 +206,20 @@ class RecipientDataAddress implements AdditionalPropertiesInterface
     /**
      * Province or state. Outside Spain an address may have none.
      *
-     * @return string
+     * @return string|null
      */
-    public function getProvince(): string
+    public function getProvince(): ?string
     {
         return $this->province;
     }
     /**
      * Province or state. Outside Spain an address may have none.
      *
-     * @param string $province
+     * @param string|null $province
      *
      * @return self
      */
-    public function setProvince(string $province): self
+    public function setProvince(?string $province): self
     {
         $this->initialized['province'] = true;
         $this->province = $province;
@@ -230,9 +230,9 @@ class RecipientDataAddress implements AdditionalPropertiesInterface
      * the country was validated may hold the name as it was sent.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getCountry(): string
+    public function getCountry(): ?string
     {
         return $this->country;
     }
@@ -241,11 +241,11 @@ class RecipientDataAddress implements AdditionalPropertiesInterface
     the country was validated may hold the name as it was sent.
     
     *
-    * @param string $country
+    * @param string|null $country
     *
     * @return self
     */
-    public function setCountry(string $country): self
+    public function setCountry(?string $country): self
     {
         $this->initialized['country'] = true;
         $this->country = $country;
@@ -254,20 +254,20 @@ class RecipientDataAddress implements AdditionalPropertiesInterface
     /**
      * ISO 3166-1 alpha-2 country code
      *
-     * @return string
+     * @return string|null
      */
-    public function getCountryCode(): string
+    public function getCountryCode(): ?string
     {
         return $this->countryCode;
     }
     /**
      * ISO 3166-1 alpha-2 country code
      *
-     * @param string $countryCode
+     * @param string|null $countryCode
      *
      * @return self
      */
-    public function setCountryCode(string $countryCode): self
+    public function setCountryCode(?string $countryCode): self
     {
         $this->initialized['countryCode'] = true;
         $this->countryCode = $countryCode;

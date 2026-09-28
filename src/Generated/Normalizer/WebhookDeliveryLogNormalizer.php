@@ -43,24 +43,44 @@ class WebhookDeliveryLogNormalizer implements DenormalizerInterface, NormalizerI
         if (\array_key_exists('success', $data) && \is_int($data['success'])) {
             $data['success'] = (bool) $data['success'];
         }
-        if (\array_key_exists('id', $data)) {
+        if (\array_key_exists('id', $data) && $data['id'] !== null) {
             $object->setId($data['id']);
             unset($data['id']);
         }
-        if (\array_key_exists('subscription_id', $data)) {
+        elseif (\array_key_exists('id', $data) && $data['id'] === null) {
+            $object->setId(null);
+            unset($data['id']);
+        }
+        if (\array_key_exists('subscription_id', $data) && $data['subscription_id'] !== null) {
             $object->setSubscriptionId($data['subscription_id']);
             unset($data['subscription_id']);
         }
-        if (\array_key_exists('webhook_event_id', $data)) {
+        elseif (\array_key_exists('subscription_id', $data) && $data['subscription_id'] === null) {
+            $object->setSubscriptionId(null);
+            unset($data['subscription_id']);
+        }
+        if (\array_key_exists('webhook_event_id', $data) && $data['webhook_event_id'] !== null) {
             $object->setWebhookEventId($data['webhook_event_id']);
             unset($data['webhook_event_id']);
         }
-        if (\array_key_exists('event_type', $data)) {
+        elseif (\array_key_exists('webhook_event_id', $data) && $data['webhook_event_id'] === null) {
+            $object->setWebhookEventId(null);
+            unset($data['webhook_event_id']);
+        }
+        if (\array_key_exists('event_type', $data) && $data['event_type'] !== null) {
             $object->setEventType($data['event_type']);
             unset($data['event_type']);
         }
-        if (\array_key_exists('attempt_number', $data)) {
+        elseif (\array_key_exists('event_type', $data) && $data['event_type'] === null) {
+            $object->setEventType(null);
+            unset($data['event_type']);
+        }
+        if (\array_key_exists('attempt_number', $data) && $data['attempt_number'] !== null) {
             $object->setAttemptNumber($data['attempt_number']);
+            unset($data['attempt_number']);
+        }
+        elseif (\array_key_exists('attempt_number', $data) && $data['attempt_number'] === null) {
+            $object->setAttemptNumber(null);
             unset($data['attempt_number']);
         }
         if (\array_key_exists('http_status', $data) && $data['http_status'] !== null) {
@@ -79,8 +99,12 @@ class WebhookDeliveryLogNormalizer implements DenormalizerInterface, NormalizerI
             $object->setResponseBody(null);
             unset($data['response_body']);
         }
-        if (\array_key_exists('response_body_truncated', $data)) {
+        if (\array_key_exists('response_body_truncated', $data) && $data['response_body_truncated'] !== null) {
             $object->setResponseBodyTruncated($data['response_body_truncated']);
+            unset($data['response_body_truncated']);
+        }
+        elseif (\array_key_exists('response_body_truncated', $data) && $data['response_body_truncated'] === null) {
+            $object->setResponseBodyTruncated(null);
             unset($data['response_body_truncated']);
         }
         if (\array_key_exists('response_body_length', $data) && $data['response_body_length'] !== null) {
@@ -99,8 +123,12 @@ class WebhookDeliveryLogNormalizer implements DenormalizerInterface, NormalizerI
             $object->setDurationMs(null);
             unset($data['duration_ms']);
         }
-        if (\array_key_exists('success', $data)) {
+        if (\array_key_exists('success', $data) && $data['success'] !== null) {
             $object->setSuccess($data['success']);
+            unset($data['success']);
+        }
+        elseif (\array_key_exists('success', $data) && $data['success'] === null) {
+            $object->setSuccess(null);
             unset($data['success']);
         }
         if (\array_key_exists('error_message', $data) && $data['error_message'] !== null) {
@@ -131,8 +159,12 @@ class WebhookDeliveryLogNormalizer implements DenormalizerInterface, NormalizerI
             $object->setRequestHeaders(null);
             unset($data['request_headers']);
         }
-        if (\array_key_exists('delivered_at', $data)) {
+        if (\array_key_exists('delivered_at', $data) && $data['delivered_at'] !== null) {
             $object->setDeliveredAt($this->denormalizer->denormalize($data['delivered_at'], \DateTime::class, 'json', $context));
+            unset($data['delivered_at']);
+        }
+        elseif (\array_key_exists('delivered_at', $data) && $data['delivered_at'] === null) {
+            $object->setDeliveredAt(null);
             unset($data['delivered_at']);
         }
         foreach ($data as $key_1 => $value_1) {

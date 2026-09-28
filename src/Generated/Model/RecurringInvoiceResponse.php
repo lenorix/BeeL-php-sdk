@@ -16,11 +16,11 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var string
+     * @var string|null
      */
     protected $id;
     /**
-     * @var string
+     * @var string|null
      */
     protected $name;
     /**
@@ -34,7 +34,7 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
      * invoices on 10 March, then every 10 March after that.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $frequency;
     /**
@@ -49,11 +49,11 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
      * (31 Jan → 28 Feb → 31 Mar).
      * 
      *
-     * @var int
+     * @var int|null
      */
     protected $dayOfMonth;
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $startDate;
     /**
@@ -93,11 +93,11 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
      * changes is only whether there is a draft to look at first.
      * 
      *
-     * @var bool
+     * @var bool|null
      */
     protected $draftInAdvance;
     /**
-     * @var string
+     * @var string|null
      */
     protected $status;
     /**
@@ -113,7 +113,7 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
      * column and nothing else changes because of it.
      * 
      *
-     * @var bool
+     * @var bool|null
      */
     protected $isFailing;
     /**
@@ -144,19 +144,15 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
      */
     protected $completion;
     /**
-     * @var string
+     * @var string|null
      */
     protected $seriesId;
     /**
-     * @var string
+     * @var string|null
      */
     protected $seriesCode;
     /**
-     * Type of the invoices a recurring template generates: `STANDARD` for an identified recipient,
-     * `SIMPLIFIED` for a recipient that is not identified.
-     * 
-     *
-     * @var string
+     * @var string|null
      */
     protected $invoiceType;
     /**
@@ -177,11 +173,11 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
      */
     protected $recipientNif;
     /**
-     * @var RecurringInvoiceResponseRecipientAlternativeId
+     * @var RecurringInvoiceResponseRecipientAlternativeId|null
      */
     protected $recipientAlternativeId;
     /**
-     * @var list<InvoiceLineTemplateResponse>
+     * @var list<InvoiceLineTemplateResponse>|null
      */
     protected $lines;
     /**
@@ -239,7 +235,7 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
      */
     protected $notes;
     /**
-     * @var bool
+     * @var bool|null
      */
     protected $sendAutomatically;
     /**
@@ -247,7 +243,7 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
      */
     protected $emailConfiguration;
     /**
-     * @var int
+     * @var int|null
      */
     protected $generatedInvoices;
     /**
@@ -295,44 +291,44 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
      */
     protected $sourceInvoiceId;
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $createdAt;
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $updatedAt;
     /**
-     * @return string
+     * @return string|null
      */
-    public function getId(): string
+    public function getId(): ?string
     {
         return $this->id;
     }
     /**
-     * @param string $id
+     * @param string|null $id
      *
      * @return self
      */
-    public function setId(string $id): self
+    public function setId(?string $id): self
     {
         $this->initialized['id'] = true;
         $this->id = $id;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->name;
     }
     /**
-     * @param string $name
+     * @param string|null $name
      *
      * @return self
      */
-    public function setName(string $name): self
+    public function setName(?string $name): self
     {
         $this->initialized['name'] = true;
         $this->name = $name;
@@ -349,9 +345,9 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
      * invoices on 10 March, then every 10 March after that.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getFrequency(): string
+    public function getFrequency(): ?string
     {
         return $this->frequency;
     }
@@ -366,11 +362,11 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
     invoices on 10 March, then every 10 March after that.
     
     *
-    * @param string $frequency
+    * @param string|null $frequency
     *
     * @return self
     */
-    public function setFrequency(string $frequency): self
+    public function setFrequency(?string $frequency): self
     {
         $this->initialized['frequency'] = true;
         $this->frequency = $frequency;
@@ -388,9 +384,9 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
      * (31 Jan → 28 Feb → 31 Mar).
      * 
      *
-     * @return int
+     * @return int|null
      */
-    public function getDayOfMonth(): int
+    public function getDayOfMonth(): ?int
     {
         return $this->dayOfMonth;
     }
@@ -406,29 +402,29 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
     (31 Jan → 28 Feb → 31 Mar).
     
     *
-    * @param int $dayOfMonth
+    * @param int|null $dayOfMonth
     *
     * @return self
     */
-    public function setDayOfMonth(int $dayOfMonth): self
+    public function setDayOfMonth(?int $dayOfMonth): self
     {
         $this->initialized['dayOfMonth'] = true;
         $this->dayOfMonth = $dayOfMonth;
         return $this;
     }
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getStartDate(): \DateTime
+    public function getStartDate(): ?\DateTime
     {
         return $this->startDate;
     }
     /**
-     * @param \DateTime $startDate
+     * @param \DateTime|null $startDate
      *
      * @return self
      */
-    public function setStartDate(\DateTime $startDate): self
+    public function setStartDate(?\DateTime $startDate): self
     {
         $this->initialized['startDate'] = true;
         $this->startDate = $startDate;
@@ -521,9 +517,9 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
      * changes is only whether there is a draft to look at first.
      * 
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getDraftInAdvance(): bool
+    public function getDraftInAdvance(): ?bool
     {
         return $this->draftInAdvance;
     }
@@ -534,29 +530,29 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
     changes is only whether there is a draft to look at first.
     
     *
-    * @param bool $draftInAdvance
+    * @param bool|null $draftInAdvance
     *
     * @return self
     */
-    public function setDraftInAdvance(bool $draftInAdvance): self
+    public function setDraftInAdvance(?bool $draftInAdvance): self
     {
         $this->initialized['draftInAdvance'] = true;
         $this->draftInAdvance = $draftInAdvance;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return $this->status;
     }
     /**
-     * @param string $status
+     * @param string|null $status
      *
      * @return self
      */
-    public function setStatus(string $status): self
+    public function setStatus(?string $status): self
     {
         $this->initialized['status'] = true;
         $this->status = $status;
@@ -575,9 +571,9 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
      * column and nothing else changes because of it.
      * 
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getIsFailing(): bool
+    public function getIsFailing(): ?bool
     {
         return $this->isFailing;
     }
@@ -594,11 +590,11 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
     column and nothing else changes because of it.
     
     *
-    * @param bool $isFailing
+    * @param bool|null $isFailing
     *
     * @return self
     */
-    public function setIsFailing(bool $isFailing): self
+    public function setIsFailing(?bool $isFailing): self
     {
         $this->initialized['isFailing'] = true;
         $this->isFailing = $isFailing;
@@ -679,62 +675,54 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSeriesId(): string
+    public function getSeriesId(): ?string
     {
         return $this->seriesId;
     }
     /**
-     * @param string $seriesId
+     * @param string|null $seriesId
      *
      * @return self
      */
-    public function setSeriesId(string $seriesId): self
+    public function setSeriesId(?string $seriesId): self
     {
         $this->initialized['seriesId'] = true;
         $this->seriesId = $seriesId;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getSeriesCode(): string
+    public function getSeriesCode(): ?string
     {
         return $this->seriesCode;
     }
     /**
-     * @param string $seriesCode
+     * @param string|null $seriesCode
      *
      * @return self
      */
-    public function setSeriesCode(string $seriesCode): self
+    public function setSeriesCode(?string $seriesCode): self
     {
         $this->initialized['seriesCode'] = true;
         $this->seriesCode = $seriesCode;
         return $this;
     }
     /**
-     * Type of the invoices a recurring template generates: `STANDARD` for an identified recipient,
-     * `SIMPLIFIED` for a recipient that is not identified.
-     * 
-     *
-     * @return string
+     * @return string|null
      */
-    public function getInvoiceType(): string
+    public function getInvoiceType(): ?string
     {
         return $this->invoiceType;
     }
     /**
-    * Type of the invoices a recurring template generates: `STANDARD` for an identified recipient,
-    `SIMPLIFIED` for a recipient that is not identified.
-    
-    *
-    * @param string $invoiceType
-    *
-    * @return self
-    */
-    public function setInvoiceType(string $invoiceType): self
+     * @param string|null $invoiceType
+     *
+     * @return self
+     */
+    public function setInvoiceType(?string $invoiceType): self
     {
         $this->initialized['invoiceType'] = true;
         $this->invoiceType = $invoiceType;
@@ -805,36 +793,36 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return RecurringInvoiceResponseRecipientAlternativeId
+     * @return RecurringInvoiceResponseRecipientAlternativeId|null
      */
-    public function getRecipientAlternativeId(): RecurringInvoiceResponseRecipientAlternativeId
+    public function getRecipientAlternativeId(): ?RecurringInvoiceResponseRecipientAlternativeId
     {
         return $this->recipientAlternativeId;
     }
     /**
-     * @param RecurringInvoiceResponseRecipientAlternativeId $recipientAlternativeId
+     * @param RecurringInvoiceResponseRecipientAlternativeId|null $recipientAlternativeId
      *
      * @return self
      */
-    public function setRecipientAlternativeId(RecurringInvoiceResponseRecipientAlternativeId $recipientAlternativeId): self
+    public function setRecipientAlternativeId(?RecurringInvoiceResponseRecipientAlternativeId $recipientAlternativeId): self
     {
         $this->initialized['recipientAlternativeId'] = true;
         $this->recipientAlternativeId = $recipientAlternativeId;
         return $this;
     }
     /**
-     * @return list<InvoiceLineTemplateResponse>
+     * @return list<InvoiceLineTemplateResponse>|null
      */
-    public function getLines(): array
+    public function getLines(): ?array
     {
         return $this->lines;
     }
     /**
-     * @param list<InvoiceLineTemplateResponse> $lines
+     * @param list<InvoiceLineTemplateResponse>|null $lines
      *
      * @return self
      */
-    public function setLines(array $lines): self
+    public function setLines(?array $lines): self
     {
         $this->initialized['lines'] = true;
         $this->lines = $lines;
@@ -1009,18 +997,18 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return bool
+     * @return bool|null
      */
-    public function getSendAutomatically(): bool
+    public function getSendAutomatically(): ?bool
     {
         return $this->sendAutomatically;
     }
     /**
-     * @param bool $sendAutomatically
+     * @param bool|null $sendAutomatically
      *
      * @return self
      */
-    public function setSendAutomatically(bool $sendAutomatically): self
+    public function setSendAutomatically(?bool $sendAutomatically): self
     {
         $this->initialized['sendAutomatically'] = true;
         $this->sendAutomatically = $sendAutomatically;
@@ -1045,18 +1033,18 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return int
+     * @return int|null
      */
-    public function getGeneratedInvoices(): int
+    public function getGeneratedInvoices(): ?int
     {
         return $this->generatedInvoices;
     }
     /**
-     * @param int $generatedInvoices
+     * @param int|null $generatedInvoices
      *
      * @return self
      */
-    public function setGeneratedInvoices(int $generatedInvoices): self
+    public function setGeneratedInvoices(?int $generatedInvoices): self
     {
         $this->initialized['generatedInvoices'] = true;
         $this->generatedInvoices = $generatedInvoices;
@@ -1191,36 +1179,36 @@ class RecurringInvoiceResponse implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
     /**
-     * @param \DateTime $createdAt
+     * @param \DateTime|null $createdAt
      *
      * @return self
      */
-    public function setCreatedAt(\DateTime $createdAt): self
+    public function setCreatedAt(?\DateTime $createdAt): self
     {
         $this->initialized['createdAt'] = true;
         $this->createdAt = $createdAt;
         return $this;
     }
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
     /**
-     * @param \DateTime $updatedAt
+     * @param \DateTime|null $updatedAt
      *
      * @return self
      */
-    public function setUpdatedAt(\DateTime $updatedAt): self
+    public function setUpdatedAt(?\DateTime $updatedAt): self
     {
         $this->initialized['updatedAt'] = true;
         $this->updatedAt = $updatedAt;

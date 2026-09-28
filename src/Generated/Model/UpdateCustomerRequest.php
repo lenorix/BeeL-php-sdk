@@ -104,7 +104,7 @@ class UpdateCustomerRequest implements AdditionalPropertiesInterface
      */
     protected $notes;
     /**
-     * @var PaymentInfo
+     * @var PaymentInfo|null
      */
     protected $preferredPaymentMethod;
     /**
@@ -406,18 +406,18 @@ class UpdateCustomerRequest implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return PaymentInfo
+     * @return PaymentInfo|null
      */
-    public function getPreferredPaymentMethod(): PaymentInfo
+    public function getPreferredPaymentMethod(): ?PaymentInfo
     {
         return $this->preferredPaymentMethod;
     }
     /**
-     * @param PaymentInfo $preferredPaymentMethod
+     * @param PaymentInfo|null $preferredPaymentMethod
      *
      * @return self
      */
-    public function setPreferredPaymentMethod(PaymentInfo $preferredPaymentMethod): self
+    public function setPreferredPaymentMethod(?PaymentInfo $preferredPaymentMethod): self
     {
         $this->initialized['preferredPaymentMethod'] = true;
         $this->preferredPaymentMethod = $preferredPaymentMethod;

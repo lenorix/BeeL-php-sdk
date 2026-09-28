@@ -81,12 +81,16 @@ class CustomerBulkDeleteResultNormalizer implements DenormalizerInterface, Norma
             $object->setFailed($data['failed']);
             unset($data['failed']);
         }
-        if (\array_key_exists('errors', $data)) {
+        if (\array_key_exists('errors', $data) && $data['errors'] !== null) {
             $values_3 = [];
             foreach ($data['errors'] as $value_3) {
                 $values_3[] = $this->denormalizer->denormalize($value_3, \Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteLegacyError::class, 'json', $context);
             }
             $object->setErrors($values_3);
+            unset($data['errors']);
+        }
+        elseif (\array_key_exists('errors', $data) && $data['errors'] === null) {
+            $object->setErrors(null);
             unset($data['errors']);
         }
         foreach ($data as $key => $value_4) {

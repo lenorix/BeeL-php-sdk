@@ -128,3 +128,47 @@ it('reads every model of the contract filled from its property examples', functi
     expect($models)->toBeGreaterThan(200)
         ->and($failures)->toBe([]);
 });
+
+it('reads everything BeeL sends when it leaves out every optional property', function () {
+    $spec = json_decode((string) file_get_contents(__DIR__.'/../build/openapi.json'), true, flags: JSON_THROW_ON_ERROR);
+    $serializer = (fn () => $this->serializer)->call((new Beel(apiKey: 'beel_sk_test_key'))->raw);
+    $sample = new SchemaSample($spec['components']['schemas'], requiredOnly: true);
+
+    $read = 0;
+    $failures = [];
+    foreach ($spec['paths'] as $operations) {
+        foreach ($operations as $operation) {
+            foreach (is_array($operation) ? $operation['responses'] ?? [] : [] as $status => $response) {
+                $schema = $response['content']['application/json']['schema'] ?? null;
+                if ((int) $status >= 300 || $schema === null) {
+                    continue;
+                }
+                $endpoint = (new ReflectionClass('Lenorix\\BeelSdk\\Generated\\Endpoint\\'.ucfirst($operation['operationId'])))->newInstanceWithoutConstructor();
+                $body = json_encode($sample->build($schema), JSON_THROW_ON_ERROR);
+                $label = "{$status} {$operation['operationId']}";
+                try {
+                    $model = (fn () => $this->transformResponseBody(new Response((int) $status, ['Content-Type' => 'application/json'], $body), $serializer, 'application/json'))->call($endpoint);
+                    array_push($failures, ...(is_object($model) ? failingGetters($model, $label) : ["{$label}: nothing read"]));
+                    $read++;
+                } catch (Throwable $exception) {
+                    $failures[] = "{$label}: ".$exception->getMessage();
+                }
+            }
+        }
+    }
+    foreach (array_keys($spec['components']['schemas']) as $name) {
+        if (str_starts_with($name, 'WebhookEvent') && class_exists($class = 'Lenorix\\BeelSdk\\Generated\\Model\\'.$name)) {
+            $model = $serializer->deserialize(json_encode($sample->build(['$ref' => '#/components/schemas/'.$name]), JSON_THROW_ON_ERROR), $class, 'json');
+            array_push($failures, ...failingGetters($model, $name));
+            $read++;
+        }
+    }
+
+    // Models that are optional in some places but required in others stay non-nullable, as
+    // bin/prepare-openapi.php reports: where BeeL leaves them out, check isInitialized() first.
+    $sharedModels = '/must be of type Lenorix\\\\BeelSdk\\\\Generated\\\\Model\\\\(Address|Pagination|ResponseMeta|TaxInfo), null returned/';
+    $failures = array_values(array_filter($failures, fn (string $failure) => preg_match($sharedModels, $failure) !== 1));
+
+    expect($read)->toBeGreaterThan(150)
+        ->and($failures)->toBe([]);
+});

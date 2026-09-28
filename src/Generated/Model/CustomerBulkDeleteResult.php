@@ -92,7 +92,7 @@ class CustomerBulkDeleteResult implements AdditionalPropertiesInterface
      *
      * @deprecated
      *
-     * @var list<CustomerBulkDeleteLegacyError>
+     * @var list<CustomerBulkDeleteLegacyError>|null
      */
     protected $errors;
     /**
@@ -322,9 +322,9 @@ class CustomerBulkDeleteResult implements AdditionalPropertiesInterface
      *
      * @deprecated
      *
-     * @return list<CustomerBulkDeleteLegacyError>
+     * @return list<CustomerBulkDeleteLegacyError>|null
      */
-    public function getErrors(): array
+    public function getErrors(): ?array
     {
         return $this->errors;
     }
@@ -333,13 +333,13 @@ class CustomerBulkDeleteResult implements AdditionalPropertiesInterface
     in the same order. Read `customers_deletion`, which also reports the rows that worked.
     
     *
-    * @param list<CustomerBulkDeleteLegacyError> $errors
+    * @param list<CustomerBulkDeleteLegacyError>|null $errors
     *
     * @deprecated
     *
     * @return self
     */
-    public function setErrors(array $errors): self
+    public function setErrors(?array $errors): self
     {
         $this->initialized['errors'] = true;
         $this->errors = $errors;

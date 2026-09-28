@@ -26,7 +26,7 @@ class ManagedAccountSummary implements AdditionalPropertiesInterface
      */
     protected $externalRef;
     /**
-     * @var string
+     * @var string|null
      */
     protected $displayName;
     /**
@@ -110,18 +110,18 @@ class ManagedAccountSummary implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getDisplayName(): string
+    public function getDisplayName(): ?string
     {
         return $this->displayName;
     }
     /**
-     * @param string $displayName
+     * @param string|null $displayName
      *
      * @return self
      */
-    public function setDisplayName(string $displayName): self
+    public function setDisplayName(?string $displayName): self
     {
         $this->initialized['displayName'] = true;
         $this->displayName = $displayName;

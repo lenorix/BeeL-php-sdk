@@ -46,7 +46,7 @@ class AccountMember implements AdditionalPropertiesInterface
     /**
      * The member's company grants (empty for OWNER/ADMIN, who have implicit access to all).
      *
-     * @var list<MemberGrant>
+     * @var list<MemberGrant>|null
      */
     protected $grants;
     /**
@@ -154,20 +154,20 @@ class AccountMember implements AdditionalPropertiesInterface
     /**
      * The member's company grants (empty for OWNER/ADMIN, who have implicit access to all).
      *
-     * @return list<MemberGrant>
+     * @return list<MemberGrant>|null
      */
-    public function getGrants(): array
+    public function getGrants(): ?array
     {
         return $this->grants;
     }
     /**
      * The member's company grants (empty for OWNER/ADMIN, who have implicit access to all).
      *
-     * @param list<MemberGrant> $grants
+     * @param list<MemberGrant>|null $grants
      *
      * @return self
      */
-    public function setGrants(array $grants): self
+    public function setGrants(?array $grants): self
     {
         $this->initialized['grants'] = true;
         $this->grants = $grants;

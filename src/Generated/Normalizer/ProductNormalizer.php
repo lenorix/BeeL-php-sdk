@@ -65,32 +65,52 @@ class ProductNormalizer implements DenormalizerInterface, NormalizerInterface, D
             $object->setName($data['name']);
             unset($data['name']);
         }
-        if (\array_key_exists('description', $data)) {
+        if (\array_key_exists('description', $data) && $data['description'] !== null) {
             $object->setDescription($data['description']);
+            unset($data['description']);
+        }
+        elseif (\array_key_exists('description', $data) && $data['description'] === null) {
+            $object->setDescription(null);
             unset($data['description']);
         }
         if (\array_key_exists('category', $data)) {
             $object->setCategory($data['category']);
             unset($data['category']);
         }
-        if (\array_key_exists('default_price', $data)) {
+        if (\array_key_exists('default_price', $data) && $data['default_price'] !== null) {
             $object->setDefaultPrice($data['default_price']);
             unset($data['default_price']);
         }
-        if (\array_key_exists('unit', $data)) {
+        elseif (\array_key_exists('default_price', $data) && $data['default_price'] === null) {
+            $object->setDefaultPrice(null);
+            unset($data['default_price']);
+        }
+        if (\array_key_exists('unit', $data) && $data['unit'] !== null) {
             $object->setUnit($data['unit']);
+            unset($data['unit']);
+        }
+        elseif (\array_key_exists('unit', $data) && $data['unit'] === null) {
+            $object->setUnit(null);
             unset($data['unit']);
         }
         if (\array_key_exists('main_tax', $data)) {
             $object->setMainTax($this->denormalizer->denormalize($data['main_tax'], \Lenorix\BeelSdk\Generated\Model\TaxInfo::class, 'json', $context));
             unset($data['main_tax']);
         }
-        if (\array_key_exists('equivalence_surcharge_rate', $data)) {
+        if (\array_key_exists('equivalence_surcharge_rate', $data) && $data['equivalence_surcharge_rate'] !== null) {
             $object->setEquivalenceSurchargeRate($data['equivalence_surcharge_rate']);
             unset($data['equivalence_surcharge_rate']);
         }
-        if (\array_key_exists('irpf_rate', $data)) {
+        elseif (\array_key_exists('equivalence_surcharge_rate', $data) && $data['equivalence_surcharge_rate'] === null) {
+            $object->setEquivalenceSurchargeRate(null);
+            unset($data['equivalence_surcharge_rate']);
+        }
+        if (\array_key_exists('irpf_rate', $data) && $data['irpf_rate'] !== null) {
             $object->setIrpfRate($data['irpf_rate']);
+            unset($data['irpf_rate']);
+        }
+        elseif (\array_key_exists('irpf_rate', $data) && $data['irpf_rate'] === null) {
+            $object->setIrpfRate(null);
             unset($data['irpf_rate']);
         }
         if (\array_key_exists('active', $data)) {

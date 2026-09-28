@@ -24,7 +24,7 @@ class V1ConfigurationSeriesGetResponse200Data implements AdditionalPropertiesInt
      * `page` and/or `limit`; omitted for the historical full list.
      * 
      *
-     * @var V1ConfigurationSeriesGetResponse200DataPagination
+     * @var V1ConfigurationSeriesGetResponse200DataPagination|null
      */
     protected $pagination;
     /**
@@ -50,9 +50,9 @@ class V1ConfigurationSeriesGetResponse200Data implements AdditionalPropertiesInt
      * `page` and/or `limit`; omitted for the historical full list.
      * 
      *
-     * @return V1ConfigurationSeriesGetResponse200DataPagination
+     * @return V1ConfigurationSeriesGetResponse200DataPagination|null
      */
-    public function getPagination(): V1ConfigurationSeriesGetResponse200DataPagination
+    public function getPagination(): ?V1ConfigurationSeriesGetResponse200DataPagination
     {
         return $this->pagination;
     }
@@ -61,11 +61,11 @@ class V1ConfigurationSeriesGetResponse200Data implements AdditionalPropertiesInt
     `page` and/or `limit`; omitted for the historical full list.
     
     *
-    * @param V1ConfigurationSeriesGetResponse200DataPagination $pagination
+    * @param V1ConfigurationSeriesGetResponse200DataPagination|null $pagination
     *
     * @return self
     */
-    public function setPagination(V1ConfigurationSeriesGetResponse200DataPagination $pagination): self
+    public function setPagination(?V1ConfigurationSeriesGetResponse200DataPagination $pagination): self
     {
         $this->initialized['pagination'] = true;
         $this->pagination = $pagination;

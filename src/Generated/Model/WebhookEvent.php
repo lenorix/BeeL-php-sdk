@@ -98,11 +98,6 @@ class WebhookEvent implements AdditionalPropertiesInterface
      */
     protected $accountExternalRef;
     /**
-     * How `account_id` relates to you: `own` when the event happened in your own account,
-     * `managed` when it happened in an account you manage. `null` when the event is not
-     * scoped to an account.
-     * 
-     *
      * @var string|null
      */
     protected $accountRelationship;
@@ -375,11 +370,6 @@ class WebhookEvent implements AdditionalPropertiesInterface
         return $this;
     }
     /**
-     * How `account_id` relates to you: `own` when the event happened in your own account,
-     * `managed` when it happened in an account you manage. `null` when the event is not
-     * scoped to an account.
-     * 
-     *
      * @return string|null
      */
     public function getAccountRelationship(): ?string
@@ -387,15 +377,10 @@ class WebhookEvent implements AdditionalPropertiesInterface
         return $this->accountRelationship;
     }
     /**
-    * How `account_id` relates to you: `own` when the event happened in your own account,
-    `managed` when it happened in an account you manage. `null` when the event is not
-    scoped to an account.
-    
-    *
-    * @param string|null $accountRelationship
-    *
-    * @return self
-    */
+     * @param string|null $accountRelationship
+     *
+     * @return self
+     */
     public function setAccountRelationship(?string $accountRelationship): self
     {
         $this->initialized['accountRelationship'] = true;

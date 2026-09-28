@@ -40,8 +40,12 @@ class CompanyResponseNormalizer implements DenormalizerInterface, NormalizerInte
         if (\array_key_exists('success', $data) && \is_int($data['success'])) {
             $data['success'] = (bool) $data['success'];
         }
-        if (\array_key_exists('success', $data)) {
+        if (\array_key_exists('success', $data) && $data['success'] !== null) {
             $object->setSuccess($data['success']);
+            unset($data['success']);
+        }
+        elseif (\array_key_exists('success', $data) && $data['success'] === null) {
+            $object->setSuccess(null);
             unset($data['success']);
         }
         if (\array_key_exists('data', $data)) {
@@ -65,9 +69,7 @@ class CompanyResponseNormalizer implements DenormalizerInterface, NormalizerInte
         if ($data->isInitialized('success') && null !== $data->getSuccess()) {
             $dataArray['success'] = $data->getSuccess();
         }
-        if ($data->isInitialized('data') && null !== $data->getData()) {
-            $dataArray['data'] = $data->getData() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getData(), 'json', $context));
-        }
+        $dataArray['data'] = $data->getData() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getData(), 'json', $context));
         if ($data->isInitialized('meta') && null !== $data->getMeta()) {
             $dataArray['meta'] = $data->getMeta() === null ? null : new \Lenorix\BeelSdk\Generated\Runtime\JsonObject($this->normalizer->normalize($data->getMeta(), 'json', $context));
         }

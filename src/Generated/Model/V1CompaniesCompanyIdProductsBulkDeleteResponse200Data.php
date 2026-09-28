@@ -16,66 +16,66 @@ class V1CompaniesCompanyIdProductsBulkDeleteResponse200Data implements Additiona
         return array_key_exists($property, $this->initialized);
     }
     /**
-     * @var list<string>
+     * @var list<string>|null
      */
     protected $deletedProducts;
     /**
-     * @var list<V1CompaniesCompanyIdProductsBulkDeleteResponse200DataErrorsItem>
+     * @var list<V1CompaniesCompanyIdProductsBulkDeleteResponse200DataErrorsItem>|null
      */
     protected $errors;
     /**
-     * @var V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary
+     * @var V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary|null
      */
     protected $summary;
     /**
-     * @return list<string>
+     * @return list<string>|null
      */
-    public function getDeletedProducts(): array
+    public function getDeletedProducts(): ?array
     {
         return $this->deletedProducts;
     }
     /**
-     * @param list<string> $deletedProducts
+     * @param list<string>|null $deletedProducts
      *
      * @return self
      */
-    public function setDeletedProducts(array $deletedProducts): self
+    public function setDeletedProducts(?array $deletedProducts): self
     {
         $this->initialized['deletedProducts'] = true;
         $this->deletedProducts = $deletedProducts;
         return $this;
     }
     /**
-     * @return list<V1CompaniesCompanyIdProductsBulkDeleteResponse200DataErrorsItem>
+     * @return list<V1CompaniesCompanyIdProductsBulkDeleteResponse200DataErrorsItem>|null
      */
-    public function getErrors(): array
+    public function getErrors(): ?array
     {
         return $this->errors;
     }
     /**
-     * @param list<V1CompaniesCompanyIdProductsBulkDeleteResponse200DataErrorsItem> $errors
+     * @param list<V1CompaniesCompanyIdProductsBulkDeleteResponse200DataErrorsItem>|null $errors
      *
      * @return self
      */
-    public function setErrors(array $errors): self
+    public function setErrors(?array $errors): self
     {
         $this->initialized['errors'] = true;
         $this->errors = $errors;
         return $this;
     }
     /**
-     * @return V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary
+     * @return V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary|null
      */
-    public function getSummary(): V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary
+    public function getSummary(): ?V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary
     {
         return $this->summary;
     }
     /**
-     * @param V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary $summary
+     * @param V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary|null $summary
      *
      * @return self
      */
-    public function setSummary(V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary $summary): self
+    public function setSummary(?V1CompaniesCompanyIdProductsBulkDeleteResponse200DataSummary $summary): self
     {
         $this->initialized['summary'] = true;
         $this->summary = $summary;

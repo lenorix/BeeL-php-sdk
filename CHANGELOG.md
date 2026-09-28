@@ -21,7 +21,9 @@ Regenerated from BeeL's current OpenAPI contract (still labelled 1.9.0).
 - Code that catches `BeelApiError` does not catch the new `BeelUnexpectedResponseError`, and code that type-hints `send()`'s return as the `200` model must accept the `202` one too.
 
 - A success status the contract does not declare (BeeL sometimes adds one, as it did with `202` here) now throws `BeelUnexpectedResponseError` instead of a `BeelApiError`: the request may have succeeded, so check `getLastResponse()` before retrying. It has `context()` with the status and request ID for logs.
-- `null` in a date-time field the model does not allow to be null throws `InvalidDateException` instead of silently becoming the current time, as the client did before 0.5. It is checked per model, so a field such as `sent_at`, nullable in an invoice but not in a send response, is handled correctly.
+- Getters of optional fields in what BeeL sends (responses and webhook events) return `null` when BeeL leaves the field out, instead of throwing a `TypeError`: 527 getters, such as `Customer::getTradeName()`, `Product::getUnit()` or `Invoice::getPaymentInfo()`, are now nullable, and so are their setters. Code that passes their result where a non-null value is expected needs a null check (PHPStan reports it from level 8). Required fields keep their types, and the `data` of every response stays non-null.
+- Optional references to `Address`, `Pagination`, `ResponseMeta` and `TaxInfo` stay non-nullable, because BeeL requires those models elsewhere: where one may be missing, such as `InvoiceLine::getMainTax()`, check `isInitialized('mainTax')` first.
+- `null` in a date-time field throws `InvalidDateException` only where the field is required, instead of silently becoming the current time as it did before 0.5. An optional date-time, such as `sent_at` in a send response, reads a `null` as `null`.
 
 ### Changed
 
@@ -37,6 +39,8 @@ Regenerated from BeeL's current OpenAPI contract (still labelled 1.9.0).
 
 ### Fixed
 
+- `exemption_reason` and `default_exemption_reason` accept and return `null`, as BeeL documents; OpenAPI 3.0 dropped the `nullable` BeeL wrote next to their reference.
+- `$account->webhooks->all()`, `allDeliveries()` and `$account->requestLogs->all()` end the iteration when a page leaves out its list or pagination, instead of throwing a `TypeError`.
 - `$company->invoices->preview()` documented a draft PDF render; it returns a temporary URL to a preview image.
 
 ## v0.6.2 - 2026-09-28

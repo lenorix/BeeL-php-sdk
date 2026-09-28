@@ -117,8 +117,12 @@ class RecurringLineRequestNormalizer implements DenormalizerInterface, Normalize
             $object->setIrpfRate(null);
             unset($data['irpf_rate']);
         }
-        if (\array_key_exists('exemption_reason', $data)) {
+        if (\array_key_exists('exemption_reason', $data) && $data['exemption_reason'] !== null) {
             $object->setExemptionReason($data['exemption_reason']);
+            unset($data['exemption_reason']);
+        }
+        elseif (\array_key_exists('exemption_reason', $data) && $data['exemption_reason'] === null) {
+            $object->setExemptionReason(null);
             unset($data['exemption_reason']);
         }
         if (\array_key_exists('exemption_reason_text', $data) && $data['exemption_reason_text'] !== null) {

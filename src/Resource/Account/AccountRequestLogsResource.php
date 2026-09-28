@@ -42,7 +42,7 @@ final readonly class AccountRequestLogsResource extends GeneratedResource
         return $this->paginateCursor(
             fn (array $query): RequestLogListResponseData => $this->list($query),
             static fn (RequestLogListResponseData $page): array => $page->getRequestLogs(),
-            static fn (RequestLogListResponseData $page): ?string => $page->isInitialized('pagination') ? $page->getPagination()->getNextCursor() : null,
+            static fn (RequestLogListResponseData $page): ?string => $page->getPagination()?->getNextCursor(),
             $query,
         );
     }

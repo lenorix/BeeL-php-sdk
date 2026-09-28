@@ -18,74 +18,74 @@ class CompanyDataAddress implements AdditionalPropertiesInterface
     /**
      * Street of the fiscal address.
      *
-     * @var string
+     * @var string|null
      */
     protected $street;
     /**
      * Street number.
      *
-     * @var string
+     * @var string|null
      */
     protected $number;
     /**
      * Floor or level.
      *
-     * @var string
+     * @var string|null
      */
     protected $floor;
     /**
      * Door or apartment.
      *
-     * @var string
+     * @var string|null
      */
     protected $door;
     /**
      * Postal code.
      *
-     * @var string
+     * @var string|null
      */
     protected $postalCode;
     /**
      * City or town.
      *
-     * @var string
+     * @var string|null
      */
     protected $city;
     /**
      * Province.
      *
-     * @var string
+     * @var string|null
      */
     protected $province;
     /**
      * Country name.
      *
-     * @var string
+     * @var string|null
      */
     protected $country;
     /**
      * ISO 3166-1 alpha-2 country code.
      *
-     * @var string
+     * @var string|null
      */
     protected $countryCode;
     /**
      * Street of the fiscal address.
      *
-     * @return string
+     * @return string|null
      */
-    public function getStreet(): string
+    public function getStreet(): ?string
     {
         return $this->street;
     }
     /**
      * Street of the fiscal address.
      *
-     * @param string $street
+     * @param string|null $street
      *
      * @return self
      */
-    public function setStreet(string $street): self
+    public function setStreet(?string $street): self
     {
         $this->initialized['street'] = true;
         $this->street = $street;
@@ -94,20 +94,20 @@ class CompanyDataAddress implements AdditionalPropertiesInterface
     /**
      * Street number.
      *
-     * @return string
+     * @return string|null
      */
-    public function getNumber(): string
+    public function getNumber(): ?string
     {
         return $this->number;
     }
     /**
      * Street number.
      *
-     * @param string $number
+     * @param string|null $number
      *
      * @return self
      */
-    public function setNumber(string $number): self
+    public function setNumber(?string $number): self
     {
         $this->initialized['number'] = true;
         $this->number = $number;
@@ -116,20 +116,20 @@ class CompanyDataAddress implements AdditionalPropertiesInterface
     /**
      * Floor or level.
      *
-     * @return string
+     * @return string|null
      */
-    public function getFloor(): string
+    public function getFloor(): ?string
     {
         return $this->floor;
     }
     /**
      * Floor or level.
      *
-     * @param string $floor
+     * @param string|null $floor
      *
      * @return self
      */
-    public function setFloor(string $floor): self
+    public function setFloor(?string $floor): self
     {
         $this->initialized['floor'] = true;
         $this->floor = $floor;
@@ -138,20 +138,20 @@ class CompanyDataAddress implements AdditionalPropertiesInterface
     /**
      * Door or apartment.
      *
-     * @return string
+     * @return string|null
      */
-    public function getDoor(): string
+    public function getDoor(): ?string
     {
         return $this->door;
     }
     /**
      * Door or apartment.
      *
-     * @param string $door
+     * @param string|null $door
      *
      * @return self
      */
-    public function setDoor(string $door): self
+    public function setDoor(?string $door): self
     {
         $this->initialized['door'] = true;
         $this->door = $door;
@@ -160,20 +160,20 @@ class CompanyDataAddress implements AdditionalPropertiesInterface
     /**
      * Postal code.
      *
-     * @return string
+     * @return string|null
      */
-    public function getPostalCode(): string
+    public function getPostalCode(): ?string
     {
         return $this->postalCode;
     }
     /**
      * Postal code.
      *
-     * @param string $postalCode
+     * @param string|null $postalCode
      *
      * @return self
      */
-    public function setPostalCode(string $postalCode): self
+    public function setPostalCode(?string $postalCode): self
     {
         $this->initialized['postalCode'] = true;
         $this->postalCode = $postalCode;
@@ -182,20 +182,20 @@ class CompanyDataAddress implements AdditionalPropertiesInterface
     /**
      * City or town.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCity(): string
+    public function getCity(): ?string
     {
         return $this->city;
     }
     /**
      * City or town.
      *
-     * @param string $city
+     * @param string|null $city
      *
      * @return self
      */
-    public function setCity(string $city): self
+    public function setCity(?string $city): self
     {
         $this->initialized['city'] = true;
         $this->city = $city;
@@ -204,20 +204,20 @@ class CompanyDataAddress implements AdditionalPropertiesInterface
     /**
      * Province.
      *
-     * @return string
+     * @return string|null
      */
-    public function getProvince(): string
+    public function getProvince(): ?string
     {
         return $this->province;
     }
     /**
      * Province.
      *
-     * @param string $province
+     * @param string|null $province
      *
      * @return self
      */
-    public function setProvince(string $province): self
+    public function setProvince(?string $province): self
     {
         $this->initialized['province'] = true;
         $this->province = $province;
@@ -226,20 +226,20 @@ class CompanyDataAddress implements AdditionalPropertiesInterface
     /**
      * Country name.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCountry(): string
+    public function getCountry(): ?string
     {
         return $this->country;
     }
     /**
      * Country name.
      *
-     * @param string $country
+     * @param string|null $country
      *
      * @return self
      */
-    public function setCountry(string $country): self
+    public function setCountry(?string $country): self
     {
         $this->initialized['country'] = true;
         $this->country = $country;
@@ -248,20 +248,20 @@ class CompanyDataAddress implements AdditionalPropertiesInterface
     /**
      * ISO 3166-1 alpha-2 country code.
      *
-     * @return string
+     * @return string|null
      */
-    public function getCountryCode(): string
+    public function getCountryCode(): ?string
     {
         return $this->countryCode;
     }
     /**
      * ISO 3166-1 alpha-2 country code.
      *
-     * @param string $countryCode
+     * @param string|null $countryCode
      *
      * @return self
      */
-    public function setCountryCode(string $countryCode): self
+    public function setCountryCode(?string $countryCode): self
     {
         $this->initialized['countryCode'] = true;
         $this->countryCode = $countryCode;

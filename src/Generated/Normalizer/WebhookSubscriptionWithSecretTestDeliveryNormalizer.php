@@ -40,8 +40,12 @@ class WebhookSubscriptionWithSecretTestDeliveryNormalizer implements Denormalize
         if (\array_key_exists('delivery_success', $data) && \is_int($data['delivery_success'])) {
             $data['delivery_success'] = (bool) $data['delivery_success'];
         }
-        if (\array_key_exists('delivery_success', $data)) {
+        if (\array_key_exists('delivery_success', $data) && $data['delivery_success'] !== null) {
             $object->setDeliverySuccess($data['delivery_success']);
+            unset($data['delivery_success']);
+        }
+        elseif (\array_key_exists('delivery_success', $data) && $data['delivery_success'] === null) {
+            $object->setDeliverySuccess(null);
             unset($data['delivery_success']);
         }
         if (\array_key_exists('http_status', $data) && $data['http_status'] !== null) {
@@ -52,8 +56,12 @@ class WebhookSubscriptionWithSecretTestDeliveryNormalizer implements Denormalize
             $object->setHttpStatus(null);
             unset($data['http_status']);
         }
-        if (\array_key_exists('duration_ms', $data)) {
+        if (\array_key_exists('duration_ms', $data) && $data['duration_ms'] !== null) {
             $object->setDurationMs($data['duration_ms']);
+            unset($data['duration_ms']);
+        }
+        elseif (\array_key_exists('duration_ms', $data) && $data['duration_ms'] === null) {
+            $object->setDurationMs(null);
             unset($data['duration_ms']);
         }
         if (\array_key_exists('error', $data) && $data['error'] !== null) {
@@ -64,8 +72,12 @@ class WebhookSubscriptionWithSecretTestDeliveryNormalizer implements Denormalize
             $object->setError(null);
             unset($data['error']);
         }
-        if (\array_key_exists('failure_cause', $data)) {
+        if (\array_key_exists('failure_cause', $data) && $data['failure_cause'] !== null) {
             $object->setFailureCause($data['failure_cause']);
+            unset($data['failure_cause']);
+        }
+        elseif (\array_key_exists('failure_cause', $data) && $data['failure_cause'] === null) {
+            $object->setFailureCause(null);
             unset($data['failure_cause']);
         }
         foreach ($data as $key => $value) {

@@ -29,15 +29,15 @@ class RepresentationStatusResponseData implements AdditionalPropertiesInterface
      *   submitted to the AEAT in Live until a new signed document is accepted.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $status;
     /**
-     * @var string
+     * @var string|null
      */
     protected $message;
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      */
     protected $updatedAt;
     /**
@@ -54,9 +54,9 @@ class RepresentationStatusResponseData implements AdditionalPropertiesInterface
      *   submitted to the AEAT in Live until a new signed document is accepted.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return $this->status;
     }
@@ -74,47 +74,47 @@ class RepresentationStatusResponseData implements AdditionalPropertiesInterface
      submitted to the AEAT in Live until a new signed document is accepted.
     
     *
-    * @param string $status
+    * @param string|null $status
     *
     * @return self
     */
-    public function setStatus(string $status): self
+    public function setStatus(?string $status): self
     {
         $this->initialized['status'] = true;
         $this->status = $status;
         return $this;
     }
     /**
-     * @return string
+     * @return string|null
      */
-    public function getMessage(): string
+    public function getMessage(): ?string
     {
         return $this->message;
     }
     /**
-     * @param string $message
+     * @param string|null $message
      *
      * @return self
      */
-    public function setMessage(string $message): self
+    public function setMessage(?string $message): self
     {
         $this->initialized['message'] = true;
         $this->message = $message;
         return $this;
     }
     /**
-     * @return \DateTime
+     * @return \DateTime|null
      */
-    public function getUpdatedAt(): \DateTime
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updatedAt;
     }
     /**
-     * @param \DateTime $updatedAt
+     * @param \DateTime|null $updatedAt
      *
      * @return self
      */
-    public function setUpdatedAt(\DateTime $updatedAt): self
+    public function setUpdatedAt(?\DateTime $updatedAt): self
     {
         $this->initialized['updatedAt'] = true;
         $this->updatedAt = $updatedAt;

@@ -22,7 +22,7 @@ class V1InvoicesInvoiceIdMarkPaidPostBody implements AdditionalPropertiesInterfa
      */
     protected $paymentDate;
     /**
-     * @var PaymentInfo
+     * @var PaymentInfo|null
      */
     protected $paymentMethod;
     /**
@@ -48,18 +48,18 @@ class V1InvoicesInvoiceIdMarkPaidPostBody implements AdditionalPropertiesInterfa
         return $this;
     }
     /**
-     * @return PaymentInfo
+     * @return PaymentInfo|null
      */
-    public function getPaymentMethod(): PaymentInfo
+    public function getPaymentMethod(): ?PaymentInfo
     {
         return $this->paymentMethod;
     }
     /**
-     * @param PaymentInfo $paymentMethod
+     * @param PaymentInfo|null $paymentMethod
      *
      * @return self
      */
-    public function setPaymentMethod(PaymentInfo $paymentMethod): self
+    public function setPaymentMethod(?PaymentInfo $paymentMethod): self
     {
         $this->initialized['paymentMethod'] = true;
         $this->paymentMethod = $paymentMethod;

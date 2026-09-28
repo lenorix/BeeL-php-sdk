@@ -47,7 +47,7 @@ class CustomerBulkDeleteItem implements AdditionalPropertiesInterface
     /**
      * Present only when the customer was not deleted.
      *
-     * @var CustomerBulkDeleteItemError
+     * @var CustomerBulkDeleteItemError|null
      */
     protected $error;
     /**
@@ -141,20 +141,20 @@ class CustomerBulkDeleteItem implements AdditionalPropertiesInterface
     /**
      * Present only when the customer was not deleted.
      *
-     * @return CustomerBulkDeleteItemError
+     * @return CustomerBulkDeleteItemError|null
      */
-    public function getError(): CustomerBulkDeleteItemError
+    public function getError(): ?CustomerBulkDeleteItemError
     {
         return $this->error;
     }
     /**
      * Present only when the customer was not deleted.
      *
-     * @param CustomerBulkDeleteItemError $error
+     * @param CustomerBulkDeleteItemError|null $error
      *
      * @return self
      */
-    public function setError(CustomerBulkDeleteItemError $error): self
+    public function setError(?CustomerBulkDeleteItemError $error): self
     {
         $this->initialized['error'] = true;
         $this->error = $error;

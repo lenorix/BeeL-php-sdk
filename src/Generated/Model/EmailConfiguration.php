@@ -24,19 +24,19 @@ class EmailConfiguration implements AdditionalPropertiesInterface
     /**
      * List of CC emails (optional)
      *
-     * @var list<string>
+     * @var list<string>|null
      */
     protected $cc;
     /**
      * Custom email subject (optional, if not specified uses a default)
      *
-     * @var string
+     * @var string|null
      */
     protected $subject;
     /**
      * Custom message (optional, added to email body)
      *
-     * @var string
+     * @var string|null
      */
     protected $message;
     /**
@@ -64,20 +64,20 @@ class EmailConfiguration implements AdditionalPropertiesInterface
     /**
      * List of CC emails (optional)
      *
-     * @return list<string>
+     * @return list<string>|null
      */
-    public function getCc(): array
+    public function getCc(): ?array
     {
         return $this->cc;
     }
     /**
      * List of CC emails (optional)
      *
-     * @param list<string> $cc
+     * @param list<string>|null $cc
      *
      * @return self
      */
-    public function setCc(array $cc): self
+    public function setCc(?array $cc): self
     {
         $this->initialized['cc'] = true;
         $this->cc = $cc;
@@ -86,20 +86,20 @@ class EmailConfiguration implements AdditionalPropertiesInterface
     /**
      * Custom email subject (optional, if not specified uses a default)
      *
-     * @return string
+     * @return string|null
      */
-    public function getSubject(): string
+    public function getSubject(): ?string
     {
         return $this->subject;
     }
     /**
      * Custom email subject (optional, if not specified uses a default)
      *
-     * @param string $subject
+     * @param string|null $subject
      *
      * @return self
      */
-    public function setSubject(string $subject): self
+    public function setSubject(?string $subject): self
     {
         $this->initialized['subject'] = true;
         $this->subject = $subject;
@@ -108,20 +108,20 @@ class EmailConfiguration implements AdditionalPropertiesInterface
     /**
      * Custom message (optional, added to email body)
      *
-     * @return string
+     * @return string|null
      */
-    public function getMessage(): string
+    public function getMessage(): ?string
     {
         return $this->message;
     }
     /**
      * Custom message (optional, added to email body)
      *
-     * @param string $message
+     * @param string|null $message
      *
      * @return self
      */
-    public function setMessage(string $message): self
+    public function setMessage(?string $message): self
     {
         $this->initialized['message'] = true;
         $this->message = $message;

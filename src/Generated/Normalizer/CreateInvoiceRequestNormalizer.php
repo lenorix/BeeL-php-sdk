@@ -81,8 +81,12 @@ class CreateInvoiceRequestNormalizer implements DenormalizerInterface, Normalize
             $object->setLines($values);
             unset($data['lines']);
         }
-        if (\array_key_exists('payment_info', $data)) {
+        if (\array_key_exists('payment_info', $data) && $data['payment_info'] !== null) {
             $object->setPaymentInfo($this->denormalizer->denormalize($data['payment_info'], \Lenorix\BeelSdk\Generated\Model\PaymentInfo::class, 'json', $context));
+            unset($data['payment_info']);
+        }
+        elseif (\array_key_exists('payment_info', $data) && $data['payment_info'] === null) {
+            $object->setPaymentInfo(null);
             unset($data['payment_info']);
         }
         if (\array_key_exists('notes', $data)) {

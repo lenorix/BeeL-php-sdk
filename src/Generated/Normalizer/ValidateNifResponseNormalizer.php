@@ -59,12 +59,20 @@ class ValidateNifResponseNormalizer implements DenormalizerInterface, Normalizer
             $object->setLegalName(null);
             unset($data['legal_name']);
         }
-        if (\array_key_exists('legal_name_verified', $data)) {
+        if (\array_key_exists('legal_name_verified', $data) && $data['legal_name_verified'] !== null) {
             $object->setLegalNameVerified($data['legal_name_verified']);
             unset($data['legal_name_verified']);
         }
-        if (\array_key_exists('census_status', $data)) {
+        elseif (\array_key_exists('legal_name_verified', $data) && $data['legal_name_verified'] === null) {
+            $object->setLegalNameVerified(null);
+            unset($data['legal_name_verified']);
+        }
+        if (\array_key_exists('census_status', $data) && $data['census_status'] !== null) {
             $object->setCensusStatus($data['census_status']);
+            unset($data['census_status']);
+        }
+        elseif (\array_key_exists('census_status', $data) && $data['census_status'] === null) {
+            $object->setCensusStatus(null);
             unset($data['census_status']);
         }
         if (\array_key_exists('message', $data)) {

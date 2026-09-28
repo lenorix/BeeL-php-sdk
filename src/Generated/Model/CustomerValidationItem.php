@@ -35,7 +35,7 @@ class CustomerValidationItem implements AdditionalPropertiesInterface
      * actually created something.
      * 
      *
-     * @var CustomerValidationItemCustomer
+     * @var CustomerValidationItemCustomer|null
      */
     protected $customer;
     /**
@@ -47,7 +47,7 @@ class CustomerValidationItem implements AdditionalPropertiesInterface
      * `GET /v1/companies/{company_id}/customers/{customer_id}` answers `200`.
      * 
      *
-     * @var string
+     * @var string|null
      */
     protected $customerId;
     /**
@@ -118,9 +118,9 @@ class CustomerValidationItem implements AdditionalPropertiesInterface
      * actually created something.
      * 
      *
-     * @return CustomerValidationItemCustomer
+     * @return CustomerValidationItemCustomer|null
      */
-    public function getCustomer(): CustomerValidationItemCustomer
+    public function getCustomer(): ?CustomerValidationItemCustomer
     {
         return $this->customer;
     }
@@ -136,11 +136,11 @@ class CustomerValidationItem implements AdditionalPropertiesInterface
     actually created something.
     
     *
-    * @param CustomerValidationItemCustomer $customer
+    * @param CustomerValidationItemCustomer|null $customer
     *
     * @return self
     */
-    public function setCustomer(CustomerValidationItemCustomer $customer): self
+    public function setCustomer(?CustomerValidationItemCustomer $customer): self
     {
         $this->initialized['customer'] = true;
         $this->customer = $customer;
@@ -155,9 +155,9 @@ class CustomerValidationItem implements AdditionalPropertiesInterface
      * `GET /v1/companies/{company_id}/customers/{customer_id}` answers `200`.
      * 
      *
-     * @return string
+     * @return string|null
      */
-    public function getCustomerId(): string
+    public function getCustomerId(): ?string
     {
         return $this->customerId;
     }
@@ -170,11 +170,11 @@ class CustomerValidationItem implements AdditionalPropertiesInterface
     `GET /v1/companies/{company_id}/customers/{customer_id}` answers `200`.
     
     *
-    * @param string $customerId
+    * @param string|null $customerId
     *
     * @return self
     */
-    public function setCustomerId(string $customerId): self
+    public function setCustomerId(?string $customerId): self
     {
         $this->initialized['customerId'] = true;
         $this->customerId = $customerId;

@@ -124,16 +124,28 @@ class CompanyPaymentConnectionNormalizer implements DenormalizerInterface, Norma
             $object->setTaxInclusiveTax(null);
             unset($data['tax_inclusive_tax']);
         }
-        if (\array_key_exists('series', $data)) {
+        if (\array_key_exists('series', $data) && $data['series'] !== null) {
             $object->setSeries($this->denormalizer->denormalize($data['series'], \Lenorix\BeelSdk\Generated\Model\CompanyPaymentConnectionSeries::class, 'json', $context));
             unset($data['series']);
         }
-        if (\array_key_exists('simplificada_threshold', $data)) {
+        elseif (\array_key_exists('series', $data) && $data['series'] === null) {
+            $object->setSeries(null);
+            unset($data['series']);
+        }
+        if (\array_key_exists('simplificada_threshold', $data) && $data['simplificada_threshold'] !== null) {
             $object->setSimplificadaThreshold($data['simplificada_threshold']);
             unset($data['simplificada_threshold']);
         }
-        if (\array_key_exists('filter_config', $data)) {
+        elseif (\array_key_exists('simplificada_threshold', $data) && $data['simplificada_threshold'] === null) {
+            $object->setSimplificadaThreshold(null);
+            unset($data['simplificada_threshold']);
+        }
+        if (\array_key_exists('filter_config', $data) && $data['filter_config'] !== null) {
             $object->setFilterConfig($this->denormalizer->denormalize($data['filter_config'], \Lenorix\BeelSdk\Generated\Model\CompanyPaymentConnectionFilters::class, 'json', $context));
+            unset($data['filter_config']);
+        }
+        elseif (\array_key_exists('filter_config', $data) && $data['filter_config'] === null) {
+            $object->setFilterConfig(null);
             unset($data['filter_config']);
         }
         if (\array_key_exists('active_filters', $data)) {

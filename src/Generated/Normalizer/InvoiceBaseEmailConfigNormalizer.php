@@ -45,7 +45,7 @@ class InvoiceBaseEmailConfigNormalizer implements DenormalizerInterface, Normali
             $object->setRecipients($values);
             unset($data['recipients']);
         }
-        if (\array_key_exists('cc', $data)) {
+        if (\array_key_exists('cc', $data) && $data['cc'] !== null) {
             $values_1 = [];
             foreach ($data['cc'] as $value_1) {
                 $values_1[] = $value_1;
@@ -53,12 +53,24 @@ class InvoiceBaseEmailConfigNormalizer implements DenormalizerInterface, Normali
             $object->setCc($values_1);
             unset($data['cc']);
         }
-        if (\array_key_exists('subject', $data)) {
+        elseif (\array_key_exists('cc', $data) && $data['cc'] === null) {
+            $object->setCc(null);
+            unset($data['cc']);
+        }
+        if (\array_key_exists('subject', $data) && $data['subject'] !== null) {
             $object->setSubject($data['subject']);
             unset($data['subject']);
         }
-        if (\array_key_exists('message', $data)) {
+        elseif (\array_key_exists('subject', $data) && $data['subject'] === null) {
+            $object->setSubject(null);
+            unset($data['subject']);
+        }
+        if (\array_key_exists('message', $data) && $data['message'] !== null) {
             $object->setMessage($data['message']);
+            unset($data['message']);
+        }
+        elseif (\array_key_exists('message', $data) && $data['message'] === null) {
+            $object->setMessage(null);
             unset($data['message']);
         }
         foreach ($data as $key => $value_2) {

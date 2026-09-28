@@ -41,16 +41,28 @@ class LegalRepresentativeAddressNormalizer implements DenormalizerInterface, Nor
             $object->setStreet($data['street']);
             unset($data['street']);
         }
-        if (\array_key_exists('number', $data)) {
+        if (\array_key_exists('number', $data) && $data['number'] !== null) {
             $object->setNumber($data['number']);
             unset($data['number']);
         }
-        if (\array_key_exists('floor', $data)) {
+        elseif (\array_key_exists('number', $data) && $data['number'] === null) {
+            $object->setNumber(null);
+            unset($data['number']);
+        }
+        if (\array_key_exists('floor', $data) && $data['floor'] !== null) {
             $object->setFloor($data['floor']);
             unset($data['floor']);
         }
-        if (\array_key_exists('door', $data)) {
+        elseif (\array_key_exists('floor', $data) && $data['floor'] === null) {
+            $object->setFloor(null);
+            unset($data['floor']);
+        }
+        if (\array_key_exists('door', $data) && $data['door'] !== null) {
             $object->setDoor($data['door']);
+            unset($data['door']);
+        }
+        elseif (\array_key_exists('door', $data) && $data['door'] === null) {
+            $object->setDoor(null);
             unset($data['door']);
         }
         if (\array_key_exists('postal_code', $data)) {
@@ -61,16 +73,28 @@ class LegalRepresentativeAddressNormalizer implements DenormalizerInterface, Nor
             $object->setCity($data['city']);
             unset($data['city']);
         }
-        if (\array_key_exists('province', $data)) {
+        if (\array_key_exists('province', $data) && $data['province'] !== null) {
             $object->setProvince($data['province']);
             unset($data['province']);
         }
-        if (\array_key_exists('country', $data)) {
+        elseif (\array_key_exists('province', $data) && $data['province'] === null) {
+            $object->setProvince(null);
+            unset($data['province']);
+        }
+        if (\array_key_exists('country', $data) && $data['country'] !== null) {
             $object->setCountry($data['country']);
             unset($data['country']);
         }
-        if (\array_key_exists('country_code', $data)) {
+        elseif (\array_key_exists('country', $data) && $data['country'] === null) {
+            $object->setCountry(null);
+            unset($data['country']);
+        }
+        if (\array_key_exists('country_code', $data) && $data['country_code'] !== null) {
             $object->setCountryCode($data['country_code']);
+            unset($data['country_code']);
+        }
+        elseif (\array_key_exists('country_code', $data) && $data['country_code'] === null) {
+            $object->setCountryCode(null);
             unset($data['country_code']);
         }
         foreach ($data as $key => $value) {

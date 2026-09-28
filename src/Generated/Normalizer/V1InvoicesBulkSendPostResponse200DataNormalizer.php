@@ -61,12 +61,16 @@ class V1InvoicesBulkSendPostResponse200DataNormalizer implements DenormalizerInt
             $object->setInvoicesAttached($data['invoices_attached']);
             unset($data['invoices_attached']);
         }
-        if (\array_key_exists('failures', $data)) {
+        if (\array_key_exists('failures', $data) && $data['failures'] !== null) {
             $values_1 = [];
             foreach ($data['failures'] as $value_1) {
                 $values_1[] = $this->denormalizer->denormalize($value_1, \Lenorix\BeelSdk\Generated\Model\V1InvoicesBulkSendPostResponse200DataFailuresItem::class, 'json', $context);
             }
             $object->setFailures($values_1);
+            unset($data['failures']);
+        }
+        elseif (\array_key_exists('failures', $data) && $data['failures'] === null) {
+            $object->setFailures(null);
             unset($data['failures']);
         }
         foreach ($data as $key => $value_2) {

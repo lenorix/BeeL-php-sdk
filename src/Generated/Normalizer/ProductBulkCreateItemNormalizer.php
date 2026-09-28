@@ -41,24 +41,40 @@ class ProductBulkCreateItemNormalizer implements DenormalizerInterface, Normaliz
             $object->setIndex($data['index']);
             unset($data['index']);
         }
-        if (\array_key_exists('code', $data)) {
+        if (\array_key_exists('code', $data) && $data['code'] !== null) {
             $object->setCode($data['code']);
             unset($data['code']);
         }
-        if (\array_key_exists('name', $data)) {
+        elseif (\array_key_exists('code', $data) && $data['code'] === null) {
+            $object->setCode(null);
+            unset($data['code']);
+        }
+        if (\array_key_exists('name', $data) && $data['name'] !== null) {
             $object->setName($data['name']);
+            unset($data['name']);
+        }
+        elseif (\array_key_exists('name', $data) && $data['name'] === null) {
+            $object->setName(null);
             unset($data['name']);
         }
         if (\array_key_exists('status', $data)) {
             $object->setStatus($data['status']);
             unset($data['status']);
         }
-        if (\array_key_exists('product_id', $data)) {
+        if (\array_key_exists('product_id', $data) && $data['product_id'] !== null) {
             $object->setProductId($data['product_id']);
             unset($data['product_id']);
         }
-        if (\array_key_exists('error', $data)) {
+        elseif (\array_key_exists('product_id', $data) && $data['product_id'] === null) {
+            $object->setProductId(null);
+            unset($data['product_id']);
+        }
+        if (\array_key_exists('error', $data) && $data['error'] !== null) {
             $object->setError($this->denormalizer->denormalize($data['error'], \Lenorix\BeelSdk\Generated\Model\ProductBulkCreateItemError::class, 'json', $context));
+            unset($data['error']);
+        }
+        elseif (\array_key_exists('error', $data) && $data['error'] === null) {
+            $object->setError(null);
             unset($data['error']);
         }
         foreach ($data as $key => $value) {

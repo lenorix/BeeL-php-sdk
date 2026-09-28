@@ -73,7 +73,7 @@ class FiscalSummaryResponseNormalizer implements DenormalizerInterface, Normaliz
             $object->setTotalVat($data['total_vat']);
             unset($data['total_vat']);
         }
-        if (\array_key_exists('tax_breakdown', $data)) {
+        if (\array_key_exists('tax_breakdown', $data) && $data['tax_breakdown'] !== null) {
             $values = [];
             foreach ($data['tax_breakdown'] as $value) {
                 $values[] = $this->denormalizer->denormalize($value, \Lenorix\BeelSdk\Generated\Model\TaxBreakdownItem::class, 'json', $context);
@@ -81,7 +81,11 @@ class FiscalSummaryResponseNormalizer implements DenormalizerInterface, Normaliz
             $object->setTaxBreakdown($values);
             unset($data['tax_breakdown']);
         }
-        if (\array_key_exists('vat_breakdown_by_rate', $data)) {
+        elseif (\array_key_exists('tax_breakdown', $data) && $data['tax_breakdown'] === null) {
+            $object->setTaxBreakdown(null);
+            unset($data['tax_breakdown']);
+        }
+        if (\array_key_exists('vat_breakdown_by_rate', $data) && $data['vat_breakdown_by_rate'] !== null) {
             $values_1 = new \Lenorix\BeelSdk\Generated\Runtime\JsonObject();
             foreach ($data['vat_breakdown_by_rate'] as $key => $value_1) {
                 $values_1[$key] = $value_1;
@@ -89,7 +93,11 @@ class FiscalSummaryResponseNormalizer implements DenormalizerInterface, Normaliz
             $object->setVatBreakdownByRate($values_1);
             unset($data['vat_breakdown_by_rate']);
         }
-        if (\array_key_exists('surcharge_breakdown', $data)) {
+        elseif (\array_key_exists('vat_breakdown_by_rate', $data) && $data['vat_breakdown_by_rate'] === null) {
+            $object->setVatBreakdownByRate(null);
+            unset($data['vat_breakdown_by_rate']);
+        }
+        if (\array_key_exists('surcharge_breakdown', $data) && $data['surcharge_breakdown'] !== null) {
             $values_2 = [];
             foreach ($data['surcharge_breakdown'] as $value_2) {
                 $values_2[] = $this->denormalizer->denormalize($value_2, \Lenorix\BeelSdk\Generated\Model\SurchargeBreakdownItem::class, 'json', $context);
@@ -97,8 +105,16 @@ class FiscalSummaryResponseNormalizer implements DenormalizerInterface, Normaliz
             $object->setSurchargeBreakdown($values_2);
             unset($data['surcharge_breakdown']);
         }
-        if (\array_key_exists('total_equivalence_surcharge', $data)) {
+        elseif (\array_key_exists('surcharge_breakdown', $data) && $data['surcharge_breakdown'] === null) {
+            $object->setSurchargeBreakdown(null);
+            unset($data['surcharge_breakdown']);
+        }
+        if (\array_key_exists('total_equivalence_surcharge', $data) && $data['total_equivalence_surcharge'] !== null) {
             $object->setTotalEquivalenceSurcharge($data['total_equivalence_surcharge']);
+            unset($data['total_equivalence_surcharge']);
+        }
+        elseif (\array_key_exists('total_equivalence_surcharge', $data) && $data['total_equivalence_surcharge'] === null) {
+            $object->setTotalEquivalenceSurcharge(null);
             unset($data['total_equivalence_surcharge']);
         }
         if (\array_key_exists('total_irpf_withheld', $data)) {
@@ -129,12 +145,16 @@ class FiscalSummaryResponseNormalizer implements DenormalizerInterface, Normaliz
             $object->setBracketDetails($values_3);
             unset($data['bracket_details']);
         }
-        if (\array_key_exists('invoices', $data)) {
+        if (\array_key_exists('invoices', $data) && $data['invoices'] !== null) {
             $values_4 = [];
             foreach ($data['invoices'] as $value_4) {
                 $values_4[] = $this->denormalizer->denormalize($value_4, \Lenorix\BeelSdk\Generated\Model\InvoiceFiscalData::class, 'json', $context);
             }
             $object->setInvoices($values_4);
+            unset($data['invoices']);
+        }
+        elseif (\array_key_exists('invoices', $data) && $data['invoices'] === null) {
+            $object->setInvoices(null);
             unset($data['invoices']);
         }
         if (\array_key_exists('total_invoices', $data)) {
