@@ -13,7 +13,6 @@ use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkDeleteRespon
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsGetResponse200Data;
 use Lenorix\BeelSdk\Http\QueryParameters;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -32,7 +31,7 @@ final readonly class CompanyProductsResource extends GeneratedResource
      */
     public function list(array $query = []): V1CompaniesCompanyIdProductsGetResponse200Data
     {
-        return $this->execute(fn () => $this->client->listCompanyProducts($this->companyId, $query));
+        return $this->execute(fn () => $this->client->listCompanyProducts($this->companyId, QueryParameters::numbers($query)));
     }
 
     /**
@@ -61,7 +60,7 @@ final readonly class CompanyProductsResource extends GeneratedResource
      */
     public function create(CreateProductRequest|array $request, array $headers = []): Product
     {
-        $request = RequestModels::from($request, CreateProductRequest::class);
+        $request = $this->model($request, CreateProductRequest::class);
 
         return $this->execute(fn () => $this->client->createCompanyProduct($this->companyId, $request, $headers));
     }
@@ -77,7 +76,7 @@ final readonly class CompanyProductsResource extends GeneratedResource
      */
     public function update(string $productId, PatchProductRequest|array $request): Product
     {
-        $request = RequestModels::from($request, PatchProductRequest::class);
+        $request = $this->model($request, PatchProductRequest::class);
 
         return $this->execute(fn () => $this->client->patchCompanyProduct($this->companyId, $productId, $request));
     }
@@ -96,7 +95,7 @@ final readonly class CompanyProductsResource extends GeneratedResource
      */
     public function createBulk(V1CompaniesCompanyIdProductsBulkPostBody|array $request, array $headers = []): ProductBulkCreateResult
     {
-        $request = RequestModels::from($request, V1CompaniesCompanyIdProductsBulkPostBody::class);
+        $request = $this->model($request, V1CompaniesCompanyIdProductsBulkPostBody::class);
 
         return $this->execute(fn () => $this->client->createCompanyProductsBulk($this->companyId, $request, $headers));
     }

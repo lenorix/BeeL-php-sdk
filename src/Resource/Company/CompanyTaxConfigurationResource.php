@@ -7,7 +7,6 @@ namespace Lenorix\BeelSdk\Resource\Company;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\TaxConfiguration;
 use Lenorix\BeelSdk\Generated\Model\UpdateTaxConfigurationRequest;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -30,7 +29,7 @@ final readonly class CompanyTaxConfigurationResource extends GeneratedResource
      */
     public function update(UpdateTaxConfigurationRequest|array $request): TaxConfiguration
     {
-        $request = RequestModels::from($request, UpdateTaxConfigurationRequest::class);
+        $request = $this->model($request, UpdateTaxConfigurationRequest::class);
 
         return $this->execute(fn () => $this->client->updateCompanyTaxConfiguration($this->companyId, $request));
     }

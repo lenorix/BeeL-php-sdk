@@ -7,7 +7,6 @@ namespace Lenorix\BeelSdk\Resource\Company;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CompanyLogo;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdLogoPutBody;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 use Psr\Http\Message\StreamInterface;
@@ -36,7 +35,7 @@ final readonly class CompanyLogoResource extends GeneratedResource
             }
             $logo = ['file' => $logo];
         }
-        $request = RequestModels::from($logo, V1CompaniesCompanyIdLogoPutBody::class);
+        $request = $this->model($logo, V1CompaniesCompanyIdLogoPutBody::class);
 
         return $this->execute(fn () => $this->client->uploadCompanyLogoById($this->companyId, $request, $headers));
     }

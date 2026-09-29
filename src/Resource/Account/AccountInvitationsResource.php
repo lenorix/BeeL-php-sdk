@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Model\CreateInvitationRequest;
 use Lenorix\BeelSdk\Generated\Model\Invitation;
 use Lenorix\BeelSdk\Generated\Model\InvitationSummary;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdInvitationsGetResponse200Data;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -51,7 +50,7 @@ final readonly class AccountInvitationsResource extends GeneratedResource
      */
     public function create(CreateInvitationRequest|array $request): Invitation
     {
-        $request = RequestModels::from($request, CreateInvitationRequest::class);
+        $request = $this->model($request, CreateInvitationRequest::class);
 
         return $this->execute(fn () => $this->client->createAccountInvitation($this->accountId, $request));
     }

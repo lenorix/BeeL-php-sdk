@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Model\CompanyData;
 use Lenorix\BeelSdk\Generated\Model\FiscalSummaryResponse;
 use Lenorix\BeelSdk\Generated\Model\IssuingReadinessData;
 use Lenorix\BeelSdk\Generated\Model\UpdateCompanyRequest;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\Company\CompanyActivationsResource;
 use Lenorix\BeelSdk\Resource\Company\CompanyCustomersResource;
@@ -106,7 +105,7 @@ final readonly class CompanyScope extends GeneratedResource
      */
     public function update(UpdateCompanyRequest|array $request): CompanyData
     {
-        $request = RequestModels::from($request, UpdateCompanyRequest::class);
+        $request = $this->model($request, UpdateCompanyRequest::class);
 
         return $this->execute(fn () => $this->client->patchCompanyById($this->companyId, $request));
     }

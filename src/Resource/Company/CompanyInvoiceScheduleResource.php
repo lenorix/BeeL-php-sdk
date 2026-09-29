@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\Invoice;
 use Lenorix\BeelSdk\Generated\Model\InvoiceSchedule;
 use Lenorix\BeelSdk\Generated\Model\SetInvoiceScheduleRequest;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -29,7 +28,7 @@ final readonly class CompanyInvoiceScheduleResource extends GeneratedResource
      */
     public function set(string $invoiceId, SetInvoiceScheduleRequest|array $request): Invoice
     {
-        $request = RequestModels::from($request, SetInvoiceScheduleRequest::class);
+        $request = $this->model($request, SetInvoiceScheduleRequest::class);
 
         return $this->execute(fn () => $this->client->setCompanyInvoiceSchedule($this->companyId, $invoiceId, $request));
     }

@@ -13,7 +13,7 @@ use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkDeleteBody;
 use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkDeleteResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1ProductsGetResponse200Data;
-use Lenorix\BeelSdk\Http\RequestModels;
+use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
 /**
@@ -46,7 +46,7 @@ final readonly class ProductsResource extends GeneratedResource
      */
     public function list(array $query = []): V1ProductsGetResponse200Data
     {
-        return $this->execute(fn () => $this->client->listProducts($query));
+        return $this->execute(fn () => $this->client->listProducts(QueryParameters::numbers($query)));
     }
 
     /**
@@ -54,7 +54,7 @@ final readonly class ProductsResource extends GeneratedResource
      */
     public function create(CreateProductRequest|array $request): Product
     {
-        $request = RequestModels::from($request, CreateProductRequest::class);
+        $request = $this->model($request, CreateProductRequest::class);
 
         return $this->execute(fn () => $this->client->createProduct($request));
     }
@@ -69,7 +69,7 @@ final readonly class ProductsResource extends GeneratedResource
      */
     public function update(string $productId, UpdateProductRequest|array $request): Product
     {
-        $request = RequestModels::from($request, UpdateProductRequest::class);
+        $request = $this->model($request, UpdateProductRequest::class);
 
         return $this->execute(fn () => $this->client->updateProduct($productId, $request));
     }
@@ -84,7 +84,7 @@ final readonly class ProductsResource extends GeneratedResource
      */
     public function createBulk(V1ProductsBulkPostBody|array $request): ProductBulkCreateResult
     {
-        $request = RequestModels::from($request, V1ProductsBulkPostBody::class);
+        $request = $this->model($request, V1ProductsBulkPostBody::class);
 
         return $this->execute(fn () => $this->client->createProductsBulk($request));
     }
@@ -94,7 +94,7 @@ final readonly class ProductsResource extends GeneratedResource
      */
     public function deleteBulk(V1ProductsBulkDeleteBody|array $request): V1ProductsBulkDeleteResponse200Data
     {
-        $request = RequestModels::from($request, V1ProductsBulkDeleteBody::class);
+        $request = $this->model($request, V1ProductsBulkDeleteBody::class);
 
         return $this->execute(fn () => $this->client->deleteProductsBulk($request));
     }

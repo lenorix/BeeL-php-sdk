@@ -32,8 +32,8 @@ class ListProducts extends BaseEndpoint implements Endpoint
      *    "search"?: string, //Global search by name, code or description
      *    "name"?: string, //Filter by name (partial search case-insensitive)
      *    "code"?: string, //Filter by code (partial search)
-     *    "min_price"?: int, //Minimum price
-     *    "max_price"?: int, //Maximum price
+     *    "min_price"?: float, //Minimum price
+     *    "max_price"?: float, //Maximum price
      *    "sort_by"?: string, //Field to sort by
      *    "sort_order"?: string, //Sort order direction
      * } $queryParameters
@@ -78,8 +78,8 @@ class ListProducts extends BaseEndpoint implements Endpoint
         $optionsResolver->addAllowedTypes('search', ['string']);
         $optionsResolver->addAllowedTypes('name', ['string']);
         $optionsResolver->addAllowedTypes('code', ['string']);
-        $optionsResolver->addAllowedTypes('min_price', ['int']);
-        $optionsResolver->addAllowedTypes('max_price', ['int']);
+        $optionsResolver->addAllowedTypes('min_price', ['float']);
+        $optionsResolver->addAllowedTypes('max_price', ['float']);
         $optionsResolver->addAllowedTypes('sort_by', ['string']);
         $optionsResolver->addAllowedTypes('sort_order', ['string']);
 

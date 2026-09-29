@@ -10,7 +10,6 @@ use Lenorix\BeelSdk\Generated\Model\InitiatePaymentConnectionRequest;
 use Lenorix\BeelSdk\Generated\Model\InitiatePaymentConnectionResponseData;
 use Lenorix\BeelSdk\Generated\Model\ListManagedPaymentConnectionsResponseData;
 use Lenorix\BeelSdk\Generated\Model\UpdateCompanyPaymentConnectionRequest;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -36,7 +35,7 @@ final readonly class CompanyPaymentConnectionsResource extends GeneratedResource
      */
     public function authorize(InitiatePaymentConnectionRequest|array $request): InitiatePaymentConnectionResponseData
     {
-        $request = RequestModels::from($request, InitiatePaymentConnectionRequest::class);
+        $request = $this->model($request, InitiatePaymentConnectionRequest::class);
 
         return $this->execute(fn () => $this->client->initiatePaymentConnection($this->companyId, $request));
     }
@@ -51,7 +50,7 @@ final readonly class CompanyPaymentConnectionsResource extends GeneratedResource
      */
     public function update(string $connectionId, UpdateCompanyPaymentConnectionRequest|array $request): CompanyPaymentConnection
     {
-        $request = RequestModels::from($request, UpdateCompanyPaymentConnectionRequest::class);
+        $request = $this->model($request, UpdateCompanyPaymentConnectionRequest::class);
 
         return $this->execute(fn () => $this->client->updateCompanyPaymentConnection($this->companyId, $connectionId, $request));
     }

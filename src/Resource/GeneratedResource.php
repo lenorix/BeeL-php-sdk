@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource;
 
+use Lenorix\BeelSdk\Beel;
 use Lenorix\BeelSdk\Exception\BeelApiError;
 use Lenorix\BeelSdk\Exception\BeelNotReadyError;
 use Lenorix\BeelSdk\Exception\BeelUnexpectedResponseError;
@@ -11,6 +12,7 @@ use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Http\IdempotencyKey;
+use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\RequestOptions;
 use Lenorix\BeelSdk\Http\RequestOptionsSlot;
 use Lenorix\BeelSdk\Http\ResponseContext;
@@ -130,6 +132,8 @@ abstract readonly class GeneratedResource
      */
     protected function paginateCursor(callable $fetchPage, callable $items, callable $nextCursor, array $query): \Generator
     {
+        // Every cursor already read, so a cycle such as A, B, A ends instead of repeating pages forever.
+        $seen = isset($query['cursor']) ? [(string) $query['cursor'] => true] : [];
         while (true) {
             $response = $fetchPage($query);
             $batch = $items($response);
@@ -138,9 +142,10 @@ abstract readonly class GeneratedResource
             }
 
             $cursor = $nextCursor($response);
-            if ($batch === [] || $cursor === null || $cursor === '' || $cursor === ($query['cursor'] ?? null)) {
+            if ($batch === [] || $cursor === null || $cursor === '' || isset($seen[$cursor])) {
                 return;
             }
+            $seen[$cursor] = true;
             $query['cursor'] = $cursor;
         }
     }
@@ -278,6 +283,25 @@ abstract readonly class GeneratedResource
         }
 
         throw new BeelNotReadyError($notReadyMessage, RetryAfter::seconds($response, ''), $response->getHeaderLine('X-Request-Id') ?: null);
+    }
+
+    /**
+     * Turn a request given as an array into its model, first forgetting the previous call's response:
+     * when the array is rejected, nothing is sent and {@see Beel::getLastResponse()} returns null.
+     *
+     * @template T of object
+     *
+     * @param  T|array<array-key, mixed>|null  $value
+     * @param  class-string<T>  $class
+     * @return ($value is null ? null : T)
+     *
+     * @throws \InvalidArgumentException If the array does not match the model or lacks a required field.
+     */
+    protected function model(object|array|null $value, string $class): ?object
+    {
+        $this->responseContext?->reset();
+
+        return RequestModels::from($value, $class);
     }
 
     /**

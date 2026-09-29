@@ -22,7 +22,6 @@ use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSendPostResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSendPostResponse202Data;
 use Lenorix\BeelSdk\Generated\Model\VoidInvoiceRequest;
 use Lenorix\BeelSdk\Http\QueryParameters;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
 /**
@@ -48,7 +47,7 @@ final readonly class InvoicesResource extends GeneratedResource
      */
     public function create(CreateInvoiceRequest|array $request): Invoice
     {
-        $request = RequestModels::from($request, CreateInvoiceRequest::class);
+        $request = $this->model($request, CreateInvoiceRequest::class);
 
         return $this->execute(fn () => $this->client->createInvoice($request));
     }
@@ -63,7 +62,7 @@ final readonly class InvoicesResource extends GeneratedResource
      */
     public function update(string $invoiceId, UpdateInvoiceRequest|array $request): Invoice
     {
-        $request = RequestModels::from($request, UpdateInvoiceRequest::class);
+        $request = $this->model($request, UpdateInvoiceRequest::class);
 
         return $this->execute(fn () => $this->client->updateInvoice($invoiceId, $request));
     }
@@ -78,7 +77,7 @@ final readonly class InvoicesResource extends GeneratedResource
      */
     public function duplicate(string $invoiceId, V1InvoicesInvoiceIdDuplicatePostBody|array|null $request = null): Invoice
     {
-        $request = RequestModels::from($request, V1InvoicesInvoiceIdDuplicatePostBody::class);
+        $request = $this->model($request, V1InvoicesInvoiceIdDuplicatePostBody::class);
 
         return $this->execute(fn () => $this->client->duplicateInvoice($invoiceId, $request));
     }
@@ -97,7 +96,7 @@ final readonly class InvoicesResource extends GeneratedResource
      */
     public function markPaid(string $invoiceId, V1InvoicesInvoiceIdMarkPaidPostBody|array|null $request = null): Invoice
     {
-        $request = RequestModels::from($request, V1InvoicesInvoiceIdMarkPaidPostBody::class);
+        $request = $this->model($request, V1InvoicesInvoiceIdMarkPaidPostBody::class);
 
         return $this->execute(fn () => $this->client->markInvoicePaid($invoiceId, $request));
     }
@@ -110,7 +109,7 @@ final readonly class InvoicesResource extends GeneratedResource
      */
     public function markSent(string $invoiceId, V1InvoicesInvoiceIdMarkSentPostBody|array|null $request = null, array $headers = []): Invoice
     {
-        $request = RequestModels::from($request, V1InvoicesInvoiceIdMarkSentPostBody::class);
+        $request = $this->model($request, V1InvoicesInvoiceIdMarkSentPostBody::class);
 
         return $this->execute(fn () => $this->client->markInvoiceSent($invoiceId, $request, $headers));
     }
@@ -125,7 +124,7 @@ final readonly class InvoicesResource extends GeneratedResource
      */
     public function void(string $invoiceId, VoidInvoiceRequest|array $request): Invoice
     {
-        $request = RequestModels::from($request, VoidInvoiceRequest::class);
+        $request = $this->model($request, VoidInvoiceRequest::class);
 
         return $this->execute(fn () => $this->client->voidInvoice($invoiceId, $request));
     }
@@ -135,7 +134,7 @@ final readonly class InvoicesResource extends GeneratedResource
      */
     public function createCorrective(string $invoiceId, CreateCorrectiveInvoiceRequest|array $request): Invoice
     {
-        $request = RequestModels::from($request, CreateCorrectiveInvoiceRequest::class);
+        $request = $this->model($request, CreateCorrectiveInvoiceRequest::class);
 
         return $this->execute(fn () => $this->client->createCorrectiveInvoice($invoiceId, $request));
     }
@@ -145,7 +144,7 @@ final readonly class InvoicesResource extends GeneratedResource
      */
     public function schedule(string $invoiceId, V1InvoicesInvoiceIdSchedulePostBody|array $request): Invoice
     {
-        $request = RequestModels::from($request, V1InvoicesInvoiceIdSchedulePostBody::class);
+        $request = $this->model($request, V1InvoicesInvoiceIdSchedulePostBody::class);
 
         return $this->execute(fn () => $this->client->scheduleInvoice($invoiceId, $request));
     }
@@ -160,7 +159,7 @@ final readonly class InvoicesResource extends GeneratedResource
      */
     public function reschedule(string $invoiceId, V1InvoicesInvoiceIdReschedulePatchBody|array $request): Invoice
     {
-        $request = RequestModels::from($request, V1InvoicesInvoiceIdReschedulePatchBody::class);
+        $request = $this->model($request, V1InvoicesInvoiceIdReschedulePatchBody::class);
 
         return $this->execute(fn () => $this->client->rescheduleInvoice($invoiceId, $request));
     }
@@ -187,7 +186,7 @@ final readonly class InvoicesResource extends GeneratedResource
      */
     public function sendEmail(string $invoiceId, SendEmailRequest|array|null $request = null): V1InvoicesInvoiceIdSendPostResponse200Data|V1InvoicesInvoiceIdSendPostResponse202Data
     {
-        $request = RequestModels::from($request, SendEmailRequest::class);
+        $request = $this->model($request, SendEmailRequest::class);
 
         return $this->execute(fn () => $this->client->sendInvoiceEmail($invoiceId, $request));
     }

@@ -11,7 +11,6 @@ use Lenorix\BeelSdk\Generated\Model\PatchSeriesRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdSeriesDefaultsGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdSeriesDefaultsPutResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdSeriesGetResponse200Data;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -59,7 +58,7 @@ final readonly class CompanySeriesResource extends GeneratedResource
      */
     public function create(CreateSeriesRequest|array $request, array $headers = []): InvoiceSeries
     {
-        $request = RequestModels::from($request, CreateSeriesRequest::class);
+        $request = $this->model($request, CreateSeriesRequest::class);
 
         return $this->execute(fn () => $this->client->createCompanySeries($this->companyId, $request, $headers));
     }
@@ -75,7 +74,7 @@ final readonly class CompanySeriesResource extends GeneratedResource
      */
     public function update(string $seriesId, PatchSeriesRequest|array $request): InvoiceSeries
     {
-        $request = RequestModels::from($request, PatchSeriesRequest::class);
+        $request = $this->model($request, PatchSeriesRequest::class);
 
         return $this->execute(fn () => $this->client->patchCompanySeries($this->companyId, $seriesId, $request));
     }

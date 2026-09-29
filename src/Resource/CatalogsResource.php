@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Model\InvoiceCustomizationOptionsResponse;
 use Lenorix\BeelSdk\Generated\Model\MyPreferences;
 use Lenorix\BeelSdk\Generated\Model\TaxTypesCatalog;
 use Lenorix\BeelSdk\Generated\Model\UpdateMeRequest;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
 /** Read-only shared API catalogs and person-level preferences. */
@@ -37,7 +36,7 @@ final readonly class CatalogsResource extends GeneratedResource
      */
     public function updateMe(UpdateMeRequest|array $request): MyPreferences
     {
-        $request = RequestModels::from($request, UpdateMeRequest::class);
+        $request = $this->model($request, UpdateMeRequest::class);
 
         return $this->execute(fn () => $this->client->updateMe($request));
     }

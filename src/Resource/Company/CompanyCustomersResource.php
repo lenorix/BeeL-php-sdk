@@ -15,7 +15,6 @@ use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersGetResponse200D
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersImportsPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersImportsPreviewPostBody;
 use Lenorix\BeelSdk\Http\QueryParameters;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -59,7 +58,7 @@ final readonly class CompanyCustomersResource extends GeneratedResource
      */
     public function create(CreateCustomerRequest|array $request, array $headers = []): Customer
     {
-        $request = RequestModels::from($request, CreateCustomerRequest::class);
+        $request = $this->model($request, CreateCustomerRequest::class);
 
         return $this->execute(fn () => $this->client->createCompanyCustomer($this->companyId, $request, $headers));
     }
@@ -75,7 +74,7 @@ final readonly class CompanyCustomersResource extends GeneratedResource
      */
     public function update(string $customerId, PatchCustomerRequest|array $request): Customer
     {
-        $request = RequestModels::from($request, PatchCustomerRequest::class);
+        $request = $this->model($request, PatchCustomerRequest::class);
 
         return $this->execute(fn () => $this->client->patchCompanyCustomer($this->companyId, $customerId, $request));
     }
@@ -95,7 +94,7 @@ final readonly class CompanyCustomersResource extends GeneratedResource
      */
     public function createBulk(V1CompaniesCompanyIdCustomersBulkPostBody|array $request, array $query = [], array $headers = []): CustomerValidationUnifiedResult
     {
-        $request = RequestModels::from($request, V1CompaniesCompanyIdCustomersBulkPostBody::class);
+        $request = $this->model($request, V1CompaniesCompanyIdCustomersBulkPostBody::class);
 
         return $this->execute(fn () => $this->client->createCompanyCustomersBulk($this->companyId, $request, $query, $headers));
     }
@@ -118,7 +117,7 @@ final readonly class CompanyCustomersResource extends GeneratedResource
      */
     public function import(V1CompaniesCompanyIdCustomersImportsPostBody|array $request, array $headers = []): CustomerValidationUnifiedResult
     {
-        $request = RequestModels::from($request, V1CompaniesCompanyIdCustomersImportsPostBody::class);
+        $request = $this->model($request, V1CompaniesCompanyIdCustomersImportsPostBody::class);
 
         return $this->execute(fn () => $this->client->createCompanyCustomerImport($this->companyId, $request, $this->withIdempotencyKey($headers)));
     }
@@ -128,7 +127,7 @@ final readonly class CompanyCustomersResource extends GeneratedResource
      */
     public function previewImport(V1CompaniesCompanyIdCustomersImportsPreviewPostBody|array $request): CustomerValidationUnifiedResult
     {
-        $request = RequestModels::from($request, V1CompaniesCompanyIdCustomersImportsPreviewPostBody::class);
+        $request = $this->model($request, V1CompaniesCompanyIdCustomersImportsPreviewPostBody::class);
 
         return $this->execute(fn () => $this->client->previewCompanyCustomerImport($this->companyId, $request));
     }

@@ -7,7 +7,6 @@ namespace Lenorix\BeelSdk\Resource\Company;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\UpdateVeriFactuConfigurationRequest;
 use Lenorix\BeelSdk\Generated\Model\VeriFactuConfiguration;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -37,7 +36,7 @@ final readonly class CompanyVeriFactuConfigurationResource extends GeneratedReso
      */
     public function update(UpdateVeriFactuConfigurationRequest|array $request): VeriFactuConfiguration
     {
-        $request = RequestModels::from($request, UpdateVeriFactuConfigurationRequest::class);
+        $request = $this->model($request, UpdateVeriFactuConfigurationRequest::class);
 
         return $this->execute(fn () => $this->client->updateCompanyVeriFactuConfiguration($this->companyId, $request));
     }

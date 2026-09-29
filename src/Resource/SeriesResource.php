@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Model\CreateSeriesRequest;
 use Lenorix\BeelSdk\Generated\Model\InvoiceSeries;
 use Lenorix\BeelSdk\Generated\Model\UpdateSeriesRequest;
 use Lenorix\BeelSdk\Generated\Model\V1ConfigurationSeriesGetResponse200Data;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
 /**
@@ -34,7 +33,7 @@ final readonly class SeriesResource extends GeneratedResource
      */
     public function create(CreateSeriesRequest|array $request): InvoiceSeries
     {
-        $request = RequestModels::from($request, CreateSeriesRequest::class);
+        $request = $this->model($request, CreateSeriesRequest::class);
 
         return $this->execute(fn () => $this->client->createSeries($request));
     }
@@ -44,7 +43,7 @@ final readonly class SeriesResource extends GeneratedResource
      */
     public function update(string $seriesId, UpdateSeriesRequest|array $request): InvoiceSeries
     {
-        $request = RequestModels::from($request, UpdateSeriesRequest::class);
+        $request = $this->model($request, UpdateSeriesRequest::class);
 
         return $this->execute(fn () => $this->client->updateSeries($seriesId, $request));
     }

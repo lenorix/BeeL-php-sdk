@@ -10,7 +10,6 @@ use Lenorix\BeelSdk\Generated\Model\CompanyData;
 use Lenorix\BeelSdk\Generated\Model\CreateCompanyRequest;
 use Lenorix\BeelSdk\Generated\Model\ListCompanies200ResponseData;
 use Lenorix\BeelSdk\Generated\Model\ListCompanyStats200ResponseData;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -52,7 +51,7 @@ final readonly class AccountCompaniesResource extends GeneratedResource
      */
     public function create(CreateCompanyRequest|array $request): CompanyCreatedData
     {
-        $request = RequestModels::from($request, CreateCompanyRequest::class);
+        $request = $this->model($request, CreateCompanyRequest::class);
 
         return $this->execute(fn () => $this->client->createCompany($this->accountId, $request));
     }

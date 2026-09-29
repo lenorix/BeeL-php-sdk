@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Model\CreateCustomerRequest;
 use Lenorix\BeelSdk\Generated\Model\Customer;
 use Lenorix\BeelSdk\Generated\Model\UpdateCustomerRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CustomersGetResponse200Data;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
 /**
@@ -35,7 +34,7 @@ final readonly class CustomersResource extends GeneratedResource
      */
     public function create(CreateCustomerRequest|array $request): Customer
     {
-        $request = RequestModels::from($request, CreateCustomerRequest::class);
+        $request = $this->model($request, CreateCustomerRequest::class);
 
         return $this->execute(fn () => $this->client->createCustomer($request));
     }
@@ -50,7 +49,7 @@ final readonly class CustomersResource extends GeneratedResource
      */
     public function update(string $customerId, UpdateCustomerRequest|array $request): Customer
     {
-        $request = RequestModels::from($request, UpdateCustomerRequest::class);
+        $request = $this->model($request, UpdateCustomerRequest::class);
 
         return $this->execute(fn () => $this->client->updateCustomer($customerId, $request));
     }

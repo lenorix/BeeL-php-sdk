@@ -37,7 +37,6 @@ use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdVerifac
 use Lenorix\BeelSdk\Generated\Model\VoidInvoiceRequest;
 use Lenorix\BeelSdk\Http\BinaryDownload;
 use Lenorix\BeelSdk\Http\QueryParameters;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -64,7 +63,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function list(array $query = []): V1CompaniesCompanyIdInvoicesGetResponse200Data
     {
-        return $this->execute(fn () => $this->client->listCompanyInvoices($this->companyId, QueryParameters::lists($query)));
+        return $this->execute(fn () => $this->client->listCompanyInvoices($this->companyId, QueryParameters::numbers(QueryParameters::lists($query))));
     }
 
     /**
@@ -101,7 +100,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function create(CreateInvoiceRequest|array $request, array $query = [], array $headers = []): Invoice
     {
-        $request = RequestModels::from($request, CreateInvoiceRequest::class);
+        $request = $this->model($request, CreateInvoiceRequest::class);
 
         return $this->execute(fn () => $this->client->createCompanyInvoice($this->companyId, $request, $query, $headers));
     }
@@ -122,7 +121,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function update(string $invoiceId, UpdateInvoiceRequest|array $request): Invoice
     {
-        $request = RequestModels::from($request, UpdateInvoiceRequest::class);
+        $request = $this->model($request, UpdateInvoiceRequest::class);
 
         return $this->execute(fn () => $this->client->patchCompanyInvoice($this->companyId, $invoiceId, $request));
     }
@@ -152,7 +151,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function void(string $invoiceId, VoidInvoiceRequest|array $request, array $headers = []): Invoice
     {
-        $request = RequestModels::from($request, VoidInvoiceRequest::class);
+        $request = $this->model($request, VoidInvoiceRequest::class);
 
         return $this->execute(fn () => $this->client->voidCompanyInvoice($this->companyId, $invoiceId, $request, $headers));
     }
@@ -167,7 +166,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function createCorrective(string $invoiceId, CreateCorrectiveInvoiceRequest|array $request, array $headers = []): Invoice
     {
-        $request = RequestModels::from($request, CreateCorrectiveInvoiceRequest::class);
+        $request = $this->model($request, CreateCorrectiveInvoiceRequest::class);
 
         return $this->execute(fn () => $this->client->createCompanyCorrectiveInvoice($this->companyId, $invoiceId, $request, $headers));
     }
@@ -182,7 +181,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function setStatus(string $invoiceId, SetInvoiceStatusRequest|array $request, array $headers = []): Invoice
     {
-        $request = RequestModels::from($request, SetInvoiceStatusRequest::class);
+        $request = $this->model($request, SetInvoiceStatusRequest::class);
 
         return $this->execute(fn () => $this->client->setCompanyInvoiceStatus($this->companyId, $invoiceId, $request, $headers));
     }
@@ -222,7 +221,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function derive(CreateInvoiceDerivationRequest|array $request, array $headers = []): Invoice
     {
-        $request = RequestModels::from($request, CreateInvoiceDerivationRequest::class);
+        $request = $this->model($request, CreateInvoiceDerivationRequest::class);
 
         return $this->execute(fn () => $this->client->createCompanyInvoiceDerivation($this->companyId, $request, $headers));
     }
@@ -236,7 +235,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function createBatch(CreateInvoiceBatchRequest|array $request, array $headers = []): BulkOperationResult
     {
-        $request = RequestModels::from($request, CreateInvoiceBatchRequest::class);
+        $request = $this->model($request, CreateInvoiceBatchRequest::class);
 
         return $this->execute(fn () => $this->client->createCompanyInvoiceBatch($this->companyId, $request, $headers));
     }
@@ -257,7 +256,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function createPdfArchive(CreateInvoicePdfArchiveRequest|array $request): BinaryDownload
     {
-        $request = RequestModels::from($request, CreateInvoicePdfArchiveRequest::class);
+        $request = $this->model($request, CreateInvoicePdfArchiveRequest::class);
 
         return BinaryDownload::fromResponse(
             $this->executeRaw(new CreateCompanyInvoicePdfArchive($this->companyId, $request), retryServerErrors: false),
@@ -276,7 +275,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function deliver(CreateInvoiceDeliveryRequest|array $request, array $headers = []): V1CompaniesCompanyIdInvoicesDeliveriesPostResponse200Data
     {
-        $request = RequestModels::from($request, CreateInvoiceDeliveryRequest::class);
+        $request = $this->model($request, CreateInvoiceDeliveryRequest::class);
 
         return $this->execute(fn () => $this->client->createCompanyInvoiceDelivery($this->companyId, $request, $headers));
     }
@@ -296,7 +295,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function createSimplifiedExchange(CreateSimplifiedExchangeRequest|array $request, array $headers = []): Invoice
     {
-        $request = RequestModels::from($request, CreateSimplifiedExchangeRequest::class);
+        $request = $this->model($request, CreateSimplifiedExchangeRequest::class);
 
         return $this->execute(fn () => $this->client->createCompanySimplifiedExchange($this->companyId, $request, $headers));
     }
@@ -340,7 +339,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function export(CreateInvoiceExportRequest|array $request): BinaryDownload
     {
-        $request = RequestModels::from($request, CreateInvoiceExportRequest::class);
+        $request = $this->model($request, CreateInvoiceExportRequest::class);
 
         return BinaryDownload::fromResponse(
             $this->executeRaw(new CreateCompanyInvoiceExport($this->companyId, $request), retryServerErrors: false),
@@ -391,7 +390,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function send(string $invoiceId, SendEmailRequest|array|null $request = null, array $headers = []): V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200Data|V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse202Data
     {
-        $request = RequestModels::from($request, SendEmailRequest::class);
+        $request = $this->model($request, SendEmailRequest::class);
 
         return $this->execute(fn () => $this->client->sendCompanyInvoice($this->companyId, $invoiceId, $request, $headers));
     }
@@ -405,7 +404,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function convertToInvoice(string $invoiceId, ConvertProformaToInvoiceRequest|array|null $request = null, array $headers = []): Invoice
     {
-        $request = RequestModels::from($request, ConvertProformaToInvoiceRequest::class);
+        $request = $this->model($request, ConvertProformaToInvoiceRequest::class);
 
         return $this->execute(fn () => $this->client->convertCompanyProformaToInvoice($this->companyId, $invoiceId, $request, $headers));
     }
@@ -428,7 +427,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function setSchedule(string $invoiceId, SetInvoiceScheduleRequest|array $request): Invoice
     {
-        $request = RequestModels::from($request, SetInvoiceScheduleRequest::class);
+        $request = $this->model($request, SetInvoiceScheduleRequest::class);
 
         return $this->execute(fn () => $this->client->setCompanyInvoiceSchedule($this->companyId, $invoiceId, $request));
     }

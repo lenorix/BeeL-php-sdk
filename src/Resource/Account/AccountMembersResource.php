@@ -12,7 +12,6 @@ use Lenorix\BeelSdk\Generated\Model\MemberGrant;
 use Lenorix\BeelSdk\Generated\Model\PutMemberGrantRequest;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdMembersGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdMembersMemberIdGrantsGetResponse200Data;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -59,7 +58,7 @@ final readonly class AccountMembersResource extends GeneratedResource
      */
     public function update(string $memberId, ChangeMemberRoleRequest|array $request): AccountMember
     {
-        $request = RequestModels::from($request, ChangeMemberRoleRequest::class);
+        $request = $this->model($request, ChangeMemberRoleRequest::class);
 
         return $this->execute(fn () => $this->client->patchAccountMember($this->accountId, $memberId, $request));
     }
@@ -100,7 +99,7 @@ final readonly class AccountMembersResource extends GeneratedResource
      */
     public function putGrant(string $memberId, string $companyId, PutMemberGrantRequest|array $request): GrantAssignment
     {
-        $request = RequestModels::from($request, PutMemberGrantRequest::class);
+        $request = $this->model($request, PutMemberGrantRequest::class);
 
         return $this->execute(fn () => $this->client->putAccountMemberGrant($this->accountId, $memberId, $companyId, $request));
     }

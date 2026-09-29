@@ -328,7 +328,7 @@ preg_match('/\.(\d+)/', $value = $raw['data']['created_at'], $m);               
 $at = Psl\DateTime\Timestamp::fromParts(strtotime($value), (int) str_pad($m[1] ?? '', 9, '0'));
 ```
 
-The JSON body is always readable from the start, even with a streaming transport. After a failed call, the last response is the error response; with retries, it is the last attempt. A call rejected before anything is sent, such as one with an invalid request array, leaves the previous call's response, so read it right after the call it belongs to.
+The JSON body is always readable from the start, even with a streaming transport. After a failed call, the last response is the error response; with retries, it is the last attempt. After a call rejected before anything is sent, such as one with an invalid request array, it is `null`. Read it right after the call it belongs to.
 
 ## Any endpoint
 

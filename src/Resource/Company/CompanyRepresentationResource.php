@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Model\RepresentationActionResponseData;
 use Lenorix\BeelSdk\Generated\Model\RepresentationDownloadResponseData;
 use Lenorix\BeelSdk\Generated\Model\RepresentationStatusResponseData;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRepresentationSubmitPostBody;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -62,7 +61,7 @@ final readonly class CompanyRepresentationResource extends GeneratedResource
      */
     public function submit(V1CompaniesCompanyIdRepresentationSubmitPostBody|array $request, array $headers = []): RepresentationActionResponseData
     {
-        $request = RequestModels::from($request, V1CompaniesCompanyIdRepresentationSubmitPostBody::class);
+        $request = $this->model($request, V1CompaniesCompanyIdRepresentationSubmitPostBody::class);
 
         return $this->execute(fn () => $this->client->submitCompanyRepresentation($this->companyId, $request, $headers));
     }

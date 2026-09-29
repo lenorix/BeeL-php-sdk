@@ -56,8 +56,8 @@ class ListCompanyPaymentEvents extends BaseEndpoint implements Endpoint
     emitted (`payment_intent.succeeded`) and is not filterable. `UNKNOWN` keeps every
     event whose provider name we do not classify. Repeat the parameter to combine kinds.
     An empty value (`event_kind=`) is the same as omitting it.
-     *    "min_amount"?: int, //Keep only the events whose `amount` is at or above this value.
-     *    "max_amount"?: int, //Keep only the events whose `amount` is at or below this value.
+     *    "min_amount"?: float, //Keep only the events whose `amount` is at or above this value.
+     *    "max_amount"?: float, //Keep only the events whose `amount` is at or below this value.
      *    "needs_action"?: bool, //`true` keeps only the events still worth acting on; `false`, only the ones that are
     not. Omit it for both.
      *    "from"?: string, //Keep only the events received at or after this instant.
@@ -152,8 +152,8 @@ class ListCompanyPaymentEvents extends BaseEndpoint implements Endpoint
         $optionsResolver->addAllowedTypes('failure_reason', ['array']);
         $optionsResolver->addAllowedTypes('failure_category', ['array']);
         $optionsResolver->addAllowedTypes('event_kind', ['array']);
-        $optionsResolver->addAllowedTypes('min_amount', ['int']);
-        $optionsResolver->addAllowedTypes('max_amount', ['int']);
+        $optionsResolver->addAllowedTypes('min_amount', ['float']);
+        $optionsResolver->addAllowedTypes('max_amount', ['float']);
         $optionsResolver->addAllowedTypes('needs_action', ['bool']);
         $optionsResolver->addAllowedTypes('from', ['string']);
         $optionsResolver->addAllowedTypes('to', ['string']);

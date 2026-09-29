@@ -11,7 +11,6 @@ use Lenorix\BeelSdk\Generated\Model\CreateClaimTokenRequest;
 use Lenorix\BeelSdk\Generated\Model\ManagedAccountSummary;
 use Lenorix\BeelSdk\Generated\Model\ProvisioningUsage;
 use Lenorix\BeelSdk\Generated\Model\SetAccountOwnerRequest;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\Account\AccountCompaniesResource;
 use Lenorix\BeelSdk\Resource\Account\AccountEmailsResource;
@@ -78,7 +77,7 @@ final readonly class AccountScope extends GeneratedResource
      */
     public function changeAccessLevel(ChangeAccessLevelRequest|array $request): void
     {
-        $request = RequestModels::from($request, ChangeAccessLevelRequest::class);
+        $request = $this->model($request, ChangeAccessLevelRequest::class);
 
         $this->executeVoid(fn () => $this->client->changeManagedAccountAccessLevel($this->accountId, $request));
     }
@@ -91,7 +90,7 @@ final readonly class AccountScope extends GeneratedResource
      */
     public function createClaimToken(CreateClaimTokenRequest|array|null $request = null): ClaimTokenResult
     {
-        $request = RequestModels::from($request, CreateClaimTokenRequest::class);
+        $request = $this->model($request, CreateClaimTokenRequest::class);
 
         return $this->execute(fn () => $this->client->createAccountClaimToken($this->accountId, $request));
     }
@@ -101,7 +100,7 @@ final readonly class AccountScope extends GeneratedResource
      */
     public function setOwner(SetAccountOwnerRequest|array $request): void
     {
-        $request = RequestModels::from($request, SetAccountOwnerRequest::class);
+        $request = $this->model($request, SetAccountOwnerRequest::class);
 
         $this->executeVoid(fn () => $this->client->putAccountOwner($this->accountId, $request));
     }

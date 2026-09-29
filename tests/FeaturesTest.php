@@ -2103,3 +2103,59 @@ it('keeps a download file name safe to save on Windows', function (string $dispo
     'trailing dots and spaces' => ['attachment; filename="invoices.zip. "', 'invoices.zip'],
     'forbidden characters' => ['attachment; filename="a<b>c|d?e*f.zip"', 'a_b_c_d_e_f.zip'],
 ]);
+
+it('accepts whole and decimal numbers in numeric list filters', function (Closure $list, array $query, string $expected) {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => []])]);
+
+    $list(testClient($transport), $query);
+
+    expect(rawurldecode($transport->requests[0]->getUri()->getQuery()))->toContain($expected);
+})->with([
+    'invoice total' => [fn (Beel $beel, array $query) => $beel->company('c')->invoices->list($query), ['total_min' => 100], 'total_min=100'],
+    'product price' => [fn (Beel $beel, array $query) => $beel->company('c')->products->list($query), ['min_price' => 9.99], 'min_price=9.99'],
+    'payment amount' => [fn (Beel $beel, array $query) => $beel->company('c')->paymentConnections->events('conn-1')->list($query), ['min_amount' => 12.5], 'min_amount=12.5'],
+]);
+
+it('lists every numeric query filter of the contract as a number', function () {
+    $numbers = [];
+    foreach (openApiContract()['paths'] as $operations) {
+        foreach ($operations as $operation) {
+            foreach (is_array($operation) ? $operation['parameters'] ?? [] : [] as $parameter) {
+                if (($parameter['in'] ?? null) === 'query' && ($parameter['schema']['type'] ?? null) === 'number') {
+                    $numbers[] = $parameter['name'];
+                }
+            }
+        }
+    }
+    $numbers = array_values(array_unique($numbers));
+    sort($numbers);
+
+    expect(QueryParameters::NUMBERS)->toBe($numbers);
+});
+
+it('has no last response after a call rejected before anything is sent', function (Closure $rejected) {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => ['id' => 'inv-1']])]);
+    $beel = testClient($transport);
+    $beel->company('c')->invoices->get('inv-1');
+
+    expect(fn () => $rejected($beel))->toThrow(InvalidArgumentException::class)
+        ->and($beel->getLastResponse())->toBeNull()
+        ->and($transport->requests)->toHaveCount(1);
+})->with([
+    'invalid request array' => [fn (Beel $beel) => $beel->company('c')->invoices->create(['unknown_field' => 1])],
+    'missing request() path parameter' => [fn (Beel $beel) => $beel->request('GET', '/v1/companies/{company_id}')],
+    'unsafe path' => [fn (Beel $beel) => $beel->company('c')->invoices->get('..')],
+]);
+
+it('stops following cursors that cycle back to a page already read', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['accounts' => [['account_id' => 'a']], 'next_cursor' => 'A']]),
+        jsonResponse(['success' => true, 'data' => ['accounts' => [['account_id' => 'b']], 'next_cursor' => 'B']]),
+        jsonResponse(['success' => true, 'data' => ['accounts' => [['account_id' => 'c']], 'next_cursor' => 'A']]),
+    ]);
+
+    $ids = array_map(static fn (object $account): string => $account->getAccountId(), iterator_to_array(testClient($transport)->accounts->all(), false));
+
+    expect($ids)->toBe(['a', 'b', 'c'])
+        ->and($transport->requests)->toHaveCount(3);
+});

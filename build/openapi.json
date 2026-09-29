@@ -11534,7 +11534,8 @@
                         "description": "Minimum price",
                         "schema": {
                             "type": "number",
-                            "minimum": 0
+                            "minimum": 0,
+                            "format": "double"
                         }
                     },
                     {
@@ -11543,7 +11544,8 @@
                         "description": "Maximum price",
                         "schema": {
                             "type": "number",
-                            "minimum": 0
+                            "minimum": 0,
+                            "format": "double"
                         }
                     },
                     {
@@ -12424,7 +12426,8 @@
                         "description": "Minimum price",
                         "schema": {
                             "type": "number",
-                            "minimum": 0
+                            "minimum": 0,
+                            "format": "double"
                         }
                     },
                     {
@@ -12433,7 +12436,8 @@
                         "description": "Maximum price",
                         "schema": {
                             "type": "number",
-                            "minimum": 0
+                            "minimum": 0,
+                            "format": "double"
                         }
                     },
                     {
@@ -19957,7 +19961,8 @@
                         "required": false,
                         "schema": {
                             "type": "number",
-                            "minimum": 0
+                            "minimum": 0,
+                            "format": "double"
                         }
                     },
                     {
@@ -19967,7 +19972,8 @@
                         "required": false,
                         "schema": {
                             "type": "number",
-                            "minimum": 0
+                            "minimum": 0,
+                            "format": "double"
                         }
                     },
                     {

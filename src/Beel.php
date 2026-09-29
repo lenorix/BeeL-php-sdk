@@ -142,8 +142,8 @@ final readonly class Beel
      * code, or the raw JSON body, where date-times keep the nanoseconds that PHP's `DateTime`
      * cannot hold. JSON and error bodies are always readable from the start; the body of a
      * successful file download is the same stream the call returned. After a failed call it is
-     * the error response; with retries, the last attempt. A call rejected before anything is sent,
-     * such as one with an invalid request array, leaves the previous call's response.
+     * the error response; with retries, the last attempt. After a call rejected before anything is
+     * sent, such as one with an invalid request array, it is null.
      */
     public function getLastResponse(): ?ResponseInterface
     {

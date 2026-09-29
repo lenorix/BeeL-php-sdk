@@ -16,7 +16,6 @@ use Lenorix\BeelSdk\Generated\Model\SetRecurringInvoiceStatusRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdHistoryGetResponse200Data;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -61,7 +60,7 @@ final readonly class CompanyRecurringInvoicesResource extends GeneratedResource
      */
     public function create(CreateRecurringInvoiceRequest|array $request): RecurringInvoiceResponse
     {
-        $request = RequestModels::from($request, CreateRecurringInvoiceRequest::class);
+        $request = $this->model($request, CreateRecurringInvoiceRequest::class);
 
         return $this->execute(fn () => $this->client->createCompanyRecurringInvoice($this->companyId, $request));
     }
@@ -89,7 +88,7 @@ final readonly class CompanyRecurringInvoicesResource extends GeneratedResource
      */
     public function update(string $recurringInvoiceId, PatchRecurringInvoiceRequest|array $request): RecurringInvoiceResponse
     {
-        $request = RequestModels::from($request, PatchRecurringInvoiceRequest::class);
+        $request = $this->model($request, PatchRecurringInvoiceRequest::class);
 
         return $this->execute(fn () => $this->client->patchCompanyRecurringInvoice($this->companyId, $recurringInvoiceId, $request));
     }
@@ -99,7 +98,7 @@ final readonly class CompanyRecurringInvoicesResource extends GeneratedResource
      */
     public function setStatus(string $recurringInvoiceId, SetRecurringInvoiceStatusRequest|array $request): RecurringInvoiceResponse
     {
-        $request = RequestModels::from($request, SetRecurringInvoiceStatusRequest::class);
+        $request = $this->model($request, SetRecurringInvoiceStatusRequest::class);
 
         return $this->execute(fn () => $this->client->setCompanyRecurringInvoiceStatus($this->companyId, $recurringInvoiceId, $request));
     }
@@ -143,7 +142,7 @@ final readonly class CompanyRecurringInvoicesResource extends GeneratedResource
      */
     public function derive(CreateRecurringInvoiceDerivationRequest|array $request): RecurringInvoiceResponse
     {
-        $request = RequestModels::from($request, CreateRecurringInvoiceDerivationRequest::class);
+        $request = $this->model($request, CreateRecurringInvoiceDerivationRequest::class);
 
         return $this->execute(fn () => $this->client->createCompanyRecurringInvoiceDerivation($this->companyId, $request));
     }

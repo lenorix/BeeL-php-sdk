@@ -27,7 +27,7 @@ final readonly class CompanyPaymentEventsResource extends GeneratedResource
      */
     public function list(array $query = []): ListManagedPaymentEventsResponseData
     {
-        return $this->execute(fn () => $this->client->listCompanyPaymentEvents($this->companyId, $this->connectionId, QueryParameters::lists($query)));
+        return $this->execute(fn () => $this->client->listCompanyPaymentEvents($this->companyId, $this->connectionId, QueryParameters::numbers(QueryParameters::lists($query))));
     }
 
     /**

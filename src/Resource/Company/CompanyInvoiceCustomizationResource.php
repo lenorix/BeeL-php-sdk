@@ -7,7 +7,6 @@ namespace Lenorix\BeelSdk\Resource\Company;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\InvoiceCustomization;
 use Lenorix\BeelSdk\Generated\Model\UpdateInvoiceCustomizationRequest;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -39,7 +38,7 @@ final readonly class CompanyInvoiceCustomizationResource extends GeneratedResour
      */
     public function update(UpdateInvoiceCustomizationRequest|array $request, array $headers = []): InvoiceCustomization
     {
-        $request = RequestModels::from($request, UpdateInvoiceCustomizationRequest::class);
+        $request = $this->model($request, UpdateInvoiceCustomizationRequest::class);
 
         return $this->execute(fn () => $this->client->updateCompanyInvoiceCustomization($this->companyId, $request, $headers));
     }

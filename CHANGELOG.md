@@ -14,6 +14,9 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 ### Fixed
 
+- `getLastResponse()` returned the previous call's response after a call rejected before anything was sent, such as one with an invalid request array: it is now `null` then.
+- `$beel->accounts->all()` stopped at a `next_cursor` only when it repeated the current one, so cursors cycling through several pages (A, B, A) were followed forever: it now stops at any cursor already read.
+- Numeric list filters rejected valid values: `total_min`/`total_max` and `taxable_base_min`/`taxable_base_max` a whole number, and the product `min_price`/`max_price` and payment event `min_amount`/`max_amount`, which the generated client read as integers, a decimal one. All of them now take both; `bin/prepare-openapi.php` gives BeeL's untyped `number` filters the `double` format.
 - `$beel->request()` queries: a `BackedEnum` is sent as its value, `null` items and empty lists are left out, and a large float keeps plain decimal notation (`1e20` was sent as `1.0E+20`); a date object or a list of maps throws `InvalidArgumentException` instead of an `Error` or a `list=Array` query.
 - `$beel->request()` sends an empty array body as `{}`, not `[]`.
 - A date-time that does not exist, such as `2026-02-30T00:00:00Z` or `T24:00:00`, throws `InvalidDateException` instead of rolling over into the next day.

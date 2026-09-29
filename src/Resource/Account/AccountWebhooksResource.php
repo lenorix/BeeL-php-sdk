@@ -13,7 +13,6 @@ use Lenorix\BeelSdk\Generated\Model\WebhookDeliveryLog;
 use Lenorix\BeelSdk\Generated\Model\WebhookSubscription;
 use Lenorix\BeelSdk\Generated\Model\WebhookSubscriptionWithSecret;
 use Lenorix\BeelSdk\Generated\Model\WebhookTestResult;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Resource\GeneratedResource;
 
@@ -55,7 +54,7 @@ final readonly class AccountWebhooksResource extends GeneratedResource
      */
     public function create(CreateWebhookSubscriptionRequest|array $request): WebhookSubscriptionWithSecret
     {
-        $request = RequestModels::from($request, CreateWebhookSubscriptionRequest::class);
+        $request = $this->model($request, CreateWebhookSubscriptionRequest::class);
 
         return $this->execute(fn () => $this->client->createAccountWebhookSubscription($this->accountId, $request));
     }
@@ -70,7 +69,7 @@ final readonly class AccountWebhooksResource extends GeneratedResource
      */
     public function update(string $webhookId, UpdateWebhookSubscriptionRequest|array $request): WebhookSubscription
     {
-        $request = RequestModels::from($request, UpdateWebhookSubscriptionRequest::class);
+        $request = $this->model($request, UpdateWebhookSubscriptionRequest::class);
 
         return $this->execute(fn () => $this->client->patchAccountWebhookSubscription($this->accountId, $webhookId, $request));
     }

@@ -4870,8 +4870,8 @@ class Client extends Runtime\Client\Client
      *    "search"?: string, //Global search by name, code or description
      *    "name"?: string, //Filter by name (partial search case-insensitive)
      *    "code"?: string, //Filter by code (partial search)
-     *    "min_price"?: int, //Minimum price
-     *    "max_price"?: int, //Maximum price
+     *    "min_price"?: float, //Minimum price
+     *    "max_price"?: float, //Maximum price
      *    "sort_by"?: string, //Field to sort by
      *    "sort_order"?: string, //Sort order direction
      * } $queryParameters
@@ -5129,8 +5129,8 @@ class Client extends Runtime\Client\Client
      *    "active"?: bool, //Filter by active/inactive status
      *    "name"?: string, //Filter by name (partial search case-insensitive)
      *    "code"?: string, //Filter by code (partial search)
-     *    "min_price"?: int, //Minimum price
-     *    "max_price"?: int, //Maximum price
+     *    "min_price"?: float, //Minimum price
+     *    "max_price"?: float, //Maximum price
      *    "sort_by"?: string, //Field to sort by
      *    "sort_order"?: string, //Sort order direction
      * } $queryParameters

@@ -11,7 +11,6 @@ use Lenorix\BeelSdk\Generated\Model\ManagedAccountSummary;
 use Lenorix\BeelSdk\Generated\Model\ProvisionAccountRequest;
 use Lenorix\BeelSdk\Generated\Model\ProvisionAccountResult;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsGetResponse200Data;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
 final readonly class AccountsResource extends GeneratedResource
@@ -58,7 +57,7 @@ final readonly class AccountsResource extends GeneratedResource
      */
     public function provision(ProvisionAccountRequest|array $request): ProvisionAccountResult
     {
-        $request = RequestModels::from($request, ProvisionAccountRequest::class);
+        $request = $this->model($request, ProvisionAccountRequest::class);
 
         return $this->execute(fn () => $this->client->provisionAccount($request));
     }
@@ -78,7 +77,7 @@ final readonly class AccountsResource extends GeneratedResource
      */
     public function import(AccountImportUpload|array $request, array $headers = []): AccountImportResult
     {
-        $request = RequestModels::from($request, AccountImportUpload::class);
+        $request = $this->model($request, AccountImportUpload::class);
 
         return $this->execute(fn () => $this->client->createAccountImport($request, $this->withIdempotencyKey($headers)));
     }
@@ -92,7 +91,7 @@ final readonly class AccountsResource extends GeneratedResource
      */
     public function previewImport(AccountImportUpload|array $request): AccountImportResult
     {
-        $request = RequestModels::from($request, AccountImportUpload::class);
+        $request = $this->model($request, AccountImportUpload::class);
 
         return $this->execute(fn () => $this->client->previewAccountImport($request));
     }

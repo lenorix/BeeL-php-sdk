@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\MyIdentity;
 use Lenorix\BeelSdk\Generated\Model\MyPreferences;
 use Lenorix\BeelSdk\Generated\Model\UpdateMeRequest;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
 /** The authenticated principal: who the API key belongs to and what it may do. */
@@ -37,7 +36,7 @@ final readonly class MeResource extends GeneratedResource
      */
     public function update(UpdateMeRequest|array $request): MyPreferences
     {
-        $request = RequestModels::from($request, UpdateMeRequest::class);
+        $request = $this->model($request, UpdateMeRequest::class);
 
         return $this->execute(fn () => $this->client->updateMe($request));
     }

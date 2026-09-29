@@ -13,7 +13,6 @@ use Lenorix\BeelSdk\Generated\Model\UpdateVeriFactuConfigurationRequest;
 use Lenorix\BeelSdk\Generated\Model\V1ConfigurationLanguagePutBody;
 use Lenorix\BeelSdk\Generated\Model\V1ConfigurationLanguagePutResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\VeriFactuConfiguration;
-use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\ResponseContext;
 
 /** @deprecated Prefer company configuration resources and global catalogs. */
@@ -41,7 +40,7 @@ final readonly class ConfigurationResource extends GeneratedResource
      */
     public function updateTaxConfig(UpdateTaxConfigurationRequest|array $request): TaxConfiguration
     {
-        $request = RequestModels::from($request, UpdateTaxConfigurationRequest::class);
+        $request = $this->model($request, UpdateTaxConfigurationRequest::class);
 
         return $this->execute(fn () => $this->client->updateTaxConfiguration($request));
     }
@@ -56,7 +55,7 @@ final readonly class ConfigurationResource extends GeneratedResource
      */
     public function updateVeriFactu(UpdateVeriFactuConfigurationRequest|array $request): VeriFactuConfiguration
     {
-        $request = RequestModels::from($request, UpdateVeriFactuConfigurationRequest::class);
+        $request = $this->model($request, UpdateVeriFactuConfigurationRequest::class);
 
         return $this->execute(fn () => $this->client->updateVeriFactuConfiguration($request));
     }

@@ -52,16 +52,30 @@ $addType = static function (mixed $parameter) use ($document, &$patched): void {
     }
 };
 
+// In the same pass: Jane reads a `number` query parameter without a `format` as an integer, so a
+// price filter such as `min_price=9.99` was rejected. Give it the `double` format BeeL uses for
+// the other amounts; the SDK passes whole numbers for them as floats (QueryParameters::numbers()).
+$numbersTyped = 0;
+$typeNumber = static function (mixed $parameter) use (&$numbersTyped): void {
+    $schema = $parameter instanceof stdClass ? ($parameter->schema ?? null) : null;
+    if (($parameter->in ?? null) === 'query' && $schema instanceof stdClass && ($schema->type ?? null) === 'number' && ! isset($schema->format)) {
+        $schema->format = 'double';
+        $numbersTyped++;
+    }
+};
+
 foreach (get_object_vars($document->paths) as $pathItem) {
     foreach (get_object_vars($pathItem) as $key => $operation) {
         $parameters = $key === 'parameters' ? $operation : ($operation->parameters ?? []);
         foreach (is_array($parameters) ? $parameters : [] as $parameter) {
             $addType($parameter);
+            $typeNumber($parameter);
         }
     }
 }
 foreach (get_object_vars($document->components->parameters ?? new stdClass) as $parameter) {
     $addType($parameter);
+    $typeNumber($parameter);
 }
 
 // Second edit: every operation declares a `default` response (BeeL's UnexpectedError), and Jane
@@ -161,7 +175,6 @@ $walk = static function (mixed $schema, array $inherited, callable $onProperty, 
 // Third edit: BeeL writes some nullable references as `{$ref, nullable: true}`, which loses the
 // null (see above). Move `nullable` onto a wrapper, where Jane reads it.
 $nullableRefs = 0;
-$visited = [];
 $everySchema = static function (callable $onProperty, callable $onReference) use ($document, $walk, $schemas, $component): void {
     $visited = [];
     foreach (array_keys(get_object_vars($schemas)) as $name) {
@@ -326,7 +339,7 @@ if ($json === false || (! is_dir(dirname($destination)) && ! mkdir(dirname($dest
     exit(1);
 }
 
-fwrite(STDOUT, "Wrote {$destination} ({$patched} parameter schemas given a type for Jane, {$defaultResponses} default responses dropped, {$nullableRefs} nullable references wrapped, {$envelopesCompleted} envelopes given a required `data`, {$optionalMadeNullable} optional properties or models made nullable).\n");
+fwrite(STDOUT, "Wrote {$destination} ({$patched} parameter schemas given a type for Jane, {$numbersTyped} number parameters given a format, {$defaultResponses} default responses dropped, {$nullableRefs} nullable references wrapped, {$envelopesCompleted} envelopes given a required `data`, {$optionalMadeNullable} optional properties or models made nullable).\n");
 if ($sharedComponents !== []) {
     fwrite(STDOUT, 'Optional but left non-nullable, as they are also required in what BeeL sends and have required keys or enums: '.implode(', ', array_keys($sharedComponents)).".\n");
 }

@@ -29,7 +29,7 @@ final class QueryParameters
         'wait_for_pdf',
     ];
 
-    /** List filters sent as a comma-separated value; a single value is accepted as a one-item list. */
+    /** List filters, sent as the contract says (a comma-separated value, or a repeated parameter for payment events); a single value is accepted as a one-item list. */
     public const LISTS = [
         'event_kind',
         'failure_category',
@@ -38,6 +38,39 @@ final class QueryParameters
         'related_entity_ids',
         'status',
     ];
+
+    /**
+     * Numeric filters, which BeeL types as `number` (bin/prepare-openapi.php makes the generated client
+     * read them as floats); a test keeps this in sync with the contract.
+     */
+    public const NUMBERS = [
+        'max_amount',
+        'max_price',
+        'min_amount',
+        'min_price',
+        'taxable_base_max',
+        'taxable_base_min',
+        'total_max',
+        'total_min',
+    ];
+
+    /**
+     * Pass a whole number given for a numeric filter, such as `['total_min' => 100]`, as the float
+     * the generated client requires.
+     *
+     * @param  array<string, mixed>  $query
+     * @return array<string, mixed>
+     */
+    public static function numbers(array $query): array
+    {
+        foreach (self::NUMBERS as $name) {
+            if (isset($query[$name]) && is_int($query[$name])) {
+                $query[$name] = (float) $query[$name];
+            }
+        }
+
+        return $query;
+    }
 
     /**
      * Wrap a single value of a list filter, such as `['status' => 'ISSUED']`, into a list.
