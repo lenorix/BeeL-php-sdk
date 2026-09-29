@@ -142,7 +142,8 @@ final readonly class Beel
      * code, or the raw JSON body, where date-times keep the nanoseconds that PHP's `DateTime`
      * cannot hold. JSON and error bodies are always readable from the start; the body of a
      * successful file download is the same stream the call returned. After a failed call it is
-     * the error response; with retries, the last attempt.
+     * the error response; with retries, the last attempt. A call rejected before anything is sent,
+     * such as one with an invalid request array, leaves the previous call's response.
      */
     public function getLastResponse(): ?ResponseInterface
     {
@@ -192,8 +193,10 @@ final readonly class Beel
         $request = Psr17FactoryDiscovery::findRequestFactory()->createRequest(strtoupper($method), $path.($queryString === '' ? '' : '?'.$queryString))
             ->withHeader('Accept', 'application/json');
         if ($body !== null) {
+            // An empty array is BeeL's empty object, never an empty list.
+            $json = $body === [] ? '{}' : json_encode($body, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION);
             $request = $request->withHeader('Content-Type', 'application/json')
-                ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode($body, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION)));
+                ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream($json));
         }
 
         $response = $this->responseContext->withRequestOptions($options, fn () => $this->api->sendRequest($request));
@@ -251,15 +254,14 @@ final readonly class Beel
 
     /**
      * @param  array<array-key, mixed>  $query
+     *
+     * @throws \InvalidArgumentException If a value has no query form, such as a date object or a list of maps.
      */
     private static function queryString(array $query, ?string $prefix = null): string
     {
         $pairs = [];
         foreach ($query as $key => $value) {
             $name = $prefix === null ? (string) $key : $prefix.'['.$key.']';
-            if ($value === null) {
-                continue;
-            }
             if (is_array($value) && ! array_is_list($value)) {
                 $nested = self::queryString($value, $name);
                 if ($nested !== '') {
@@ -268,12 +270,32 @@ final readonly class Beel
 
                 continue;
             }
-            $value = is_array($value)
-                ? implode(',', array_map(static fn (mixed $item): string => is_bool($item) ? ($item ? 'true' : 'false') : (string) $item, $value))
-                : (is_bool($value) ? ($value ? 'true' : 'false') : (string) $value);
-            $pairs[] = rawurlencode($name).'='.rawurlencode($value);
+            // Nulls, and lists left empty without them, are left out.
+            $items = array_values(array_filter(is_array($value) ? $value : [$value], static fn (mixed $item): bool => $item !== null));
+            if ($items !== []) {
+                $pairs[] = rawurlencode($name).'='.rawurlencode(implode(',', array_map(static fn (mixed $item): string => self::queryValue($name, $item), $items)));
+            }
         }
 
         return implode('&', $pairs);
+    }
+
+    /** @throws \InvalidArgumentException If the value has no query form. */
+    private static function queryValue(string $name, mixed $value): string
+    {
+        return match (true) {
+            is_bool($value) => $value ? 'true' : 'false',
+            is_int($value), is_string($value) => (string) $value,
+            // Plain decimal notation: PHP would write 1e20 as 1.0E+20.
+            is_float($value) && is_finite($value) => rtrim(rtrim(number_format($value, 14, '.', ''), '0'), '.'),
+            $value instanceof \BackedEnum => (string) $value->value,
+            $value instanceof \Stringable && ! $value instanceof \DateTimeInterface => (string) $value,
+            default => throw new \InvalidArgumentException(sprintf(
+                'Query parameter "%s" has a %s, which has no query form: pass text, a number, a boolean, an enum, or a list or map of them%s.',
+                $name,
+                get_debug_type($value),
+                $value instanceof \DateTimeInterface ? ' (a date as "Y-m-d" or an RFC 3339 date-time)' : '',
+            )),
+        };
     }
 }

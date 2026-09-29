@@ -84,7 +84,7 @@ final readonly class BinaryDownload
      * Read the file name from `Content-Disposition` (RFC 6266), preferring the UTF-8 `filename*` form.
      *
      * The result is reduced to a base name, so a value such as `../../x` can never point outside
-     * the directory it is saved to.
+     * the directory it is saved to, and made safe to save on Windows too.
      */
     private static function fileName(string $disposition): ?string
     {
@@ -105,7 +105,13 @@ final readonly class BinaryDownload
         }
 
         $name = basename(str_replace('\\', '/', (string) preg_replace('/[\x00-\x1F\x7F]/', '', $name)));
+        // Also safe on Windows: no characters it forbids (":" would name an alternate data stream),
+        // no trailing dots or spaces, which it drops, and no reserved device name such as CON.
+        $name = rtrim((string) preg_replace('/[<>:"|?*]/', '_', $name), '. ');
+        if (preg_match('/^(CON|PRN|AUX|NUL|COM[1-9]|LPT[1-9])(\.|$)/i', $name) === 1) {
+            $name = '_'.$name;
+        }
 
-        return in_array($name, ['', '.', '..'], true) ? null : $name;
+        return $name === '' ? null : $name;
     }
 }

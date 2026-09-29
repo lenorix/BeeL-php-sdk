@@ -2052,3 +2052,54 @@ it('reads only a valid Retry-After and otherwise backs off', function (string $h
 it('ignores a retry_after in the body that is not a finite, non-negative number', function (string $value) {
     expect(RetryAfter::seconds(new Response(429), '{"error":{"retry_after":'.$value.'}}'))->toBeNull();
 })->with(['overflowing' => ['1e400'], 'negative' => ['-5'], 'text' => ['"soon"']]);
+
+it('encodes enums, lists and numbers in request() queries, and rejects what has no query form', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => []])]);
+
+    testClient($transport)->request('GET', '/v1/x', query: [
+        'environment' => Environment::TEST,
+        'status' => ['DRAFT', null, 'ISSUED'],
+        'empty' => [],
+        'total_min' => 1e20,
+        'rate' => 0.1,
+    ]);
+
+    expect(rawurldecode($transport->requests[0]->getUri()->getQuery()))
+        ->toBe('environment=TEST&status=DRAFT,ISSUED&total_min=100000000000000000000&rate=0.1');
+});
+
+it('rejects request() query values that have no query form', function (mixed $value) {
+    $transport = new RecordingPsrClient([]);
+
+    expect(fn () => testClient($transport)->request('GET', '/v1/x', query: ['value' => $value]))->toThrow(InvalidArgumentException::class)
+        ->and($transport->requests)->toBe([]);
+})->with([
+    'a date object' => [new DateTimeImmutable('2026-01-01')],
+    'a list of maps' => [[['a' => 1]]],
+    'an infinite number' => [INF],
+]);
+
+it('sends an empty request() body as a JSON object', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => []])]);
+
+    testClient($transport)->request('POST', '/v1/x', body: []);
+
+    expect((string) $transport->requests[0]->getBody())->toBe('{}');
+});
+
+it('rejects a date-time that does not exist instead of rolling it over', function (string $value) {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => ['id' => 'inv-1', 'created_at' => $value]])]);
+
+    expect(fn () => testClient($transport)->company('c')->invoices->get('inv-1'))->toThrow(InvalidDateException::class);
+})->with(['2026-02-30T00:00:00Z', '2026-01-01T24:00:00Z', '2026-12-31T23:59:60Z', '2026-13-01T00:00:00Z']);
+
+it('keeps a download file name safe to save on Windows', function (string $disposition, ?string $fileName) {
+    $download = BinaryDownload::fromResponse(new Response(200, ['Content-Disposition' => $disposition]));
+
+    expect($download->fileName)->toBe($fileName);
+})->with([
+    'alternate data stream' => ['attachment; filename="invoices.zip:hidden"', 'invoices.zip_hidden'],
+    'reserved device name' => ['attachment; filename="CON.zip"', '_CON.zip'],
+    'trailing dots and spaces' => ['attachment; filename="invoices.zip. "', 'invoices.zip'],
+    'forbidden characters' => ['attachment; filename="a<b>c|d?e*f.zip"', 'a_b_c_d_e_f.zip'],
+]);

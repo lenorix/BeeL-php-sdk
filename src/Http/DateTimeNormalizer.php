@@ -21,7 +21,7 @@ use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
  */
 final class DateTimeNormalizer implements DenormalizerInterface, NormalizerInterface
 {
-    private const RFC3339 = '/^\d{4}-\d{2}-\d{2}[Tt]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:[Zz]|[+-]\d{2}:\d{2})$/';
+    private const RFC3339 = '/^(\d{4}-\d{2}-\d{2})[Tt](\d{2}:\d{2}:\d{2})(?:\.\d+)?(?:[Zz]|[+-]\d{2}:\d{2})$/';
 
     private const FORMAT = 'Y-m-d\TH:i:s.uP';
 
@@ -36,11 +36,19 @@ final class DateTimeNormalizer implements DenormalizerInterface, NormalizerInter
         if ($data instanceof \DateTimeInterface) {
             return \DateTime::createFromInterface($data);
         }
-        if (! is_string($data) || preg_match(self::RFC3339, $data) !== 1) {
+        if (! is_string($data) || preg_match(self::RFC3339, $data, $parts) !== 1) {
             throw new InvalidDateException($data, 'RFC 3339 date-time');
         }
 
-        $date = new \DateTime($data);
+        try {
+            $date = new \DateTime($data);
+        } catch (\Exception) {
+            throw new InvalidDateException($data, 'RFC 3339 date-time');
+        }
+        // PHP rolls a day or time that does not exist, such as February 30 or 24:00, over into the next one.
+        if ($date->format('Y-m-d H:i:s') !== $parts[1].' '.$parts[2]) {
+            throw new InvalidDateException($data, 'RFC 3339 date-time');
+        }
 
         // Same as the generated code did: a "Z" zone reads as GMT (+00:00).
         return $date->getTimezone()->getName() === 'Z' ? $date->setTimezone(new \DateTimeZone('GMT')) : $date;

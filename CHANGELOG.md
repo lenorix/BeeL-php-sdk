@@ -14,6 +14,10 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 ### Fixed
 
+- `$beel->request()` queries: a `BackedEnum` is sent as its value, `null` items and empty lists are left out, and a large float keeps plain decimal notation (`1e20` was sent as `1.0E+20`); a date object or a list of maps throws `InvalidArgumentException` instead of an `Error` or a `list=Array` query.
+- `$beel->request()` sends an empty array body as `{}`, not `[]`.
+- A date-time that does not exist, such as `2026-02-30T00:00:00Z` or `T24:00:00`, throws `InvalidDateException` instead of rolling over into the next day.
+- `BinaryDownload::$fileName` is safe to save on Windows too: characters Windows forbids become `_` (`:` would have named an alternate data stream), trailing dots and spaces are removed, and a reserved device name such as `CON` gets a `_` prefix.
 - A `409 IDEMPOTENCY_KEY_PROCESSING`, which BeeL sends while the first request with the key is still running, was returned as the result of a retried write, so calling again with a new key could duplicate it: it is now retried with the same key after BeeL's `Retry-After`.
 - A `5xx` BeeL replays for the key (`Idempotency-Replay: true`) is no longer retried, since the same key would only replay it.
 - A `Retry-After` that is neither seconds nor an HTTP date (such as `-1`, `now` or `1.5` read as a clock time) and a non-finite or negative `retry_after` made retries fire at once: they are now ignored, and decimal seconds are rounded up. `BeelNotReadyError::$retryAfter` reads it the same way.
