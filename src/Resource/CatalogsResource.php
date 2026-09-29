@@ -31,8 +31,6 @@ final readonly class CatalogsResource extends GeneratedResource
      */
     public function updateMe(UpdateMeRequest|array $request): MyPreferences
     {
-        $request = $this->model($request, UpdateMeRequest::class);
-
-        return $this->execute(fn () => $this->client->updateMe($request));
+        return $this->inheritOptions(new MeResource($this->client, $this->responseContext))->update($request);
     }
 }

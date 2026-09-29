@@ -416,7 +416,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function getSchedule(string $invoiceId): InvoiceSchedule
     {
-        return $this->execute(fn () => $this->client->getCompanyInvoiceSchedule($this->companyId, $invoiceId));
+        return $this->schedule->get($invoiceId);
     }
 
     /**
@@ -427,14 +427,12 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
      */
     public function setSchedule(string $invoiceId, SetInvoiceScheduleRequest|array $request): Invoice
     {
-        $request = $this->model($request, SetInvoiceScheduleRequest::class);
-
-        return $this->execute(fn () => $this->client->setCompanyInvoiceSchedule($this->companyId, $invoiceId, $request));
+        return $this->schedule->set($invoiceId, $request);
     }
 
     /** Remove an invoice's scheduled issue date. */
     public function clearSchedule(string $invoiceId): void
     {
-        $this->executeVoid(fn () => $this->client->deleteCompanyInvoiceSchedule($this->companyId, $invoiceId));
+        $this->schedule->clear($invoiceId);
     }
 }

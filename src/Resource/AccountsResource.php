@@ -57,7 +57,7 @@ final readonly class AccountsResource extends GeneratedResource
 
     public function get(string $accountId): ManagedAccountSummary
     {
-        return $this->execute(fn () => $this->client->getAccount($accountId));
+        return $this->scope($accountId)->get();
     }
 
     /**

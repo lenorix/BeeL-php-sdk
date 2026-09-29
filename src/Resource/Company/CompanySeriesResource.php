@@ -96,7 +96,7 @@ final readonly class CompanySeriesResource extends GeneratedResource
     /** Alias for {@see getDefaults()}. */
     public function getDefault(): V1CompaniesCompanyIdSeriesDefaultsGetResponse200Data
     {
-        return $this->execute(fn () => $this->client->getCompanyDefaultSeries($this->companyId));
+        return $this->getDefaults();
     }
 
     /**

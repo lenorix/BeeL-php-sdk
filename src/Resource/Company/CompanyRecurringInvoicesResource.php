@@ -158,7 +158,7 @@ final readonly class CompanyRecurringInvoicesResource extends GeneratedResource
     /** Generate an invoice from this template immediately. */
     public function generateNow(string $recurringInvoiceId): V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201Data
     {
-        return $this->execute(fn () => $this->client->generateCompanyRecurringInvoiceNow($this->companyId, $recurringInvoiceId));
+        return $this->generate($recurringInvoiceId);
     }
 
     /**

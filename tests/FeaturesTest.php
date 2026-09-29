@@ -2099,3 +2099,15 @@ it('keeps every docblock summary in the SDK whole', function () {
 
     expect($broken)->toBe([]);
 });
+
+it('keeps per-call options when an alias delegates to another resource', function (Closure $call, array $response) {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => $response])]);
+
+    $call(testClient($transport), new RequestOptions(headers: ['X-Trace-Id' => 'trace-9']));
+
+    expect($transport->requests[0]->getHeaderLine('X-Trace-Id'))->toBe('trace-9');
+})->with([
+    'invoice schedule' => [fn (Beel $beel, RequestOptions $options) => $beel->company('c')->invoices->withOptions($options)->getSchedule('inv-1'), ['invoice_id' => 'inv-1']],
+    'catalog preferences' => [fn (Beel $beel, RequestOptions $options) => $beel->catalogs->withOptions($options)->updateMe(['language' => 'es']), ['language' => 'es']],
+    'account' => [fn (Beel $beel, RequestOptions $options) => $beel->accounts->withOptions($options)->get('acc-1'), ['account_id' => 'acc-1']],
+]);
