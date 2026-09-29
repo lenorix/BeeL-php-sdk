@@ -350,6 +350,17 @@ abstract readonly class GeneratedResource
         }
     }
 
+    /** The pagination model of a page, when BeeL sent one. */
+    private function pagination(object $response): ?object
+    {
+        if (! method_exists($response, 'isInitialized') || ! method_exists($response, 'getPagination') || ! $response->isInitialized('pagination')) {
+            return null;
+        }
+        $pagination = $response->getPagination();
+
+        return is_object($pagination) && method_exists($pagination, 'isInitialized') ? $pagination : null;
+    }
+
     /**
      * The page number BeeL says it answered, or null when it does not say.
      *
@@ -358,13 +369,10 @@ abstract readonly class GeneratedResource
      */
     private function reportedPage(object $response): ?int
     {
-        if (! method_exists($response, 'isInitialized') || ! method_exists($response, 'getPagination') || ! $response->isInitialized('pagination')) {
-            return null;
-        }
-        $pagination = $response->getPagination();
+        $pagination = $this->pagination($response);
 
-        return is_object($pagination) && method_exists($pagination, 'isInitialized') && method_exists($pagination, 'getCurrentPage')
-            && $pagination->isInitialized('currentPage') ? (int) $pagination->getCurrentPage() : null;
+        return $pagination !== null && method_exists($pagination, 'getCurrentPage') && $pagination->isInitialized('currentPage')
+            ? (int) $pagination->getCurrentPage() : null;
     }
 
     /**
@@ -372,12 +380,8 @@ abstract readonly class GeneratedResource
      */
     private function hasNextPage(object $response): bool
     {
-        if (! method_exists($response, 'isInitialized') || ! method_exists($response, 'getPagination') || ! $response->isInitialized('pagination')) {
-            return false;
-        }
-
-        $pagination = $response->getPagination();
-        if (! is_object($pagination) || ! method_exists($pagination, 'isInitialized')) {
+        $pagination = $this->pagination($response);
+        if ($pagination === null) {
             return false;
         }
         // `has_next` is nullable in BeeL's contract: only a boolean decides, null falls back to page numbers.
