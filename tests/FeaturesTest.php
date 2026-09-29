@@ -75,8 +75,6 @@ use Lenorix\BeelSdk\Webhook\WebhookSignatureHeader;
 use Lenorix\BeelSdk\Webhook\WebhookSigner;
 use Lenorix\BeelSdk\Webhook\WebhookVerifier;
 use Psr\Http\Client\ClientInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 
 /** Read a source file with Unix line endings; Git checks files out with CRLF on Windows. */
 function sourceCode(string $file): string
@@ -1261,29 +1259,6 @@ it('keeps the error response as the last response after a failed call', function
 
 // Retry delays and network errors
 
-/** A transport that fails with a connection error for each queued exception, then answers with the queued responses. */
-function flakyTransport(array $outcomes): ClientInterface
-{
-    return new class($outcomes) implements ClientInterface
-    {
-        /** @var list<RequestInterface> */
-        public array $requests = [];
-
-        public function __construct(private array $outcomes) {}
-
-        public function sendRequest(RequestInterface $request): ResponseInterface
-        {
-            $this->requests[] = $request;
-            $outcome = array_shift($this->outcomes) ?? throw new LogicException('Unexpected request.');
-            if ($outcome instanceof Throwable) {
-                throw $outcome;
-            }
-
-            return $outcome;
-        }
-    };
-}
-
 function retryingClient(ClientInterface $transport, array &$sleeps, int $maxRetries = 1, int $maxRetryDelayMs = 30_000, int $retryDelayMs = 500): RetryingClient
 {
     return new RetryingClient($transport, $maxRetries, $retryDelayMs, $maxRetryDelayMs, sleep: static function (int $milliseconds) use (&$sleeps): void {
@@ -1358,7 +1333,7 @@ it('retries a connection error on a safe request and rethrows the original after
     $sleeps = [];
     $first = new ConnectException('Connection refused', new Request('GET', 'https://example.test/x'));
     $last = new ConnectException('Timed out', new Request('GET', 'https://example.test/x'));
-    $transport = flakyTransport([$first, $first, $last]);
+    $transport = new RecordingPsrClient([$first, $first, $last]);
 
     try {
         retryingClient($transport, $sleeps, maxRetries: 2, retryDelayMs: 0)->sendRequest(new Request('GET', 'https://example.test/x'));
@@ -1372,7 +1347,7 @@ it('retries a connection error on a safe request and rethrows the original after
 
 it('retries a connection error only when repeating it cannot duplicate a write', function (string $method, array $headers, bool $retried) {
     $sleeps = [];
-    $transport = flakyTransport([new ConnectException('Timed out', new Request($method, 'https://example.test/x')), new Response(200)]);
+    $transport = new RecordingPsrClient([new ConnectException('Timed out', new Request($method, 'https://example.test/x')), new Response(200)]);
     $client = new RetryingClient($transport, 1, 0, 0, autoIdempotencyKey: false);
 
     try {
@@ -1389,7 +1364,7 @@ it('retries a connection error only when repeating it cannot duplicate a write',
 ]);
 
 it('does not retry a connection error on file downloads', function (string $method) {
-    $transport = flakyTransport([new ConnectException('Timed out', new Request('POST', 'https://example.test/x')), new Response(200, ['Content-Type' => 'application/zip'], 'PK')]);
+    $transport = new RecordingPsrClient([new ConnectException('Timed out', new Request('POST', 'https://example.test/x')), new Response(200, ['Content-Type' => 'application/zip'], 'PK')]);
     $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 1, retryDelayMs: 0, maxRetryDelayMs: 0, httpClient: $transport);
     $invoices = $beel->company('c')->invoices;
 

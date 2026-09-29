@@ -14,7 +14,7 @@ final class RecordingPsrClient implements ClientInterface
     /** @var list<RequestInterface> */
     public array $requests = [];
 
-    /** @param list<ResponseInterface> $responses */
+    /** @param list<ResponseInterface|\Throwable> $responses Answers in order; a Throwable is thrown instead, such as a connection error. */
     public function __construct(private array $responses) {}
 
     public function sendRequest(RequestInterface $request): ResponseInterface
@@ -28,6 +28,10 @@ final class RecordingPsrClient implements ClientInterface
                 $request->getMethod(),
                 (string) $request->getUri(),
             ));
+        }
+
+        if ($response instanceof \Throwable) {
+            throw $response;
         }
 
         return $response;
