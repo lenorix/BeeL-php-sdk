@@ -59,7 +59,11 @@
         "format": "@pint",
         "phpstan": "vendor/bin/phpstan analyse --configuration=phpstan.neon.dist --memory-limit=512M",
         "prepare-openapi": "@php bin/prepare-openapi.php",
-        "generate": "@prepare-openapi && php -d memory_limit=256M vendor/bin/jane-openapi generate && vendor/bin/pint src/Generated"
+        "generate": [
+            "@prepare-openapi",
+            "php -d memory_limit=256M vendor/bin/jane-openapi generate",
+            "vendor/bin/pint src/Generated"
+        ]
     },
     "config": {
         "sort-packages": true,
