@@ -97,9 +97,13 @@ final readonly class RetryingClient implements ClientInterface
                 $response = $response->withBody(Utils::streamFor((string) $response->getBody()));
             }
             $this->responseContext->capture($response);
-            // BeeL rejects a 429 without applying it; a 5xx may have been applied, so it needs $canRetry.
+            // BeeL rejects a 429 without applying it; a 5xx may have been applied, so it needs $canRetry,
+            // unless BeeL replays a stored 5xx for the key, which the same key would only replay again.
+            // A 409 IDEMPOTENCY_KEY_PROCESSING asks to wait and retry with the same key.
             $status = $response->getStatusCode();
-            $retryable = $status === 429 || ($status >= 500 && $canRetry);
+            $retryable = $status === 429
+                || ($status >= 500 && $canRetry && strtolower($response->getHeaderLine('Idempotency-Replay')) !== 'true')
+                || ($status === 409 && $request->hasHeader('Idempotency-Key') && self::errorCode($response) === 'IDEMPOTENCY_KEY_PROCESSING');
             if ($attempt >= $maxRetries || ! $canReplayBody || ! $retryable) {
                 return $response;
             }
@@ -115,6 +119,17 @@ final readonly class RetryingClient implements ClientInterface
                 ($this->sleep)($delay);
             }
         }
+    }
+
+    /** The `error.code` of a JSON error body, which the loop above made rereadable. */
+    private static function errorCode(ResponseInterface $response): ?string
+    {
+        $body = $response->getBody();
+        $data = json_decode((string) $body, true);
+        $body->rewind();
+        $code = is_array($data) && is_array($data['error'] ?? null) ? ($data['error']['code'] ?? null) : null;
+
+        return is_string($code) ? $code : null;
     }
 
     public function responseContext(): ResponseContext

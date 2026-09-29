@@ -14,6 +14,9 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 ### Fixed
 
+- A `409 IDEMPOTENCY_KEY_PROCESSING`, which BeeL sends while the first request with the key is still running, was returned as the result of a retried write, so calling again with a new key could duplicate it: it is now retried with the same key after BeeL's `Retry-After`.
+- A `5xx` BeeL replays for the key (`Idempotency-Replay: true`) is no longer retried, since the same key would only replay it.
+- A `Retry-After` that is neither seconds nor an HTTP date (such as `-1`, `now` or `1.5` read as a clock time) and a non-finite or negative `retry_after` made retries fire at once: they are now ignored, and decimal seconds are rounded up. `BeelNotReadyError::$retryAfter` reads it the same way.
 - `$beel->request()` sent the API key to any host given in the path, such as `https://attacker.example/x` or `//attacker.example/x`: it now takes only a path starting with a single `/`, without a query (use `$query`).
 - An ID that is empty, `.` or `..`, such as `invoices->delete('..')`, pointed the request at a parent resource (`DELETE /companies/{id}/`): every BeeL request with an empty, `.` or `..` path segment is now rejected with `InvalidArgumentException` before it is sent.
 - A redirect (`3xx`) was read as a success, so a write that never happened looked done: it now throws `BeelApiError`, since the SDK never follows redirects.

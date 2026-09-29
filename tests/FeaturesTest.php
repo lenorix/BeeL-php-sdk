@@ -65,6 +65,7 @@ use Lenorix\BeelSdk\Http\BinaryDownload;
 use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\RequestOptions;
+use Lenorix\BeelSdk\Http\RetryAfter;
 use Lenorix\BeelSdk\Http\RetryingClient;
 use Lenorix\BeelSdk\Resource\Company\CompanyRepresentationResource;
 use Lenorix\BeelSdk\Tests\Support\RecordingPsrClient;
@@ -2001,3 +2002,53 @@ it('treats a redirect as a failed request, never as a success', function (Closur
     'get' => [fn (Beel $beel) => $beel->company('c')->invoices->get('i')],
     'file download' => [fn (Beel $beel) => $beel->company('c')->invoices->export(['invoice_ids' => ['i']])],
 ]);
+
+it('waits and retries with the same key while BeeL is still processing it', function () {
+    $sleeps = [];
+    $transport = new RecordingPsrClient([
+        new Response(409, ['Content-Type' => 'application/json', 'Retry-After' => '2'], '{"success":false,"error":{"code":"IDEMPOTENCY_KEY_PROCESSING","message":"In flight"}}'),
+        new Response(201, ['Content-Type' => 'application/json'], '{"success":true,"data":{"id":"inv-1"}}'),
+    ]);
+
+    $response = retryingClient($transport, $sleeps)->sendRequest(new Request('POST', 'https://app.beel.es/api/v1/x', [], '{"a":1}'));
+
+    expect($response->getStatusCode())->toBe(201)
+        ->and($sleeps)->toBe([2_000])
+        ->and($transport->requests[1]->getHeaderLine('Idempotency-Key'))->toBe($transport->requests[0]->getHeaderLine('Idempotency-Key'));
+});
+
+it('does not retry a conflict other than a key still being processed', function () {
+    $sleeps = [];
+    $transport = new RecordingPsrClient([
+        new Response(409, ['Content-Type' => 'application/json'], '{"success":false,"error":{"code":"IDEMPOTENCY_KEY_MISMATCH","message":"Other body"}}'),
+    ]);
+
+    expect(retryingClient($transport, $sleeps)->sendRequest(new Request('POST', 'https://app.beel.es/api/v1/x', [], '{"a":1}'))->getStatusCode())->toBe(409)
+        ->and($transport->requests)->toHaveCount(1);
+});
+
+it('does not retry a server error BeeL replays for the same key', function () {
+    $sleeps = [];
+    $transport = new RecordingPsrClient([
+        new Response(500, ['Content-Type' => 'application/json', 'Idempotency-Replay' => 'true'], '{"success":false}'),
+    ]);
+
+    expect(retryingClient($transport, $sleeps)->sendRequest(new Request('POST', 'https://app.beel.es/api/v1/x', [], '{"a":1}'))->getStatusCode())->toBe(500)
+        ->and($transport->requests)->toHaveCount(1);
+});
+
+it('reads only a valid Retry-After and otherwise backs off', function (string $header, ?int $seconds) {
+    expect(RetryAfter::seconds(new Response(429, ['Retry-After' => $header]), '', 1_000_000_000))->toBe($seconds);
+})->with([
+    'seconds' => ['7', 7],
+    'decimal seconds round up' => ['1.5', 2],
+    'HTTP date' => ['Sun, 09 Sep 2001 01:46:50 GMT', 10],
+    'negative' => ['-1', null],
+    'words' => ['now', null],
+    'a clock time' => ['2.0', 2],
+    'garbage' => ['soon please', null],
+]);
+
+it('ignores a retry_after in the body that is not a finite, non-negative number', function (string $value) {
+    expect(RetryAfter::seconds(new Response(429), '{"error":{"retry_after":'.$value.'}}'))->toBeNull();
+})->with(['overflowing' => ['1e400'], 'negative' => ['-5'], 'text' => ['"soon"']]);

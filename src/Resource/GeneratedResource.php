@@ -14,6 +14,7 @@ use Lenorix\BeelSdk\Http\IdempotencyKey;
 use Lenorix\BeelSdk\Http\RequestOptions;
 use Lenorix\BeelSdk\Http\RequestOptionsSlot;
 use Lenorix\BeelSdk\Http\ResponseContext;
+use Lenorix\BeelSdk\Http\RetryAfter;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Throwable;
@@ -276,14 +277,7 @@ abstract readonly class GeneratedResource
             return $this->unwrap($this->requireBody($result));
         }
 
-        $retryAfter = trim($response->getHeaderLine('Retry-After'));
-        $seconds = match (true) {
-            ctype_digit($retryAfter) => (int) $retryAfter,
-            $retryAfter !== '' && ($retryAt = strtotime($retryAfter)) !== false => max(0, $retryAt - time()),
-            default => null,
-        };
-
-        throw new BeelNotReadyError($notReadyMessage, $seconds, $response->getHeaderLine('X-Request-Id') ?: null);
+        throw new BeelNotReadyError($notReadyMessage, RetryAfter::seconds($response, ''), $response->getHeaderLine('X-Request-Id') ?: null);
     }
 
     /**
