@@ -57,6 +57,6 @@ final readonly class CustomersResource extends GeneratedResource
 
     public function deactivate(string $customerId): void
     {
-        $this->execute(fn () => $this->client->deleteCustomer($customerId));
+        $this->executeVoid(fn () => $this->client->deleteCustomer($customerId));
     }
 }

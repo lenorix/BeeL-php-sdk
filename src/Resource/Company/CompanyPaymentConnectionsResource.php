@@ -43,7 +43,7 @@ final readonly class CompanyPaymentConnectionsResource extends GeneratedResource
 
     public function disconnect(string $connectionId): void
     {
-        $this->execute(fn () => $this->client->disconnectCompanyPaymentConnection($this->companyId, $connectionId));
+        $this->executeVoid(fn () => $this->client->disconnectCompanyPaymentConnection($this->companyId, $connectionId));
     }
 
     /**

@@ -48,6 +48,6 @@ final readonly class CompanyLogoResource extends GeneratedResource
      */
     public function delete(): void
     {
-        $this->execute(fn () => $this->client->deleteCompanyLogoById($this->companyId));
+        $this->executeVoid(fn () => $this->client->deleteCompanyLogoById($this->companyId));
     }
 }

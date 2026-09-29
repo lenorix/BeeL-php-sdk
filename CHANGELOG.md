@@ -2,6 +2,13 @@
 
 All notable changes to `BeeL-php-sdk` will be documented in this file.
 
+## Unreleased
+
+### Fixed
+
+- A success status without a body the SDK can read (an undeclared status such as an empty `202` or `204`, or a declared one whose body is empty or not JSON) throws `BeelUnexpectedResponseError`; it ended in a `TypeError`, or a Symfony `NotEncodableValueException` for an empty JSON body. Only the operations that return nothing accept an empty `204`.
+- An error status whose JSON `Content-Type` carries a body that is not JSON, such as a proxy's error page, throws the `BeelApiError` for its status instead of a Symfony `NotEncodableValueException`.
+
 ## v0.8.0 - 2026-09-29
 
 ### Changed

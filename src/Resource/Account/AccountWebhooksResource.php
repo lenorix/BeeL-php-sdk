@@ -77,7 +77,7 @@ final readonly class AccountWebhooksResource extends GeneratedResource
 
     public function delete(string $webhookId): void
     {
-        $this->execute(fn () => $this->client->deleteAccountWebhookSubscription($this->accountId, $webhookId));
+        $this->executeVoid(fn () => $this->client->deleteAccountWebhookSubscription($this->accountId, $webhookId));
     }
 
     public function test(string $webhookId): WebhookTestResult

@@ -75,7 +75,7 @@ final readonly class CompanyRecurringInvoicesResource extends GeneratedResource
     /** Delete a recurring invoice template. Already-issued invoices are not deleted. */
     public function delete(string $recurringInvoiceId): void
     {
-        $this->execute(fn () => $this->client->deleteCompanyRecurringInvoice($this->companyId, $recurringInvoiceId));
+        $this->executeVoid(fn () => $this->client->deleteCompanyRecurringInvoice($this->companyId, $recurringInvoiceId));
     }
 
     /** Retrieve a recurring invoice template. */

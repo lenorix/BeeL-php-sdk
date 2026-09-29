@@ -457,7 +457,7 @@ API errors are mapped to semantic exception classes. All extend `BeelApiError`:
 | `BeelRateLimitError` | 429 | `statusCode`, `retryAfter`, `retryAfterSeconds` |
 | `BeelApiError` | Other API errors | `statusCode`, `apiCode`, `details`, `requestId` |
 
-If BeeL answers with a success status the SDK does not know for that operation (BeeL sometimes adds one before the SDK is updated), the SDK throws `BeelUnexpectedResponseError` instead of reporting a failure: the request may have succeeded, so check `getLastResponse()` before retrying. Like `BeelNotReadyError`, it does not extend `BeelApiError`.
+If BeeL answers with a success status the SDK does not know for that operation (BeeL sometimes adds one before the SDK is updated), or with a success whose body is missing or not JSON, the SDK throws `BeelUnexpectedResponseError` instead of reporting a failure: the request may have succeeded, so check `getLastResponse()` before retrying. Like `BeelNotReadyError`, it does not extend `BeelApiError`.
 
 An error without a JSON body, such as an HTML `502` or an empty `503` from a proxy, is mapped the same way, with its real `statusCode`. When BeeL sends no error code, `apiCode` falls back to the same values as the official Node.js SDK: `UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `CONFLICT`, `UNPROCESSABLE_ENTITY`, `RATE_LIMIT_EXCEEDED` or `UNKNOWN`. `BeelRateLimitError::$retryAfterSeconds` is `60` when BeeL gives no delay, also like the Node.js SDK; `retryAfter` stays `null` in that case. `BeelNotReadyError` (HTTP `202`, see [PDF downloads](#pdf-downloads)) does not extend `BeelApiError`, because it is not an error.
 

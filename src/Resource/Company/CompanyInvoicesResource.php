@@ -351,7 +351,7 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
     /** Delete a draft invoice. Issued invoices must be corrected or voided instead. */
     public function delete(string $invoiceId): void
     {
-        $this->execute(fn () => $this->client->deleteCompanyInvoice($this->companyId, $invoiceId));
+        $this->executeVoid(fn () => $this->client->deleteCompanyInvoice($this->companyId, $invoiceId));
     }
 
     /**
@@ -436,6 +436,6 @@ final readonly class CompanyInvoicesResource extends GeneratedResource
     /** Remove an invoice's scheduled issue date. */
     public function clearSchedule(string $invoiceId): void
     {
-        $this->execute(fn () => $this->client->deleteCompanyInvoiceSchedule($this->companyId, $invoiceId));
+        $this->executeVoid(fn () => $this->client->deleteCompanyInvoiceSchedule($this->companyId, $invoiceId));
     }
 }

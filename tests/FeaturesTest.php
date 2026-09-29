@@ -1023,7 +1023,7 @@ it('declares every resource return type as the generated client actually returns
             if (str_contains($body, '$this->client->')) {
                 $callers[] = basename($file, '.php').'::'.$name;
             }
-            if (preg_match('/\$this->(execute(?:Ready)?)\(\s*fn \(\) => \$this->client->(\w+)\(/', $body, $call) !== 1) {
+            if (preg_match('/\$this->(execute(?:Ready|Void)?)\(\s*fn \(\) => \$this->client->(\w+)\(/', $body, $call) !== 1) {
                 continue;
             }
             $checked[] = basename($file, '.php').'::'.$name;
@@ -1045,9 +1045,12 @@ it('declares every resource return type as the generated client actually returns
                 $types[] = ltrim($type, '?\\');
             }
             $types = array_values(array_unique($types));
-            // executeReady() turns a bodiless 202 into BeelNotReadyError, so only execute() can return null for it.
+            // execute() reports a success without a body as unexpected and executeReady() only accepts a
+            // bodiless 202, so a declared bodiless status needs executeVoid() or executeReady().
             $bodiless = array_diff(array_unique($statuses[1]), array_column($bodies, 1));
-            $nullable = $nullable || ($call[1] === 'execute' && $bodiless !== []);
+            if (($call[1] === 'execute' && $bodiless !== []) || ($call[1] === 'executeReady' && array_diff($bodiless, ['202']) !== [])) {
+                $mismatches[] = basename($file, '.php')."::{$name}(): {$call[1]}() cannot return the bodiless ".implode(', ', $bodiless);
+            }
 
             $expected = $types === [] ? 'void' : (count($types) === 1 ? $types[0] : implode('|', $types));
             $actual = (string) (new ReflectionMethod(
@@ -1724,3 +1727,46 @@ it('sends a list of IDs to bulk deletes as the comma-separated value BeeL expect
     expect(rawurldecode($transport->requests[0]->getUri()->getQuery()))->toBe('ids=id-1,id-2')
         ->and(rawurldecode($transport->requests[1]->getUri()->getQuery()))->toBe('ids=id-1,id-2');
 })->with(['customers', 'products']);
+
+it('reports a success status without a readable body as unexpected, not as a TypeError', function (Response $response) {
+    $transport = new RecordingPsrClient([$response]);
+
+    expect(fn () => testClient($transport)->company('c')->invoices->get('inv-1'))
+        ->toThrow(BeelUnexpectedResponseError::class);
+})->with([
+    // A Content-Type keeps Jane's generated code from lowercasing a missing one (null), which PHP deprecates.
+    'undeclared status' => fn () => new Response(202, ['Content-Type' => 'text/plain', 'X-Request-Id' => 'req-1']),
+    'undeclared 204' => fn () => new Response(204, ['Content-Type' => 'text/plain']),
+    'declared status, empty body' => fn () => new Response(200, ['Content-Type' => 'application/json']),
+    'declared status, not JSON' => fn () => new Response(200, ['Content-Type' => 'text/html'], '<html></html>'),
+]);
+
+it('reports a preview answered without a readable body as unexpected, and 202 as not ready', function () {
+    $transport = new RecordingPsrClient([new Response(200, ['Content-Type' => 'text/plain']), new Response(202, ['Retry-After' => '3'])]);
+    $invoices = testClient($transport)->company('c')->invoices;
+
+    expect(fn () => $invoices->preview('inv-1'))->toThrow(BeelUnexpectedResponseError::class)
+        ->and(fn () => $invoices->preview('inv-1'))->toThrow(BeelNotReadyError::class);
+});
+
+it('accepts the empty 204 of operations that return nothing', function () {
+    $transport = new RecordingPsrClient([new Response(204), new Response(204)]);
+    $company = testClient($transport)->company('c');
+
+    $company->customers->delete('cus-1');
+    $company->invoices->delete('inv-1');
+
+    expect($transport->requests)->toHaveCount(2);
+});
+
+it('maps an error status whose JSON Content-Type carries no JSON to BeelApiError', function () {
+    $transport = new RecordingPsrClient([new Response(502, ['Content-Type' => 'application/json', 'X-Request-Id' => 'req-9'], '<html>Bad gateway</html>')]);
+
+    try {
+        testClient($transport)->company('c')->invoices->get('inv-1');
+        test()->fail('Expected BeelApiError.');
+    } catch (BeelApiError $exception) {
+        expect($exception->statusCode)->toBe(502)
+            ->and($exception->requestId)->toBe('req-9');
+    }
+});

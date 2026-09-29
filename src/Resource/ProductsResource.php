@@ -76,7 +76,7 @@ final readonly class ProductsResource extends GeneratedResource
 
     public function delete(string $productId): void
     {
-        $this->execute(fn () => $this->client->deleteProduct($productId));
+        $this->executeVoid(fn () => $this->client->deleteProduct($productId));
     }
 
     /**

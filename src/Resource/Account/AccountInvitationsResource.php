@@ -63,6 +63,6 @@ final readonly class AccountInvitationsResource extends GeneratedResource
 
     public function revoke(string $invitationId): void
     {
-        $this->execute(fn () => $this->client->deleteAccountInvitation($this->accountId, $invitationId));
+        $this->executeVoid(fn () => $this->client->deleteAccountInvitation($this->accountId, $invitationId));
     }
 }

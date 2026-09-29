@@ -83,7 +83,7 @@ final readonly class CompanySeriesResource extends GeneratedResource
     /** Delete a series that is no longer in use. */
     public function delete(string $seriesId): void
     {
-        $this->execute(fn () => $this->client->deleteCompanySeries($this->companyId, $seriesId));
+        $this->executeVoid(fn () => $this->client->deleteCompanySeries($this->companyId, $seriesId));
     }
 
     /** Retrieve the default series assignments for this company's invoice types. */

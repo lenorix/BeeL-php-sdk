@@ -66,7 +66,7 @@ final readonly class AccountMembersResource extends GeneratedResource
 
     public function remove(string $memberId): void
     {
-        $this->execute(fn () => $this->client->deleteAccountMember($this->accountId, $memberId));
+        $this->executeVoid(fn () => $this->client->deleteAccountMember($this->accountId, $memberId));
     }
 
     /**
@@ -107,6 +107,6 @@ final readonly class AccountMembersResource extends GeneratedResource
 
     public function removeGrant(string $memberId, string $companyId): void
     {
-        $this->execute(fn () => $this->client->deleteAccountMemberGrant($this->accountId, $memberId, $companyId));
+        $this->executeVoid(fn () => $this->client->deleteAccountMemberGrant($this->accountId, $memberId, $companyId));
     }
 }

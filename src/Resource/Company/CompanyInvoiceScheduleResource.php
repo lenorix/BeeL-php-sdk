@@ -36,6 +36,6 @@ final readonly class CompanyInvoiceScheduleResource extends GeneratedResource
 
     public function clear(string $invoiceId): void
     {
-        $this->execute(fn () => $this->client->deleteCompanyInvoiceSchedule($this->companyId, $invoiceId));
+        $this->executeVoid(fn () => $this->client->deleteCompanyInvoiceSchedule($this->companyId, $invoiceId));
     }
 }

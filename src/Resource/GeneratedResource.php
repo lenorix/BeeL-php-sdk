@@ -14,6 +14,7 @@ use Lenorix\BeelSdk\Http\RequestOptions;
 use Lenorix\BeelSdk\Http\RequestOptionsSlot;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Psr\Http\Message\ResponseInterface;
+use Symfony\Component\Serializer\Exception\NotEncodableValueException;
 use Throwable;
 
 /** Shared error mapping and response unwrapping for resources that call Jane directly. */
@@ -142,8 +143,24 @@ abstract readonly class GeneratedResource
         }
     }
 
-    /** Run one generated endpoint call and unwrap its generated response envelope. */
+    /**
+     * Run one generated endpoint call and unwrap its generated response envelope.
+     *
+     * @throws BeelUnexpectedResponseError If BeeL answers a success status with nothing the SDK can read.
+     */
     protected function execute(callable $operation): mixed
+    {
+        return $this->unwrap($this->requireBody($this->call($operation)));
+    }
+
+    /** Run one generated endpoint call whose success, usually a `204`, carries no body to return. */
+    protected function executeVoid(callable $operation): void
+    {
+        $this->call($operation);
+    }
+
+    /** Run one generated endpoint call and map every failure; the result may be null when nothing was read. */
+    private function call(callable $operation): mixed
     {
         $this->responseContext?->reset();
 
@@ -151,6 +168,14 @@ abstract readonly class GeneratedResource
             $response = $this->responseContext === null
                 ? $operation()
                 : $this->responseContext->withRequestOptions($this->options(), $operation);
+        } catch (NotEncodableValueException $exception) {
+            // A JSON Content-Type with a body that is not JSON, such as an empty one or a proxy's error page.
+            $httpResponse = $this->responseContext?->response();
+            if ($httpResponse !== null && $httpResponse->getStatusCode() >= 400) {
+                throw BeelApiError::fromErrorResponse(new ErrorResponse, $httpResponse, $this->responseContext->body());
+            }
+
+            throw $this->unreadable($exception) ?? BeelApiError::fromGenerated($exception);
         } catch (Throwable $exception) {
             throw BeelApiError::fromGenerated($exception);
         }
@@ -171,7 +196,34 @@ abstract readonly class GeneratedResource
             );
         }
 
-        return $this->unwrap($response);
+        return $response;
+    }
+
+    /**
+     * Jane reads nothing (null) from a success status without a JSON body, which the operation
+     * returning a model cannot turn into its result.
+     */
+    private function requireBody(mixed $response): mixed
+    {
+        if ($response === null) {
+            $unreadable = $this->unreadable();
+            if ($unreadable !== null) {
+                throw $unreadable;
+            }
+        }
+
+        return $response;
+    }
+
+    /** The error for a success response the SDK could not read, or null when the last response was not a success. */
+    private function unreadable(?Throwable $previous = null): ?BeelUnexpectedResponseError
+    {
+        $response = $this->responseContext?->response();
+        if ($response === null || $response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
+            return null;
+        }
+
+        return new BeelUnexpectedResponseError($response->getStatusCode(), $response->getHeaderLine('X-Request-Id') ?: null, $previous);
     }
 
     /**
@@ -214,10 +266,10 @@ abstract readonly class GeneratedResource
      */
     protected function executeReady(callable $operation, string $notReadyMessage): mixed
     {
-        $result = $this->execute($operation);
+        $result = $this->call($operation);
         $response = $this->responseContext?->response();
         if ($response === null || $response->getStatusCode() !== 202) {
-            return $result;
+            return $this->unwrap($this->requireBody($result));
         }
 
         $retryAfter = trim($response->getHeaderLine('Retry-After'));

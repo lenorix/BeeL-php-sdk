@@ -70,6 +70,6 @@ final readonly class CompanyRepresentationResource extends GeneratedResource
     /** Cancel the representation process in progress. */
     public function cancel(): void
     {
-        $this->execute(fn () => $this->client->cancelCompanyRepresentation($this->companyId));
+        $this->executeVoid(fn () => $this->client->cancelCompanyRepresentation($this->companyId));
     }
 }

@@ -51,7 +51,7 @@ final readonly class SeriesResource extends GeneratedResource
 
     public function delete(string $seriesId): void
     {
-        $this->execute(fn () => $this->client->deleteSeries($seriesId));
+        $this->executeVoid(fn () => $this->client->deleteSeries($seriesId));
     }
 
     public function setDefault(string $seriesId): InvoiceSeries

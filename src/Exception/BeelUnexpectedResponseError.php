@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Lenorix\BeelSdk\Exception;
 
 /**
- * BeeL answered with a success status this SDK version does not recognise for the operation.
+ * BeeL answered with a success status, but not with a response this SDK version can read for the
+ * operation: a status it does not recognise, or a body that is missing or not JSON.
  *
  * The request may well have succeeded: BeeL sometimes adds a success status (such as `202`)
  * before this SDK is updated. It does not extend {@see BeelApiError}, so a generic error handler
@@ -17,15 +18,17 @@ final class BeelUnexpectedResponseError extends \RuntimeException
     /**
      * @param  int  $statusCode  The success status BeeL answered with.
      * @param  string|null  $requestId  BeeL request ID to include when contacting support.
+     * @param  \Throwable|null  $previous  The error reading the body, when there was one.
      */
     public function __construct(
         public readonly int $statusCode,
         public readonly ?string $requestId = null,
+        ?\Throwable $previous = null,
     ) {
         parent::__construct(sprintf(
-            'BeeL answered HTTP %d, a success status this SDK version does not recognise for this operation. The request may have succeeded: check $beel->getLastResponse() before retrying, and update the SDK.',
+            'BeeL answered HTTP %d, but not with a response this SDK version can read for this operation (an unknown success status, or a missing or non-JSON body). The request may have succeeded: check $beel->getLastResponse() before retrying, and update the SDK.',
             $statusCode,
-        ));
+        ), 0, $previous);
     }
 
     /**

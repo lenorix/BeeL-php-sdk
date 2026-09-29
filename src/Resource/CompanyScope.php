@@ -114,7 +114,7 @@ final readonly class CompanyScope extends GeneratedResource
     /** Delete this company profile. */
     public function delete(): void
     {
-        $this->execute(fn () => $this->client->deleteCompanyById($this->companyId));
+        $this->executeVoid(fn () => $this->client->deleteCompanyById($this->companyId));
     }
 
     /**

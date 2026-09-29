@@ -80,7 +80,7 @@ final readonly class AccountScope extends GeneratedResource
     {
         $request = RequestModels::from($request, ChangeAccessLevelRequest::class);
 
-        $this->execute(fn () => $this->client->changeManagedAccountAccessLevel($this->accountId, $request));
+        $this->executeVoid(fn () => $this->client->changeManagedAccountAccessLevel($this->accountId, $request));
     }
 
     /**
@@ -103,12 +103,12 @@ final readonly class AccountScope extends GeneratedResource
     {
         $request = RequestModels::from($request, SetAccountOwnerRequest::class);
 
-        $this->execute(fn () => $this->client->putAccountOwner($this->accountId, $request));
+        $this->executeVoid(fn () => $this->client->putAccountOwner($this->accountId, $request));
     }
 
     /** End the management relationship for this account. */
     public function endManagement(): void
     {
-        $this->execute(fn () => $this->client->endAccountManagement($this->accountId));
+        $this->executeVoid(fn () => $this->client->endAccountManagement($this->accountId));
     }
 }

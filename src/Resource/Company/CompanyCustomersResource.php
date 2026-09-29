@@ -83,7 +83,7 @@ final readonly class CompanyCustomersResource extends GeneratedResource
     /** Delete a customer from this company's catalog. */
     public function delete(string $customerId): void
     {
-        $this->execute(fn () => $this->client->deleteCompanyCustomer($this->companyId, $customerId));
+        $this->executeVoid(fn () => $this->client->deleteCompanyCustomer($this->companyId, $customerId));
     }
 
     /**

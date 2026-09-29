@@ -70,7 +70,7 @@ final readonly class InvoicesResource extends GeneratedResource
 
     public function delete(string $invoiceId): void
     {
-        $this->execute(fn () => $this->client->deleteInvoice($invoiceId));
+        $this->executeVoid(fn () => $this->client->deleteInvoice($invoiceId));
     }
 
     /**
