@@ -306,7 +306,7 @@ $customerRequest = CustomerBuilder::create()
 $customer = $company->customers->create($customerRequest);
 ```
 
-`InvoiceBuilder` supports `type()`, `forCustomer()`, `operationDate()`, `dueDate()`, `series()`, `externalRef()`, `metadata()`, `notes()`, `addLine()` and `addLineObject()`. BeeL requires a `main_tax` on every normal line, which `addLine()` does not set: use `addLineObject()` for taxable lines. `CustomerBuilder` supports name, NIF, email, phone, notes and address. `build()` checks each builder's required fields.
+`InvoiceBuilder` supports `type()`, `forCustomer()`, `operationDate()`, `dueDate()`, `mainTax()`, `series()`, `externalRef()`, `metadata()`, `notes()`, `addLine()` and `addLineObject()`. BeeL requires a `main_tax` on every normal line: set a default with `mainTax(['type' => 'IVA', 'percentage' => 21, 'regime_key' => '01'])`, or pass one as the fifth argument of `addLine()`. `CustomerBuilder` supports name, NIF, email, phone, notes and address. `build()` checks each builder's required fields.
 
 ## Last response
 

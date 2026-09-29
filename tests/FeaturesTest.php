@@ -1934,3 +1934,33 @@ it('sends the Idempotency-Key BeeL requires on imports without one from the call
     'accounts' => [fn (Beel $beel, ?string $key) => ($key === null ? $beel->accounts : $beel->accounts->withOptions(new RequestOptions(idempotencyKey: $key)))
         ->import(['accounts_file' => fopen('php://memory', 'rb')]), ],
 ]);
+
+it('keeps the calendar day of a date object in its own time zone when building an invoice', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => ['id' => 'inv-1']], 201)]);
+    $madrid = new DateTimeZone('Europe/Madrid');
+
+    testClient($transport)->company('c')->invoices->create(InvoiceBuilder::create()
+        ->forCustomer('customer-1')
+        ->operationDate(new DateTimeImmutable('2026-03-01 00:00', $madrid))
+        ->dueDate(new DateTime('2026-03-15 00:30', $madrid))
+        ->addLine('Consulting', 1, 100)
+        ->build());
+    $sent = json_decode((string) $transport->requests[0]->getBody(), true);
+
+    expect($sent['operation_date'])->toBe('2026-03-01')
+        ->and($sent['due_date'])->toBe('2026-03-15');
+});
+
+it('applies a default main tax to lines added with addLine(), unless a line passes its own', function () {
+    $request = InvoiceBuilder::create()
+        ->forCustomer('customer-1')
+        ->mainTax(['type' => 'IVA', 'percentage' => 21, 'regime_key' => '01'])
+        ->addLine('Consulting', 1, 100)
+        ->addLine('Books', 2, 20, 0, ['type' => 'IVA', 'percentage' => 4, 'regime_key' => '01'])
+        ->build();
+    $lines = $request->getLines();
+
+    expect($lines[0]->getMainTax()->getPercentage())->toEqual(21)
+        ->and($lines[1]->getMainTax()->getPercentage())->toEqual(4)
+        ->and(InvoiceBuilder::create()->forCustomer('c')->addLine('No tax', 1, 1)->build()->getLines()[0]->isInitialized('mainTax'))->toBeFalse();
+});

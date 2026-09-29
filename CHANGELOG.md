@@ -4,6 +4,10 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 ## Unreleased
 
+### Added
+
+- `InvoiceBuilder::mainTax()` sets the tax of the lines added with `addLine()`, which also takes a line's own tax as its fifth argument, like the Node.js SDK: BeeL rejects a normal line without one.
+
 ### Changed
 
 - The generated client no longer reads a status an operation does not declare as an `ErrorResponse` (BeeL's `default` response, which `bin/prepare-openapi.php` now drops): called directly through `$beel->raw`, it returns `null` for one. Resource methods are unaffected: they still read such an error from its body, with its code, message and request ID.
@@ -12,6 +16,7 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 - A response without a `Content-Type` no longer triggers PHP's "Passing null to parameter #1 ($string) of type string is deprecated" in the generated client, which read BeeL's `default` response without checking the header exists.
 - A success status without a body the SDK can read (an undeclared status such as an empty `202` or `204`, or a declared one whose body is empty or not JSON) throws `BeelUnexpectedResponseError`; it ended in a `TypeError`, or a Symfony `NotEncodableValueException` for an empty JSON body. Only the operations that return nothing accept an empty `204`.
+- `InvoiceBuilder::operationDate()` and `dueDate()` sent the previous day for a date object in a time zone ahead of UTC, such as `Europe/Madrid` at midnight: they now keep its calendar day.
 - `$company->customers->import()` and `$beel->accounts->import()` failed with `MissingOptionsException` unless the caller passed an `Idempotency-Key` header, which BeeL requires there: they now send the key set with `withOptions()`, or a new one.
 - `all()` iterators stopped after the first page when BeeL sent `"has_next": null`, which its contract allows; they now fall back to comparing page numbers.
 - An error body whose `code`, `message` or `request_id` is not text (such as a proxy's numeric code) throws `BeelApiError` instead of a `TypeError`, and an `error` given as a plain string becomes its message.

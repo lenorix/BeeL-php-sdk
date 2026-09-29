@@ -6,7 +6,9 @@ namespace Lenorix\BeelSdk\Builder;
 
 use Lenorix\BeelSdk\Generated\Model\CreateInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\CreateInvoiceRequestLinesItem;
+use Lenorix\BeelSdk\Generated\Model\CreateInvoiceRequestLinesItemMainTax;
 use Lenorix\BeelSdk\Generated\Model\Recipient;
+use Lenorix\BeelSdk\Http\RequestModels;
 
 /** Build a Jane-generated invoice request using a fluent interface. */
 final class InvoiceBuilder
@@ -17,6 +19,8 @@ final class InvoiceBuilder
     private array $lines = [];
 
     private ?string $customerId = null;
+
+    private ?CreateInvoiceRequestLinesItemMainTax $mainTax = null;
 
     private function __construct()
     {
@@ -46,22 +50,30 @@ final class InvoiceBuilder
         return $this;
     }
 
-    /** Set the date the invoiced service or transaction took place. */
+    /** Set the date the invoiced service or transaction took place: the calendar day of a date object, in its own time zone. */
     public function operationDate(\DateTimeInterface|string $date): self
     {
-        $this->request->setOperationDate($date instanceof \DateTimeInterface
-            ? \DateTime::createFromInterface($date)->setTimezone(new \DateTimeZone('UTC'))
-            : new \DateTime($date));
+        $this->request->setOperationDate(self::day($date));
 
         return $this;
     }
 
-    /** Set the payment due date. It must be today or a future date. */
+    /** Set the payment due date, which must be today or later: the calendar day of a date object, in its own time zone. */
     public function dueDate(\DateTimeInterface|string $date): self
     {
-        $this->request->setDueDate($date instanceof \DateTimeInterface
-            ? \DateTime::createFromInterface($date)->setTimezone(new \DateTimeZone('UTC'))
-            : new \DateTime($date));
+        $this->request->setDueDate(self::day($date));
+
+        return $this;
+    }
+
+    /**
+     * Set the main tax of every line added with {@see addLine()} after this call, unless the line passes its own.
+     *
+     * @param  CreateInvoiceRequestLinesItemMainTax|array<string, mixed>  $tax  For example `['type' => 'IVA', 'percentage' => 21, 'regime_key' => '01']`.
+     */
+    public function mainTax(CreateInvoiceRequestLinesItemMainTax|array $tax): self
+    {
+        $this->mainTax = RequestModels::from($tax, CreateInvoiceRequestLinesItemMainTax::class);
 
         return $this;
     }
@@ -101,15 +113,20 @@ final class InvoiceBuilder
     /**
      * Add a normal service or product line.
      *
-     * This shortcut does not set `main_tax`. BeeL requires an explicit tax on every
-     * `NORMAL` line, so use {@see addLineObject()} with a generated line model that
-     * includes its tax before sending the built request.
+     * BeeL requires a tax on every `NORMAL` line: pass `$mainTax`, or set a default with {@see mainTax()}.
+     *
+     * @param  CreateInvoiceRequestLinesItemMainTax|array<string, mixed>|null  $mainTax  The tax of this line, instead of the default.
      */
-    public function addLine(string $description, float $quantity, float $unitPrice, float $discountPercentage = 0): self
+    public function addLine(string $description, float $quantity, float $unitPrice, float $discountPercentage = 0, CreateInvoiceRequestLinesItemMainTax|array|null $mainTax = null): self
     {
-        $this->lines[] = (new CreateInvoiceRequestLinesItem)
+        $line = (new CreateInvoiceRequestLinesItem)
             ->setLineType('NORMAL')->setDescription($description)->setQuantity($quantity)
             ->setUnitPrice($unitPrice)->setDiscountPercentage($discountPercentage);
+        $tax = RequestModels::from($mainTax, CreateInvoiceRequestLinesItemMainTax::class) ?? $this->mainTax;
+        if ($tax !== null) {
+            $line->setMainTax(clone $tax);
+        }
+        $this->lines[] = $line;
 
         return $this;
     }
@@ -124,6 +141,14 @@ final class InvoiceBuilder
         $this->lines[] = $line;
 
         return $this;
+    }
+
+    /** The calendar day of a date: a date object keeps its own time zone instead of moving to UTC, which could change the day. */
+    private static function day(\DateTimeInterface|string $date): \DateTime
+    {
+        return $date instanceof \DateTimeInterface
+            ? new \DateTime($date->format('Y-m-d'))
+            : new \DateTime($date);
     }
 
     /**
