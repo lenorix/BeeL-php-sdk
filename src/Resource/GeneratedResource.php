@@ -10,6 +10,7 @@ use Lenorix\BeelSdk\Exception\BeelUnexpectedResponseError;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
+use Lenorix\BeelSdk\Http\IdempotencyKey;
 use Lenorix\BeelSdk\Http\RequestOptions;
 use Lenorix\BeelSdk\Http\RequestOptionsSlot;
 use Lenorix\BeelSdk\Http\ResponseContext;
@@ -282,6 +283,25 @@ abstract readonly class GeneratedResource
         };
 
         throw new BeelNotReadyError($notReadyMessage, $seconds, $response->getHeaderLine('X-Request-Id') ?: null);
+    }
+
+    /**
+     * Headers for an operation whose contract requires an `Idempotency-Key`, which Jane checks before
+     * the transport could add one: the caller's key, the one set with {@see self::withOptions()}, or a new one.
+     *
+     * @param  array<string, mixed>  $headers
+     * @return array<string, mixed>
+     */
+    protected function withIdempotencyKey(array $headers): array
+    {
+        foreach (array_keys($headers) as $name) {
+            if (strcasecmp((string) $name, 'Idempotency-Key') === 0) {
+                return $headers;
+            }
+        }
+        $headers['Idempotency-Key'] = $this->options()->idempotencyKey ?? IdempotencyKey::generate();
+
+        return $headers;
     }
 
     /**

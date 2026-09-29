@@ -72,7 +72,7 @@ final readonly class AccountsResource extends GeneratedResource
      * Import managed accounts in bulk from CSV files, sent as `multipart/form-data`.
      *
      * @param  AccountImportUpload|array<string, mixed>  $request  The request as a model or as an array in API format, with `accounts_file` and optionally `customers_file` and `options`.
-     * @param  array<string, mixed>  $headers  Request headers, including optional `Idempotency-Key`.
+     * @param  array<string, mixed>  $headers  Request headers. BeeL requires an `Idempotency-Key`: without one here or in `withOptions()`, a new one is sent.
      *
      * @see https://docs.beel.es/accounts/createAccountImport
      */
@@ -80,7 +80,7 @@ final readonly class AccountsResource extends GeneratedResource
     {
         $request = RequestModels::from($request, AccountImportUpload::class);
 
-        return $this->execute(fn () => $this->client->createAccountImport($request, $headers));
+        return $this->execute(fn () => $this->client->createAccountImport($request, $this->withIdempotencyKey($headers)));
     }
 
     /**

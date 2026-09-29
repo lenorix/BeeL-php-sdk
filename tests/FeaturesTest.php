@@ -1915,3 +1915,22 @@ it('reports a success response without data as unexpected, not as a TypeError', 
     expect(fn () => $company->get())->toThrow(BeelUnexpectedResponseError::class)
         ->and(fn () => $company->get())->toThrow(BeelUnexpectedResponseError::class);
 });
+
+it('sends the Idempotency-Key BeeL requires on imports without one from the caller', function (Closure $import) {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['id' => 'x']], 201),
+        jsonResponse(['success' => true, 'data' => ['id' => 'x']], 201),
+    ]);
+    $beel = testClient($transport);
+
+    $import($beel, null);
+    $import($beel, 'import-42');
+
+    expect($transport->requests[0]->getHeaderLine('Idempotency-Key'))->toMatch('/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/')
+        ->and($transport->requests[1]->getHeaderLine('Idempotency-Key'))->toBe('import-42');
+})->with([
+    'customers' => [fn (Beel $beel, ?string $key) => ($key === null ? $beel->company('c')->customers : $beel->company('c')->customers->withOptions(new RequestOptions(idempotencyKey: $key)))
+        ->import(['file' => fopen('php://memory', 'rb'), 'source' => 'BEEL']), ],
+    'accounts' => [fn (Beel $beel, ?string $key) => ($key === null ? $beel->accounts : $beel->accounts->withOptions(new RequestOptions(idempotencyKey: $key)))
+        ->import(['accounts_file' => fopen('php://memory', 'rb')]), ],
+]);

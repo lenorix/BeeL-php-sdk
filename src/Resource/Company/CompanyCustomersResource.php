@@ -114,13 +114,13 @@ final readonly class CompanyCustomersResource extends GeneratedResource
      * Start a customer import for this company.
      *
      * @param  V1CompaniesCompanyIdCustomersImportsPostBody|array<string, mixed>  $request  The request as a model or as an array in API format.
-     * @param  array<string, mixed>  $headers  Optional request headers.
+     * @param  array<string, mixed>  $headers  Request headers. BeeL requires an `Idempotency-Key`: without one here or in `withOptions()`, a new one is sent.
      */
     public function import(V1CompaniesCompanyIdCustomersImportsPostBody|array $request, array $headers = []): CustomerValidationUnifiedResult
     {
         $request = RequestModels::from($request, V1CompaniesCompanyIdCustomersImportsPostBody::class);
 
-        return $this->execute(fn () => $this->client->createCompanyCustomerImport($this->companyId, $request, $headers));
+        return $this->execute(fn () => $this->client->createCompanyCustomerImport($this->companyId, $request, $this->withIdempotencyKey($headers)));
     }
 
     /** Validate an import payload and preview its results without importing custom     *
