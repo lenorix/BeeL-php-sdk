@@ -101,13 +101,9 @@ it('uploads the signed representation as a replayable multipart body', function 
 it('reads retry_after from the error body like the Node.js SDK', function () {
     $transport = new RecordingPsrClient([jsonResponse(['success' => false, 'error' => ['code' => 'RATE_LIMITED', 'message' => 'Slow', 'retry_after' => 30]], 429)]);
 
-    try {
-        testClient($transport)->company('c')->invoices->get('inv-1');
-        test()->fail('Expected a rate limit error.');
-    } catch (BeelRateLimitError $exception) {
-        expect($exception->retryAfter)->toBe(30)
-            ->and($exception->retryAfterSeconds)->toBe(30);
-    }
+    $exception = thrown(fn () => testClient($transport)->company('c')->invoices->get('inv-1'), BeelRateLimitError::class);
+    expect($exception->retryAfter)->toBe(30)
+        ->and($exception->retryAfterSeconds)->toBe(30);
 });
 
 it('waits exactly the Retry-After BeeL asks for when it fits under maxRetryDelayMs', function () {
@@ -136,14 +132,10 @@ it('reports the requested delay on the exception when it does not wait', functio
     // unexpected-request error, so one request proves the SDK did not wait, without timing it.
     $transport = new RecordingPsrClient([new Response(429, ['Content-Type' => 'application/json', ...$headers], $body)]);
 
-    try {
-        testClient($transport, maxRetries: 3)->company('c')->invoices->get('inv-1');
-        test()->fail('Expected a rate limit error.');
-    } catch (BeelRateLimitError $exception) {
-        expect($exception->retryAfterSeconds)->toBeGreaterThanOrEqual($expected - 1)->toBeLessThanOrEqual($expected)
-            ->and($exception->retryAfter)->toBe($exception->retryAfterSeconds)
-            ->and($transport->requests)->toHaveCount(1);
-    }
+    $exception = thrown(fn () => testClient($transport, maxRetries: 3)->company('c')->invoices->get('inv-1'), BeelRateLimitError::class);
+    expect($exception->retryAfterSeconds)->toBeGreaterThanOrEqual($expected - 1)->toBeLessThanOrEqual($expected)
+        ->and($exception->retryAfter)->toBe($exception->retryAfterSeconds)
+        ->and($transport->requests)->toHaveCount(1);
 })->with([
     'seconds' => [['Retry-After' => '120'], '{"success":false}', 120],
     // A closure, so the date is built when the test runs rather than when the file loads.
@@ -165,12 +157,8 @@ it('backs off within maxRetryDelayMs for a 429 without Retry-After and for 5xx',
 it('lets a single call skip waiting with maxRetries 0', function () {
     $transport = new RecordingPsrClient([new Response(429, ['Content-Type' => 'application/json', 'Retry-After' => '5'], '{"success":false}')]);
 
-    try {
-        testClient($transport, maxRetries: 3)->company('c')->invoices->withOptions(new RequestOptions(maxRetries: 0))->get('inv-1');
-        test()->fail('Expected a rate limit error.');
-    } catch (BeelRateLimitError $exception) {
-        expect($exception->retryAfterSeconds)->toBe(5)->and($transport->requests)->toHaveCount(1);
-    }
+    $exception = thrown(fn () => testClient($transport, maxRetries: 3)->company('c')->invoices->withOptions(new RequestOptions(maxRetries: 0))->get('inv-1'), BeelRateLimitError::class);
+    expect($exception->retryAfterSeconds)->toBe(5)->and($transport->requests)->toHaveCount(1);
 });
 
 it('retries a connection error on a safe request and rethrows the original after the last attempt', function () {
@@ -179,14 +167,12 @@ it('retries a connection error on a safe request and rethrows the original after
     $last = new ConnectException('Timed out', new Request('GET', 'https://example.test/x'));
     $transport = new RecordingPsrClient([$first, $first, $last]);
 
-    try {
-        retryingClient($transport, $sleeps, maxRetries: 2, retryDelayMs: 0)->sendRequest(new Request('GET', 'https://example.test/x'));
-        test()->fail('Expected the connection error.');
-    } catch (ConnectException $exception) {
-        expect($exception)->toBe($last)
-            ->and($transport->requests)->toHaveCount(3)
-            ->and($sleeps)->toHaveCount(2);
-    }
+    $exception = thrown(function () use ($transport, &$sleeps) {
+        return retryingClient($transport, $sleeps, maxRetries: 2, retryDelayMs: 0)->sendRequest(new Request('GET', 'https://example.test/x'));
+    }, ConnectException::class);
+    expect($exception)->toBe($last)
+        ->and($transport->requests)->toHaveCount(3)
+        ->and($sleeps)->toHaveCount(2);
 });
 
 it('retries a connection error only when repeating it cannot duplicate a write', function (string $method, array $headers, bool $retried) {
@@ -289,11 +275,7 @@ it('ignores a retry_after in the body that is not a finite, non-negative number'
 it('ignores an invalid retry_after in the error details, as the transport does', function (string $value) {
     $transport = new RecordingPsrClient([new Response(429, ['Content-Type' => 'application/json'], '{"success":false,"error":{"code":"RATE_LIMIT_EXCEEDED","details":{"retry_after":'.$value.'}}}')]);
 
-    try {
-        testClient($transport)->company('c')->invoices->get('inv-1');
-        test()->fail('Expected BeelRateLimitError.');
-    } catch (BeelRateLimitError $exception) {
-        expect($exception->retryAfter)->toBeNull()
-            ->and($exception->retryAfterSeconds)->toBe(60);
-    }
+    $exception = thrown(fn () => testClient($transport)->company('c')->invoices->get('inv-1'), BeelRateLimitError::class);
+    expect($exception->retryAfter)->toBeNull()
+        ->and($exception->retryAfterSeconds)->toBe(60);
 })->with(['negative' => ['-5'], 'overflowing' => ['1e400']]);

@@ -132,12 +132,8 @@ it('calls any API path with the client authentication and error mapping', functi
         ->and((string) $transport->requests[1]->getBody())->toBe('{"name":"x","amount":1.0}')
         ->and($transport->requests[1]->getHeaderLine('Idempotency-Key'))->toBe('thing-1');
 
-    try {
-        $beel->request('GET', '/v1/companies/{company_id}/logo', ['company_id' => 'c']);
-        test()->fail('Expected a not found error.');
-    } catch (BeelNotFoundError $exception) {
-        expect($exception->apiCode)->toBe('LOGO_NOT_FOUND');
-    }
+    $exception = thrown(fn () => $beel->request('GET', '/v1/companies/{company_id}/logo', ['company_id' => 'c']), BeelNotFoundError::class);
+    expect($exception->apiCode)->toBe('LOGO_NOT_FOUND');
     expect(fn () => $beel->request('GET', '/v1/companies/{company_id}'))->toThrow(InvalidArgumentException::class, 'company_id');
 
     $files = new RecordingPsrClient([new Response(200, ['Content-Type' => 'application/zip'], new TripwireStream('PK'))]);

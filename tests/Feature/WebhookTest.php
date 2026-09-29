@@ -33,12 +33,8 @@ it('reports each webhook verification failure with its own exception type', func
     ];
 
     foreach ($cases as [$verify, $expected]) {
-        try {
-            $verify();
-            test()->fail("Expected {$expected}.");
-        } catch (WebhookVerificationError $exception) {
-            expect($exception)->toBeInstanceOf($expected);
-        }
+        $exception = thrown(fn () => $verify(), WebhookVerificationError::class);
+        expect($exception)->toBeInstanceOf($expected);
     }
 });
 
@@ -138,14 +134,10 @@ it('checks the required fields of every webhook event and its data as BeeL decla
 it('exposes the checked and signed timestamps on a replay window failure', function () {
     $header = WebhookSignatureHeader::parse((new WebhookSigner('whsec_test'))->sign('{}', 1_000));
 
-    try {
-        (new WebhookVerifier('whsec_test', toleranceSeconds: 60))->checkTimestamp($header, 2_000);
-        test()->fail('Expected a timestamp error.');
-    } catch (WebhookTimestampError $exception) {
-        expect($exception->timestamp)->toBe(1_000)
-            ->and($exception->now)->toBe(2_000)
-            ->and($exception->toleranceSeconds)->toBe(60);
-    }
+    $exception = thrown(fn () => (new WebhookVerifier('whsec_test', toleranceSeconds: 60))->checkTimestamp($header, 2_000), WebhookTimestampError::class);
+    expect($exception->timestamp)->toBe(1_000)
+        ->and($exception->now)->toBe(2_000)
+        ->and($exception->toleranceSeconds)->toBe(60);
 });
 
 it('parses and checks the header freshness without the body or HMAC', function () {

@@ -37,25 +37,17 @@ it('sends the PDF wait preference and still returns the ready PDF', function () 
 it('keeps mapping PDF API errors to BeelApiError', function () {
     $transport = new RecordingPsrClient([jsonResponse(['success' => false, 'error' => ['code' => 'INVOICE_NOT_ISSUED_NO_PDF', 'message' => 'Draft']], 400)]);
 
-    try {
-        testClient($transport)->company('c')->invoices->getPdf('inv-1');
-        test()->fail('Expected an API error.');
-    } catch (BeelApiError $exception) {
-        expect($exception->apiCode)->toBe('INVOICE_NOT_ISSUED_NO_PDF')
-            ->and($exception->statusCode)->toBe(400);
-    }
+    $exception = thrown(fn () => testClient($transport)->company('c')->invoices->getPdf('inv-1'), BeelApiError::class);
+    expect($exception->apiCode)->toBe('INVOICE_NOT_ISSUED_NO_PDF')
+        ->and($exception->statusCode)->toBe(400);
 });
 
 it('applies the not-ready behavior to the legacy PDF endpoint', function () {
     $transport = new RecordingPsrClient([new Response(202, ['Retry-After' => '7'])]);
 
-    try {
-        testClient($transport)->invoices->getPdf('inv-1', waitSeconds: 2);
-        test()->fail('Expected BeelNotReadyError.');
-    } catch (BeelNotReadyError $exception) {
-        expect($exception->retryAfter)->toBe(7)
-            ->and($transport->requests[0]->getHeaderLine('Prefer'))->toBe('wait=2');
-    }
+    $exception = thrown(fn () => testClient($transport)->invoices->getPdf('inv-1', waitSeconds: 2), BeelNotReadyError::class);
+    expect($exception->retryAfter)->toBe(7)
+        ->and($transport->requests[0]->getHeaderLine('Prefer'))->toBe('wait=2');
 });
 
 it('returns the PDF archive as the untouched response stream', function (bool $seekable) {
@@ -119,14 +111,10 @@ it('maps export errors to BeelApiError with their BeeL code', function () {
     $gateway = new RecordingPsrClient([new Response(502, ['Content-Type' => 'text/html'], '<html>Bad gateway</html>')]);
 
     foreach ([[$selection, BeelApiError::class, 400, 'EXPORT_SELECTION_REQUIRED'], [$limit, BeelValidationError::class, 422, 'EXPORT_LIMIT_EXCEEDED'], [$gateway, BeelApiError::class, 502, 'UNKNOWN']] as [$transport, $class, $status, $code]) {
-        try {
-            testClient($transport)->company('c')->invoices->export(new CreateInvoiceExportRequest);
-            test()->fail('Expected an API error.');
-        } catch (BeelApiError $exception) {
-            expect($exception)->toBeInstanceOf($class)
-                ->and($exception->statusCode)->toBe($status)
-                ->and($exception->apiCode)->toBe($code);
-        }
+        $exception = thrown(fn () => testClient($transport)->company('c')->invoices->export(new CreateInvoiceExportRequest), BeelApiError::class);
+        expect($exception)->toBeInstanceOf($class)
+            ->and($exception->statusCode)->toBe($status)
+            ->and($exception->apiCode)->toBe($code);
     }
 });
 
@@ -202,12 +190,8 @@ it('reports a draft preview whose PDF is not ready as not ready', function () {
     ]);
     $invoices = testClient($transport)->company('c')->invoices;
 
-    try {
-        $invoices->preview('inv-1');
-        test()->fail('Expected BeelNotReadyError.');
-    } catch (BeelNotReadyError $exception) {
-        expect($exception->retryAfter)->toBe(4);
-    }
+    $exception = thrown(fn () => $invoices->preview('inv-1'), BeelNotReadyError::class);
+    expect($exception->retryAfter)->toBe(4);
 
     expect($invoices->preview('inv-1'))->toBeInstanceOf(InvoicePreviewResponseData::class);
 });

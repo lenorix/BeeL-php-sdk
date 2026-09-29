@@ -157,14 +157,10 @@ it('delegates company invoice creation to Jane with auth, path and generated mod
     $request = InvoiceBuilder::create()->forCustomer('customer-1')->addLine('Consulting', 1, 100)->build();
 
     expect($request)->toBeInstanceOf(CreateInvoiceRequest::class);
-    try {
-        $beel->company('company-1')->invoices->create($request);
-        test()->fail('Expected the API error to be mapped.');
-    } catch (BeelValidationError $exception) {
-        expect($exception->statusCode)->toBe(422)
-            ->and($exception->apiCode)->toBe('INVALID')
-            ->and($exception->requestId)->toBe('req-test');
-    }
+    $exception = thrown(fn () => $beel->company('company-1')->invoices->create($request), BeelValidationError::class);
+    expect($exception->statusCode)->toBe(422)
+        ->and($exception->apiCode)->toBe('INVALID')
+        ->and($exception->requestId)->toBe('req-test');
 
     expect((string) $transport->requests[0]->getUri())->toStartWith('https://sandbox.example/api/v1/companies/company-1/invoices?')
         ->and($transport->requests[0]->getHeaderLine('Authorization'))->toBe('Bearer beel_sk_test_key')
@@ -179,15 +175,11 @@ it('maps an undocumented gateway error response to a typed BeeL error', function
     ]);
     $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 1, httpClient: $transport);
 
-    try {
-        $beel->company('company-1')->invoices->get('invoice-1');
-        test()->fail('Expected an API error for the gateway response.');
-    } catch (BeelApiError $exception) {
-        expect($exception->statusCode)->toBe(502)
-            ->and($exception->apiCode)->toBe('UPSTREAM_UNAVAILABLE')
-            ->and($exception->requestId)->toBe('req-gateway')
-            ->and($exception->retryAfter)->toBe(4);
-    }
+    $exception = thrown(fn () => $beel->company('company-1')->invoices->get('invoice-1'), BeelApiError::class);
+    expect($exception->statusCode)->toBe(502)
+        ->and($exception->apiCode)->toBe('UPSTREAM_UNAVAILABLE')
+        ->and($exception->requestId)->toBe('req-gateway')
+        ->and($exception->retryAfter)->toBe(4);
 
     expect(count($transport->requests))->toBe(2);
 });
@@ -221,13 +213,9 @@ it('scopes account resource calls to the account path', function () {
     ]);
     $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 0, httpClient: $transport);
 
-    try {
-        $beel->account('account-1')->members->list();
-        test()->fail('Expected an authentication error.');
-    } catch (BeelAuthError $exception) {
-        expect($exception->statusCode)->toBe(401)
-            ->and($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/accounts/account-1/members');
-    }
+    $exception = thrown(fn () => $beel->account('account-1')->members->list(), BeelAuthError::class);
+    expect($exception->statusCode)->toBe(401)
+        ->and($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/accounts/account-1/members');
 });
 
 it('creates the company payment events resource with its company scope', function () {

@@ -71,13 +71,9 @@ it('switches a company on and off, exposing the Live checkout URL', function () 
     $activations = testClient($transport)->company('c')->activations;
 
     $activations->activate(Environment::TEST);
-    try {
-        $activations->activate('PROD', 'https://app.example.test/ok?s={CHECKOUT_SESSION_ID}', 'https://app.example.test/cancel');
-        test()->fail('Expected a payment required error.');
-    } catch (BeelPaymentRequiredError $exception) {
-        expect($exception->apiCode)->toBe('CHECKOUT_REQUIRED')
-            ->and($exception->checkoutUrl)->toBe('https://checkout.example.test/s/1');
-    }
+    $exception = thrown(fn () => $activations->activate('PROD', 'https://app.example.test/ok?s={CHECKOUT_SESSION_ID}', 'https://app.example.test/cancel'), BeelPaymentRequiredError::class);
+    expect($exception->apiCode)->toBe('CHECKOUT_REQUIRED')
+        ->and($exception->checkoutUrl)->toBe('https://checkout.example.test/s/1');
     $activations->deactivate(Environment::PROD);
 
     expect($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/companies/c/activations')
@@ -179,18 +175,10 @@ it('exposes the company representation flow with real HTTP statuses', function (
         ->and($representation->get())->toBeInstanceOf(RepresentationStatusResponseData::class)
         ->and($representation->documentLink()->getDownloadUrl())->toBe('https://signed.example.test/r.pdf');
 
-    try {
-        $representation->documentLink();
-        test()->fail('Expected a not found error.');
-    } catch (BeelNotFoundError $exception) {
-        expect($exception->statusCode)->toBe(404)->and($exception->apiCode)->toBe('REPRESENTATION_NOT_FOUND');
-    }
-    try {
-        $representation->generate();
-        test()->fail('Expected a conflict error.');
-    } catch (BeelConflictError $exception) {
-        expect($exception->statusCode)->toBe(409)->and($exception->apiCode)->toBe('REPRESENTATION_IN_PROGRESS');
-    }
+    $exception = thrown(fn () => $representation->documentLink(), BeelNotFoundError::class);
+    expect($exception->statusCode)->toBe(404)->and($exception->apiCode)->toBe('REPRESENTATION_NOT_FOUND');
+    $exception = thrown(fn () => $representation->generate(), BeelConflictError::class);
+    expect($exception->statusCode)->toBe(409)->and($exception->apiCode)->toBe('REPRESENTATION_IN_PROGRESS');
     $representation->cancel();
 
     expect($transport->requests[0]->getUri()->getPath())->toBe('/api/v1/companies/c/representation')

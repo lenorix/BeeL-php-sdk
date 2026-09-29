@@ -8,6 +8,7 @@ use Lenorix\BeelSdk\Exception\BeelNotReadyError;
 use Lenorix\BeelSdk\Generated\Model\CreateInvoicePdfArchiveRequest;
 use Lenorix\BeelSdk\Http\RetryingClient;
 use Lenorix\BeelSdk\Tests\Support\RecordingPsrClient;
+use PHPUnit\Framework\AssertionFailedError;
 use Psr\Http\Client\ClientInterface;
 
 /**
@@ -116,4 +117,25 @@ function webhookEvent(array $overrides = []): array
         'data' => ['invoice_id' => 'inv-1', 'invoice_number' => 'F-2026-0001'],
         ...$overrides,
     ];
+}
+
+/**
+ * Run a call that must throw, and return the exception so the test can check it.
+ *
+ * @template T of Throwable
+ *
+ * @param  class-string<T>  $class
+ * @return T
+ */
+function thrown(callable $call, string $class): Throwable
+{
+    try {
+        $call();
+    } catch (Throwable $exception) {
+        expect($exception)->toBeInstanceOf($class);
+
+        return $exception;
+    }
+
+    throw new AssertionFailedError("Expected {$class}, but nothing was thrown.");
 }

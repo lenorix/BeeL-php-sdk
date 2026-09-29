@@ -61,14 +61,10 @@ it('reads every response example of the contract', function (string $operationId
         return;
     }
 
-    try {
-        $read();
-        $this->fail('An error example was read as a success.');
-    } catch (Throwable $exception) {
-        $error = BeelApiError::fromGenerated($exception);
-        expect($error->statusCode)->toBe($status)
-            ->and($error->apiCode)->toBe($example['error']['code']);
-    }
+    $exception = thrown(fn () => $read(), Throwable::class);
+    $error = BeelApiError::fromGenerated($exception);
+    expect($error->statusCode)->toBe($status)
+        ->and($error->apiCode)->toBe($example['error']['code']);
 })->with(contractResponseExamples());
 
 /**

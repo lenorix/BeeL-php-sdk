@@ -16,13 +16,9 @@ use Lenorix\BeelSdk\Tests\Support\RecordingPsrClient;
 it('exposes API error data as a logging context without submitted values', function () {
     $transport = new RecordingPsrClient([new Response(422, ['Content-Type' => 'application/json', 'X-Request-Id' => 'req-9'], '{"success":false,"error":{"code":"INVALID","message":"Bad","details":{"field":"x"}}}')]);
 
-    try {
-        testClient($transport)->company('c')->invoices->get('inv-1');
-        test()->fail('Expected a validation error.');
-    } catch (BeelValidationError $exception) {
-        expect($exception->context())->toBe(['status_code' => 422, 'api_code' => 'INVALID', 'request_id' => 'req-9', 'retry_after' => null])
-            ->and($exception->details['field'])->toBe('x');
-    }
+    $exception = thrown(fn () => testClient($transport)->company('c')->invoices->get('inv-1'), BeelValidationError::class);
+    expect($exception->context())->toBe(['status_code' => 422, 'api_code' => 'INVALID', 'request_id' => 'req-9', 'retry_after' => null])
+        ->and($exception->details['field'])->toBe('x');
 });
 
 it('maps an empty error response without Content-Type to BeelApiError', function () {
@@ -51,13 +47,9 @@ it('maps an empty error response without Content-Type to BeelApiError', function
 it('falls back to the Node.js SDK error codes when BeeL sends none', function (int $status, string $class, string $code) {
     $transport = new RecordingPsrClient([new Response($status, ['Content-Type' => 'application/json'], '{"success":false}')]);
 
-    try {
-        testClient($transport)->company('c')->invoices->get('inv-1');
-        test()->fail('Expected an API error.');
-    } catch (BeelApiError $exception) {
-        expect($exception)->toBeInstanceOf($class)
-            ->and($exception->apiCode)->toBe($code);
-    }
+    $exception = thrown(fn () => testClient($transport)->company('c')->invoices->get('inv-1'), BeelApiError::class);
+    expect($exception)->toBeInstanceOf($class)
+        ->and($exception->apiCode)->toBe($code);
 })->with([
     [401, BeelAuthError::class, 'UNAUTHORIZED'],
     [403, BeelAuthError::class, 'FORBIDDEN'],
@@ -69,12 +61,8 @@ it('falls back to the Node.js SDK error codes when BeeL sends none', function (i
 ]);
 
 it('uses the Node.js SDK fallback message when BeeL sends none', function (Response $response, string $message) {
-    try {
-        testClient(new RecordingPsrClient([$response]))->company('c')->invoices->get('inv-1');
-        test()->fail('Expected an API error.');
-    } catch (BeelApiError $exception) {
-        expect($exception->getMessage())->toBe($message);
-    }
+    $exception = thrown(fn () => testClient(new RecordingPsrClient([$response]))->company('c')->invoices->get('inv-1'), BeelApiError::class);
+    expect($exception->getMessage())->toBe($message);
 })->with([
     'declared JSON error without message' => [new Response(404, ['Content-Type' => 'application/json'], '{"success":false}'), 'API error 404'],
     'undeclared HTML error' => [new Response(502, ['Content-Type' => 'text/html'], '<html>Bad gateway</html>'), 'API error 502'],
@@ -88,16 +76,12 @@ it('reports an undeclared success status as unexpected, not as a failed request'
     ]);
     $invoices = testClient($transport)->company('c')->invoices;
 
-    try {
-        $invoices->get('inv-1');
-        test()->fail('Expected BeelUnexpectedResponseError.');
-    } catch (BeelUnexpectedResponseError $exception) {
-        expect($exception)->not->toBeInstanceOf(BeelApiError::class)
-            ->and($exception->statusCode)->toBe(202)
-            ->and($exception->requestId)->toBe('req-202')
-            ->and($exception->getMessage())->toContain('getLastResponse()')
-            ->and($exception->context())->toBe(['status_code' => 202, 'request_id' => 'req-202']);
-    }
+    $exception = thrown(fn () => $invoices->get('inv-1'), BeelUnexpectedResponseError::class);
+    expect($exception)->not->toBeInstanceOf(BeelApiError::class)
+        ->and($exception->statusCode)->toBe(202)
+        ->and($exception->requestId)->toBe('req-202')
+        ->and($exception->getMessage())->toContain('getLastResponse()')
+        ->and($exception->context())->toBe(['status_code' => 202, 'request_id' => 'req-202']);
 
     expect(fn () => $invoices->get('inv-1'))->toThrow(BeelNotFoundError::class);
 });
@@ -147,27 +131,19 @@ it('maps an error status the operation does not declare from its body, or its st
 it('maps an error status whose JSON Content-Type carries no JSON to BeelApiError', function () {
     $transport = new RecordingPsrClient([new Response(502, ['Content-Type' => 'application/json', 'X-Request-Id' => 'req-9'], '<html>Bad gateway</html>')]);
 
-    try {
-        testClient($transport)->company('c')->invoices->get('inv-1');
-        test()->fail('Expected BeelApiError.');
-    } catch (BeelApiError $exception) {
-        expect($exception->statusCode)->toBe(502)
-            ->and($exception->requestId)->toBe('req-9');
-    }
+    $exception = thrown(fn () => testClient($transport)->company('c')->invoices->get('inv-1'), BeelApiError::class);
+    expect($exception->statusCode)->toBe(502)
+        ->and($exception->requestId)->toBe('req-9');
 });
 
 it('maps an error body whose fields are not strings to BeelApiError', function (string $body, ?string $apiCode, string $message, ?string $requestId) {
     $transport = new RecordingPsrClient([new Response(503, ['Content-Type' => 'application/json'], $body)]);
 
-    try {
-        testClient($transport)->company('c')->get();
-        test()->fail('Expected BeelApiError.');
-    } catch (BeelApiError $exception) {
-        expect($exception->statusCode)->toBe(503)
-            ->and($exception->apiCode)->toBe($apiCode)
-            ->and($exception->getMessage())->toBe($message)
-            ->and($exception->requestId)->toBe($requestId);
-    }
+    $exception = thrown(fn () => testClient($transport)->company('c')->get(), BeelApiError::class);
+    expect($exception->statusCode)->toBe(503)
+        ->and($exception->apiCode)->toBe($apiCode)
+        ->and($exception->getMessage())->toBe($message)
+        ->and($exception->requestId)->toBe($requestId);
 })->with([
     'numeric code' => ['{"error":{"code":500,"message":"Down"}}', '500', 'Down', null],
     'list message' => ['{"error":{"code":"DOWN","message":["a","b"]}}', 'DOWN', 'API error 503', null],
