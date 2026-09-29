@@ -12,11 +12,11 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 ### Changed
 
 - Resource constructors require the client's `ResponseContext` and are marked `@internal`: resources are meant to be reached from `Beel` (`$beel->company($id)->invoices`), which always passed it. Code that built them by hand without one, which could not send per-call options, must use the client instead.
-
 - The generated client no longer reads a status an operation does not declare as an `ErrorResponse` (BeeL's `default` response, which `bin/prepare-openapi.php` now drops): called directly through `$beel->raw`, it returns `null` for one. Resource methods are unaffected: they still read such an error from its body, with its code, message and request ID.
 
 ### Fixed
 
+- An error status the operation declares took its message only from the generated model: like an undeclared one, it now falls back to the body's plain `error`, `detail` or `title` when BeeL sends no `message`. `BeelApiError::fromErrorResponse()` takes the original exception as an optional fourth argument.
 - A `retry_after` in an error's `details` that is negative or not a finite number reached `retryAfter`/`retryAfterSeconds` (such as `-5`), because the exceptions read it without the transport's checks: both now use the same rules.
 - The legacy `$beel->invoices->list()` rejected whole numbers for `total_min` and the other amount filters, like the company-scoped list did.
 - `getLastResponse()` returned the previous call's response after a call rejected before anything was sent, such as one with an invalid request array: it is now `null` then.
