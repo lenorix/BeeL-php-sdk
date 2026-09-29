@@ -52,6 +52,8 @@ $issued = $company->invoices->issue($invoice->getId());
 echo $issued->getInvoiceNumber();
 ```
 
+The invoice is created as a draft and issued in a separate call, once it is ready.
+
 Every method that takes a request model also accepts an array with the API's field names, like the plain objects of the official Node.js SDK:
 
 ```php
@@ -71,7 +73,7 @@ $company->invoices->void($invoice->getId(), ['reason' => 'Billing error']);
 
 An array that does not match the model, or lacks a required field, throws `InvalidArgumentException` naming the problem before anything is sent.
 
-Create the invoice first and issue it when it is ready. Methods return the generated Jane model, so its getters and the complete BeeL response remain accessible. Values keep exactly what BeeL sent, including anything in `metadata`, except date-times.
+Methods return the generated Jane model, so its getters and the complete BeeL response remain accessible. Values keep exactly what BeeL sent, including anything in `metadata`, except date-times.
 
 Date-times become `DateTime` objects with microseconds, the most PHP can hold (BeeL sends nanoseconds), and the ones you send go out with microseconds too. A date-time must be a full RFC 3339 value, or `null` where the field allows it: anything else, such as `''` or `tomorrow`, throws `InvalidDateException` instead of silently becoming the current time.
 
@@ -160,7 +162,7 @@ foreach ($company->invoices->all(['status' => ['ISSUED'], 'limit' => 100]) as $i
 
 Filters and `limit` apply to every page, and `page` sets the first page to read. Iteration stops on the last page, on an empty page, or if BeeL answers a different page than the one requested.
 
-Iterators are available for company invoices, customers, products, series, recurring invoices (`all()` and `allHistory()`), payment events, and for account companies, members (`all()` and `allGrants()`), invitations, webhooks (`all()` and `allDeliveries()`), emails, and `$beel->accounts->all()`, which follows BeeL's `next_cursor`.
+Iterators are available for company invoices, customers, products, series, recurring invoices (`all()` and `allHistory()`), payment events, and for account companies, members (`all()` and `allGrants()`), invitations, webhooks (`all()` and `allDeliveries()`), emails, request logs, and `$beel->accounts->all()`, which follows BeeL's `next_cursor`.
 
 ## Per-call options
 
@@ -421,6 +423,12 @@ if ($event->getType() === 'invoice.issued'
 }
 ```
 
+`verifyEvent()` returns Jane's generated `WebhookEvent` model, with `data` denormalized to the model of its event type, which suits dispatching typed framework events such as Laravel's. `verify()` returns the decoded payload as an array instead.
+
+To build the typed model later from a payload `verify()` already returned, for example in a queued job, use `$verifier->toEvent($payload)`, or the static `WebhookVerifier::eventFromPayload($payload)`, which needs no secret. Neither checks the signature again, so pass only verified payloads.
+
+Event names are `WebhookEventType` cases, for example `WebhookEventType::INVOICE_ISSUED->value`. `isProvisionerOnly()` is `true` for `account.claimed`, `company.created` and `representation.signed`, which BeeL delivers only to the platform that provisioned the account. Event field values have enums in `Lenorix\BeelSdk\Enum` too: `VeriFactuSubmissionStatus`, `RecurringInvoicePauseReason` and `WebhookAccountRelationship`.
+
 Each failure has its own exception, and all of them extend `WebhookVerificationError`:
 
 | Exception | Cause |
@@ -448,16 +456,6 @@ use Lenorix\BeelSdk\Webhook\WebhookSigner;
 $signatureHeader = (new WebhookSigner($secret))->sign($body); // "t=...,v1=..."
 ```
 
-`$verifier->toEvent($payload)` builds the typed model from a payload that `verify()` already returned, without checking the signature again. Only pass it verified payloads.
-
-Event field values are also available as enums in `Lenorix\BeelSdk\Enum`: `VeriFactuSubmissionStatus`, `RecurringInvoicePauseReason` and `WebhookAccountRelationship`.
-
-`verifyEvent()` returns Jane's generated `WebhookEvent` model, with `data` denormalized to the model of its event type, which suits dispatching typed framework events such as Laravel's. `verify()` returns the decoded payload as an array instead.
-
-Event names are `WebhookEventType` cases, for example `WebhookEventType::INVOICE_ISSUED->value`. `isProvisionerOnly()` is `true` for `account.claimed`, `company.created` and `representation.signed`, which BeeL delivers only to the platform that provisioned the account.
-
-To build the typed event later from a payload already verified, for example in a queued job, use the static `WebhookVerifier::eventFromPayload($payload)`; it needs no secret and checks no signature, so pass only verified payloads.
-
 ## Errors
 
 API errors are mapped to semantic exception classes. All extend `BeelApiError`:
@@ -465,6 +463,7 @@ API errors are mapped to semantic exception classes. All extend `BeelApiError`:
 | Exception | HTTP status | Useful properties |
 |---|---:|---|
 | `BeelAuthError` | 401, 403 | `statusCode`, `apiCode`, `requestId` |
+| `BeelPaymentRequiredError` | 402 | `statusCode`, `apiCode`, `checkoutUrl`, `requestId` |
 | `BeelNotFoundError` | 404 | `statusCode`, `apiCode`, `requestId` |
 | `BeelConflictError` | 409 | `statusCode`, `apiCode`, `details`, `requestId` |
 | `BeelValidationError` | 422 | `statusCode`, `apiCode`, `details`, `requestId` |
@@ -504,7 +503,7 @@ The SDK follows the official [`@beel_es/sdk`](https://www.npmjs.com/package/@bee
 - **Request IDs:** `requestId` comes from the `X-Request-Id` header when present, then from `meta.request_id` in the body; the Node.js SDK reads only the body.
 - **Any endpoint:** `$beel->request()` is the equivalent of `beel.raw.GET(...)`. `$beel->raw` is the generated Jane client, which does not map errors to `BeelApiError`.
 - **Writes without a body:** they are sent as `{}` like in the Node.js SDK, but an existing `Content-Type`, such as a multipart upload, is never replaced.
-- **Success statuses:** `send()` tells a sent email (`200`) from a queued one (`202`) by its return model; the Node.js SDK returns the data of any `2xx` without telling them apart. A success status the contract does not declare throws `BeelUnexpectedResponseError`, because the generated client has no model to read it into; Node returns its data.
+- **Success statuses:** `send()` tells a sent email (`200`) from a queued one (`202`) by its return model; the Node.js SDK returns the data of any `2xx` without telling them apart. A success status the contract does not declare, or one without a readable body, throws `BeelUnexpectedResponseError`, because the generated client has no model to read it into; Node returns its data.
 - **Extras:** `getLastResponse()` to read the exact response of the last call, every current endpoint has a method, including those without one in the Node.js SDK (`activations`, `invoiceCustomization`, `logo`, `requestLogs`, account imports, `templates`, `previewPdf()`), named in its style. Also `$beel->request()` for any path, `all()` iterators, per-call `withOptions()`, `BinaryDownload` for archives and exports, `$company->representation`, `BeelNotReadyError` with `Retry-After` for PDFs, `WebhookSigner`, and `$beel->me`.
 
 ## Documentation and support
