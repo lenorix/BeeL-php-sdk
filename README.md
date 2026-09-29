@@ -71,7 +71,11 @@ $company->invoices->void($invoice->getId(), ['reason' => 'Billing error']);
 
 An array that does not match the model, or lacks a required field, throws `InvalidArgumentException` naming the problem before anything is sent.
 
-Create the invoice first and issue it when it is ready. The generated Jane model returned by the SDK is available directly, so its getters and the complete BeeL response remain accessible. Date-time fields become `DateTime` objects that keep microseconds, the most PHP's `DateTime` can hold (BeeL sends nanoseconds), and date-times you send go out with microseconds too. A date-time must be a full RFC 3339 value, or `null` where the field allows it: an empty string, text such as `tomorrow` or a `null` the field does not allow throws `InvalidDateException` instead of silently becoming the current time. In arrays passed to resource methods, a date-time field also accepts a date object (`DateTime`, `DateTimeImmutable`, Carbon…); date-only fields such as `issue_date` stay `Y-m-d` strings, and `$beel->request()` sends its body with plain `json_encode`, so give it strings there. Every other value, including anything in `metadata`, keeps exactly what BeeL sent.
+Create the invoice first and issue it when it is ready. Methods return the generated Jane model, so its getters and the complete BeeL response remain accessible. Values keep exactly what BeeL sent, including anything in `metadata`, except date-times.
+
+Date-times become `DateTime` objects with microseconds, the most PHP can hold (BeeL sends nanoseconds), and the ones you send go out with microseconds too. A date-time must be a full RFC 3339 value, or `null` where the field allows it: anything else, such as `''` or `tomorrow`, throws `InvalidDateException` instead of silently becoming the current time.
+
+In arrays passed to resource methods, a date-time field also accepts a date object (`DateTime`, `DateTimeImmutable`, Carbon…). Date-only fields such as `issue_date` take `Y-m-d` strings, and so does every date in a `$beel->request()` body.
 
 ## Client options
 
@@ -127,7 +131,9 @@ $summary = $company->fiscalSummary(['year' => 2026]);
 $readiness = $company->issuingReadiness();
 ```
 
-Right after issuing, the invoice PDF may still be generating. Then `getPdf()` and `preview()` (a preview image URL) throw `BeelNotReadyError` with BeeL's `Retry-After`, and `send()` with `attach_pdf` queues the email: it returns the `...Response202Data` model instead of `...Response200Data` (or check `$beel->getLastResponse()->getStatusCode() === 202`), and the email goes out once the PDF exists. A VeriFactu record rejected before reaching AEAT may lack `registered_at`, `registration_number` or `qr_url`: like every optional field BeeL leaves out, their getters return `null`. The exceptions are an optional `Pagination` or `TaxInfo`: BeeL requires them in other responses and they have required keys or an enum, so they stay non-nullable. Check `isInitialized('mainTax')` before calling `InvoiceLine::getMainTax()`, for example.
+Right after issuing, the invoice PDF may still be generating. Then `getPdf()` and `preview()` (a preview image URL) throw `BeelNotReadyError` with BeeL's `Retry-After`. `send()` with `attach_pdf` queues the email instead: it returns the `...Response202Data` model rather than `...Response200Data`, and the email goes out once the PDF exists.
+
+Optional fields BeeL leaves out read as `null`, such as the `registered_at`, `registration_number` or `qr_url` of a VeriFactu record rejected before reaching AEAT. The exceptions are an optional `Pagination` or `TaxInfo`, which stay non-nullable because BeeL requires them in other responses: check `isInitialized('mainTax')` before calling `InvoiceLine::getMainTax()`, for example.
 
 The company scope exposes `invoices`, `customers`, `products`, `series`, `recurringInvoices`, `paymentConnections`, `taxConfiguration`, `verifactuConfiguration`, `invoiceCustomization`, `logo`, `activations` and `representation`, along with company operations such as `get()`, `update()`, `delete()`, `fiscalSummary()`, and `issuingReadiness()`.
 
@@ -152,7 +158,9 @@ foreach ($company->invoices->all(['status' => ['ISSUED'], 'limit' => 100]) as $i
 }
 ```
 
-Filters and `limit` apply to every page, and `page` sets the first page to read. Iteration stops on the last page, on an empty page, or if BeeL answers a different page than the one requested. Iterators are available for company invoices, customers, products, series, recurring invoices (`all()` and `allHistory()`), payment events, and for account companies, members (`all()` and `allGrants()`), invitations, webhooks (`all()` and `allDeliveries()`), emails, and `$beel->accounts->all()`, which follows BeeL's `next_cursor`.
+Filters and `limit` apply to every page, and `page` sets the first page to read. Iteration stops on the last page, on an empty page, or if BeeL answers a different page than the one requested.
+
+Iterators are available for company invoices, customers, products, series, recurring invoices (`all()` and `allHistory()`), payment events, and for account companies, members (`all()` and `allGrants()`), invitations, webhooks (`all()` and `allDeliveries()`), emails, and `$beel->accounts->all()`, which follows BeeL's `next_cursor`.
 
 ## Per-call options
 
@@ -169,7 +177,9 @@ $traced = $beel->company('company-uuid')->withOptions(new RequestOptions(headers
 $traced->invoices->get('invoice-uuid'); // child resources use the same options
 ```
 
-The options are added by the SDK's transport, so they work for every operation, including those whose generated endpoint declares no header parameters. A stable idempotency key lets you retry a write safely after a timeout or a crash: BeeL returns the stored response instead of repeating the operation. The same key is sent on every request made through the copy, so scope a copy with an idempotency key to one write. Options take precedence over headers passed as method arguments. `maxRetries` overrides the client's retry limit for these requests (`0` disables retries, useful inside queue workers that retry on their own), and `retryServerErrors` decides whether a `5xx` may be retried. `Authorization`, `Host`, `Content-Type` and `Content-Length` cannot be set per call: the API key belongs to the `Beel` instance, so use one instance per credential.
+The options are added by the SDK's transport, so they work for every operation, and they take precedence over headers passed as method arguments. `maxRetries` overrides the client's retry limit (`0` disables retries, useful in queue workers that retry on their own), and `retryServerErrors` decides whether a `5xx` may be retried.
+
+A stable idempotency key lets you retry a write safely after a timeout or a crash: BeeL returns the stored response instead of repeating the operation. The copy sends its key on every request, so scope it to one write. `Authorization`, `Host`, `Content-Type` and `Content-Length` cannot be set per call: the API key belongs to the `Beel` instance, so use one instance per credential.
 
 ## Identity
 
@@ -294,7 +304,7 @@ $customerRequest = CustomerBuilder::create()
 $customer = $company->customers->create($customerRequest);
 ```
 
-`InvoiceBuilder` supports `type()`, `forCustomer()`, `operationDate()`, `dueDate()`, `series()`, `externalRef()`, `metadata()`, `notes()`, `addLine()`, and `addLineObject()`. BeeL requires an explicit `main_tax` on every normal invoice line; `addLine()` is a convenience shortcut without tax fields, so use `addLineObject()` when building a valid taxable line. `CustomerBuilder` supports name, NIF, email, phone, notes, and address. Each builder checks its documented required fields when `build()` is called.
+`InvoiceBuilder` supports `type()`, `forCustomer()`, `operationDate()`, `dueDate()`, `series()`, `externalRef()`, `metadata()`, `notes()`, `addLine()` and `addLineObject()`. BeeL requires a `main_tax` on every normal line, which `addLine()` does not set: use `addLineObject()` for taxable lines. `CustomerBuilder` supports name, NIF, email, phone, notes and address. `build()` checks each builder's required fields.
 
 ## Last response
 
@@ -382,7 +392,9 @@ fclose($file);
 $download->counts; // ['total' => 10, 'successful' => 9, 'failed' => 1]
 ```
 
-`fileName` comes from `Content-Disposition` and is reduced to a base name, so it never contains a path. `contentType` is the media type, such as `text/csv`, and `charset` the `Content-Type` charset when BeeL sends one, such as `utf-8`. The archive's `counts` has `total`, `successful` and `failed`; the export's has `total`. Errors such as `EXPORT_SELECTION_REQUIRED` or `EXPORT_LIMIT_EXCEEDED` throw `BeelApiError`. Neither operation retries a `5xx` by default, because each attempt builds the file again.
+`fileName` comes from `Content-Disposition` and is reduced to a base name, so it never contains a path. `contentType` is the media type, such as `text/csv`, and `charset` its charset when BeeL sends one, such as `utf-8`. The archive's `counts` has `total`, `successful` and `failed`; the export's has `total`.
+
+Errors such as `EXPORT_SELECTION_REQUIRED` or `EXPORT_LIMIT_EXCEEDED` throw `BeelApiError`. Neither operation retries a `5xx` by default, because each attempt builds the file again.
 
 With the default Guzzle client, the body is downloaded to a temporary stream (in memory up to 2 MB, then on disk) before the call returns. For true network streaming, pass a client created with `new \GuzzleHttp\Client(['stream' => true])`; the body can then be read only once.
 
@@ -440,7 +452,9 @@ $signatureHeader = (new WebhookSigner($secret))->sign($body); // "t=...,v1=..."
 
 Event field values are also available as enums in `Lenorix\BeelSdk\Enum`: `VeriFactuSubmissionStatus`, `RecurringInvoicePauseReason` and `WebhookAccountRelationship`.
 
-`verifyEvent()` returns Jane's generated `WebhookEvent` model, with `data` denormalized to the generated model for its event type. This is useful when dispatching typed framework events, such as Laravel events. `verify()` remains available when you prefer the decoded payload as an array. Event names are also available as `WebhookEventType` enum cases, for example `WebhookEventType::INVOICE_ISSUED->value`. `WebhookEventType::isProvisionerOnly()` is `true` for `account.claimed`, `company.created` and `representation.signed`, which BeeL documents as delivered only to the platform that provisioned the account.*` events, which BeeL documents as delivered only to the provisioner that created the account.
+`verifyEvent()` returns Jane's generated `WebhookEvent` model, with `data` denormalized to the model of its event type, which suits dispatching typed framework events such as Laravel's. `verify()` returns the decoded payload as an array instead.
+
+Event names are `WebhookEventType` cases, for example `WebhookEventType::INVOICE_ISSUED->value`. `isProvisionerOnly()` is `true` for `account.claimed`, `company.created` and `representation.signed`, which BeeL delivers only to the platform that provisioned the account.
 
 To build the typed event later from a payload already verified, for example in a queued job, use the static `WebhookVerifier::eventFromPayload($payload)`; it needs no secret and checks no signature, so pass only verified payloads.
 
@@ -457,9 +471,9 @@ API errors are mapped to semantic exception classes. All extend `BeelApiError`:
 | `BeelRateLimitError` | 429 | `statusCode`, `retryAfter`, `retryAfterSeconds` |
 | `BeelApiError` | Other API errors | `statusCode`, `apiCode`, `details`, `requestId` |
 
-If BeeL answers with a success status the SDK does not know for that operation (BeeL sometimes adds one before the SDK is updated), or with a success whose body is missing or not JSON, the SDK throws `BeelUnexpectedResponseError` instead of reporting a failure: the request may have succeeded, so check `getLastResponse()` before retrying. Like `BeelNotReadyError`, it does not extend `BeelApiError`.
+An error without a JSON body, such as an HTML `502` or an empty `503` from a proxy, gets the class of its real `statusCode` too. When BeeL sends no error code, `apiCode` falls back to the official Node.js SDK's values: `UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `CONFLICT`, `UNPROCESSABLE_ENTITY`, `RATE_LIMIT_EXCEEDED` or `UNKNOWN`. `BeelRateLimitError::$retryAfterSeconds` is `60` when BeeL gives no delay, also like the Node.js SDK, while `retryAfter` stays `null`.
 
-An error without a JSON body, such as an HTML `502` or an empty `503` from a proxy, is mapped the same way, with its real `statusCode`. When BeeL sends no error code, `apiCode` falls back to the same values as the official Node.js SDK: `UNAUTHORIZED`, `FORBIDDEN`, `NOT_FOUND`, `CONFLICT`, `UNPROCESSABLE_ENTITY`, `RATE_LIMIT_EXCEEDED` or `UNKNOWN`. `BeelRateLimitError::$retryAfterSeconds` is `60` when BeeL gives no delay, also like the Node.js SDK; `retryAfter` stays `null` in that case. `BeelNotReadyError` (HTTP `202`, see [PDF downloads](#pdf-downloads)) does not extend `BeelApiError`, because it is not an error.
+Two exceptions do not extend `BeelApiError`, because they may not mean a failure. `BeelNotReadyError` (HTTP `202`, see [PDF downloads](#pdf-downloads)) means the result is still being generated. `BeelUnexpectedResponseError` means BeeL answered a success the SDK cannot read: a status it does not know for that operation (BeeL sometimes adds one before the SDK is updated), or a body that is missing or not JSON. The request may have succeeded, so check `getLastResponse()` before retrying.
 
 `$exception->context()` returns `status_code`, `api_code`, `request_id` and `retry_after` as an array, ready for a PSR-3 logging context. It leaves out `details`, because validation errors echo submitted values such as NIFs or amounts; read `$exception->details` explicitly when you need them.
 
