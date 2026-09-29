@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\InvoiceCustomizationOptionsResponse;
 use Lenorix\BeelSdk\Generated\Model\TaxConfiguration;
 use Lenorix\BeelSdk\Generated\Model\TaxTypesCatalog;
@@ -13,16 +12,10 @@ use Lenorix\BeelSdk\Generated\Model\UpdateVeriFactuConfigurationRequest;
 use Lenorix\BeelSdk\Generated\Model\V1ConfigurationLanguagePutBody;
 use Lenorix\BeelSdk\Generated\Model\V1ConfigurationLanguagePutResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\VeriFactuConfiguration;
-use Lenorix\BeelSdk\Http\ResponseContext;
 
 /** @deprecated Prefer company configuration resources and global catalogs. */
 final readonly class ConfigurationResource extends GeneratedResource
 {
-    public function __construct(Client $client, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     public function updateLanguage(string $language): V1ConfigurationLanguagePutResponse200Data
     {
         $request = (new V1ConfigurationLanguagePutBody)->setLanguage($language);

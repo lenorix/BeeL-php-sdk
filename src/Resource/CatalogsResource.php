@@ -4,21 +4,14 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\InvoiceCustomizationOptionsResponse;
 use Lenorix\BeelSdk\Generated\Model\MyPreferences;
 use Lenorix\BeelSdk\Generated\Model\TaxTypesCatalog;
 use Lenorix\BeelSdk\Generated\Model\UpdateMeRequest;
-use Lenorix\BeelSdk\Http\ResponseContext;
 
 /** Read-only shared API catalogs and person-level preferences. */
 final readonly class CatalogsResource extends GeneratedResource
 {
-    public function __construct(Client $client, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /** List the tax types and regimes accepted by the API. */
     public function taxTypes(): TaxTypesCatalog
     {

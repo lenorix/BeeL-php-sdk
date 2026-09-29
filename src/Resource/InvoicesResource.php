@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Lenorix\BeelSdk\Resource;
 
 use Lenorix\BeelSdk\Exception\BeelNotReadyError;
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateCorrectiveInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\CreateInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\Invoice;
@@ -22,18 +21,12 @@ use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSendPostResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSendPostResponse202Data;
 use Lenorix\BeelSdk\Generated\Model\VoidInvoiceRequest;
 use Lenorix\BeelSdk\Http\QueryParameters;
-use Lenorix\BeelSdk\Http\ResponseContext;
 
 /**
  * @deprecated Session-focus invoice operations. Prefer company-scoped resources.
  */
 final readonly class InvoicesResource extends GeneratedResource
 {
-    public function __construct(Client $client, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /**
      * @param  array<string, mixed>  $query
      */

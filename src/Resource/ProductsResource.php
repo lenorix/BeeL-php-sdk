@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateProductRequest;
 use Lenorix\BeelSdk\Generated\Model\Product;
 use Lenorix\BeelSdk\Generated\Model\ProductBulkCreateResult;
@@ -14,18 +13,12 @@ use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkDeleteResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1ProductsBulkPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1ProductsGetResponse200Data;
 use Lenorix\BeelSdk\Http\QueryParameters;
-use Lenorix\BeelSdk\Http\ResponseContext;
 
 /**
  * @deprecated Use a company-scoped products resource.
  */
 final readonly class ProductsResource extends GeneratedResource
 {
-    public function __construct(Client $client, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /**
      * Search the deprecated product-search route (the company list route is preferred).
      *

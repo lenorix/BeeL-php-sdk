@@ -4,23 +4,16 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateSeriesRequest;
 use Lenorix\BeelSdk\Generated\Model\InvoiceSeries;
 use Lenorix\BeelSdk\Generated\Model\UpdateSeriesRequest;
 use Lenorix\BeelSdk\Generated\Model\V1ConfigurationSeriesGetResponse200Data;
-use Lenorix\BeelSdk\Http\ResponseContext;
 
 /**
  * @deprecated Use a company-scoped series resource.
  */
 final readonly class SeriesResource extends GeneratedResource
 {
-    public function __construct(Client $client, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     public function list(?bool $active = null): V1ConfigurationSeriesGetResponse200Data
     {
         $query = $active === null ? [] : ['active' => $active];

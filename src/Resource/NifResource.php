@@ -4,19 +4,12 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\ValidateNifRequest;
 use Lenorix\BeelSdk\Generated\Model\ValidateNifResponse;
-use Lenorix\BeelSdk\Http\ResponseContext;
 
 /** Validate Spanish NIF/CIF values against the AEAT census. */
 final readonly class NifResource extends GeneratedResource
 {
-    public function __construct(Client $client, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /**
      * Check a NIF's syntax and census status with AEAT.
      *

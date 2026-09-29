@@ -4,22 +4,15 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\AccountImportResult;
 use Lenorix\BeelSdk\Generated\Model\AccountImportUpload;
 use Lenorix\BeelSdk\Generated\Model\ManagedAccountSummary;
 use Lenorix\BeelSdk\Generated\Model\ProvisionAccountRequest;
 use Lenorix\BeelSdk\Generated\Model\ProvisionAccountResult;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsGetResponse200Data;
-use Lenorix\BeelSdk\Http\ResponseContext;
 
 final readonly class AccountsResource extends GeneratedResource
 {
-    public function __construct(Client $client, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     public function scope(string $accountId): AccountScope
     {
         return $this->inheritOptions(new AccountScope($this->client, $accountId, $this->responseContext));
