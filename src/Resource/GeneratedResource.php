@@ -172,7 +172,7 @@ abstract readonly class GeneratedResource
         } catch (NotEncodableValueException $exception) {
             // A JSON Content-Type with a body that is not JSON, such as an empty one or a proxy's error page.
             $httpResponse = $this->responseContext?->response();
-            if ($httpResponse !== null && $httpResponse->getStatusCode() >= 400) {
+            if ($httpResponse !== null && ($httpResponse->getStatusCode() < 200 || $httpResponse->getStatusCode() >= 300)) {
                 throw BeelApiError::fromErrorResponse(new ErrorResponse, $httpResponse, $this->responseContext->body());
             }
 
@@ -185,7 +185,8 @@ abstract readonly class GeneratedResource
         // An error status the operation does not declare (such as an empty 503 from a proxy) comes back
         // as null, and is read from its body here. A client generated with BeeL's `default` response,
         // which bin/prepare-openapi.php drops, returns an ErrorResponse for it instead.
-        if ($httpResponse !== null && $httpResponse->getStatusCode() >= 400) {
+        // A redirect is never followed, so it is reported like an error status rather than read as a success.
+        if ($httpResponse !== null && ($httpResponse->getStatusCode() < 200 || $httpResponse->getStatusCode() >= 300)) {
             throw BeelApiError::fromErrorResponse(
                 $response instanceof ErrorResponse ? $response : new ErrorResponse,
                 $httpResponse,

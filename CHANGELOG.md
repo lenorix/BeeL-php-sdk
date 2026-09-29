@@ -14,6 +14,9 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 ### Fixed
 
+- `$beel->request()` sent the API key to any host given in the path, such as `https://attacker.example/x` or `//attacker.example/x`: it now takes only a path starting with a single `/`, without a query (use `$query`).
+- An ID that is empty, `.` or `..`, such as `invoices->delete('..')`, pointed the request at a parent resource (`DELETE /companies/{id}/`): every BeeL request with an empty, `.` or `..` path segment is now rejected with `InvalidArgumentException` before it is sent.
+- A redirect (`3xx`) was read as a success, so a write that never happened looked done: it now throws `BeelApiError`, since the SDK never follows redirects.
 - A response without a `Content-Type` no longer triggers PHP's "Passing null to parameter #1 ($string) of type string is deprecated" in the generated client, which read BeeL's `default` response without checking the header exists.
 - A success status without a body the SDK can read (an undeclared status such as an empty `202` or `204`, or a declared one whose body is empty or not JSON) throws `BeelUnexpectedResponseError`; it ended in a `TypeError`, or a Symfony `NotEncodableValueException` for an empty JSON body. Only the operations that return nothing accept an empty `204`.
 - `InvoiceBuilder::operationDate()` and `dueDate()` sent the previous day for a date object in a time zone ahead of UTC, such as `Europe/Madrid` at midnight: they now keep its calendar day.
