@@ -96,7 +96,7 @@ final readonly class RetryingClient implements ClientInterface
             }
             // JSON and error bodies are small: make them rereadable, so the SDK and getLastResponse()
             // can read them even from a streaming transport. Successful file downloads stay streamed.
-            $isJson = str_contains(strtolower($response->getHeaderLine('Content-Type')), 'json');
+            $isJson = Responses::isJson($response);
             if (($isJson || $response->getStatusCode() >= 400) && ! $response->getBody()->isSeekable()) {
                 $response = $response->withBody(Utils::streamFor((string) $response->getBody()));
             }
@@ -107,7 +107,7 @@ final readonly class RetryingClient implements ClientInterface
             $status = $response->getStatusCode();
             $retryable = $status === 429
                 || ($status >= 500 && $canRetry && strtolower($response->getHeaderLine('Idempotency-Replay')) !== 'true')
-                || ($status === 409 && $request->hasHeader('Idempotency-Key') && self::errorCode($response) === 'IDEMPOTENCY_KEY_PROCESSING');
+                || ($status === 409 && $request->hasHeader('Idempotency-Key') && ErrorBody::fromJson(Responses::peekBody($response))->code() === 'IDEMPOTENCY_KEY_PROCESSING');
             if ($attempt >= $maxRetries || ! $canReplayBody || ! $retryable) {
                 return $response;
             }
@@ -123,17 +123,6 @@ final readonly class RetryingClient implements ClientInterface
                 ($this->sleep)($delay);
             }
         }
-    }
-
-    /** The `error.code` of a JSON error body, which the loop above made rereadable. */
-    private static function errorCode(ResponseInterface $response): ?string
-    {
-        $body = $response->getBody();
-        $data = json_decode((string) $body, true);
-        $body->rewind();
-        $code = is_array($data) && is_array($data['error'] ?? null) ? ($data['error']['code'] ?? null) : null;
-
-        return is_string($code) ? $code : null;
     }
 
     /** Exponential backoff with jitter for attempts BeeL gave no delay for, capped at maxRetryDelayMs. */

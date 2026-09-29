@@ -11,12 +11,12 @@ use Lenorix\BeelSdk\Exception\BeelUnexpectedResponseError;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
-use Lenorix\BeelSdk\Http\HttpStatus;
 use Lenorix\BeelSdk\Http\IdempotencyKey;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\RequestOptions;
 use Lenorix\BeelSdk\Http\RequestOptionsSlot;
 use Lenorix\BeelSdk\Http\ResponseContext;
+use Lenorix\BeelSdk\Http\Responses;
 use Lenorix\BeelSdk\Http\RetryAfter;
 use Psr\Http\Message\ResponseInterface;
 use Symfony\Component\Serializer\Exception\NotEncodableValueException;
@@ -174,7 +174,7 @@ abstract readonly class GeneratedResource
         } catch (NotEncodableValueException $exception) {
             // A JSON Content-Type with a body that is not JSON, such as an empty one or a proxy's error page.
             $httpResponse = $this->responseContext->response();
-            if ($httpResponse !== null && ! HttpStatus::isSuccess($httpResponse)) {
+            if ($httpResponse !== null && ! Responses::isSuccess($httpResponse)) {
                 throw BeelApiError::fromErrorResponse(new ErrorResponse, $httpResponse, $this->responseContext->body());
             }
 
@@ -188,7 +188,7 @@ abstract readonly class GeneratedResource
         // as null, and is read from its body here. A client generated with BeeL's `default` response,
         // which bin/prepare-openapi.php drops, returns an ErrorResponse for it instead.
         // A redirect is never followed, so it is reported like an error status rather than read as a success.
-        if ($httpResponse !== null && ! HttpStatus::isSuccess($httpResponse)) {
+        if ($httpResponse !== null && ! Responses::isSuccess($httpResponse)) {
             throw BeelApiError::fromErrorResponse(
                 $response instanceof ErrorResponse ? $response : new ErrorResponse,
                 $httpResponse,
@@ -225,7 +225,7 @@ abstract readonly class GeneratedResource
     private function unreadable(?Throwable $previous = null): ?BeelUnexpectedResponseError
     {
         $response = $this->responseContext->response();
-        if ($response === null || ! HttpStatus::isSuccess($response)) {
+        if ($response === null || ! Responses::isSuccess($response)) {
             return null;
         }
 
@@ -253,7 +253,7 @@ abstract readonly class GeneratedResource
             throw BeelApiError::fromGenerated($exception);
         }
 
-        if (HttpStatus::isSuccess($response)) {
+        if (Responses::isSuccess($response)) {
             return $response;
         }
 

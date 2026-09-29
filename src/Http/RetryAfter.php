@@ -37,23 +37,7 @@ final class RetryAfter
             return max(0, $retryAt->getTimestamp() - ($now ?? time()));
         }
 
-        if ($body === null) {
-            $stream = $response->getBody();
-            if (! $stream->isSeekable()) {
-                return null;
-            }
-            $position = $stream->tell();
-            $body = (string) $stream;
-            $stream->seek($position);
-        }
-        $data = json_decode($body, true);
-        if (! is_array($data)) {
-            return null;
-        }
-        $error = is_array($data['error'] ?? null) ? $data['error'] : [];
-        $seconds = $error['retry_after'] ?? $data['retry_after'] ?? (is_array($error['details'] ?? null) ? ($error['details']['retry_after'] ?? null) : null);
-
-        return self::fromValue($seconds);
+        return ErrorBody::fromJson($body ?? Responses::peekBody($response))->retryAfter();
     }
 
     /**

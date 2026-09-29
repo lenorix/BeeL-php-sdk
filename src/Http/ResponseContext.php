@@ -58,15 +58,9 @@ final class ResponseContext
         $this->body = null;
 
         // Keep a copy for error mapping only; a successful file download must not be read into memory.
-        $isJson = str_contains(strtolower($response->getHeaderLine('Content-Type')), 'json');
-        $body = $response->getBody();
-        if (! $body->isSeekable() || (! $isJson && $response->getStatusCode() < 400)) {
-            return;
+        if (Responses::isJson($response) || $response->getStatusCode() >= 400) {
+            $this->body = Responses::peekBody($response);
         }
-
-        $position = $body->tell();
-        $this->body = (string) $body;
-        $body->seek($position);
     }
 
     public function response(): ?ResponseInterface

@@ -6,6 +6,8 @@ namespace Lenorix\BeelSdk\Exception;
 
 use Lenorix\BeelSdk\Generated\Model\ErrorDetail;
 use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
+use Lenorix\BeelSdk\Http\ErrorBody;
+use Lenorix\BeelSdk\Http\Responses;
 use Lenorix\BeelSdk\Http\RetryAfter;
 use Psr\Http\Message\ResponseInterface;
 use Throwable;
@@ -64,28 +66,16 @@ class BeelApiError extends \RuntimeException
 
         /** @var ResponseInterface $response */
         $response = $exception->getResponse();
-        $status = $response->getStatusCode();
         $payload = method_exists($exception, 'getErrorResponse') ? $exception->getErrorResponse() : null;
-        $error = $payload instanceof ErrorResponse && $payload->isInitialized('error') ? $payload->getError() : null;
-        $code = $error instanceof ErrorDetail && $error->isInitialized('code') ? $error->getCode() : null;
-        // Same fallback as the official Node.js SDK when BeeL sends no message.
-        $message = $error instanceof ErrorDetail && $error->isInitialized('message') ? $error->getMessage() : 'API error '.$status;
-        $details = $error instanceof ErrorDetail && $error->isInitialized('details') ? $error->getDetails() : null;
-        $requestId = $response->getHeaderLine('X-Request-Id') ?: null;
-        if ($requestId === null && $payload instanceof ErrorResponse && $payload->isInitialized('meta')) {
-            $meta = $payload->getMeta();
-            $requestId = $meta->isInitialized('requestId') ? $meta->getRequestId() : null;
-        }
-        $retryAfter = RetryAfter::seconds($response);
-        $retryAfter ??= self::retryAfterFromDetails($details);
 
-        return self::forStatus($status, $message, $code, $details, $requestId, $retryAfter, $exception);
+        return self::fromErrorResponse($payload instanceof ErrorResponse ? $payload : new ErrorResponse, $response, Responses::peekBody($response), $exception);
     }
 
     public static function fromErrorResponse(
         ErrorResponse $payload,
         ?ResponseInterface $response = null,
         ?string $body = null,
+        ?Throwable $previous = null,
     ): self {
         $status = $response?->getStatusCode() ?? 0;
         $error = $payload->isInitialized('error') ? $payload->getError() : null;
@@ -98,19 +88,12 @@ class BeelApiError extends \RuntimeException
             $requestId = $meta->isInitialized('requestId') ? $meta->getRequestId() : null;
         }
 
-        if (($message === null || $code === null || $details === null || $requestId === null) && $body !== null) {
-            $data = json_decode($body, true);
-            if (is_array($data)) {
-                // Bodies from gateways and proxies do not follow BeeL's error schema: take text values only.
-                $error = $data['error'] ?? null;
-                $errorData = is_array($error) ? $error : $data;
-                $message ??= self::text($errorData['message'] ?? null) ?? self::text(is_array($error) ? null : $error)
-                    ?? self::text($data['detail'] ?? null) ?? self::text($data['title'] ?? null);
-                $code ??= self::text($errorData['code'] ?? null);
-                $details ??= $errorData['details'] ?? null;
-                $requestId ??= self::text(is_array($data['meta'] ?? null) ? ($data['meta']['request_id'] ?? null) : null);
-            }
-        }
+        // What the generated model left out, read from the body itself.
+        $fallback = ErrorBody::fromJson($body);
+        $message ??= $fallback->message();
+        $code ??= $fallback->code();
+        $details ??= $fallback->details();
+        $requestId ??= $fallback->requestId();
 
         $retryAfter = $response === null ? null : RetryAfter::seconds($response, $body);
         $retryAfter ??= self::retryAfterFromDetails($details);
@@ -122,17 +105,8 @@ class BeelApiError extends \RuntimeException
             $details,
             $requestId,
             $retryAfter,
+            $previous,
         );
-    }
-
-    /** A non-empty string, or a number written as one; anything else is not usable as text. */
-    private static function text(mixed $value): ?string
-    {
-        return match (true) {
-            is_string($value) && $value !== '' => $value,
-            is_int($value), is_float($value) => (string) $value,
-            default => null,
-        };
     }
 
     private static function forStatus(
