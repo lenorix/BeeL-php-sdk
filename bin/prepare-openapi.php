@@ -64,6 +64,20 @@ foreach (get_object_vars($document->components->parameters ?? new stdClass) as $
     $addType($parameter);
 }
 
+// Second edit: every operation declares a `default` response (BeeL's UnexpectedError), and Jane
+// reads it with code that lowercases the Content-Type without checking it exists, a PHP
+// deprecation for a response without one. Drop them: the SDK reads an error status the operation
+// does not declare from its body itself, and reports a success status it cannot read.
+$defaultResponses = 0;
+foreach (get_object_vars($document->paths) as $pathItem) {
+    foreach (get_object_vars($pathItem) as $operation) {
+        if ($operation instanceof stdClass && ($operation->responses ?? null) instanceof stdClass && isset($operation->responses->default)) {
+            unset($operation->responses->default);
+            $defaultResponses++;
+        }
+    }
+}
+
 $schemas = $document->components->schemas ?? new stdClass;
 $component = static function (mixed $schema) use ($schemas): ?string {
     $reference = $schema instanceof stdClass ? ($schema->{'$ref'} ?? null) : null;
@@ -144,7 +158,7 @@ $walk = static function (mixed $schema, array $inherited, callable $onProperty, 
     }
 };
 
-// Second edit: BeeL writes some nullable references as `{$ref, nullable: true}`, which loses the
+// Third edit: BeeL writes some nullable references as `{$ref, nullable: true}`, which loses the
 // null (see above). Move `nullable` onto a wrapper, where Jane reads it.
 $nullableRefs = 0;
 $visited = [];
@@ -179,7 +193,7 @@ $everySchema(static function (stdClass $schema, string $property) use ($componen
     }
 }, static fn () => null);
 
-// Third edit: BeeL's `SuccessResponse` states that every successful JSON response carries its
+// Fourth edit: BeeL's `SuccessResponse` states that every successful JSON response carries its
 // payload in `data`, but a few envelopes are written without `SuccessResponse` and without
 // `required`. Require `data` there too, so the next edit keeps it non-nullable like everywhere else.
 $envelopesCompleted = 0;
@@ -202,7 +216,7 @@ foreach (get_object_vars($document->paths) as $pathItem) {
     }
 }
 
-// Fourth edit: an optional property BeeL leaves out of what it sends is read as null. The contract
+// Fifth edit: an optional property BeeL leaves out of what it sends is read as null. The contract
 // keeps absent and null apart, but a PHP getter cannot return "absent": without this, the getter
 // of an omitted optional property throws a TypeError. Required properties keep their types, so a
 // null BeeL sends where one is not allowed is still rejected.
@@ -312,7 +326,7 @@ if ($json === false || (! is_dir(dirname($destination)) && ! mkdir(dirname($dest
     exit(1);
 }
 
-fwrite(STDOUT, "Wrote {$destination} ({$patched} parameter schemas given a type for Jane, {$nullableRefs} nullable references wrapped, {$envelopesCompleted} envelopes given a required `data`, {$optionalMadeNullable} optional properties or models made nullable).\n");
+fwrite(STDOUT, "Wrote {$destination} ({$patched} parameter schemas given a type for Jane, {$defaultResponses} default responses dropped, {$nullableRefs} nullable references wrapped, {$envelopesCompleted} envelopes given a required `data`, {$optionalMadeNullable} optional properties or models made nullable).\n");
 if ($sharedComponents !== []) {
     fwrite(STDOUT, 'Optional but left non-nullable, as they are also required in what BeeL sends and have required keys or enums: '.implode(', ', array_keys($sharedComponents)).".\n");
 }

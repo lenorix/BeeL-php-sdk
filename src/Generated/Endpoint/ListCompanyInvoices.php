@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\ListCompanyInvoicesInternalServerErrorEx
 use Lenorix\BeelSdk\Generated\Exception\ListCompanyInvoicesTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\ListCompanyInvoicesUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\ListCompanyInvoicesUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesGetResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -147,7 +146,7 @@ class ListCompanyInvoices extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CompaniesCompanyIdInvoicesGetResponse200|ErrorResponse
+     * @return null|V1CompaniesCompanyIdInvoicesGetResponse200
      *
      * @throws ListCompanyInvoicesBadRequestException
      * @throws ListCompanyInvoicesUnauthorizedException
@@ -180,9 +179,6 @@ class ListCompanyInvoices extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new ListCompanyInvoicesInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

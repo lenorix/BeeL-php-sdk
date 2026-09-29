@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\PatchSeriesInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\PatchSeriesNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\PatchSeriesUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\PatchSeriesUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\PatchSeriesRequest;
 use Lenorix\BeelSdk\Generated\Model\V1ConfigurationSeriesSeriesIdPatchResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -79,7 +78,7 @@ class PatchSeries extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1ConfigurationSeriesSeriesIdPatchResponse200|ErrorResponse
+     * @return null|V1ConfigurationSeriesSeriesIdPatchResponse200
      *
      * @throws PatchSeriesBadRequestException
      * @throws PatchSeriesUnauthorizedException
@@ -112,9 +111,6 @@ class PatchSeries extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new PatchSeriesInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\UpdateCompanyTaxConfigurationInternalSer
 use Lenorix\BeelSdk\Generated\Exception\UpdateCompanyTaxConfigurationTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateCompanyTaxConfigurationUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateCompanyTaxConfigurationUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\UpdateTaxConfigurationRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdTaxConfigurationPutResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -74,7 +73,7 @@ class UpdateCompanyTaxConfiguration extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CompaniesCompanyIdTaxConfigurationPutResponse200|ErrorResponse
+     * @return null|V1CompaniesCompanyIdTaxConfigurationPutResponse200
      *
      * @throws UpdateCompanyTaxConfigurationBadRequestException
      * @throws UpdateCompanyTaxConfigurationUnauthorizedException
@@ -107,9 +106,6 @@ class UpdateCompanyTaxConfiguration extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new UpdateCompanyTaxConfigurationInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

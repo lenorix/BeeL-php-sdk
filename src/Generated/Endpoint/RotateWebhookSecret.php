@@ -5,7 +5,6 @@ namespace Lenorix\BeelSdk\Generated\Endpoint;
 use Lenorix\BeelSdk\Generated\Exception\RotateWebhookSecretForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\RotateWebhookSecretNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\RotateWebhookSecretUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1WebhooksWebhookIdSecretPostResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -93,7 +92,7 @@ class RotateWebhookSecret extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1WebhooksWebhookIdSecretPostResponse200|ErrorResponse
+     * @return null|V1WebhooksWebhookIdSecretPostResponse200
      *
      * @throws RotateWebhookSecretUnauthorizedException
      * @throws RotateWebhookSecretForbiddenException
@@ -114,9 +113,6 @@ class RotateWebhookSecret extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 404 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new RotateWebhookSecretNotFoundException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

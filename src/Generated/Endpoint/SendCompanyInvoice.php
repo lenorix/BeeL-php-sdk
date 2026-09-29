@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\SendCompanyInvoiceNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\SendCompanyInvoiceTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\SendCompanyInvoiceUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\SendCompanyInvoiceUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\SendEmailRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse202;
@@ -103,7 +102,7 @@ class SendCompanyInvoice extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200|V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse202|ErrorResponse
+     * @return null|V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200|V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse202
      *
      * @throws SendCompanyInvoiceBadRequestException
      * @throws SendCompanyInvoiceUnauthorizedException
@@ -143,9 +142,6 @@ class SendCompanyInvoice extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new SendCompanyInvoiceInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

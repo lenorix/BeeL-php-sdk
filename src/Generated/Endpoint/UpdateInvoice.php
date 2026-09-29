@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\UpdateInvoiceNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateInvoiceTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateInvoiceUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateInvoiceUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\UpdateInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdPutResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -115,7 +114,7 @@ class UpdateInvoice extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1InvoicesInvoiceIdPutResponse200|ErrorResponse
+     * @return null|V1InvoicesInvoiceIdPutResponse200
      *
      * @throws UpdateInvoiceBadRequestException
      * @throws UpdateInvoiceUnauthorizedException
@@ -152,9 +151,6 @@ class UpdateInvoice extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new UpdateInvoiceInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

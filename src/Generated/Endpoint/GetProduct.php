@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\GetProductForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\GetProductInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\GetProductNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\GetProductUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1ProductsProductIdGetResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -60,7 +59,7 @@ class GetProduct extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1ProductsProductIdGetResponse200|ErrorResponse
+     * @return null|V1ProductsProductIdGetResponse200
      *
      * @throws GetProductBadRequestException
      * @throws GetProductUnauthorizedException
@@ -89,9 +88,6 @@ class GetProduct extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new GetProductInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

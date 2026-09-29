@@ -1556,7 +1556,6 @@ use Lenorix\BeelSdk\Generated\Model\CreateWebhookSubscriptionRequest;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryDetailResponse;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryIndicatorListResponse;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryListResponse;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\InitiatePaymentConnectionRequest;
 use Lenorix\BeelSdk\Generated\Model\InitiatePaymentConnectionResponse;
 use Lenorix\BeelSdk\Generated\Model\InvoicePdfResponse;
@@ -1791,7 +1790,7 @@ class Client extends Runtime\Client\Client
 {
     /**
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1MeIdentityGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1MeIdentityGetResponse200 : ResponseInterface)
      *
      * @throws GetMyIdentityUnauthorizedException
      * @throws GetMyIdentityForbiddenException
@@ -1813,7 +1812,7 @@ class Client extends Runtime\Client\Client
      * settings of each company.
      *
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1MePatchResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1MePatchResponse200 : ResponseInterface)
      *
      * @throws UpdateMeBadRequestException
      * @throws UpdateMeUnauthorizedException
@@ -1846,7 +1845,7 @@ class Client extends Runtime\Client\Client
      *    "BeeL-Active-Company"?: string, //Which company (tax ID) the request operates on.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesGetResponse200 : ResponseInterface)
      *
      * @throws ListInvoicesBadRequestException
      * @throws ListInvoicesUnauthorizedException
@@ -1875,7 +1874,7 @@ class Client extends Runtime\Client\Client
      *    "BeeL-Active-Company"?: string, //Which company (tax ID) the request operates on.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesPostResponse201 : ResponseInterface)
      *
      * @throws CreateInvoiceBadRequestException
      * @throws CreateInvoiceUnauthorizedException
@@ -1905,7 +1904,7 @@ class Client extends Runtime\Client\Client
      *    "BeeL-Active-Company"?: string, //Which company (tax ID) the request operates on.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteInvoiceBadRequestException
      * @throws DeleteInvoiceUnauthorizedException
@@ -1932,7 +1931,7 @@ class Client extends Runtime\Client\Client
      *    "BeeL-Active-Company"?: string, //Which company (tax ID) the request operates on.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdGetResponse200 : ResponseInterface)
      *
      * @throws GetInvoiceBadRequestException
      * @throws GetInvoiceUnauthorizedException
@@ -1961,7 +1960,7 @@ class Client extends Runtime\Client\Client
      *    "BeeL-Active-Company"?: string, //Which company (tax ID) the request operates on.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdPutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdPutResponse200 : ResponseInterface)
      *
      * @throws UpdateInvoiceBadRequestException
      * @throws UpdateInvoiceUnauthorizedException
@@ -1989,7 +1988,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  array  $accept  Accept content header application/zip|application/json
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DownloadInvoicesPdfBulkBadRequestException
      * @throws DownloadInvoicesPdfBulkUnauthorizedException
@@ -2020,7 +2019,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesBulkSendPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesBulkSendPostResponse200 : ResponseInterface)
      *
      * @throws SendInvoicesBulkEmailBadRequestException
      * @throws SendInvoicesBulkEmailUnauthorizedException
@@ -2051,7 +2050,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|BulkOperationResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|BulkOperationResponse : ResponseInterface)
      *
      * @throws ChangeInvoicesStatusBulkBadRequestException
      * @throws ChangeInvoicesStatusBulkUnauthorizedException
@@ -2080,7 +2079,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|BulkOperationResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|BulkOperationResponse : ResponseInterface)
      *
      * @throws IssueInvoicesBulkBadRequestException
      * @throws IssueInvoicesBulkUnauthorizedException
@@ -2112,7 +2111,7 @@ class Client extends Runtime\Client\Client
      * @param array{
      *    "Prefer"?: string, //RFC 7240 preference bounding how long this request may wait for a PDF that is still
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|InvoicePdfResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|InvoicePdfResponse : ResponseInterface)
      *
      * @throws GenerateInvoicePdfBadRequestException
      * @throws GenerateInvoicePdfUnauthorizedException
@@ -2138,7 +2137,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $invoiceId  Invoice ID (must be a draft)
      * @param  array  $accept  Accept content header application/pdf|application/json
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws PreviewDraftInvoicePdfBadRequestException
      * @throws PreviewDraftInvoicePdfUnauthorizedException
@@ -2167,7 +2166,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdSendPostResponse200|V1InvoicesInvoiceIdSendPostResponse202|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdSendPostResponse200|V1InvoicesInvoiceIdSendPostResponse202 : ResponseInterface)
      *
      * @throws SendInvoiceEmailBadRequestException
      * @throws SendInvoiceEmailUnauthorizedException
@@ -2197,7 +2196,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdMarkPaidPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdMarkPaidPostResponse200 : ResponseInterface)
      *
      * @throws MarkInvoicePaidBadRequestException
      * @throws MarkInvoicePaidUnauthorizedException
@@ -2231,7 +2230,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdVoidPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdVoidPostResponse200 : ResponseInterface)
      *
      * @throws VoidInvoiceBadRequestException
      * @throws VoidInvoiceUnauthorizedException
@@ -2269,7 +2268,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdCorrectivePostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdCorrectivePostResponse201 : ResponseInterface)
      *
      * @throws CreateCorrectiveInvoiceBadRequestException
      * @throws CreateCorrectiveInvoiceUnauthorizedException
@@ -2302,7 +2301,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdIssuePostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdIssuePostResponse200 : ResponseInterface)
      *
      * @throws IssueInvoiceBadRequestException
      * @throws IssueInvoiceUnauthorizedException
@@ -2335,7 +2334,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdConvertToInvoicePostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdConvertToInvoicePostResponse201 : ResponseInterface)
      *
      * @throws ConvertProformaToInvoiceUnauthorizedException
      * @throws ConvertProformaToInvoiceForbiddenException
@@ -2365,7 +2364,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdMarkSentPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdMarkSentPostResponse200 : ResponseInterface)
      *
      * @throws MarkInvoiceSentBadRequestException
      * @throws MarkInvoiceSentUnauthorizedException
@@ -2393,7 +2392,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdRevertToIssuedPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdRevertToIssuedPostResponse200 : ResponseInterface)
      *
      * @throws RevertInvoiceToIssuedBadRequestException
      * @throws RevertInvoiceToIssuedUnauthorizedException
@@ -2422,7 +2421,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdSchedulePostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdSchedulePostResponse200 : ResponseInterface)
      *
      * @throws ScheduleInvoiceBadRequestException
      * @throws ScheduleInvoiceUnauthorizedException
@@ -2452,7 +2451,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdUnschedulePostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdUnschedulePostResponse200 : ResponseInterface)
      *
      * @throws UnscheduleInvoiceBadRequestException
      * @throws UnscheduleInvoiceUnauthorizedException
@@ -2479,7 +2478,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $invoiceId  Invoice ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdReschedulePatchResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdReschedulePatchResponse200 : ResponseInterface)
      *
      * @throws RescheduleInvoiceBadRequestException
      * @throws RescheduleInvoiceUnauthorizedException
@@ -2511,7 +2510,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdDuplicatePostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdDuplicatePostResponse201 : ResponseInterface)
      *
      * @throws DuplicateInvoiceBadRequestException
      * @throws DuplicateInvoiceUnauthorizedException
@@ -2542,7 +2541,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  array  $accept  Accept content header application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|application/json
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws ExportInvoicesExcelBadRequestException
      * @throws ExportInvoicesExcelUnauthorizedException
@@ -2568,7 +2567,7 @@ class Client extends Runtime\Client\Client
      *    "search"?: string, //Global search across invoice number, recipient name, recipient NIF, and series code (partial, case-insensitive)
      *    "status"?: array, //Filter by invoice status. Accepts a comma-separated list to match any of several
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesGetResponse200 : ResponseInterface)
      *
      * @throws ListCompanyInvoicesBadRequestException
      * @throws ListCompanyInvoicesUnauthorizedException
@@ -2610,7 +2609,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesPostResponse201 : ResponseInterface)
      *
      * @throws CreateCompanyInvoiceBadRequestException
      * @throws CreateCompanyInvoiceUnauthorizedException
@@ -2642,7 +2641,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesDerivationsPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesDerivationsPostResponse201 : ResponseInterface)
      *
      * @throws CreateCompanyInvoiceDerivationBadRequestException
      * @throws CreateCompanyInvoiceDerivationUnauthorizedException
@@ -2674,7 +2673,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|BulkOperationResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|BulkOperationResponse : ResponseInterface)
      *
      * @throws CreateCompanyInvoiceBatchBadRequestException
      * @throws CreateCompanyInvoiceBatchUnauthorizedException
@@ -2701,7 +2700,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  array  $accept  Accept content header application/zip|application/json
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws CreateCompanyInvoicePdfArchiveBadRequestException
      * @throws CreateCompanyInvoicePdfArchiveUnauthorizedException
@@ -2729,7 +2728,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesDeliveriesPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesDeliveriesPostResponse200 : ResponseInterface)
      *
      * @throws CreateCompanyInvoiceDeliveryBadRequestException
      * @throws CreateCompanyInvoiceDeliveryUnauthorizedException
@@ -2762,7 +2761,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  array  $accept  Accept content header application/vnd.openxmlformats-officedocument.spreadsheetml.sheet|application/json
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws CreateCompanyInvoiceExportBadRequestException
      * @throws CreateCompanyInvoiceExportUnauthorizedException
@@ -2790,7 +2789,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $invoiceId  Invoice ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteCompanyInvoiceBadRequestException
      * @throws DeleteCompanyInvoiceUnauthorizedException
@@ -2810,7 +2809,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $invoiceId  Invoice ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdGetResponse200 : ResponseInterface)
      *
      * @throws GetCompanyInvoiceBadRequestException
      * @throws GetCompanyInvoiceUnauthorizedException
@@ -2840,7 +2839,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdPatchResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdPatchResponse200 : ResponseInterface)
      *
      * @throws PatchCompanyInvoiceBadRequestException
      * @throws PatchCompanyInvoiceUnauthorizedException
@@ -2871,7 +2870,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $invoiceId  Invoice ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdVerifactuRecordsGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdVerifactuRecordsGetResponse200 : ResponseInterface)
      *
      * @throws ListCompanyInvoiceVerifactuRecordsBadRequestException
      * @throws ListCompanyInvoiceVerifactuRecordsUnauthorizedException
@@ -2910,7 +2909,7 @@ class Client extends Runtime\Client\Client
      * @param array{
      *    "Prefer"?: string, //RFC 7240 preference bounding how long this request may wait for a PDF that is still
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|InvoicePdfResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|InvoicePdfResponse : ResponseInterface)
      *
      * @throws GetCompanyInvoicePdfBadRequestException
      * @throws GetCompanyInvoicePdfUnauthorizedException
@@ -2938,7 +2937,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $invoiceId  Invoice ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|InvoicePreviewResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|InvoicePreviewResponse : ResponseInterface)
      *
      * @throws GetCompanyInvoicePreviewBadRequestException
      * @throws GetCompanyInvoicePreviewUnauthorizedException
@@ -2965,7 +2964,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $invoiceId  Invoice ID
      * @param  array  $accept  Accept content header application/pdf|application/json
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws PreviewCompanyInvoicePdfBadRequestException
      * @throws PreviewCompanyInvoicePdfUnauthorizedException
@@ -2989,7 +2988,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200|V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse202|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse200|V1CompaniesCompanyIdInvoicesInvoiceIdSendPostResponse202 : ResponseInterface)
      *
      * @throws SendCompanyInvoiceBadRequestException
      * @throws SendCompanyInvoiceUnauthorizedException
@@ -3027,7 +3026,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdIssuePostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdIssuePostResponse200 : ResponseInterface)
      *
      * @throws IssueCompanyInvoiceBadRequestException
      * @throws IssueCompanyInvoiceUnauthorizedException
@@ -3078,7 +3077,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdVoidPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdVoidPostResponse200 : ResponseInterface)
      *
      * @throws VoidCompanyInvoiceBadRequestException
      * @throws VoidCompanyInvoiceUnauthorizedException
@@ -3123,7 +3122,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesSimplifiedExchangesPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesSimplifiedExchangesPostResponse201 : ResponseInterface)
      *
      * @throws CreateCompanySimplifiedExchangeBadRequestException
      * @throws CreateCompanySimplifiedExchangeUnauthorizedException
@@ -3225,7 +3224,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdCorrectivePostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdCorrectivePostResponse201 : ResponseInterface)
      *
      * @throws CreateCompanyCorrectiveInvoiceBadRequestException
      * @throws CreateCompanyCorrectiveInvoiceUnauthorizedException
@@ -3265,7 +3264,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdConvertToInvoicePostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdConvertToInvoicePostResponse201 : ResponseInterface)
      *
      * @throws ConvertCompanyProformaToInvoiceBadRequestException
      * @throws ConvertCompanyProformaToInvoiceUnauthorizedException
@@ -3297,7 +3296,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdStatusPutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdStatusPutResponse200 : ResponseInterface)
      *
      * @throws SetCompanyInvoiceStatusBadRequestException
      * @throws SetCompanyInvoiceStatusUnauthorizedException
@@ -3323,7 +3322,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteCompanyInvoiceScheduleBadRequestException
      * @throws DeleteCompanyInvoiceScheduleUnauthorizedException
@@ -3345,7 +3344,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $invoiceId  Invoice ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|InvoiceScheduleResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|InvoiceScheduleResponse : ResponseInterface)
      *
      * @throws GetCompanyInvoiceScheduleUnauthorizedException
      * @throws GetCompanyInvoiceScheduleForbiddenException
@@ -3374,7 +3373,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdSchedulePutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoicesInvoiceIdSchedulePutResponse200 : ResponseInterface)
      *
      * @throws SetCompanyInvoiceScheduleBadRequestException
      * @throws SetCompanyInvoiceScheduleUnauthorizedException
@@ -3411,7 +3410,7 @@ class Client extends Runtime\Client\Client
      *    "sort_by"?: string, //Field to sort by. Defaults to `created_at` when omitted.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1RecurringInvoicesGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1RecurringInvoicesGetResponse200 : ResponseInterface)
      *
      * @throws ListRecurringInvoicesUnauthorizedException
      * @throws ListRecurringInvoicesForbiddenException
@@ -3455,7 +3454,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1RecurringInvoicesPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1RecurringInvoicesPostResponse201 : ResponseInterface)
      *
      * @throws CreateRecurringInvoiceBadRequestException
      * @throws CreateRecurringInvoiceForbiddenException
@@ -3476,7 +3475,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $recurringInvoiceId  Unique identifier (UUID) of the recurring invoice template, as returned when it is created or listed. A template of another company answers `404` with `RECURRING_NOT_FOUND`, exactly like one that does not exist.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteRecurringInvoiceForbiddenException
      * @throws DeleteRecurringInvoiceNotFoundException
@@ -3496,7 +3495,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $recurringInvoiceId  Unique identifier (UUID) of the recurring invoice template, as returned when it is created or listed. A template of another company answers `404` with `RECURRING_NOT_FOUND`, exactly like one that does not exist.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdGetResponse200 : ResponseInterface)
      *
      * @throws GetRecurringInvoiceForbiddenException
      * @throws GetRecurringInvoiceNotFoundException
@@ -3530,7 +3529,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $recurringInvoiceId  Unique identifier (UUID) of the recurring invoice template, as returned when it is created or listed. A template of another company answers `404` with `RECURRING_NOT_FOUND`, exactly like one that does not exist.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdPatchResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdPatchResponse200 : ResponseInterface)
      *
      * @throws PatchRecurringInvoiceBadRequestException
      * @throws PatchRecurringInvoiceForbiddenException
@@ -3562,7 +3561,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $recurringInvoiceId  Unique identifier (UUID) of the recurring invoice template, as returned when it is created or listed. A template of another company answers `404` with `RECURRING_NOT_FOUND`, exactly like one that does not exist.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdPutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdPutResponse200 : ResponseInterface)
      *
      * @throws UpdateRecurringInvoiceForbiddenException
      * @throws UpdateRecurringInvoiceNotFoundException
@@ -3586,7 +3585,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdPausePostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdPausePostResponse200 : ResponseInterface)
      *
      * @throws PauseRecurringInvoiceBadRequestException
      * @throws PauseRecurringInvoiceForbiddenException
@@ -3613,7 +3612,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdResumePostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdResumePostResponse200 : ResponseInterface)
      *
      * @throws ResumeRecurringInvoiceBadRequestException
      * @throws ResumeRecurringInvoiceForbiddenException
@@ -3646,7 +3645,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdGeneratePostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdGeneratePostResponse201 : ResponseInterface)
      *
      * @throws GenerateInvoiceNowBadRequestException
      * @throws GenerateInvoiceNowForbiddenException
@@ -3672,7 +3671,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdSkipPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdSkipPostResponse200 : ResponseInterface)
      *
      * @throws SkipNextGenerationBadRequestException
      * @throws SkipNextGenerationForbiddenException
@@ -3694,7 +3693,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $recurringInvoiceId  UUID of the recurring invoice template
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdPreviewGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdPreviewGetResponse200 : ResponseInterface)
      *
      * @throws PreviewRecurringInvoiceUnauthorizedException
      * @throws PreviewRecurringInvoiceForbiddenException
@@ -3724,7 +3723,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $recurringInvoiceId  Unique identifier (UUID) of the recurring invoice template, as returned when it is created or listed. A template of another company answers `404` with `RECURRING_NOT_FOUND`, exactly like one that does not exist.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdHistoryGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1RecurringInvoicesRecurringInvoiceIdHistoryGetResponse200 : ResponseInterface)
      *
      * @throws GetRecurringHistoryForbiddenException
      * @throws GetRecurringHistoryNotFoundException
@@ -3747,7 +3746,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdCreateRecurringPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoicesInvoiceIdCreateRecurringPostResponse201 : ResponseInterface)
      *
      * @throws CreateRecurringFromInvoiceForbiddenException
      * @throws CreateRecurringFromInvoiceNotFoundException
@@ -3768,7 +3767,7 @@ class Client extends Runtime\Client\Client
      *    "customer_id"?: string, //Keeps only the schedules that invoice this customer of the company.
      *    "pause_reason"?: string, //Keeps only the schedules stopped for this reason — the same value the response returns
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesGetResponse200 : ResponseInterface)
      *
      * @throws ListCompanyRecurringInvoicesBadRequestException
      * @throws ListCompanyRecurringInvoicesUnauthorizedException
@@ -3811,7 +3810,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesPostResponse201 : ResponseInterface)
      *
      * @throws CreateCompanyRecurringInvoiceBadRequestException
      * @throws CreateCompanyRecurringInvoiceUnauthorizedException
@@ -3850,7 +3849,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesStatsGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesStatsGetResponse200 : ResponseInterface)
      *
      * @throws GetCompanyRecurringInvoiceStatsBadRequestException
      * @throws GetCompanyRecurringInvoiceStatsUnauthorizedException
@@ -3869,7 +3868,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $recurringInvoiceId  Unique identifier (UUID) of the recurring invoice template, as returned when it is created or listed. A template of another company answers `404` with `RECURRING_NOT_FOUND`, exactly like one that does not exist.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteCompanyRecurringInvoiceUnauthorizedException
      * @throws DeleteCompanyRecurringInvoiceForbiddenException
@@ -3888,7 +3887,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $recurringInvoiceId  Unique identifier (UUID) of the recurring invoice template, as returned when it is created or listed. A template of another company answers `404` with `RECURRING_NOT_FOUND`, exactly like one that does not exist.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGetResponse200 : ResponseInterface)
      *
      * @throws GetCompanyRecurringInvoiceBadRequestException
      * @throws GetCompanyRecurringInvoiceUnauthorizedException
@@ -3924,7 +3923,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdPatchResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdPatchResponse200 : ResponseInterface)
      *
      * @throws PatchCompanyRecurringInvoiceBadRequestException
      * @throws PatchCompanyRecurringInvoiceUnauthorizedException
@@ -3964,7 +3963,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdStatusPutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdStatusPutResponse200 : ResponseInterface)
      *
      * @throws SetCompanyRecurringInvoiceStatusBadRequestException
      * @throws SetCompanyRecurringInvoiceStatusUnauthorizedException
@@ -3988,7 +3987,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdSkipPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdSkipPostResponse200 : ResponseInterface)
      *
      * @throws SkipCompanyRecurringInvoiceBadRequestException
      * @throws SkipCompanyRecurringInvoiceUnauthorizedException
@@ -4010,7 +4009,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $recurringInvoiceId  Unique identifier (UUID) of the recurring invoice template, as returned when it is created or listed. A template of another company answers `404` with `RECURRING_NOT_FOUND`, exactly like one that does not exist.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdNextOccurrenceGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdNextOccurrenceGetResponse200 : ResponseInterface)
      *
      * @throws GetCompanyRecurringInvoiceNextOccurrenceBadRequestException
      * @throws GetCompanyRecurringInvoiceNextOccurrenceUnauthorizedException
@@ -4050,7 +4049,7 @@ class Client extends Runtime\Client\Client
      *    "limit"?: int, //How many items to return per page. The response echoes it back as `pagination.items_per_page`.
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdHistoryGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdHistoryGetResponse200 : ResponseInterface)
      *
      * @throws GetCompanyRecurringInvoiceHistoryBadRequestException
      * @throws GetCompanyRecurringInvoiceHistoryUnauthorizedException
@@ -4085,7 +4084,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesDerivationsPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesDerivationsPostResponse201 : ResponseInterface)
      *
      * @throws CreateCompanyRecurringInvoiceDerivationBadRequestException
      * @throws CreateCompanyRecurringInvoiceDerivationUnauthorizedException
@@ -4124,7 +4123,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201 : ResponseInterface)
      *
      * @throws GenerateCompanyRecurringInvoiceNowBadRequestException
      * @throws GenerateCompanyRecurringInvoiceNowUnauthorizedException
@@ -4164,7 +4163,7 @@ class Client extends Runtime\Client\Client
      * } $queryParameters
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CustomersGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CustomersGetResponse200 : ResponseInterface)
      *
      * @throws ListCustomersBadRequestException
      * @throws ListCustomersUnauthorizedException
@@ -4190,7 +4189,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CustomersPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CustomersPostResponse201 : ResponseInterface)
      *
      * @throws CreateCustomerBadRequestException
      * @throws CreateCustomerUnauthorizedException
@@ -4235,7 +4234,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $customerId  Customer ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CustomersCustomerIdDeleteResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CustomersCustomerIdDeleteResponse200 : ResponseInterface)
      *
      * @throws DeleteCustomerBadRequestException
      * @throws DeleteCustomerUnauthorizedException
@@ -4260,7 +4259,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $customerId  Customer ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CustomersCustomerIdGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CustomersCustomerIdGetResponse200 : ResponseInterface)
      *
      * @throws GetCustomerBadRequestException
      * @throws GetCustomerUnauthorizedException
@@ -4294,7 +4293,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $customerId  Customer ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CustomersCustomerIdPatchResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CustomersCustomerIdPatchResponse200 : ResponseInterface)
      *
      * @throws PatchCustomerBadRequestException
      * @throws PatchCustomerUnauthorizedException
@@ -4334,7 +4333,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $customerId  Customer ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CustomersCustomerIdPutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CustomersCustomerIdPutResponse200 : ResponseInterface)
      *
      * @throws UpdateCustomerBadRequestException
      * @throws UpdateCustomerUnauthorizedException
@@ -4378,7 +4377,7 @@ class Client extends Runtime\Client\Client
      *    "ids": string, //Comma-separated customer IDs
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CustomersBulkDeleteResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CustomersBulkDeleteResponse200 : ResponseInterface)
      *
      * @throws DeactivateCustomersBulkBadRequestException
      * @throws DeactivateCustomersBulkUnauthorizedException
@@ -4416,7 +4415,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CustomersBulkPostResponse200|V1CustomersBulkPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CustomersBulkPostResponse200|V1CustomersBulkPostResponse201 : ResponseInterface)
      *
      * @throws CreateCustomersBulkBadRequestException
      * @throws CreateCustomersBulkUnauthorizedException
@@ -4452,7 +4451,7 @@ class Client extends Runtime\Client\Client
      * **Retires on 9 December 2026.** See the [migration guide](https://docs.beel.es/changelog/resources-under-the-nif) for what moved where and what changes when you switch.
      *
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CustomersImportCsvPreviewPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CustomersImportCsvPreviewPostResponse200 : ResponseInterface)
      *
      * @throws ImportCustomersCsvPreviewBadRequestException
      * @throws ImportCustomersCsvPreviewUnauthorizedException
@@ -4487,7 +4486,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CustomersImportHoldedContactsPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CustomersImportHoldedContactsPostResponse200 : ResponseInterface)
      *
      * @throws ImportHoldedContactsBadRequestException
      * @throws ImportHoldedContactsUnauthorizedException
@@ -4512,7 +4511,7 @@ class Client extends Runtime\Client\Client
      *    "limit"?: int, //How many items to return per page. The response echoes it back as `pagination.items_per_page`.
      *    "active"?: bool, //Filter by active/inactive status. Defaults to `true`, so inactive customers must be
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdCustomersGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdCustomersGetResponse200 : ResponseInterface)
      *
      * @throws ListCompanyCustomersBadRequestException
      * @throws ListCompanyCustomersUnauthorizedException
@@ -4537,7 +4536,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdCustomersPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdCustomersPostResponse201 : ResponseInterface)
      *
      * @throws CreateCompanyCustomerBadRequestException
      * @throws CreateCompanyCustomerUnauthorizedException
@@ -4580,7 +4579,7 @@ class Client extends Runtime\Client\Client
      *    "ids": string, //Comma-separated customer IDs
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdCustomersBulkDeleteResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdCustomersBulkDeleteResponse200 : ResponseInterface)
      *
      * @throws DeleteCompanyCustomersBulkBadRequestException
      * @throws DeleteCompanyCustomersBulkUnauthorizedException
@@ -4614,7 +4613,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdCustomersBulkPostResponse200|V1CompaniesCompanyIdCustomersBulkPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdCustomersBulkPostResponse200|V1CompaniesCompanyIdCustomersBulkPostResponse201 : ResponseInterface)
      *
      * @throws CreateCompanyCustomersBulkBadRequestException
      * @throws CreateCompanyCustomersBulkUnauthorizedException
@@ -4650,7 +4649,7 @@ class Client extends Runtime\Client\Client
      * @param array{
      *    "Idempotency-Key": string, //Same key as `Idempotency-Key` above, but **required**: the operation writes many rows per
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdCustomersImportsPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdCustomersImportsPostResponse201 : ResponseInterface)
      *
      * @throws CreateCompanyCustomerImportBadRequestException
      * @throws CreateCompanyCustomerImportUnauthorizedException
@@ -4674,7 +4673,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdCustomersImportsPreviewPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdCustomersImportsPreviewPostResponse200 : ResponseInterface)
      *
      * @throws PreviewCompanyCustomerImportBadRequestException
      * @throws PreviewCompanyCustomerImportUnauthorizedException
@@ -4707,7 +4706,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $customerId  Customer ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteCompanyCustomerBadRequestException
      * @throws DeleteCompanyCustomerUnauthorizedException
@@ -4728,7 +4727,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $customerId  Customer ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdCustomersCustomerIdGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdCustomersCustomerIdGetResponse200 : ResponseInterface)
      *
      * @throws GetCompanyCustomerBadRequestException
      * @throws GetCompanyCustomerUnauthorizedException
@@ -4762,7 +4761,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $customerId  Customer ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdCustomersCustomerIdPatchResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdCustomersCustomerIdPatchResponse200 : ResponseInterface)
      *
      * @throws PatchCompanyCustomerBadRequestException
      * @throws PatchCompanyCustomerUnauthorizedException
@@ -4790,7 +4789,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  array  $accept  Accept content header text/csv|application/json
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DownloadCustomerTemplateCsvUnauthorizedException
      * @throws DownloadCustomerTemplateCsvForbiddenException
@@ -4814,7 +4813,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  array  $accept  Accept content header text/csv|application/json
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DownloadCustomerImportTemplateUnauthorizedException
      * @throws DownloadCustomerImportTemplateForbiddenException
@@ -4843,7 +4842,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  array  $accept  Accept content header text/csv|application/json
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DownloadAccountImportTemplateUnauthorizedException
      * @throws DownloadAccountImportTemplateForbiddenException
@@ -4877,7 +4876,7 @@ class Client extends Runtime\Client\Client
      *    "sort_order"?: string, //Sort order direction
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ProductsGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ProductsGetResponse200 : ResponseInterface)
      *
      * @throws ListProductsUnauthorizedException
      * @throws ListProductsForbiddenException
@@ -4901,7 +4900,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ProductsPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ProductsPostResponse201 : ResponseInterface)
      *
      * @throws CreateProductBadRequestException
      * @throws CreateProductUnauthorizedException
@@ -4925,7 +4924,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $productId  Product unique UUID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteProductUnauthorizedException
      * @throws DeleteProductForbiddenException
@@ -4947,7 +4946,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $productId  Product unique UUID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ProductsProductIdGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ProductsProductIdGetResponse200 : ResponseInterface)
      *
      * @throws GetProductBadRequestException
      * @throws GetProductUnauthorizedException
@@ -4974,7 +4973,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $productId  Product unique UUID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ProductsProductIdPatchResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ProductsProductIdPatchResponse200 : ResponseInterface)
      *
      * @throws PatchProductBadRequestException
      * @throws PatchProductUnauthorizedException
@@ -5007,7 +5006,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $productId  Product unique UUID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ProductsProductIdPutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ProductsProductIdPutResponse200 : ResponseInterface)
      *
      * @throws UpdateProductBadRequestException
      * @throws UpdateProductUnauthorizedException
@@ -5040,7 +5039,7 @@ class Client extends Runtime\Client\Client
      *    "search"?: string, //Search term (empty to get recent products).
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ProductsSearchGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ProductsSearchGetResponse200 : ResponseInterface)
      *
      * @throws SearchProductsBadRequestException
      * @throws SearchProductsUnauthorizedException
@@ -5067,7 +5066,7 @@ class Client extends Runtime\Client\Client
      * **Retires on 9 December 2026.** See the [migration guide](https://docs.beel.es/changelog/resources-under-the-nif) for what moved where and what changes when you switch.
      *
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ProductsBulkDeleteResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ProductsBulkDeleteResponse200 : ResponseInterface)
      *
      * @throws DeleteProductsBulkBadRequestException
      * @throws DeleteProductsBulkUnauthorizedException
@@ -5099,7 +5098,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ProductsBulkPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ProductsBulkPostResponse201 : ResponseInterface)
      *
      * @throws CreateProductsBulkBadRequestException
      * @throws CreateProductsBulkUnauthorizedException
@@ -5136,7 +5135,7 @@ class Client extends Runtime\Client\Client
      *    "sort_order"?: string, //Sort order direction
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdProductsGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdProductsGetResponse200 : ResponseInterface)
      *
      * @throws ListCompanyProductsBadRequestException
      * @throws ListCompanyProductsUnauthorizedException
@@ -5168,7 +5167,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdProductsPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdProductsPostResponse201 : ResponseInterface)
      *
      * @throws CreateCompanyProductBadRequestException
      * @throws CreateCompanyProductUnauthorizedException
@@ -5197,7 +5196,7 @@ class Client extends Runtime\Client\Client
      *    "ids": string, //Comma-separated product IDs (max 100 per request)
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdProductsBulkDeleteResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdProductsBulkDeleteResponse200 : ResponseInterface)
      *
      * @throws DeleteCompanyProductsBulkBadRequestException
      * @throws DeleteCompanyProductsBulkUnauthorizedException
@@ -5226,7 +5225,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdProductsBulkPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdProductsBulkPostResponse201 : ResponseInterface)
      *
      * @throws CreateCompanyProductsBulkBadRequestException
      * @throws CreateCompanyProductsBulkUnauthorizedException
@@ -5247,7 +5246,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $productId  Product unique UUID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteCompanyProductUnauthorizedException
      * @throws DeleteCompanyProductForbiddenException
@@ -5266,7 +5265,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $productId  Product unique UUID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdProductsProductIdGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdProductsProductIdGetResponse200 : ResponseInterface)
      *
      * @throws GetCompanyProductBadRequestException
      * @throws GetCompanyProductUnauthorizedException
@@ -5293,7 +5292,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $productId  Product unique UUID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdProductsProductIdPatchResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdProductsProductIdPatchResponse200 : ResponseInterface)
      *
      * @throws PatchCompanyProductBadRequestException
      * @throws PatchCompanyProductUnauthorizedException
@@ -5322,7 +5321,7 @@ class Client extends Runtime\Client\Client
      *    "limit"?: int, //How many items to return per page. The response echoes it back as `pagination.items_per_page`.
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdMembersGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdMembersGetResponse200 : ResponseInterface)
      *
      * @throws ListAccountMembersBadRequestException
      * @throws ListAccountMembersUnauthorizedException
@@ -5342,7 +5341,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $accountId  Your own account, or an account you provisioned. It — not the credential — decides which account the operation acts on; a `403` is returned when you do not reach it, the same response an account that does not exist gets.
      * @param  string  $memberId  Membership unique UUID.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteAccountMemberBadRequestException
      * @throws DeleteAccountMemberUnauthorizedException
@@ -5362,7 +5361,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $accountId  Your own account, or an account you provisioned. It — not the credential — decides which account the operation acts on; a `403` is returned when you do not reach it, the same response an account that does not exist gets.
      * @param  string  $memberId  Membership unique UUID.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdMembersMemberIdGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdMembersMemberIdGetResponse200 : ResponseInterface)
      *
      * @throws GetAccountMemberBadRequestException
      * @throws GetAccountMemberUnauthorizedException
@@ -5387,7 +5386,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $accountId  Your own account, or an account you provisioned. It — not the credential — decides which account the operation acts on; a `403` is returned when you do not reach it, the same response an account that does not exist gets.
      * @param  string  $memberId  Membership unique UUID.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdMembersMemberIdPatchResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdMembersMemberIdPatchResponse200 : ResponseInterface)
      *
      * @throws PatchAccountMemberBadRequestException
      * @throws PatchAccountMemberUnauthorizedException
@@ -5416,7 +5415,7 @@ class Client extends Runtime\Client\Client
      *    "limit"?: int, //How many items to return per page. The response echoes it back as `pagination.items_per_page`.
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdMembersMemberIdGrantsGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdMembersMemberIdGrantsGetResponse200 : ResponseInterface)
      *
      * @throws ListAccountMemberGrantsUnauthorizedException
      * @throws ListAccountMemberGrantsForbiddenException
@@ -5437,7 +5436,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $memberId  Membership unique UUID.
      * @param  string  $companyId  Unique identifier (UUID) of the company within the account.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteAccountMemberGrantUnauthorizedException
      * @throws DeleteAccountMemberGrantForbiddenException
@@ -5464,7 +5463,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $memberId  Membership unique UUID.
      * @param  string  $companyId  Unique identifier (UUID) of the company within the account.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdMembersMemberIdGrantsCompanyIdPutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdMembersMemberIdGrantsCompanyIdPutResponse200 : ResponseInterface)
      *
      * @throws PutAccountMemberGrantBadRequestException
      * @throws PutAccountMemberGrantUnauthorizedException
@@ -5497,7 +5496,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws PutAccountOwnerBadRequestException
      * @throws PutAccountOwnerUnauthorizedException
@@ -5520,7 +5519,7 @@ class Client extends Runtime\Client\Client
      *    "limit"?: int, //How many items to return per page. The response echoes it back as `pagination.items_per_page`.
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdInvitationsGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdInvitationsGetResponse200 : ResponseInterface)
      *
      * @throws ListAccountInvitationsBadRequestException
      * @throws ListAccountInvitationsUnauthorizedException
@@ -5554,7 +5553,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdInvitationsPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdInvitationsPostResponse201 : ResponseInterface)
      *
      * @throws CreateAccountInvitationBadRequestException
      * @throws CreateAccountInvitationUnauthorizedException
@@ -5579,7 +5578,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $accountId  Your own account, or an account you provisioned. It — not the credential — decides which account the operation acts on; a `403` is returned when you do not reach it, the same response an account that does not exist gets.
      * @param  string  $invitationId  Identifier (UUID) of an invitation of the account in the path, as returned when it is created or listed. An invitation of another account answers `404`, exactly like one that does not exist.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteAccountInvitationUnauthorizedException
      * @throws DeleteAccountInvitationForbiddenException
@@ -5598,7 +5597,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $accountId  Your own account, or an account you provisioned. It — not the credential — decides which account the operation acts on; a `403` is returned when you do not reach it, the same response an account that does not exist gets.
      * @param  string  $invitationId  Identifier (UUID) of an invitation of the account in the path, as returned when it is created or listed. An invitation of another account answers `404`, exactly like one that does not exist.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdInvitationsInvitationIdGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdInvitationsInvitationIdGetResponse200 : ResponseInterface)
      *
      * @throws GetAccountInvitationUnauthorizedException
      * @throws GetAccountInvitationForbiddenException
@@ -5632,7 +5631,7 @@ class Client extends Runtime\Client\Client
      *    "cursor"?: string, //Opaque pagination cursor from a previous response's `next_cursor`.
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsGetResponse200 : ResponseInterface)
      *
      * @throws ListAccountsBadRequestException
      * @throws ListAccountsUnauthorizedException
@@ -5677,7 +5676,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsPostResponse201 : ResponseInterface)
      *
      * @throws ProvisionAccountBadRequestException
      * @throws ProvisionAccountUnauthorizedException
@@ -5698,7 +5697,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $accountId  Identifier (UUID) of an account you provisioned. An account you did not provision answers exactly like one that does not exist, so its existence is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdGetResponse200 : ResponseInterface)
      *
      * @throws GetAccountUnauthorizedException
      * @throws GetAccountForbiddenException
@@ -5723,7 +5722,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $accountId  Identifier (UUID) of an account you manage. An account you do not manage answers exactly like one that does not exist, so its existence is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws ChangeManagedAccountAccessLevelBadRequestException
      * @throws ChangeManagedAccountAccessLevelUnauthorizedException
@@ -5750,7 +5749,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $accountId  Identifier (UUID) of an account you manage. An account you do not manage answers exactly like one that does not exist, so its existence is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws EndAccountManagementUnauthorizedException
      * @throws EndAccountManagementForbiddenException
@@ -5782,7 +5781,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdClaimTokensPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdClaimTokensPostResponse201 : ResponseInterface)
      *
      * @throws CreateAccountClaimTokenUnauthorizedException
      * @throws CreateAccountClaimTokenForbiddenException
@@ -5809,7 +5808,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $accountId  Your own account id.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdUsageGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdUsageGetResponse200 : ResponseInterface)
      *
      * @throws GetAccountUsageUnauthorizedException
      * @throws GetAccountUsageForbiddenException
@@ -5881,7 +5880,7 @@ class Client extends Runtime\Client\Client
      * @param array{
      *    "Idempotency-Key": string, //Same key as `Idempotency-Key` above, but **required**: the operation writes many rows per
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsImportsPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsImportsPostResponse201 : ResponseInterface)
      *
      * @throws CreateAccountImportBadRequestException
      * @throws CreateAccountImportUnauthorizedException
@@ -5916,7 +5915,7 @@ class Client extends Runtime\Client\Client
      *   a given account depends on the account, and that only shows up when the import runs.
      *
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsImportsPreviewPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsImportsPreviewPostResponse200 : ResponseInterface)
      *
      * @throws PreviewAccountImportBadRequestException
      * @throws PreviewAccountImportUnauthorizedException
@@ -5940,7 +5939,7 @@ class Client extends Runtime\Client\Client
      * @param array{
      *    "start_date"?: string, //Period start date (inclusive), as `YYYY-MM-DD`. Goes together with `end_date`:
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdFiscalSummaryGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdFiscalSummaryGetResponse200 : ResponseInterface)
      *
      * @throws GetCompanyFiscalSummaryBadRequestException
      * @throws GetCompanyFiscalSummaryUnauthorizedException
@@ -5955,7 +5954,7 @@ class Client extends Runtime\Client\Client
 
     /**
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ConfigurationVerifactuGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ConfigurationVerifactuGetResponse200 : ResponseInterface)
      *
      * @throws GetVeriFactuConfigurationUnauthorizedException
      * @throws GetVeriFactuConfigurationForbiddenException
@@ -5994,7 +5993,7 @@ class Client extends Runtime\Client\Client
      * **Retires on 9 December 2026.** See the [migration guide](https://docs.beel.es/changelog/resources-under-the-nif) for what moved where and what changes when you switch.
      *
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ConfigurationVerifactuPutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ConfigurationVerifactuPutResponse200 : ResponseInterface)
      *
      * @throws UpdateVeriFactuConfigurationBadRequestException
      * @throws UpdateVeriFactuConfigurationUnauthorizedException
@@ -6009,7 +6008,7 @@ class Client extends Runtime\Client\Client
 
     /**
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|TaxTypesCatalogResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|TaxTypesCatalogResponse : ResponseInterface)
      *
      * @throws GetTaxTypesUnauthorizedException
      * @throws GetTaxTypesForbiddenException
@@ -6022,7 +6021,7 @@ class Client extends Runtime\Client\Client
 
     /**
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ConfigurationInvoiceCustomizationOptionsGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ConfigurationInvoiceCustomizationOptionsGetResponse200 : ResponseInterface)
      *
      * @throws GetInvoiceCustomizationOptionsUnauthorizedException
      * @throws GetInvoiceCustomizationOptionsForbiddenException
@@ -6035,7 +6034,7 @@ class Client extends Runtime\Client\Client
 
     /**
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ConfigurationTaxesGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ConfigurationTaxesGetResponse200 : ResponseInterface)
      *
      * @throws GetTaxConfigurationUnauthorizedException
      * @throws GetTaxConfigurationForbiddenException
@@ -6066,7 +6065,7 @@ class Client extends Runtime\Client\Client
      * **Retires on 9 December 2026.** See the [migration guide](https://docs.beel.es/changelog/resources-under-the-nif) for what moved where and what changes when you switch.
      *
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ConfigurationTaxesPutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ConfigurationTaxesPutResponse200 : ResponseInterface)
      *
      * @throws UpdateTaxConfigurationBadRequestException
      * @throws UpdateTaxConfigurationUnauthorizedException
@@ -6102,7 +6101,7 @@ class Client extends Runtime\Client\Client
      * } $queryParameters
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ConfigurationSeriesGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ConfigurationSeriesGetResponse200 : ResponseInterface)
      *
      * @throws ListSeriesUnauthorizedException
      * @throws ListSeriesForbiddenException
@@ -6132,7 +6131,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ConfigurationSeriesPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ConfigurationSeriesPostResponse201 : ResponseInterface)
      *
      * @throws CreateSeriesBadRequestException
      * @throws CreateSeriesUnauthorizedException
@@ -6167,7 +6166,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ConfigurationSeriesDefaultsPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ConfigurationSeriesDefaultsPostResponse200 : ResponseInterface)
      *
      * @throws CreateDefaultSeriesUnauthorizedException
      * @throws CreateDefaultSeriesForbiddenException
@@ -6180,7 +6179,7 @@ class Client extends Runtime\Client\Client
 
     /**
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ConfigurationSeriesDefaultsStatusGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ConfigurationSeriesDefaultsStatusGetResponse200 : ResponseInterface)
      *
      * @throws GetDefaultSeriesStatusUnauthorizedException
      * @throws GetDefaultSeriesStatusForbiddenException
@@ -6210,7 +6209,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $seriesId  Series ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteSeriesBadRequestException
      * @throws DeleteSeriesUnauthorizedException
@@ -6244,7 +6243,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $seriesId  Series ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ConfigurationSeriesSeriesIdPatchResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ConfigurationSeriesSeriesIdPatchResponse200 : ResponseInterface)
      *
      * @throws PatchSeriesBadRequestException
      * @throws PatchSeriesUnauthorizedException
@@ -6280,7 +6279,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $seriesId  Series ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ConfigurationSeriesSeriesIdPutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ConfigurationSeriesSeriesIdPutResponse200 : ResponseInterface)
      *
      * @throws UpdateSeriesBadRequestException
      * @throws UpdateSeriesUnauthorizedException
@@ -6312,7 +6311,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ConfigurationSeriesSeriesIdDefaultPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ConfigurationSeriesSeriesIdDefaultPostResponse200 : ResponseInterface)
      *
      * @throws SetDefaultSeriesBadRequestException
      * @throws SetDefaultSeriesUnauthorizedException
@@ -6340,7 +6339,7 @@ class Client extends Runtime\Client\Client
      * **Retires on 9 December 2026.** See the [migration guide](https://docs.beel.es/changelog/resources-under-the-nif) for what moved where and what changes when you switch.
      *
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1ConfigurationLanguagePutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1ConfigurationLanguagePutResponse200 : ResponseInterface)
      *
      * @throws UpdateLanguageBadRequestException
      * @throws UpdateLanguageUnauthorizedException
@@ -6355,7 +6354,7 @@ class Client extends Runtime\Client\Client
 
     /**
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|TaxTypesCatalogResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|TaxTypesCatalogResponse : ResponseInterface)
      *
      * @throws ListTaxTypesBadRequestException
      * @throws ListTaxTypesUnauthorizedException
@@ -6370,7 +6369,7 @@ class Client extends Runtime\Client\Client
 
     /**
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1InvoiceCustomizationOptionsGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1InvoiceCustomizationOptionsGetResponse200 : ResponseInterface)
      *
      * @throws ListInvoiceCustomizationOptionsUnauthorizedException
      * @throws ListInvoiceCustomizationOptionsForbiddenException
@@ -6404,7 +6403,7 @@ class Client extends Runtime\Client\Client
      *   `details.field` naming it.
      *
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1NifValidatePostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1NifValidatePostResponse200 : ResponseInterface)
      *
      * @throws ValidateNifBadRequestException
      * @throws ValidateNifUnauthorizedException
@@ -6439,7 +6438,7 @@ class Client extends Runtime\Client\Client
      *    "include"?: string, //Include derived data. `readiness` adds each company's issuing-readiness status.
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ListCompanies200Response|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|ListCompanies200Response : ResponseInterface)
      *
      * @throws ListCompaniesBadRequestException
      * @throws ListCompaniesUnauthorizedException
@@ -6477,7 +6476,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|CompanyResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|CompanyResponse201 : ResponseInterface)
      *
      * @throws CreateCompanyBadRequestException
      * @throws CreateCompanyUnauthorizedException
@@ -6519,7 +6518,7 @@ class Client extends Runtime\Client\Client
      *    "search"?: string, //Case-insensitive filter on NIF, legal name or trade name — the same filter, over the same universe, as the one `GET /v1/accounts/{account_id}/companies` applies. Blank or omitted returns all.
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ListCompanyStats200Response|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|ListCompanyStats200Response : ResponseInterface)
      *
      * @throws ListCompanyStatsBadRequestException
      * @throws ListCompanyStatsUnauthorizedException
@@ -6551,7 +6550,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteCompanyByIdBadRequestException
      * @throws DeleteCompanyByIdUnauthorizedException
@@ -6579,7 +6578,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|CompanyResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|CompanyResponse : ResponseInterface)
      *
      * @throws GetCompanyByIdBadRequestException
      * @throws GetCompanyByIdUnauthorizedException
@@ -6636,7 +6635,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|CompanyResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|CompanyResponse : ResponseInterface)
      *
      * @throws PatchCompanyByIdUnauthorizedException
      * @throws PatchCompanyByIdForbiddenException
@@ -6667,7 +6666,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company whose issuing readiness is evaluated — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|IssuingReadinessResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|IssuingReadinessResponse : ResponseInterface)
      *
      * @throws GetCompanyIssuingReadinessBadRequestException
      * @throws GetCompanyIssuingReadinessUnauthorizedException
@@ -6691,7 +6690,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|RepresentationActionResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|RepresentationActionResponse : ResponseInterface)
      *
      * @throws GenerateRepresentationBadRequestException
      * @throws GenerateRepresentationUnauthorizedException
@@ -6712,7 +6711,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $accountId  Account that owns the NIF. The pair must be coherent, and which answer you get depends on how far you reach: an `{account_id}` you do not reach answers `403` before the NIF is even looked at (the same answer an account that does not exist gets); a `{company_id}` you do not reach, or reach at a level that does not allow the operation — the usual case on writes, since the level checked is the one you hold over the `{account_id}` of the path — answers `403` too; and only a `{company_id}` you do reach but that hangs from a different account answers `404`, so the existence of a NIF in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|RepresentationDownloadResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|RepresentationDownloadResponse : ResponseInterface)
      *
      * @throws DownloadRepresentationBadRequestException
      * @throws DownloadRepresentationUnauthorizedException
@@ -6736,7 +6735,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|RepresentationActionResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|RepresentationActionResponse : ResponseInterface)
      *
      * @throws SubmitRepresentationBadRequestException
      * @throws SubmitRepresentationUnauthorizedException
@@ -6758,7 +6757,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $accountId  Account that owns the NIF. The pair must be coherent, and which answer you get depends on how far you reach: an `{account_id}` you do not reach answers `403` before the NIF is even looked at (the same answer an account that does not exist gets); a `{company_id}` you do not reach, or reach at a level that does not allow the operation — the usual case on writes, since the level checked is the one you hold over the `{account_id}` of the path — answers `403` too; and only a `{company_id}` you do reach but that hangs from a different account answers `404`, so the existence of a NIF in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|RepresentationStatusResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|RepresentationStatusResponse : ResponseInterface)
      *
      * @throws GetRepresentationStatusUnauthorizedException
      * @throws GetRepresentationStatusForbiddenException
@@ -6779,7 +6778,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $accountId  Account that owns the NIF. The pair must be coherent, and which answer you get depends on how far you reach: an `{account_id}` you do not reach answers `403` before the NIF is even looked at (the same answer an account that does not exist gets); a `{company_id}` you do not reach, or reach at a level that does not allow the operation — the usual case on writes, since the level checked is the one you hold over the `{account_id}` of the path — answers `403` too; and only a `{company_id}` you do reach but that hangs from a different account answers `404`, so the existence of a NIF in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|RepresentationActionResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|RepresentationActionResponse : ResponseInterface)
      *
      * @throws CancelRepresentationUnauthorizedException
      * @throws CancelRepresentationForbiddenException
@@ -6802,7 +6801,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws CancelCompanyRepresentationBadRequestException
      * @throws CancelCompanyRepresentationUnauthorizedException
@@ -6827,7 +6826,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|RepresentationStatusResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|RepresentationStatusResponse : ResponseInterface)
      *
      * @throws GetCompanyRepresentationUnauthorizedException
      * @throws GetCompanyRepresentationForbiddenException
@@ -6856,7 +6855,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|RepresentationActionResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|RepresentationActionResponse : ResponseInterface)
      *
      * @throws GenerateCompanyRepresentationBadRequestException
      * @throws GenerateCompanyRepresentationUnauthorizedException
@@ -6881,7 +6880,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|RepresentationDownloadResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|RepresentationDownloadResponse : ResponseInterface)
      *
      * @throws DownloadCompanyRepresentationDocumentBadRequestException
      * @throws DownloadCompanyRepresentationDocumentUnauthorizedException
@@ -6907,7 +6906,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|RepresentationActionResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|RepresentationActionResponse : ResponseInterface)
      *
      * @throws SubmitCompanyRepresentationBadRequestException
      * @throws SubmitCompanyRepresentationUnauthorizedException
@@ -6927,7 +6926,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteCompanyLogoByIdUnauthorizedException
      * @throws DeleteCompanyLogoByIdForbiddenException
@@ -6952,7 +6951,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdLogoPutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdLogoPutResponse200 : ResponseInterface)
      *
      * @throws UploadCompanyLogoByIdUnauthorizedException
      * @throws UploadCompanyLogoByIdForbiddenException
@@ -6976,7 +6975,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoiceCustomizationGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoiceCustomizationGetResponse200 : ResponseInterface)
      *
      * @throws GetCompanyInvoiceCustomizationUnauthorizedException
      * @throws GetCompanyInvoiceCustomizationForbiddenException
@@ -7001,7 +7000,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoiceCustomizationPutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdInvoiceCustomizationPutResponse200 : ResponseInterface)
      *
      * @throws UpdateCompanyInvoiceCustomizationBadRequestException
      * @throws UpdateCompanyInvoiceCustomizationUnauthorizedException
@@ -7022,7 +7021,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdVerifactuConfigurationGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdVerifactuConfigurationGetResponse200 : ResponseInterface)
      *
      * @throws GetCompanyVeriFactuConfigurationBadRequestException
      * @throws GetCompanyVeriFactuConfigurationUnauthorizedException
@@ -7058,7 +7057,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdVerifactuConfigurationPutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdVerifactuConfigurationPutResponse200 : ResponseInterface)
      *
      * @throws UpdateCompanyVeriFactuConfigurationBadRequestException
      * @throws UpdateCompanyVeriFactuConfigurationUnauthorizedException
@@ -7083,7 +7082,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdTaxConfigurationGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdTaxConfigurationGetResponse200 : ResponseInterface)
      *
      * @throws GetCompanyTaxConfigurationBadRequestException
      * @throws GetCompanyTaxConfigurationUnauthorizedException
@@ -7112,7 +7111,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdTaxConfigurationPutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdTaxConfigurationPutResponse200 : ResponseInterface)
      *
      * @throws UpdateCompanyTaxConfigurationBadRequestException
      * @throws UpdateCompanyTaxConfigurationUnauthorizedException
@@ -7146,7 +7145,7 @@ class Client extends Runtime\Client\Client
      * } $queryParameters
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdSeriesGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdSeriesGetResponse200 : ResponseInterface)
      *
      * @throws ListCompanySeriesBadRequestException
      * @throws ListCompanySeriesUnauthorizedException
@@ -7181,7 +7180,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdSeriesPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdSeriesPostResponse201 : ResponseInterface)
      *
      * @throws CreateCompanySeriesBadRequestException
      * @throws CreateCompanySeriesUnauthorizedException
@@ -7212,7 +7211,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdSeriesDefaultsGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdSeriesDefaultsGetResponse200 : ResponseInterface)
      *
      * @throws GetCompanyDefaultSeriesBadRequestException
      * @throws GetCompanyDefaultSeriesUnauthorizedException
@@ -7247,7 +7246,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdSeriesDefaultsPutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdSeriesDefaultsPutResponse200 : ResponseInterface)
      *
      * @throws EnsureCompanyDefaultSeriesUnauthorizedException
      * @throws EnsureCompanyDefaultSeriesForbiddenException
@@ -7273,7 +7272,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $seriesId  Series ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteCompanySeriesBadRequestException
      * @throws DeleteCompanySeriesUnauthorizedException
@@ -7294,7 +7293,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $seriesId  Series ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdSeriesSeriesIdGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdSeriesSeriesIdGetResponse200 : ResponseInterface)
      *
      * @throws GetCompanySeriesBadRequestException
      * @throws GetCompanySeriesUnauthorizedException
@@ -7330,7 +7329,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $seriesId  Series ID
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdSeriesSeriesIdPatchResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdSeriesSeriesIdPatchResponse200 : ResponseInterface)
      *
      * @throws PatchCompanySeriesBadRequestException
      * @throws PatchCompanySeriesUnauthorizedException
@@ -7360,7 +7359,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdSeriesSeriesIdDefaultPutResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdSeriesSeriesIdDefaultPutResponse200 : ResponseInterface)
      *
      * @throws SetCompanyDefaultSeriesBadRequestException
      * @throws SetCompanyDefaultSeriesUnauthorizedException
@@ -7404,7 +7403,7 @@ class Client extends Runtime\Client\Client
      *    "environment": string, //Mode to switch the NIF off in.
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdActivationsDeleteResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1CompaniesCompanyIdActivationsDeleteResponse200 : ResponseInterface)
      *
      * @throws DeactivateCompanyByIdUnauthorizedException
      * @throws DeactivateCompanyByIdForbiddenException
@@ -7445,7 +7444,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|CompanyActivationResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|CompanyActivationResponse : ResponseInterface)
      *
      * @throws ActivateCompanyByIdBadRequestException
      * @throws ActivateCompanyByIdUnauthorizedException
@@ -7478,7 +7477,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ListManagedPaymentConnectionsResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|ListManagedPaymentConnectionsResponse : ResponseInterface)
      *
      * @throws ListCompanyPaymentConnectionsBadRequestException
      * @throws ListCompanyPaymentConnectionsUnauthorizedException
@@ -7521,7 +7520,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|InitiatePaymentConnectionResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|InitiatePaymentConnectionResponse : ResponseInterface)
      *
      * @throws InitiatePaymentConnectionBadRequestException
      * @throws InitiatePaymentConnectionUnauthorizedException
@@ -7549,7 +7548,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $companyId  Unique identifier (UUID) of the company the operation acts on — its identifier, not its NIF. It is the only source of context: the account that owns it is derived from it, and the `BeeL-Active-Company` header plays no part. A company you do not reach answers `403`, and so does a company that does not exist, so the existence of a company in another account is never disclosed.
      * @param  string  $connectionId  Unique identifier (UUID) of the payment connection the operation acts on, as returned by `GET /v1/companies/{company_id}/payment-connections`. A NIF can hold several connections of the same provider, so the provider slug alone does not name one. A connection of another NIF answers `404`, exactly like one that does not exist.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DisconnectCompanyPaymentConnectionUnauthorizedException
      * @throws DisconnectCompanyPaymentConnectionForbiddenException
@@ -7583,7 +7582,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|CompanyPaymentConnectionResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|CompanyPaymentConnectionResponse : ResponseInterface)
      *
      * @throws UpdateCompanyPaymentConnectionUnauthorizedException
      * @throws UpdateCompanyPaymentConnectionForbiddenException
@@ -7624,7 +7623,7 @@ class Client extends Runtime\Client\Client
     combine reasons. An empty value (`failure_reason=`) is the same as omitting it.
      *    "failure_category"?: array, //Keep only the events that did not complete for a cause in these categories. Repeat the
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ListManagedPaymentEventsResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|ListManagedPaymentEventsResponse : ResponseInterface)
      *
      * @throws ListCompanyPaymentEventsUnauthorizedException
      * @throws ListCompanyPaymentEventsForbiddenException
@@ -7650,7 +7649,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $connectionId  Unique identifier (UUID) of the payment connection the operation acts on, as returned by `GET /v1/companies/{company_id}/payment-connections`. A NIF can hold several connections of the same provider, so the provider slug alone does not name one. A connection of another NIF answers `404`, exactly like one that does not exist.
      * @param  string  $eventId  Identifier of the payment event, as returned by the list operation.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ManagedPaymentEventResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|ManagedPaymentEventResponse : ResponseInterface)
      *
      * @throws GetCompanyPaymentEventUnauthorizedException
      * @throws GetCompanyPaymentEventForbiddenException
@@ -7683,7 +7682,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ManagedPaymentEventResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|ManagedPaymentEventResponse : ResponseInterface)
      *
      * @throws RetryCompanyPaymentEventBadRequestException
      * @throws RetryCompanyPaymentEventUnauthorizedException
@@ -7717,7 +7716,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ManagedPaymentEventDraftResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|ManagedPaymentEventDraftResponse : ResponseInterface)
      *
      * @throws GenerateCompanyPaymentEventDraftBadRequestException
      * @throws GenerateCompanyPaymentEventDraftUnauthorizedException
@@ -7761,7 +7760,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ManagedPaymentEventResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|ManagedPaymentEventResponse : ResponseInterface)
      *
      * @throws ResolveCompanyPaymentEventBadRequestException
      * @throws ResolveCompanyPaymentEventUnauthorizedException
@@ -7801,7 +7800,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ManagedPaymentEventResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|ManagedPaymentEventResponse : ResponseInterface)
      *
      * @throws DiscardCompanyPaymentEventBadRequestException
      * @throws DiscardCompanyPaymentEventUnauthorizedException
@@ -7832,7 +7831,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ManagedPaymentEventResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|ManagedPaymentEventResponse : ResponseInterface)
      *
      * @throws RestoreCompanyPaymentEventUnauthorizedException
      * @throws RestoreCompanyPaymentEventForbiddenException
@@ -7859,7 +7858,7 @@ class Client extends Runtime\Client\Client
      *    "limit"?: int, //How many items to return per page. The response echoes it back as `pagination.items_per_page`.
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1WebhooksGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1WebhooksGetResponse200 : ResponseInterface)
      *
      * @throws ListWebhookSubscriptionsUnauthorizedException
      * @throws ListWebhookSubscriptionsForbiddenException
@@ -7895,7 +7894,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1WebhooksPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1WebhooksPostResponse201 : ResponseInterface)
      *
      * @throws CreateWebhookSubscriptionBadRequestException
      * @throws CreateWebhookSubscriptionUnauthorizedException
@@ -7917,7 +7916,7 @@ class Client extends Runtime\Client\Client
      * **Retires on 9 December 2026.** See the [migration guide](https://docs.beel.es/changelog/resources-under-the-nif) for what moved where and what changes when you switch.
      *
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteWebhookSubscriptionUnauthorizedException
      * @throws DeleteWebhookSubscriptionForbiddenException
@@ -7936,7 +7935,7 @@ class Client extends Runtime\Client\Client
      * **Retires on 9 December 2026.** See the [migration guide](https://docs.beel.es/changelog/resources-under-the-nif) for what moved where and what changes when you switch.
      *
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1WebhooksWebhookIdGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1WebhooksWebhookIdGetResponse200 : ResponseInterface)
      *
      * @throws GetWebhookSubscriptionUnauthorizedException
      * @throws GetWebhookSubscriptionForbiddenException
@@ -7966,7 +7965,7 @@ class Client extends Runtime\Client\Client
      * **Retires on 9 December 2026.** See the [migration guide](https://docs.beel.es/changelog/resources-under-the-nif) for what moved where and what changes when you switch.
      *
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1WebhooksWebhookIdPatchResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1WebhooksWebhookIdPatchResponse200 : ResponseInterface)
      *
      * @throws UpdateWebhookSubscriptionBadRequestException
      * @throws UpdateWebhookSubscriptionUnauthorizedException
@@ -7998,7 +7997,7 @@ class Client extends Runtime\Client\Client
      *    "event_id"?: string, //Only deliveries of this event. Use it to follow every attempt on one event without paging through the whole history.
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1WebhooksWebhookIdDeliveriesGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1WebhooksWebhookIdDeliveriesGetResponse200 : ResponseInterface)
      *
      * @throws ListWebhookDeliveriesBadRequestException
      * @throws ListWebhookDeliveriesUnauthorizedException
@@ -8028,7 +8027,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1WebhooksWebhookIdDeliveriesDeliveryIdRetryPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1WebhooksWebhookIdDeliveriesDeliveryIdRetryPostResponse200 : ResponseInterface)
      *
      * @throws RetryWebhookDeliveryUnauthorizedException
      * @throws RetryWebhookDeliveryForbiddenException
@@ -8061,7 +8060,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1WebhooksWebhookIdTestPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1WebhooksWebhookIdTestPostResponse200 : ResponseInterface)
      *
      * @throws TestWebhookSubscriptionUnauthorizedException
      * @throws TestWebhookSubscriptionForbiddenException
@@ -8088,7 +8087,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1WebhooksWebhookIdSecretPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1WebhooksWebhookIdSecretPostResponse200 : ResponseInterface)
      *
      * @throws RotateWebhookSecretUnauthorizedException
      * @throws RotateWebhookSecretForbiddenException
@@ -8108,7 +8107,7 @@ class Client extends Runtime\Client\Client
      *    "limit"?: int, //How many items to return per page. The response echoes it back as `pagination.items_per_page`.
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdWebhooksGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdWebhooksGetResponse200 : ResponseInterface)
      *
      * @throws ListAccountWebhookSubscriptionsBadRequestException
      * @throws ListAccountWebhookSubscriptionsUnauthorizedException
@@ -8144,7 +8143,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdWebhooksPostResponse201|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdWebhooksPostResponse201 : ResponseInterface)
      *
      * @throws CreateAccountWebhookSubscriptionBadRequestException
      * @throws CreateAccountWebhookSubscriptionUnauthorizedException
@@ -8166,7 +8165,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $accountId  Your own account, or an account you provisioned. It — not the credential, and not the `BeeL-Active-Company` header — decides which account the operation acts on. An account you do not reach answers `403`, and so does an account that does not exist, so the existence of somebody else's account is never disclosed.
      * @param  string  $webhookId  Subscription of the account in the path. A subscription of another account answers `404`, the same as one that does not exist: under the account resolved from `{account_id}` it simply is not there.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null : ResponseInterface)
      *
      * @throws DeleteAccountWebhookSubscriptionUnauthorizedException
      * @throws DeleteAccountWebhookSubscriptionForbiddenException
@@ -8185,7 +8184,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $accountId  Your own account, or an account you provisioned. It — not the credential, and not the `BeeL-Active-Company` header — decides which account the operation acts on. An account you do not reach answers `403`, and so does an account that does not exist, so the existence of somebody else's account is never disclosed.
      * @param  string  $webhookId  Subscription of the account in the path. A subscription of another account answers `404`, the same as one that does not exist: under the account resolved from `{account_id}` it simply is not there.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdWebhooksWebhookIdGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdWebhooksWebhookIdGetResponse200 : ResponseInterface)
      *
      * @throws GetAccountWebhookSubscriptionUnauthorizedException
      * @throws GetAccountWebhookSubscriptionForbiddenException
@@ -8215,7 +8214,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $accountId  Your own account, or an account you provisioned. It — not the credential, and not the `BeeL-Active-Company` header — decides which account the operation acts on. An account you do not reach answers `403`, and so does an account that does not exist, so the existence of somebody else's account is never disclosed.
      * @param  string  $webhookId  Subscription of the account in the path. A subscription of another account answers `404`, the same as one that does not exist: under the account resolved from `{account_id}` it simply is not there.
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdWebhooksWebhookIdPatchResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdWebhooksWebhookIdPatchResponse200 : ResponseInterface)
      *
      * @throws PatchAccountWebhookSubscriptionBadRequestException
      * @throws PatchAccountWebhookSubscriptionUnauthorizedException
@@ -8247,7 +8246,7 @@ class Client extends Runtime\Client\Client
      *    "event_id"?: string, //Only deliveries of this event. Use it to follow every attempt on one event without paging through the whole history.
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdWebhooksWebhookIdDeliveriesGetResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdWebhooksWebhookIdDeliveriesGetResponse200 : ResponseInterface)
      *
      * @throws ListAccountWebhookDeliveriesUnauthorizedException
      * @throws ListAccountWebhookDeliveriesForbiddenException
@@ -8277,7 +8276,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdWebhooksWebhookIdDeliveriesDeliveryIdRetryPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdWebhooksWebhookIdDeliveriesDeliveryIdRetryPostResponse200 : ResponseInterface)
      *
      * @throws RetryAccountWebhookDeliveryUnauthorizedException
      * @throws RetryAccountWebhookDeliveryForbiddenException
@@ -8310,7 +8309,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdWebhooksWebhookIdTestPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdWebhooksWebhookIdTestPostResponse200 : ResponseInterface)
      *
      * @throws TestAccountWebhookSubscriptionUnauthorizedException
      * @throws TestAccountWebhookSubscriptionForbiddenException
@@ -8336,7 +8335,7 @@ class Client extends Runtime\Client\Client
      *    "Idempotency-Key"?: string, //Idempotency key to prevent duplicates in sensitive operations.
 
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|V1AccountsAccountIdWebhooksWebhookIdSecretPostResponse200|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|V1AccountsAccountIdWebhooksWebhookIdSecretPostResponse200 : ResponseInterface)
      *
      * @throws RotateAccountWebhookSecretUnauthorizedException
      * @throws RotateAccountWebhookSecretForbiddenException
@@ -8380,7 +8379,7 @@ class Client extends Runtime\Client\Client
      *    "limit"?: int, //Maximum number of log entries in the page, from 1 to 100. Defaults to 25.
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|RequestLogListResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|RequestLogListResponse : ResponseInterface)
      *
      * @throws ListAccountRequestLogsBadRequestException
      * @throws ListAccountRequestLogsUnauthorizedException
@@ -8412,7 +8411,7 @@ class Client extends Runtime\Client\Client
      * @param array{
      *    "timestamp"?: string, //Log timestamp (the one returned by the list). Narrows the search window around
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|RequestLogSingleResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|RequestLogSingleResponse : ResponseInterface)
      *
      * @throws GetAccountRequestLogUnauthorizedException
      * @throws GetAccountRequestLogForbiddenException
@@ -8464,7 +8463,7 @@ class Client extends Runtime\Client\Client
      *    "limit"?: int,
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|RequestLogListResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|RequestLogListResponse : ResponseInterface)
      *
      * @throws ListDeveloperRequestLogsBadRequestException
      * @throws ListDeveloperRequestLogsUnauthorizedException
@@ -8496,7 +8495,7 @@ class Client extends Runtime\Client\Client
      * @param array{
      *    "timestamp"?: string, //Log timestamp (the one returned by the list). Narrows the search window around
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|RequestLogSingleResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|RequestLogSingleResponse : ResponseInterface)
      *
      * @throws GetDeveloperRequestLogUnauthorizedException
      * @throws GetDeveloperRequestLogForbiddenException
@@ -8535,7 +8534,7 @@ class Client extends Runtime\Client\Client
      *    "sort_order"?: string, //Sort order direction
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|EmailDeliveryListResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|EmailDeliveryListResponse : ResponseInterface)
      *
      * @throws ListAccountEmailDeliveriesBadRequestException
      * @throws ListAccountEmailDeliveriesUnauthorizedException
@@ -8568,7 +8567,7 @@ class Client extends Runtime\Client\Client
      *    "related_entity_ids": array, //Comma-separated list of related entity ids (e.g. invoice ids)
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|EmailDeliveryIndicatorListResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|EmailDeliveryIndicatorListResponse : ResponseInterface)
      *
      * @throws GetAccountEmailDeliveryIndicatorsBadRequestException
      * @throws GetAccountEmailDeliveryIndicatorsUnauthorizedException
@@ -8593,7 +8592,7 @@ class Client extends Runtime\Client\Client
      * @param  string  $accountId  Your own account, or an account you provisioned. It — not the credential — decides which account the operation acts on; a `403` is returned when you do not reach it, the same response an account that does not exist gets.
      * @param  string  $emailId  Email delivery id
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|EmailDeliveryDetailResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|EmailDeliveryDetailResponse : ResponseInterface)
      *
      * @throws GetAccountEmailDeliveryBadRequestException
      * @throws GetAccountEmailDeliveryUnauthorizedException
@@ -8635,7 +8634,7 @@ class Client extends Runtime\Client\Client
      *    "sort_order"?: string, //Sort order direction
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|EmailDeliveryListResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|EmailDeliveryListResponse : ResponseInterface)
      *
      * @throws ListEmailDeliveriesUnauthorizedException
      * @throws ListEmailDeliveriesForbiddenException
@@ -8666,7 +8665,7 @@ class Client extends Runtime\Client\Client
      *    "related_entity_ids": array, //Comma-separated list of related entity ids (e.g. invoice ids)
      * } $queryParameters
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|EmailDeliveryIndicatorListResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|EmailDeliveryIndicatorListResponse : ResponseInterface)
      *
      * @throws GetEmailDeliveryIndicatorsBadRequestException
      * @throws GetEmailDeliveryIndicatorsUnauthorizedException
@@ -8693,7 +8692,7 @@ class Client extends Runtime\Client\Client
      *
      * @param  string  $emailId  Email delivery id
      * @param  string  $fetch  Fetch mode to use (can be OBJECT or RESPONSE)
-     * @return ($fetch is 'object' ? null|EmailDeliveryDetailResponse|ErrorResponse : ResponseInterface)
+     * @return ($fetch is 'object' ? null|EmailDeliveryDetailResponse : ResponseInterface)
      *
      * @throws GetEmailDeliveryUnauthorizedException
      * @throws GetEmailDeliveryForbiddenException

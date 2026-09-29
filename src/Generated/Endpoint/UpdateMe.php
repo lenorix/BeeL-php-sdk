@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\UpdateMeInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateMeTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateMeUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateMeUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\UpdateMeRequest;
 use Lenorix\BeelSdk\Generated\Model\V1MePatchResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -64,7 +63,7 @@ class UpdateMe extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1MePatchResponse200|ErrorResponse
+     * @return null|V1MePatchResponse200
      *
      * @throws UpdateMeBadRequestException
      * @throws UpdateMeUnauthorizedException
@@ -97,9 +96,6 @@ class UpdateMe extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new UpdateMeInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

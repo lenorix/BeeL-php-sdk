@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\SetDefaultSeriesForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\SetDefaultSeriesInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\SetDefaultSeriesNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\SetDefaultSeriesUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1ConfigurationSeriesSeriesIdDefaultPostResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -99,7 +98,7 @@ class SetDefaultSeries extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1ConfigurationSeriesSeriesIdDefaultPostResponse200|ErrorResponse
+     * @return null|V1ConfigurationSeriesSeriesIdDefaultPostResponse200
      *
      * @throws SetDefaultSeriesBadRequestException
      * @throws SetDefaultSeriesUnauthorizedException
@@ -132,9 +131,6 @@ class SetDefaultSeries extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new SetDefaultSeriesInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

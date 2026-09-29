@@ -10,7 +10,6 @@ use Lenorix\BeelSdk\Generated\Exception\PatchCompanyInvoiceNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\PatchCompanyInvoiceTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\PatchCompanyInvoiceUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\PatchCompanyInvoiceUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\UpdateInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdPatchResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -109,7 +108,7 @@ class PatchCompanyInvoice extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CompaniesCompanyIdInvoicesInvoiceIdPatchResponse200|ErrorResponse
+     * @return null|V1CompaniesCompanyIdInvoicesInvoiceIdPatchResponse200
      *
      * @throws PatchCompanyInvoiceBadRequestException
      * @throws PatchCompanyInvoiceUnauthorizedException
@@ -150,9 +149,6 @@ class PatchCompanyInvoice extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new PatchCompanyInvoiceInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

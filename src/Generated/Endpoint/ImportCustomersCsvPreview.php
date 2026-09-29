@@ -10,7 +10,6 @@ use Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewRequestEntityTo
 use Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\ImportCustomersCsvPreviewUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1CustomersImportCsvPreviewPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CustomersImportCsvPreviewPostResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -102,7 +101,7 @@ class ImportCustomersCsvPreview extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CustomersImportCsvPreviewPostResponse200|ErrorResponse
+     * @return null|V1CustomersImportCsvPreviewPostResponse200
      *
      * @throws ImportCustomersCsvPreviewBadRequestException
      * @throws ImportCustomersCsvPreviewUnauthorizedException
@@ -139,9 +138,6 @@ class ImportCustomersCsvPreview extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new ImportCustomersCsvPreviewInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

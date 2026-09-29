@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\CreateCompanyInvoicePdfArchiveTooManyReq
 use Lenorix\BeelSdk\Generated\Exception\CreateCompanyInvoicePdfArchiveUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\CreateCompanyInvoicePdfArchiveUnprocessableEntityException;
 use Lenorix\BeelSdk\Generated\Model\CreateInvoicePdfArchiveRequest;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
@@ -77,7 +76,7 @@ class CreateCompanyInvoicePdfArchive extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|ErrorResponse
+     * @return null
      *
      * @throws CreateCompanyInvoicePdfArchiveBadRequestException
      * @throws CreateCompanyInvoicePdfArchiveUnauthorizedException
@@ -109,9 +108,6 @@ class CreateCompanyInvoicePdfArchive extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new CreateCompanyInvoicePdfArchiveInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

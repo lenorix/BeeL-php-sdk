@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\DisconnectCompanyPaymentConnectionIntern
 use Lenorix\BeelSdk\Generated\Exception\DisconnectCompanyPaymentConnectionNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\DisconnectCompanyPaymentConnectionTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\DisconnectCompanyPaymentConnectionUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
@@ -66,7 +65,7 @@ class DisconnectCompanyPaymentConnection extends BaseEndpoint implements Endpoin
      * {@inheritdoc}
      *
      *
-     * @return null|ErrorResponse
+     * @return null
      *
      * @throws DisconnectCompanyPaymentConnectionUnauthorizedException
      * @throws DisconnectCompanyPaymentConnectionForbiddenException
@@ -95,9 +94,6 @@ class DisconnectCompanyPaymentConnection extends BaseEndpoint implements Endpoin
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new DisconnectCompanyPaymentConnectionInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

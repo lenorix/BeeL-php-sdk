@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsForbiddenEx
 use Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\ListCompanyPaymentConnectionsUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\ListManagedPaymentConnectionsResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -68,7 +67,7 @@ class ListCompanyPaymentConnections extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|ListManagedPaymentConnectionsResponse|ErrorResponse
+     * @return null|ListManagedPaymentConnectionsResponse
      *
      * @throws ListCompanyPaymentConnectionsBadRequestException
      * @throws ListCompanyPaymentConnectionsUnauthorizedException
@@ -97,9 +96,6 @@ class ListCompanyPaymentConnections extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new ListCompanyPaymentConnectionsInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

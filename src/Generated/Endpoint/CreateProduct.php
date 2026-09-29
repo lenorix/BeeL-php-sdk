@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\CreateProductInternalServerErrorExceptio
 use Lenorix\BeelSdk\Generated\Exception\CreateProductUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\CreateProductUnprocessableEntityException;
 use Lenorix\BeelSdk\Generated\Model\CreateProductRequest;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1ProductsPostResponse201;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -97,7 +96,7 @@ class CreateProduct extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1ProductsPostResponse201|ErrorResponse
+     * @return null|V1ProductsPostResponse201
      *
      * @throws CreateProductBadRequestException
      * @throws CreateProductUnauthorizedException
@@ -130,9 +129,6 @@ class CreateProduct extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new CreateProductInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

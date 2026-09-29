@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\CreateSeriesInternalServerErrorException
 use Lenorix\BeelSdk\Generated\Exception\CreateSeriesUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\CreateSeriesUnprocessableEntityException;
 use Lenorix\BeelSdk\Generated\Model\CreateSeriesRequest;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1ConfigurationSeriesPostResponse201;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -103,7 +102,7 @@ class CreateSeries extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1ConfigurationSeriesPostResponse201|ErrorResponse
+     * @return null|V1ConfigurationSeriesPostResponse201
      *
      * @throws CreateSeriesBadRequestException
      * @throws CreateSeriesUnauthorizedException
@@ -136,9 +135,6 @@ class CreateSeries extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new CreateSeriesInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

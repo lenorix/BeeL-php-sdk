@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\DeleteCustomerInternalServerErrorExcepti
 use Lenorix\BeelSdk\Generated\Exception\DeleteCustomerNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\DeleteCustomerTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\DeleteCustomerUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1CustomersCustomerIdDeleteResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -82,7 +81,7 @@ class DeleteCustomer extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CustomersCustomerIdDeleteResponse200|ErrorResponse
+     * @return null|V1CustomersCustomerIdDeleteResponse200
      *
      * @throws DeleteCustomerBadRequestException
      * @throws DeleteCustomerUnauthorizedException
@@ -119,9 +118,6 @@ class DeleteCustomer extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new DeleteCustomerInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

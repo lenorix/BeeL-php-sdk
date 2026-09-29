@@ -10,7 +10,6 @@ use Lenorix\BeelSdk\Generated\Exception\CreateCompanyCustomerImportRequestEntity
 use Lenorix\BeelSdk\Generated\Exception\CreateCompanyCustomerImportTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\CreateCompanyCustomerImportUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\CreateCompanyCustomerImportUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersImportsPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersImportsPostResponse201;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -121,7 +120,7 @@ class CreateCompanyCustomerImport extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CompaniesCompanyIdCustomersImportsPostResponse201|ErrorResponse
+     * @return null|V1CompaniesCompanyIdCustomersImportsPostResponse201
      *
      * @throws CreateCompanyCustomerImportBadRequestException
      * @throws CreateCompanyCustomerImportUnauthorizedException
@@ -158,9 +157,6 @@ class CreateCompanyCustomerImport extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new CreateCompanyCustomerImportInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

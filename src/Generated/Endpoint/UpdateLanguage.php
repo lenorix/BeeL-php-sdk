@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\UpdateLanguageForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateLanguageInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateLanguageUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateLanguageUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1ConfigurationLanguagePutBody;
 use Lenorix\BeelSdk\Generated\Model\V1ConfigurationLanguagePutResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -67,7 +66,7 @@ class UpdateLanguage extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1ConfigurationLanguagePutResponse200|ErrorResponse
+     * @return null|V1ConfigurationLanguagePutResponse200
      *
      * @throws UpdateLanguageBadRequestException
      * @throws UpdateLanguageUnauthorizedException
@@ -96,9 +95,6 @@ class UpdateLanguage extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new UpdateLanguageInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\UpdateSeriesInternalServerErrorException
 use Lenorix\BeelSdk\Generated\Exception\UpdateSeriesNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateSeriesUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateSeriesUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\UpdateSeriesRequest;
 use Lenorix\BeelSdk\Generated\Model\V1ConfigurationSeriesSeriesIdPutResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -80,7 +79,7 @@ class UpdateSeries extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1ConfigurationSeriesSeriesIdPutResponse200|ErrorResponse
+     * @return null|V1ConfigurationSeriesSeriesIdPutResponse200
      *
      * @throws UpdateSeriesBadRequestException
      * @throws UpdateSeriesUnauthorizedException
@@ -113,9 +112,6 @@ class UpdateSeries extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new UpdateSeriesInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

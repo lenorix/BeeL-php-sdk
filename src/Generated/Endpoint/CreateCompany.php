@@ -13,7 +13,6 @@ use Lenorix\BeelSdk\Generated\Exception\CreateCompanyUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\CreateCompanyUnprocessableEntityException;
 use Lenorix\BeelSdk\Generated\Model\CompanyResponse201;
 use Lenorix\BeelSdk\Generated\Model\CreateCompanyRequest;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
@@ -115,7 +114,7 @@ class CreateCompany extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|CompanyResponse201|ErrorResponse
+     * @return null|CompanyResponse201
      *
      * @throws CreateCompanyBadRequestException
      * @throws CreateCompanyUnauthorizedException
@@ -160,9 +159,6 @@ class CreateCompany extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 502 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new CreateCompanyBadGatewayException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

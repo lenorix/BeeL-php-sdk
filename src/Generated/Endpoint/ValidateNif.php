@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\ValidateNifInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\ValidateNifTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\ValidateNifUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\ValidateNifUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1NifValidatePostResponse200;
 use Lenorix\BeelSdk\Generated\Model\ValidateNifRequest;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -76,7 +75,7 @@ class ValidateNif extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1NifValidatePostResponse200|ErrorResponse
+     * @return null|V1NifValidatePostResponse200
      *
      * @throws ValidateNifBadRequestException
      * @throws ValidateNifUnauthorizedException
@@ -109,9 +108,6 @@ class ValidateNif extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new ValidateNifInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

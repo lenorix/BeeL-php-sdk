@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\ListAccountMemberGrantsNotFoundException
 use Lenorix\BeelSdk\Generated\Exception\ListAccountMemberGrantsTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\ListAccountMemberGrantsUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\ListAccountMemberGrantsUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdMembersMemberIdGrantsGetResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -82,7 +81,7 @@ class ListAccountMemberGrants extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1AccountsAccountIdMembersMemberIdGrantsGetResponse200|ErrorResponse
+     * @return null|V1AccountsAccountIdMembersMemberIdGrantsGetResponse200
      *
      * @throws ListAccountMemberGrantsUnauthorizedException
      * @throws ListAccountMemberGrantsForbiddenException
@@ -115,9 +114,6 @@ class ListAccountMemberGrants extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new ListAccountMemberGrantsInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

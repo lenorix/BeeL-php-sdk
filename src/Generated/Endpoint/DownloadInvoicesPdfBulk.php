@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\DownloadInvoicesPdfBulkInternalServerErr
 use Lenorix\BeelSdk\Generated\Exception\DownloadInvoicesPdfBulkTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\DownloadInvoicesPdfBulkUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\DownloadInvoicesPdfBulkUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesBulkPdfPostBody;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -74,7 +73,7 @@ class DownloadInvoicesPdfBulk extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|ErrorResponse
+     * @return null
      *
      * @throws DownloadInvoicesPdfBulkBadRequestException
      * @throws DownloadInvoicesPdfBulkUnauthorizedException
@@ -106,9 +105,6 @@ class DownloadInvoicesPdfBulk extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new DownloadInvoicesPdfBulkInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

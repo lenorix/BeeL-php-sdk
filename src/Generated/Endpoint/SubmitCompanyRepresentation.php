@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\SubmitCompanyRepresentationInternalServe
 use Lenorix\BeelSdk\Generated\Exception\SubmitCompanyRepresentationRequestEntityTooLargeException;
 use Lenorix\BeelSdk\Generated\Exception\SubmitCompanyRepresentationTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\SubmitCompanyRepresentationUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\RepresentationActionResponse;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRepresentationSubmitPostBody;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -126,7 +125,7 @@ class SubmitCompanyRepresentation extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|RepresentationActionResponse|ErrorResponse
+     * @return null|RepresentationActionResponse
      *
      * @throws SubmitCompanyRepresentationBadRequestException
      * @throws SubmitCompanyRepresentationUnauthorizedException
@@ -159,9 +158,6 @@ class SubmitCompanyRepresentation extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new SubmitCompanyRepresentationInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

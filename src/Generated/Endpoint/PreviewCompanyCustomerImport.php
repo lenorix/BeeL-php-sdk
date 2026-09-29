@@ -10,7 +10,6 @@ use Lenorix\BeelSdk\Generated\Exception\PreviewCompanyCustomerImportRequestEntit
 use Lenorix\BeelSdk\Generated\Exception\PreviewCompanyCustomerImportTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\PreviewCompanyCustomerImportUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\PreviewCompanyCustomerImportUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersImportsPreviewPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersImportsPreviewPostResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -93,7 +92,7 @@ class PreviewCompanyCustomerImport extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CompaniesCompanyIdCustomersImportsPreviewPostResponse200|ErrorResponse
+     * @return null|V1CompaniesCompanyIdCustomersImportsPreviewPostResponse200
      *
      * @throws PreviewCompanyCustomerImportBadRequestException
      * @throws PreviewCompanyCustomerImportUnauthorizedException
@@ -130,9 +129,6 @@ class PreviewCompanyCustomerImport extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new PreviewCompanyCustomerImportInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

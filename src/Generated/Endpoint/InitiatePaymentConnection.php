@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\InitiatePaymentConnectionInternalServerE
 use Lenorix\BeelSdk\Generated\Exception\InitiatePaymentConnectionTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\InitiatePaymentConnectionUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\InitiatePaymentConnectionUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\InitiatePaymentConnectionRequest;
 use Lenorix\BeelSdk\Generated\Model\InitiatePaymentConnectionResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -118,7 +117,7 @@ class InitiatePaymentConnection extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|InitiatePaymentConnectionResponse|ErrorResponse
+     * @return null|InitiatePaymentConnectionResponse
      *
      * @throws InitiatePaymentConnectionBadRequestException
      * @throws InitiatePaymentConnectionUnauthorizedException
@@ -151,9 +150,6 @@ class InitiatePaymentConnection extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new InitiatePaymentConnectionInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

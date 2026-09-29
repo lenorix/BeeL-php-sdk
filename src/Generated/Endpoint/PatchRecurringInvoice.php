@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceConflictException;
 use Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\PatchRecurringInvoiceUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\PatchRecurringInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\V1RecurringInvoicesRecurringInvoiceIdPatchResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -81,7 +80,7 @@ class PatchRecurringInvoice extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1RecurringInvoicesRecurringInvoiceIdPatchResponse200|ErrorResponse
+     * @return null|V1RecurringInvoicesRecurringInvoiceIdPatchResponse200
      *
      * @throws PatchRecurringInvoiceBadRequestException
      * @throws PatchRecurringInvoiceForbiddenException
@@ -110,9 +109,6 @@ class PatchRecurringInvoice extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 422 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new PatchRecurringInvoiceUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

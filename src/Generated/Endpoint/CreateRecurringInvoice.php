@@ -6,7 +6,6 @@ use Lenorix\BeelSdk\Generated\Exception\CreateRecurringInvoiceBadRequestExceptio
 use Lenorix\BeelSdk\Generated\Exception\CreateRecurringInvoiceForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\CreateRecurringInvoiceUnprocessableEntityException;
 use Lenorix\BeelSdk\Generated\Model\CreateRecurringInvoiceRequest;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1RecurringInvoicesPostResponse201;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -115,7 +114,7 @@ class CreateRecurringInvoice extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1RecurringInvoicesPostResponse201|ErrorResponse
+     * @return null|V1RecurringInvoicesPostResponse201
      *
      * @throws CreateRecurringInvoiceBadRequestException
      * @throws CreateRecurringInvoiceForbiddenException
@@ -136,9 +135,6 @@ class CreateRecurringInvoice extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 422 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new CreateRecurringInvoiceUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

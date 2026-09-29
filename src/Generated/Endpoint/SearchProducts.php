@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\SearchProductsForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\SearchProductsInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\SearchProductsUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\SearchProductsUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1ProductsSearchGetResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -87,7 +86,7 @@ class SearchProducts extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1ProductsSearchGetResponse200|ErrorResponse
+     * @return null|V1ProductsSearchGetResponse200
      *
      * @throws SearchProductsBadRequestException
      * @throws SearchProductsUnauthorizedException
@@ -116,9 +115,6 @@ class SearchProducts extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new SearchProductsInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

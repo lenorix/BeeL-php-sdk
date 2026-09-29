@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\PatchCompanyByIdTooManyRequestsException
 use Lenorix\BeelSdk\Generated\Exception\PatchCompanyByIdUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\PatchCompanyByIdUnprocessableEntityException;
 use Lenorix\BeelSdk\Generated\Model\CompanyResponse;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\UpdateCompanyRequest;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -101,7 +100,7 @@ class PatchCompanyById extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|CompanyResponse|ErrorResponse
+     * @return null|CompanyResponse
      *
      * @throws PatchCompanyByIdUnauthorizedException
      * @throws PatchCompanyByIdForbiddenException
@@ -130,9 +129,6 @@ class PatchCompanyById extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new PatchCompanyByIdInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

@@ -10,7 +10,6 @@ use Lenorix\BeelSdk\Generated\Exception\CreateCompanyInvoiceDerivationTooManyReq
 use Lenorix\BeelSdk\Generated\Exception\CreateCompanyInvoiceDerivationUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\CreateCompanyInvoiceDerivationUnprocessableEntityException;
 use Lenorix\BeelSdk\Generated\Model\CreateInvoiceDerivationRequest;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesDerivationsPostResponse201;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -106,7 +105,7 @@ class CreateCompanyInvoiceDerivation extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CompaniesCompanyIdInvoicesDerivationsPostResponse201|ErrorResponse
+     * @return null|V1CompaniesCompanyIdInvoicesDerivationsPostResponse201
      *
      * @throws CreateCompanyInvoiceDerivationBadRequestException
      * @throws CreateCompanyInvoiceDerivationUnauthorizedException
@@ -143,9 +142,6 @@ class CreateCompanyInvoiceDerivation extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new CreateCompanyInvoiceDerivationInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

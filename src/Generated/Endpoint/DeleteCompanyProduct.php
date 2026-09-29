@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\DeleteCompanyProductInternalServerErrorE
 use Lenorix\BeelSdk\Generated\Exception\DeleteCompanyProductNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\DeleteCompanyProductTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\DeleteCompanyProductUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
@@ -58,7 +57,7 @@ class DeleteCompanyProduct extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|ErrorResponse
+     * @return null
      *
      * @throws DeleteCompanyProductUnauthorizedException
      * @throws DeleteCompanyProductForbiddenException
@@ -87,9 +86,6 @@ class DeleteCompanyProduct extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new DeleteCompanyProductInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

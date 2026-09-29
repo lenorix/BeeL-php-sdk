@@ -5,7 +5,6 @@ namespace Lenorix\BeelSdk\Generated\Endpoint;
 use Lenorix\BeelSdk\Generated\Exception\PauseRecurringInvoiceBadRequestException;
 use Lenorix\BeelSdk\Generated\Exception\PauseRecurringInvoiceForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\PauseRecurringInvoiceNotFoundException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1RecurringInvoicesRecurringInvoiceIdPausePostResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -90,7 +89,7 @@ class PauseRecurringInvoice extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1RecurringInvoicesRecurringInvoiceIdPausePostResponse200|ErrorResponse
+     * @return null|V1RecurringInvoicesRecurringInvoiceIdPausePostResponse200
      *
      * @throws PauseRecurringInvoiceBadRequestException
      * @throws PauseRecurringInvoiceForbiddenException
@@ -111,9 +110,6 @@ class PauseRecurringInvoice extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 404 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new PauseRecurringInvoiceNotFoundException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

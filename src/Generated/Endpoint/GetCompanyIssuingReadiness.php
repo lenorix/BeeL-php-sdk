@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\GetCompanyIssuingReadinessForbiddenExcep
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyIssuingReadinessInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyIssuingReadinessTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyIssuingReadinessUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\IssuingReadinessResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -68,7 +67,7 @@ class GetCompanyIssuingReadiness extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|IssuingReadinessResponse|ErrorResponse
+     * @return null|IssuingReadinessResponse
      *
      * @throws GetCompanyIssuingReadinessBadRequestException
      * @throws GetCompanyIssuingReadinessUnauthorizedException
@@ -97,9 +96,6 @@ class GetCompanyIssuingReadiness extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new GetCompanyIssuingReadinessInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

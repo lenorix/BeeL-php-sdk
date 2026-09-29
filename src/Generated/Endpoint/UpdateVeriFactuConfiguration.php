@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\UpdateVeriFactuConfigurationForbiddenExc
 use Lenorix\BeelSdk\Generated\Exception\UpdateVeriFactuConfigurationInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateVeriFactuConfigurationUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateVeriFactuConfigurationUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\UpdateVeriFactuConfigurationRequest;
 use Lenorix\BeelSdk\Generated\Model\V1ConfigurationVerifactuPutResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -81,7 +80,7 @@ class UpdateVeriFactuConfiguration extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1ConfigurationVerifactuPutResponse200|ErrorResponse
+     * @return null|V1ConfigurationVerifactuPutResponse200
      *
      * @throws UpdateVeriFactuConfigurationBadRequestException
      * @throws UpdateVeriFactuConfigurationUnauthorizedException
@@ -110,9 +109,6 @@ class UpdateVeriFactuConfiguration extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new UpdateVeriFactuConfigurationInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

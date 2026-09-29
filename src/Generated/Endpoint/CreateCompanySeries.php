@@ -10,7 +10,6 @@ use Lenorix\BeelSdk\Generated\Exception\CreateCompanySeriesTooManyRequestsExcept
 use Lenorix\BeelSdk\Generated\Exception\CreateCompanySeriesUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\CreateCompanySeriesUnprocessableEntityException;
 use Lenorix\BeelSdk\Generated\Model\CreateSeriesRequest;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdSeriesPostResponse201;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -110,7 +109,7 @@ class CreateCompanySeries extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CompaniesCompanyIdSeriesPostResponse201|ErrorResponse
+     * @return null|V1CompaniesCompanyIdSeriesPostResponse201
      *
      * @throws CreateCompanySeriesBadRequestException
      * @throws CreateCompanySeriesUnauthorizedException
@@ -147,9 +146,6 @@ class CreateCompanySeries extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new CreateCompanySeriesInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

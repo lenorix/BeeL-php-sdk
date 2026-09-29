@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\GetCompanyPaymentEventNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyPaymentEventTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyPaymentEventUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyPaymentEventUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\ManagedPaymentEventResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -69,7 +68,7 @@ class GetCompanyPaymentEvent extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|ManagedPaymentEventResponse|ErrorResponse
+     * @return null|ManagedPaymentEventResponse
      *
      * @throws GetCompanyPaymentEventUnauthorizedException
      * @throws GetCompanyPaymentEventForbiddenException
@@ -102,9 +101,6 @@ class GetCompanyPaymentEvent extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new GetCompanyPaymentEventInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

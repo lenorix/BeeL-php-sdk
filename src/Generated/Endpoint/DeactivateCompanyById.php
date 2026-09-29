@@ -6,7 +6,6 @@ use Lenorix\BeelSdk\Generated\Exception\DeactivateCompanyByIdForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\DeactivateCompanyByIdInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\DeactivateCompanyByIdTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\DeactivateCompanyByIdUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdActivationsDeleteResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -91,7 +90,7 @@ class DeactivateCompanyById extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CompaniesCompanyIdActivationsDeleteResponse200|ErrorResponse
+     * @return null|V1CompaniesCompanyIdActivationsDeleteResponse200
      *
      * @throws DeactivateCompanyByIdUnauthorizedException
      * @throws DeactivateCompanyByIdForbiddenException
@@ -116,9 +115,6 @@ class DeactivateCompanyById extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new DeactivateCompanyByIdInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

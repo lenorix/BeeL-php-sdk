@@ -313,9 +313,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -392,9 +389,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -707,9 +701,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -902,9 +893,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -993,9 +981,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -1113,9 +1098,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -1182,9 +1164,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -1312,9 +1291,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -1548,9 +1524,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -1686,9 +1659,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -1797,9 +1767,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -1899,9 +1866,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -1975,9 +1939,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -2152,9 +2113,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -2264,9 +2222,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -2382,9 +2337,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -2527,9 +2479,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -2650,9 +2599,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -2760,9 +2706,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -2868,9 +2811,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -2958,9 +2898,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -3082,9 +3019,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -3172,9 +3106,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -3283,9 +3214,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -3427,9 +3355,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -3607,9 +3532,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -3932,9 +3854,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -4142,9 +4061,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -4271,9 +4187,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -4391,9 +4304,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -4513,9 +4423,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -4709,9 +4616,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -4850,9 +4754,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -4949,9 +4850,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -5064,9 +4962,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -5120,9 +5015,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -5223,9 +5115,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -5338,9 +5227,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -5435,9 +5321,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -5522,9 +5405,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -5720,9 +5600,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -5868,9 +5745,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -5999,9 +5873,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -6124,9 +5995,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -6287,9 +6155,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -6419,9 +6284,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -6545,9 +6407,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -6628,9 +6487,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -6739,9 +6595,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -6800,9 +6653,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -6889,9 +6739,6 @@
                                 }
                             }
                         }
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -7024,9 +6871,6 @@
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableQueryParameter"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -7093,9 +6937,6 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -7180,9 +7021,6 @@
                                 }
                             }
                         }
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -7294,9 +7132,6 @@
                                 }
                             }
                         }
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -7342,9 +7177,6 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -7417,9 +7249,6 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -7495,9 +7324,6 @@
                     },
                     "409": {
                         "$ref": "#/components/responses/StateConflict"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -7596,9 +7422,6 @@
                                 }
                             }
                         }
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -7671,9 +7494,6 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -7756,9 +7576,6 @@
                                 }
                             }
                         }
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -7836,9 +7653,6 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -7927,9 +7741,6 @@
                                 }
                             }
                         }
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -8077,9 +7888,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -8194,9 +8002,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -8276,9 +8081,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -8368,9 +8170,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -8493,9 +8292,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -8539,9 +8335,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -8660,9 +8453,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -8757,9 +8547,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -8862,9 +8649,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -8980,9 +8764,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -9118,9 +8899,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -9246,9 +9024,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -9435,9 +9210,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -9566,9 +9338,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -9651,9 +9420,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -9739,9 +9505,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -9837,9 +9600,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -9941,9 +9701,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -10115,9 +9872,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -10191,9 +9945,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -10316,9 +10067,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -10432,9 +10180,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -10634,9 +10379,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -10771,9 +10513,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -10933,9 +10672,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -11010,9 +10746,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -11132,9 +10865,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -11248,9 +10978,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -11351,9 +11078,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -11460,9 +11184,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -11533,9 +11254,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -11602,9 +11320,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -11672,9 +11387,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -11742,9 +11454,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -11915,9 +11624,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -12004,9 +11710,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -12082,9 +11785,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -12166,9 +11866,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -12253,9 +11950,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -12295,9 +11989,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -12398,9 +12089,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -12509,9 +12197,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -12653,9 +12338,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -12850,9 +12532,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -12961,9 +12640,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -13094,9 +12770,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -13227,9 +12900,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -13326,9 +12996,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -13435,9 +13102,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -13488,9 +13152,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -13579,9 +13240,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -13650,9 +13308,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -13736,9 +13391,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -13778,9 +13430,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -13872,9 +13521,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -13978,9 +13624,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -14017,9 +13660,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -14083,9 +13723,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -14184,9 +13821,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -14301,9 +13935,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -14386,9 +14017,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -14443,9 +14071,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -14585,9 +14210,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -14728,9 +14350,6 @@
                                 }
                             }
                         }
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -14818,9 +14437,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -14904,9 +14520,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -14954,9 +14567,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -15105,9 +14715,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -15195,9 +14802,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -15326,9 +14930,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -15441,9 +15042,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -15547,9 +15145,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -15607,9 +15202,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -15681,9 +15273,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -15729,9 +15318,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -15789,9 +15375,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -15849,9 +15432,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -15923,9 +15503,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -16047,9 +15624,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -16136,9 +15710,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -16212,9 +15783,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -16283,9 +15851,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -16377,9 +15942,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -16472,9 +16034,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -16535,9 +16094,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -16632,9 +16188,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -16752,9 +16305,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -16800,9 +16350,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -16858,9 +16405,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -17052,9 +16596,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -17225,9 +16766,6 @@
                                 }
                             }
                         }
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -17310,9 +16848,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -17397,9 +16932,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -17464,9 +16996,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -17550,9 +17079,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -17613,9 +17139,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -17673,9 +17196,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -17760,9 +17280,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -17849,9 +17366,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -17966,9 +17480,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -18045,9 +17556,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -18124,9 +17632,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -18188,9 +17693,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -18249,9 +17751,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -18295,9 +17794,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -18369,9 +17865,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -18464,9 +17957,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -18581,9 +18071,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -18624,9 +18111,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -18703,9 +18187,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -18797,9 +18278,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -18876,9 +18354,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -18962,9 +18437,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -19041,9 +18513,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -19127,9 +18596,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -19270,9 +18736,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -19381,9 +18844,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -19472,9 +18932,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -19551,9 +19008,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -19649,9 +19103,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -19762,9 +19213,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -19825,9 +19273,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -19945,9 +19390,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -20051,9 +19493,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -20117,9 +19556,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -20185,9 +19621,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -20289,9 +19722,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -20382,9 +19812,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -20428,9 +19855,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -20642,9 +20066,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -20704,9 +20125,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -20781,9 +20199,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -20870,9 +20285,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -20947,9 +20359,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -21024,9 +20433,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -21091,9 +20497,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -21341,9 +20744,6 @@
                     },
                     "422": {
                         "$ref": "#/components/responses/WebhookSubscriptionValidationError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -21419,9 +20819,6 @@
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableQueryParameter"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -21490,9 +20887,6 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -21575,9 +20969,6 @@
                     },
                     "422": {
                         "$ref": "#/components/responses/WebhookSubscriptionValidationError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -21625,9 +21016,6 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -21740,9 +21128,6 @@
                     },
                     "422": {
                         "$ref": "#/components/responses/UnprocessableQueryParameter"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -21823,9 +21208,6 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -21927,9 +21309,6 @@
                     },
                     "409": {
                         "$ref": "#/components/responses/StateConflict"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -22001,9 +21380,6 @@
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFound"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -22268,9 +21644,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -22349,9 +21722,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -22431,9 +21801,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -22513,9 +21880,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             },
@@ -22552,9 +21916,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -22677,9 +22038,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -22774,9 +22132,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -22888,9 +22243,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -22975,9 +22327,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -23130,9 +22479,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -23209,9 +22555,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -23356,9 +22699,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -23428,9 +22768,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -23608,9 +22945,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -23693,9 +23027,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -23775,9 +23106,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -23936,9 +23264,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -24004,9 +23329,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }
@@ -24067,9 +23389,6 @@
                     },
                     "500": {
                         "$ref": "#/components/responses/InternalServerError"
-                    },
-                    "default": {
-                        "$ref": "#/components/responses/UnexpectedError"
                     }
                 }
             }

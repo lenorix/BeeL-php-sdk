@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\SendInvoiceEmailNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\SendInvoiceEmailTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\SendInvoiceEmailUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\SendInvoiceEmailUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\SendEmailRequest;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSendPostResponse200;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdSendPostResponse202;
@@ -105,7 +104,7 @@ class SendInvoiceEmail extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1InvoicesInvoiceIdSendPostResponse200|V1InvoicesInvoiceIdSendPostResponse202|ErrorResponse
+     * @return null|V1InvoicesInvoiceIdSendPostResponse200|V1InvoicesInvoiceIdSendPostResponse202
      *
      * @throws SendInvoiceEmailBadRequestException
      * @throws SendInvoiceEmailUnauthorizedException
@@ -145,9 +144,6 @@ class SendInvoiceEmail extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new SendInvoiceEmailInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

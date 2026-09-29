@@ -6,7 +6,6 @@ use Lenorix\BeelSdk\Generated\Exception\UpdateRecurringInvoiceConflictException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateRecurringInvoiceForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateRecurringInvoiceNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateRecurringInvoiceUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\UpdateRecurringInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\V1RecurringInvoicesRecurringInvoiceIdPutResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -75,7 +74,7 @@ class UpdateRecurringInvoice extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1RecurringInvoicesRecurringInvoiceIdPutResponse200|ErrorResponse
+     * @return null|V1RecurringInvoicesRecurringInvoiceIdPutResponse200
      *
      * @throws UpdateRecurringInvoiceForbiddenException
      * @throws UpdateRecurringInvoiceNotFoundException
@@ -100,9 +99,6 @@ class UpdateRecurringInvoice extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 422 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new UpdateRecurringInvoiceUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

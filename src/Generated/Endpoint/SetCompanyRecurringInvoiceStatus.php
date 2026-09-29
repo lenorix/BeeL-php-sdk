@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\SetCompanyRecurringInvoiceStatusNotFound
 use Lenorix\BeelSdk\Generated\Exception\SetCompanyRecurringInvoiceStatusTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\SetCompanyRecurringInvoiceStatusUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\SetCompanyRecurringInvoiceStatusUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\SetRecurringInvoiceStatusRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdStatusPutResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -116,7 +115,7 @@ class SetCompanyRecurringInvoiceStatus extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdStatusPutResponse200|ErrorResponse
+     * @return null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdStatusPutResponse200
      *
      * @throws SetCompanyRecurringInvoiceStatusBadRequestException
      * @throws SetCompanyRecurringInvoiceStatusUnauthorizedException
@@ -153,9 +152,6 @@ class SetCompanyRecurringInvoiceStatus extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new SetCompanyRecurringInvoiceStatusInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

@@ -10,7 +10,6 @@ use Lenorix\BeelSdk\Generated\Exception\PatchCompanyProductNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\PatchCompanyProductTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\PatchCompanyProductUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\PatchCompanyProductUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\PatchProductRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsProductIdPatchResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -76,7 +75,7 @@ class PatchCompanyProduct extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CompaniesCompanyIdProductsProductIdPatchResponse200|ErrorResponse
+     * @return null|V1CompaniesCompanyIdProductsProductIdPatchResponse200
      *
      * @throws PatchCompanyProductBadRequestException
      * @throws PatchCompanyProductUnauthorizedException
@@ -117,9 +116,6 @@ class PatchCompanyProduct extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new PatchCompanyProductInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

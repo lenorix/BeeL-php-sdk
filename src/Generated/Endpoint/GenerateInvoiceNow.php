@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\GenerateInvoiceNowConflictException;
 use Lenorix\BeelSdk\Generated\Exception\GenerateInvoiceNowForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\GenerateInvoiceNowNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\GenerateInvoiceNowUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1RecurringInvoicesRecurringInvoiceIdGeneratePostResponse201;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -101,7 +100,7 @@ class GenerateInvoiceNow extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1RecurringInvoicesRecurringInvoiceIdGeneratePostResponse201|ErrorResponse
+     * @return null|V1RecurringInvoicesRecurringInvoiceIdGeneratePostResponse201
      *
      * @throws GenerateInvoiceNowBadRequestException
      * @throws GenerateInvoiceNowForbiddenException
@@ -130,9 +129,6 @@ class GenerateInvoiceNow extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 422 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new GenerateInvoiceNowUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

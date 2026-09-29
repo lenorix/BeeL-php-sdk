@@ -12,7 +12,6 @@ use Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportTooManyRequestsExcep
 use Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\PreviewAccountImportUnprocessableEntityException;
 use Lenorix\BeelSdk\Generated\Model\AccountImportUpload;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsImportsPreviewPostResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -99,7 +98,7 @@ class PreviewAccountImport extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1AccountsImportsPreviewPostResponse200|ErrorResponse
+     * @return null|V1AccountsImportsPreviewPostResponse200
      *
      * @throws PreviewAccountImportBadRequestException
      * @throws PreviewAccountImportUnauthorizedException
@@ -140,9 +139,6 @@ class PreviewAccountImport extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new PreviewAccountImportInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

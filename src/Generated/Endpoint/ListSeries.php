@@ -6,7 +6,6 @@ use Lenorix\BeelSdk\Generated\Exception\ListSeriesForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\ListSeriesInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\ListSeriesUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\ListSeriesUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1ConfigurationSeriesGetResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -84,7 +83,7 @@ class ListSeries extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1ConfigurationSeriesGetResponse200|ErrorResponse
+     * @return null|V1ConfigurationSeriesGetResponse200
      *
      * @throws ListSeriesUnauthorizedException
      * @throws ListSeriesForbiddenException
@@ -109,9 +108,6 @@ class ListSeries extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new ListSeriesInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

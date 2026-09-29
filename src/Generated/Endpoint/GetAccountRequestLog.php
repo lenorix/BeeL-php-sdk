@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\GetAccountRequestLogInternalServerErrorE
 use Lenorix\BeelSdk\Generated\Exception\GetAccountRequestLogNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\GetAccountRequestLogTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\GetAccountRequestLogUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\RequestLogSingleResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -87,7 +86,7 @@ class GetAccountRequestLog extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|RequestLogSingleResponse|ErrorResponse
+     * @return null|RequestLogSingleResponse
      *
      * @throws GetAccountRequestLogUnauthorizedException
      * @throws GetAccountRequestLogForbiddenException
@@ -116,9 +115,6 @@ class GetAccountRequestLog extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new GetAccountRequestLogInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

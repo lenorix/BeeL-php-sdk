@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\PreviewDraftInvoicePdfInternalServerErro
 use Lenorix\BeelSdk\Generated\Exception\PreviewDraftInvoicePdfNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\PreviewDraftInvoicePdfTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\PreviewDraftInvoicePdfUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
@@ -69,7 +68,7 @@ class PreviewDraftInvoicePdf extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|ErrorResponse
+     * @return null
      *
      * @throws PreviewDraftInvoicePdfBadRequestException
      * @throws PreviewDraftInvoicePdfUnauthorizedException
@@ -101,9 +100,6 @@ class PreviewDraftInvoicePdf extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new PreviewDraftInvoicePdfInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

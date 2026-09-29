@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\CreateWebhookSubscriptionForbiddenExcept
 use Lenorix\BeelSdk\Generated\Exception\CreateWebhookSubscriptionUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\CreateWebhookSubscriptionUnprocessableEntityException;
 use Lenorix\BeelSdk\Generated\Model\CreateWebhookSubscriptionRequest;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1WebhooksPostResponse201;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -108,7 +107,7 @@ class CreateWebhookSubscription extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1WebhooksPostResponse201|ErrorResponse
+     * @return null|V1WebhooksPostResponse201
      *
      * @throws CreateWebhookSubscriptionBadRequestException
      * @throws CreateWebhookSubscriptionUnauthorizedException
@@ -133,9 +132,6 @@ class CreateWebhookSubscription extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 422 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new CreateWebhookSubscriptionUnprocessableEntityException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

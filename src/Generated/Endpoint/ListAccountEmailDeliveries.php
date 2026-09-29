@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\ListAccountEmailDeliveriesTooManyRequest
 use Lenorix\BeelSdk\Generated\Exception\ListAccountEmailDeliveriesUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\ListAccountEmailDeliveriesUnprocessableEntityException;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryListResponse;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
@@ -98,7 +97,7 @@ class ListAccountEmailDeliveries extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|EmailDeliveryListResponse|ErrorResponse
+     * @return null|EmailDeliveryListResponse
      *
      * @throws ListAccountEmailDeliveriesBadRequestException
      * @throws ListAccountEmailDeliveriesUnauthorizedException
@@ -131,9 +130,6 @@ class ListAccountEmailDeliveries extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new ListAccountEmailDeliveriesInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

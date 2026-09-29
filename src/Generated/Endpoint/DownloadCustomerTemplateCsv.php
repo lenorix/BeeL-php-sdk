@@ -6,7 +6,6 @@ use Lenorix\BeelSdk\Generated\Exception\DownloadCustomerTemplateCsvForbiddenExce
 use Lenorix\BeelSdk\Generated\Exception\DownloadCustomerTemplateCsvInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\DownloadCustomerTemplateCsvTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\DownloadCustomerTemplateCsvUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
@@ -64,7 +63,7 @@ class DownloadCustomerTemplateCsv extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|ErrorResponse
+     * @return null
      *
      * @throws DownloadCustomerTemplateCsvUnauthorizedException
      * @throws DownloadCustomerTemplateCsvForbiddenException
@@ -88,9 +87,6 @@ class DownloadCustomerTemplateCsv extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new DownloadCustomerTemplateCsvInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

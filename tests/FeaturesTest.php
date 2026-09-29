@@ -1728,25 +1728,82 @@ it('sends a list of IDs to bulk deletes as the comma-separated value BeeL expect
         ->and(rawurldecode($transport->requests[1]->getUri()->getQuery()))->toBe('ids=id-1,id-2');
 })->with(['customers', 'products']);
 
+/**
+ * Run a call and collect the deprecations it triggers in the SDK's own code, generated code included.
+ *
+ * @return list<string>
+ */
+function deprecationsFromSource(Closure $call): array
+{
+    $deprecations = [];
+    $source = str_replace('\\', '/', (string) realpath(__DIR__.'/../src')).'/';
+    set_error_handler(static function (int $level, string $message, string $file) use (&$deprecations, $source): bool {
+        if (str_starts_with(str_replace('\\', '/', $file), $source)) {
+            $deprecations[] = $message;
+        }
+
+        return true;
+    }, E_DEPRECATED | E_USER_DEPRECATED);
+
+    try {
+        $call();
+    } finally {
+        restore_error_handler();
+    }
+
+    return $deprecations;
+}
+
 it('reports a success status without a readable body as unexpected, not as a TypeError', function (Response $response) {
     $transport = new RecordingPsrClient([$response]);
 
-    expect(fn () => testClient($transport)->company('c')->invoices->get('inv-1'))
-        ->toThrow(BeelUnexpectedResponseError::class);
+    $deprecations = deprecationsFromSource(fn () => expect(fn () => testClient($transport)->company('c')->invoices->get('inv-1'))
+        ->toThrow(BeelUnexpectedResponseError::class));
+
+    expect($deprecations)->toBe([]);
 })->with([
-    // A Content-Type keeps Jane's generated code from lowercasing a missing one (null), which PHP deprecates.
-    'undeclared status' => fn () => new Response(202, ['Content-Type' => 'text/plain', 'X-Request-Id' => 'req-1']),
-    'undeclared 204' => fn () => new Response(204, ['Content-Type' => 'text/plain']),
+    'undeclared status' => fn () => new Response(202, ['X-Request-Id' => 'req-1']),
+    'undeclared 204' => fn () => new Response(204),
     'declared status, empty body' => fn () => new Response(200, ['Content-Type' => 'application/json']),
     'declared status, not JSON' => fn () => new Response(200, ['Content-Type' => 'text/html'], '<html></html>'),
 ]);
 
 it('reports a preview answered without a readable body as unexpected, and 202 as not ready', function () {
-    $transport = new RecordingPsrClient([new Response(200, ['Content-Type' => 'text/plain']), new Response(202, ['Retry-After' => '3'])]);
+    $transport = new RecordingPsrClient([new Response(200), new Response(202, ['Retry-After' => '3'])]);
     $invoices = testClient($transport)->company('c')->invoices;
 
-    expect(fn () => $invoices->preview('inv-1'))->toThrow(BeelUnexpectedResponseError::class)
-        ->and(fn () => $invoices->preview('inv-1'))->toThrow(BeelNotReadyError::class);
+    $deprecations = deprecationsFromSource(fn () => expect(fn () => $invoices->preview('inv-1'))->toThrow(BeelUnexpectedResponseError::class)
+        ->and(fn () => $invoices->preview('inv-1'))->toThrow(BeelNotReadyError::class));
+
+    expect($deprecations)->toBe([]);
+});
+
+it('maps an error status the operation does not declare from its body, or its status alone', function () {
+    // getCompanyInvoice declares neither 409 nor 503.
+    $transport = new RecordingPsrClient([
+        new Response(409, ['Content-Type' => 'application/json'], '{"success":false,"error":{"code":"INVOICE_LOCKED","message":"Locked"},"meta":{"request_id":"req-409"}}'),
+        new Response(503),
+    ]);
+    $invoices = testClient($transport)->company('c')->invoices;
+    $errors = [];
+
+    $deprecations = deprecationsFromSource(function () use ($invoices, &$errors) {
+        foreach ([1, 2] as $attempt) {
+            try {
+                $invoices->get('inv-1');
+            } catch (BeelApiError $exception) {
+                $errors[] = $exception;
+            }
+        }
+    });
+
+    expect($deprecations)->toBe([])
+        ->and($errors)->toHaveCount(2)
+        ->and($errors[0])->toBeInstanceOf(BeelConflictError::class)
+        ->and($errors[0]->apiCode)->toBe('INVOICE_LOCKED')
+        ->and($errors[0]->getMessage())->toBe('Locked')
+        ->and($errors[0]->requestId)->toBe('req-409')
+        ->and($errors[1]->statusCode)->toBe(503);
 });
 
 it('accepts the empty 204 of operations that return nothing', function () {

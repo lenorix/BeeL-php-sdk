@@ -5,7 +5,6 @@ namespace Lenorix\BeelSdk\Generated\Endpoint;
 use Lenorix\BeelSdk\Generated\Exception\RetryWebhookDeliveryForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\RetryWebhookDeliveryNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\RetryWebhookDeliveryUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1WebhooksWebhookIdDeliveriesDeliveryIdRetryPostResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -98,7 +97,7 @@ class RetryWebhookDelivery extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1WebhooksWebhookIdDeliveriesDeliveryIdRetryPostResponse200|ErrorResponse
+     * @return null|V1WebhooksWebhookIdDeliveriesDeliveryIdRetryPostResponse200
      *
      * @throws RetryWebhookDeliveryUnauthorizedException
      * @throws RetryWebhookDeliveryForbiddenException
@@ -119,9 +118,6 @@ class RetryWebhookDelivery extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 404 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new RetryWebhookDeliveryNotFoundException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\PutAccountMemberGrantNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\PutAccountMemberGrantTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\PutAccountMemberGrantUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\PutAccountMemberGrantUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\PutMemberGrantRequest;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdMembersMemberIdGrantsCompanyIdPutResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -79,7 +78,7 @@ class PutAccountMemberGrant extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1AccountsAccountIdMembersMemberIdGrantsCompanyIdPutResponse200|ErrorResponse
+     * @return null|V1AccountsAccountIdMembersMemberIdGrantsCompanyIdPutResponse200
      *
      * @throws PutAccountMemberGrantBadRequestException
      * @throws PutAccountMemberGrantUnauthorizedException
@@ -116,9 +115,6 @@ class PutAccountMemberGrant extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new PutAccountMemberGrantInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

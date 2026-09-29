@@ -13,7 +13,6 @@ use Lenorix\BeelSdk\Generated\Exception\CreateAccountImportTooManyRequestsExcept
 use Lenorix\BeelSdk\Generated\Exception\CreateAccountImportUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\CreateAccountImportUnprocessableEntityException;
 use Lenorix\BeelSdk\Generated\Model\AccountImportUpload;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsImportsPostResponse201;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -158,7 +157,7 @@ class CreateAccountImport extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1AccountsImportsPostResponse201|ErrorResponse
+     * @return null|V1AccountsImportsPostResponse201
      *
      * @throws CreateAccountImportBadRequestException
      * @throws CreateAccountImportUnauthorizedException
@@ -203,9 +202,6 @@ class CreateAccountImport extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new CreateAccountImportInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

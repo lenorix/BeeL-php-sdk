@@ -10,7 +10,6 @@ use Lenorix\BeelSdk\Generated\Exception\ImportHoldedContactsRequestEntityTooLarg
 use Lenorix\BeelSdk\Generated\Exception\ImportHoldedContactsTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\ImportHoldedContactsUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\ImportHoldedContactsUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1CustomersImportHoldedContactsPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CustomersImportHoldedContactsPostResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -131,7 +130,7 @@ class ImportHoldedContacts extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CustomersImportHoldedContactsPostResponse200|ErrorResponse
+     * @return null|V1CustomersImportHoldedContactsPostResponse200
      *
      * @throws ImportHoldedContactsBadRequestException
      * @throws ImportHoldedContactsUnauthorizedException
@@ -168,9 +167,6 @@ class ImportHoldedContacts extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new ImportHoldedContactsInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

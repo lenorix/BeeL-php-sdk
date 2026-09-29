@@ -6,7 +6,6 @@ use Lenorix\BeelSdk\Generated\Exception\DeleteProductForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\DeleteProductInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\DeleteProductNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\DeleteProductUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
@@ -58,7 +57,7 @@ class DeleteProduct extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|ErrorResponse
+     * @return null
      *
      * @throws DeleteProductUnauthorizedException
      * @throws DeleteProductForbiddenException
@@ -83,9 +82,6 @@ class DeleteProduct extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new DeleteProductInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

@@ -10,7 +10,6 @@ use Lenorix\BeelSdk\Generated\Exception\CreateAccountClaimTokenTooManyRequestsEx
 use Lenorix\BeelSdk\Generated\Exception\CreateAccountClaimTokenUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\CreateAccountClaimTokenUnprocessableEntityException;
 use Lenorix\BeelSdk\Generated\Model\CreateClaimTokenRequest;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdClaimTokensPostResponse201;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -109,7 +108,7 @@ class CreateAccountClaimToken extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1AccountsAccountIdClaimTokensPostResponse201|ErrorResponse
+     * @return null|V1AccountsAccountIdClaimTokensPostResponse201
      *
      * @throws CreateAccountClaimTokenUnauthorizedException
      * @throws CreateAccountClaimTokenForbiddenException
@@ -146,9 +145,6 @@ class CreateAccountClaimToken extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new CreateAccountClaimTokenInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

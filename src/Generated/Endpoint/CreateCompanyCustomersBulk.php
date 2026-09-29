@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\CreateCompanyCustomersBulkInternalServer
 use Lenorix\BeelSdk\Generated\Exception\CreateCompanyCustomersBulkTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\CreateCompanyCustomersBulkUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\CreateCompanyCustomersBulkUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersBulkPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersBulkPostResponse200;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersBulkPostResponse201;
@@ -123,7 +122,7 @@ class CreateCompanyCustomersBulk extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CompaniesCompanyIdCustomersBulkPostResponse200|V1CompaniesCompanyIdCustomersBulkPostResponse201|ErrorResponse
+     * @return null|V1CompaniesCompanyIdCustomersBulkPostResponse200|V1CompaniesCompanyIdCustomersBulkPostResponse201
      *
      * @throws CreateCompanyCustomersBulkBadRequestException
      * @throws CreateCompanyCustomersBulkUnauthorizedException
@@ -163,9 +162,6 @@ class CreateCompanyCustomersBulk extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new CreateCompanyCustomersBulkInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

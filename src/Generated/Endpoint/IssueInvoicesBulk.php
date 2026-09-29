@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\IssueInvoicesBulkTooManyRequestsExceptio
 use Lenorix\BeelSdk\Generated\Exception\IssueInvoicesBulkUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\IssueInvoicesBulkUnprocessableEntityException;
 use Lenorix\BeelSdk\Generated\Model\BulkOperationResponse;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesBulkIssuePostBody;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -100,7 +99,7 @@ class IssueInvoicesBulk extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|BulkOperationResponse|ErrorResponse
+     * @return null|BulkOperationResponse
      *
      * @throws IssueInvoicesBulkBadRequestException
      * @throws IssueInvoicesBulkUnauthorizedException
@@ -133,9 +132,6 @@ class IssueInvoicesBulk extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new IssueInvoicesBulkInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

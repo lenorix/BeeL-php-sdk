@@ -5,7 +5,6 @@ namespace Lenorix\BeelSdk\Generated\Endpoint;
 use Lenorix\BeelSdk\Generated\Exception\SkipNextGenerationBadRequestException;
 use Lenorix\BeelSdk\Generated\Exception\SkipNextGenerationForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\SkipNextGenerationNotFoundException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1RecurringInvoicesRecurringInvoiceIdSkipPostResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -91,7 +90,7 @@ class SkipNextGeneration extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1RecurringInvoicesRecurringInvoiceIdSkipPostResponse200|ErrorResponse
+     * @return null|V1RecurringInvoicesRecurringInvoiceIdSkipPostResponse200
      *
      * @throws SkipNextGenerationBadRequestException
      * @throws SkipNextGenerationForbiddenException
@@ -112,9 +111,6 @@ class SkipNextGeneration extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 404 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new SkipNextGenerationNotFoundException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

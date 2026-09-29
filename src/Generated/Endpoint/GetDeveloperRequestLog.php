@@ -6,7 +6,6 @@ use Lenorix\BeelSdk\Generated\Exception\GetDeveloperRequestLogForbiddenException
 use Lenorix\BeelSdk\Generated\Exception\GetDeveloperRequestLogInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\GetDeveloperRequestLogNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\GetDeveloperRequestLogUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\RequestLogSingleResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -84,7 +83,7 @@ class GetDeveloperRequestLog extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|RequestLogSingleResponse|ErrorResponse
+     * @return null|RequestLogSingleResponse
      *
      * @throws GetDeveloperRequestLogUnauthorizedException
      * @throws GetDeveloperRequestLogForbiddenException
@@ -109,9 +108,6 @@ class GetDeveloperRequestLog extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new GetDeveloperRequestLogInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

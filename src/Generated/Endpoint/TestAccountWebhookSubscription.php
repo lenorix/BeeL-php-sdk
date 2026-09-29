@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\TestAccountWebhookSubscriptionInternalSe
 use Lenorix\BeelSdk\Generated\Exception\TestAccountWebhookSubscriptionNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\TestAccountWebhookSubscriptionTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\TestAccountWebhookSubscriptionUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdWebhooksWebhookIdTestPostResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -103,7 +102,7 @@ class TestAccountWebhookSubscription extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1AccountsAccountIdWebhooksWebhookIdTestPostResponse200|ErrorResponse
+     * @return null|V1AccountsAccountIdWebhooksWebhookIdTestPostResponse200
      *
      * @throws TestAccountWebhookSubscriptionUnauthorizedException
      * @throws TestAccountWebhookSubscriptionForbiddenException
@@ -132,9 +131,6 @@ class TestAccountWebhookSubscription extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new TestAccountWebhookSubscriptionInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

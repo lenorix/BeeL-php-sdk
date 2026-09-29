@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\ChangeManagedAccountAccessLevelInternalS
 use Lenorix\BeelSdk\Generated\Exception\ChangeManagedAccountAccessLevelTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\ChangeManagedAccountAccessLevelUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Model\ChangeAccessLevelRequest;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
@@ -69,7 +68,7 @@ class ChangeManagedAccountAccessLevel extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|ErrorResponse
+     * @return null
      *
      * @throws ChangeManagedAccountAccessLevelBadRequestException
      * @throws ChangeManagedAccountAccessLevelUnauthorizedException
@@ -98,9 +97,6 @@ class ChangeManagedAccountAccessLevel extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new ChangeManagedAccountAccessLevelInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

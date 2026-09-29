@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\UpdateCustomerNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateCustomerTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateCustomerUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateCustomerUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\UpdateCustomerRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CustomersCustomerIdPutResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -84,7 +83,7 @@ class UpdateCustomer extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CustomersCustomerIdPutResponse200|ErrorResponse
+     * @return null|V1CustomersCustomerIdPutResponse200
      *
      * @throws UpdateCustomerBadRequestException
      * @throws UpdateCustomerUnauthorizedException
@@ -121,9 +120,6 @@ class UpdateCustomer extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new UpdateCustomerInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

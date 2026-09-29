@@ -10,7 +10,6 @@ use Lenorix\BeelSdk\Generated\Exception\CreateInvoiceTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\CreateInvoiceUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\CreateInvoiceUnprocessableEntityException;
 use Lenorix\BeelSdk\Generated\Model\CreateInvoiceRequest;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesPostResponse201;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -143,7 +142,7 @@ class CreateInvoice extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1InvoicesPostResponse201|ErrorResponse
+     * @return null|V1InvoicesPostResponse201
      *
      * @throws CreateInvoiceBadRequestException
      * @throws CreateInvoiceUnauthorizedException
@@ -180,9 +179,6 @@ class CreateInvoice extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new CreateInvoiceInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

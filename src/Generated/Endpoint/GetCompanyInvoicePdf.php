@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\GetCompanyInvoicePdfInternalServerErrorE
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyInvoicePdfNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyInvoicePdfTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyInvoicePdfUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\InvoicePdfResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -104,7 +103,7 @@ class GetCompanyInvoicePdf extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|InvoicePdfResponse|ErrorResponse
+     * @return null|InvoicePdfResponse
      *
      * @throws GetCompanyInvoicePdfBadRequestException
      * @throws GetCompanyInvoicePdfUnauthorizedException
@@ -140,9 +139,6 @@ class GetCompanyInvoicePdf extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new GetCompanyInvoicePdfInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

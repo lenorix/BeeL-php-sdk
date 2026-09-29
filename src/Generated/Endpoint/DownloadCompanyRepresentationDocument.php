@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\DownloadCompanyRepresentationDocumentFor
 use Lenorix\BeelSdk\Generated\Exception\DownloadCompanyRepresentationDocumentInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\DownloadCompanyRepresentationDocumentTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\DownloadCompanyRepresentationDocumentUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\RepresentationDownloadResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -61,7 +60,7 @@ class DownloadCompanyRepresentationDocument extends BaseEndpoint implements Endp
      * {@inheritdoc}
      *
      *
-     * @return null|RepresentationDownloadResponse|ErrorResponse
+     * @return null|RepresentationDownloadResponse
      *
      * @throws DownloadCompanyRepresentationDocumentBadRequestException
      * @throws DownloadCompanyRepresentationDocumentUnauthorizedException
@@ -90,9 +89,6 @@ class DownloadCompanyRepresentationDocument extends BaseEndpoint implements Endp
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new DownloadCompanyRepresentationDocumentInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

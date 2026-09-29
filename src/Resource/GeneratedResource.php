@@ -181,18 +181,14 @@ abstract readonly class GeneratedResource
         }
 
         $httpResponse = $this->responseContext?->response();
-        // For a status the contract does not declare, the generated client reads any JSON body as an
-        // ErrorResponse. On a 2xx that would report a possible success as a failed request.
-        if ($response instanceof ErrorResponse && $httpResponse !== null
-            && $httpResponse->getStatusCode() >= 200 && $httpResponse->getStatusCode() < 300) {
-            throw new BeelUnexpectedResponseError($httpResponse->getStatusCode(), $httpResponse->getHeaderLine('X-Request-Id') ?: null);
-        }
-        // An error status Jane has no model for (such as an empty 503 from a proxy) comes back as null.
-        if ($response instanceof ErrorResponse || ($httpResponse !== null && $httpResponse->getStatusCode() >= 400)) {
+        // An error status the operation does not declare (such as an empty 503 from a proxy) comes back
+        // as null, and is read from its body here. A client generated with BeeL's `default` response,
+        // which bin/prepare-openapi.php drops, returns an ErrorResponse for it instead.
+        if ($httpResponse !== null && $httpResponse->getStatusCode() >= 400) {
             throw BeelApiError::fromErrorResponse(
                 $response instanceof ErrorResponse ? $response : new ErrorResponse,
                 $httpResponse,
-                $this->responseContext?->body(),
+                $this->responseContext->body(),
             );
         }
 
@@ -200,15 +196,21 @@ abstract readonly class GeneratedResource
     }
 
     /**
-     * Jane reads nothing (null) from a success status without a JSON body, which the operation
-     * returning a model cannot turn into its result.
+     * Jane reads nothing (null) from a success status the operation does not declare or whose body is
+     * not JSON, which an operation returning a model cannot turn into its result. A client generated
+     * with BeeL's `default` response reads such a JSON body as an ErrorResponse instead: on a success
+     * status, that would report a possible success as a failed request.
      */
     private function requireBody(mixed $response): mixed
     {
-        if ($response === null) {
+        if ($response === null || $response instanceof ErrorResponse) {
             $unreadable = $this->unreadable();
             if ($unreadable !== null) {
                 throw $unreadable;
+            }
+            if ($response instanceof ErrorResponse) {
+                // Without the HTTP response to tell a success from a failure, keep reporting the error.
+                throw BeelApiError::fromErrorResponse($response);
             }
         }
 

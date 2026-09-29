@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\GetCompanyVeriFactuConfigurationForbidde
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyVeriFactuConfigurationInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyVeriFactuConfigurationTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyVeriFactuConfigurationUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdVerifactuConfigurationGetResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -56,7 +55,7 @@ class GetCompanyVeriFactuConfiguration extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CompaniesCompanyIdVerifactuConfigurationGetResponse200|ErrorResponse
+     * @return null|V1CompaniesCompanyIdVerifactuConfigurationGetResponse200
      *
      * @throws GetCompanyVeriFactuConfigurationBadRequestException
      * @throws GetCompanyVeriFactuConfigurationUnauthorizedException
@@ -85,9 +84,6 @@ class GetCompanyVeriFactuConfiguration extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new GetCompanyVeriFactuConfigurationInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\ListCompaniesInternalServerErrorExceptio
 use Lenorix\BeelSdk\Generated\Exception\ListCompaniesTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\ListCompaniesUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\ListCompaniesUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\ListCompanies200Response;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -88,7 +87,7 @@ class ListCompanies extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|ListCompanies200Response|ErrorResponse
+     * @return null|ListCompanies200Response
      *
      * @throws ListCompaniesBadRequestException
      * @throws ListCompaniesUnauthorizedException
@@ -121,9 +120,6 @@ class ListCompanies extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new ListCompaniesInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

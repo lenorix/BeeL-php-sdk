@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\GetAccountEmailDeliveryNotFoundException
 use Lenorix\BeelSdk\Generated\Exception\GetAccountEmailDeliveryTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\GetAccountEmailDeliveryUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryDetailResponse;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
@@ -66,7 +65,7 @@ class GetAccountEmailDelivery extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|EmailDeliveryDetailResponse|ErrorResponse
+     * @return null|EmailDeliveryDetailResponse
      *
      * @throws GetAccountEmailDeliveryBadRequestException
      * @throws GetAccountEmailDeliveryUnauthorizedException
@@ -99,9 +98,6 @@ class GetAccountEmailDelivery extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new GetAccountEmailDeliveryInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

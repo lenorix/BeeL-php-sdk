@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\CreateCustomersBulkInternalServerErrorEx
 use Lenorix\BeelSdk\Generated\Exception\CreateCustomersBulkTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\CreateCustomersBulkUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\CreateCustomersBulkUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1CustomersBulkPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CustomersBulkPostResponse200;
 use Lenorix\BeelSdk\Generated\Model\V1CustomersBulkPostResponse201;
@@ -123,7 +122,7 @@ class CreateCustomersBulk extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CustomersBulkPostResponse200|V1CustomersBulkPostResponse201|ErrorResponse
+     * @return null|V1CustomersBulkPostResponse200|V1CustomersBulkPostResponse201
      *
      * @throws CreateCustomersBulkBadRequestException
      * @throws CreateCustomersBulkUnauthorizedException
@@ -159,9 +158,6 @@ class CreateCustomersBulk extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new CreateCustomersBulkInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

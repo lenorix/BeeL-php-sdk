@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\UpdateCompanyPaymentConnectionTooManyReq
 use Lenorix\BeelSdk\Generated\Exception\UpdateCompanyPaymentConnectionUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\UpdateCompanyPaymentConnectionUnprocessableEntityException;
 use Lenorix\BeelSdk\Generated\Model\CompanyPaymentConnectionResponse;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\UpdateCompanyPaymentConnectionRequest;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -112,7 +111,7 @@ class UpdateCompanyPaymentConnection extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|CompanyPaymentConnectionResponse|ErrorResponse
+     * @return null|CompanyPaymentConnectionResponse
      *
      * @throws UpdateCompanyPaymentConnectionUnauthorizedException
      * @throws UpdateCompanyPaymentConnectionForbiddenException
@@ -145,9 +144,6 @@ class UpdateCompanyPaymentConnection extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new UpdateCompanyPaymentConnectionInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

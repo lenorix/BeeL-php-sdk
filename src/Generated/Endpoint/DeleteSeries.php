@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\DeleteSeriesForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\DeleteSeriesInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\DeleteSeriesNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\DeleteSeriesUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
@@ -68,7 +67,7 @@ class DeleteSeries extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|ErrorResponse
+     * @return null
      *
      * @throws DeleteSeriesBadRequestException
      * @throws DeleteSeriesUnauthorizedException
@@ -97,9 +96,6 @@ class DeleteSeries extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new DeleteSeriesInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

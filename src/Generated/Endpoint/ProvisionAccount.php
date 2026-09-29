@@ -10,7 +10,6 @@ use Lenorix\BeelSdk\Generated\Exception\ProvisionAccountInternalServerErrorExcep
 use Lenorix\BeelSdk\Generated\Exception\ProvisionAccountTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\ProvisionAccountUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\ProvisionAccountUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\ProvisionAccountRequest;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsPostResponse201;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -118,7 +117,7 @@ class ProvisionAccount extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1AccountsPostResponse201|ErrorResponse
+     * @return null|V1AccountsPostResponse201
      *
      * @throws ProvisionAccountBadRequestException
      * @throws ProvisionAccountUnauthorizedException
@@ -159,9 +158,6 @@ class ProvisionAccount extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 502 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new ProvisionAccountBadGatewayException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

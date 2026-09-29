@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\DuplicateInvoiceNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\DuplicateInvoiceTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\DuplicateInvoiceUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\DuplicateInvoiceUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdDuplicatePostBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdDuplicatePostResponse201;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -106,7 +105,7 @@ class DuplicateInvoice extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1InvoicesInvoiceIdDuplicatePostResponse201|ErrorResponse
+     * @return null|V1InvoicesInvoiceIdDuplicatePostResponse201
      *
      * @throws DuplicateInvoiceBadRequestException
      * @throws DuplicateInvoiceUnauthorizedException
@@ -143,9 +142,6 @@ class DuplicateInvoice extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new DuplicateInvoiceInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

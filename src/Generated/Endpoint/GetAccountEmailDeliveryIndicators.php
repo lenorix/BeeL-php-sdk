@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\GetAccountEmailDeliveryIndicatorsInterna
 use Lenorix\BeelSdk\Generated\Exception\GetAccountEmailDeliveryIndicatorsTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\GetAccountEmailDeliveryIndicatorsUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryIndicatorListResponse;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
@@ -87,7 +86,7 @@ class GetAccountEmailDeliveryIndicators extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|EmailDeliveryIndicatorListResponse|ErrorResponse
+     * @return null|EmailDeliveryIndicatorListResponse
      *
      * @throws GetAccountEmailDeliveryIndicatorsBadRequestException
      * @throws GetAccountEmailDeliveryIndicatorsUnauthorizedException
@@ -116,9 +115,6 @@ class GetAccountEmailDeliveryIndicators extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new GetAccountEmailDeliveryIndicatorsInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

@@ -336,7 +336,7 @@ In the query, booleans are sent as `true`/`false`, lists as a comma-separated va
 
 ### Raw Jane client
 
-`$beel->raw` exposes the generated Jane client, with typed models for every operation in the contract. It uses the same authentication and transport, but it returns Jane's `ErrorResponse` models or exceptions instead of `BeelApiError`:
+`$beel->raw` exposes the generated Jane client, with typed models for every operation in the contract. It uses the same authentication and transport, but it throws Jane's exceptions instead of `BeelApiError`, and returns `null` for a status the operation does not declare:
 
 ```php
 $identity = $beel->raw->getMyIdentity();

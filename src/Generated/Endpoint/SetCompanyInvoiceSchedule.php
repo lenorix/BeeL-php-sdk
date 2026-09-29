@@ -10,7 +10,6 @@ use Lenorix\BeelSdk\Generated\Exception\SetCompanyInvoiceScheduleNotFoundExcepti
 use Lenorix\BeelSdk\Generated\Exception\SetCompanyInvoiceScheduleTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\SetCompanyInvoiceScheduleUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\SetCompanyInvoiceScheduleUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\SetInvoiceScheduleRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdInvoicesInvoiceIdSchedulePutResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -109,7 +108,7 @@ class SetCompanyInvoiceSchedule extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CompaniesCompanyIdInvoicesInvoiceIdSchedulePutResponse200|ErrorResponse
+     * @return null|V1CompaniesCompanyIdInvoicesInvoiceIdSchedulePutResponse200
      *
      * @throws SetCompanyInvoiceScheduleBadRequestException
      * @throws SetCompanyInvoiceScheduleUnauthorizedException
@@ -150,9 +149,6 @@ class SetCompanyInvoiceSchedule extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new SetCompanyInvoiceScheduleInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\GetCompanyCustomerInternalServerErrorExc
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyCustomerNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyCustomerTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyCustomerUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersCustomerIdGetResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -60,7 +59,7 @@ class GetCompanyCustomer extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CompaniesCompanyIdCustomersCustomerIdGetResponse200|ErrorResponse
+     * @return null|V1CompaniesCompanyIdCustomersCustomerIdGetResponse200
      *
      * @throws GetCompanyCustomerBadRequestException
      * @throws GetCompanyCustomerUnauthorizedException
@@ -93,9 +92,6 @@ class GetCompanyCustomer extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new GetCompanyCustomerInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

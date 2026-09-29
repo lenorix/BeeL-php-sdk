@@ -10,7 +10,6 @@ use Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceNextOccurrence
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceNextOccurrenceTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceNextOccurrenceUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\GetCompanyRecurringInvoiceNextOccurrenceUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdNextOccurrenceGetResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -64,7 +63,7 @@ class GetCompanyRecurringInvoiceNextOccurrence extends BaseEndpoint implements E
      * {@inheritdoc}
      *
      *
-     * @return null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdNextOccurrenceGetResponse200|ErrorResponse
+     * @return null|V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdNextOccurrenceGetResponse200
      *
      * @throws GetCompanyRecurringInvoiceNextOccurrenceBadRequestException
      * @throws GetCompanyRecurringInvoiceNextOccurrenceUnauthorizedException
@@ -105,9 +104,6 @@ class GetCompanyRecurringInvoiceNextOccurrence extends BaseEndpoint implements E
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new GetCompanyRecurringInvoiceNextOccurrenceInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

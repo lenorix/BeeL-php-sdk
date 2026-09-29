@@ -6,7 +6,6 @@ use Lenorix\BeelSdk\Generated\Exception\ResumeRecurringInvoiceBadRequestExceptio
 use Lenorix\BeelSdk\Generated\Exception\ResumeRecurringInvoiceConflictException;
 use Lenorix\BeelSdk\Generated\Exception\ResumeRecurringInvoiceForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\ResumeRecurringInvoiceNotFoundException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1RecurringInvoicesRecurringInvoiceIdResumePostResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -95,7 +94,7 @@ class ResumeRecurringInvoice extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1RecurringInvoicesRecurringInvoiceIdResumePostResponse200|ErrorResponse
+     * @return null|V1RecurringInvoicesRecurringInvoiceIdResumePostResponse200
      *
      * @throws ResumeRecurringInvoiceBadRequestException
      * @throws ResumeRecurringInvoiceForbiddenException
@@ -120,9 +119,6 @@ class ResumeRecurringInvoice extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 409 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new ResumeRecurringInvoiceConflictException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

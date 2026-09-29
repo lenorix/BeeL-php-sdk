@@ -6,7 +6,6 @@ use Lenorix\BeelSdk\Generated\Exception\TestWebhookSubscriptionConflictException
 use Lenorix\BeelSdk\Generated\Exception\TestWebhookSubscriptionForbiddenException;
 use Lenorix\BeelSdk\Generated\Exception\TestWebhookSubscriptionNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\TestWebhookSubscriptionUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1WebhooksWebhookIdTestPostResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -101,7 +100,7 @@ class TestWebhookSubscription extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1WebhooksWebhookIdTestPostResponse200|ErrorResponse
+     * @return null|V1WebhooksWebhookIdTestPostResponse200
      *
      * @throws TestWebhookSubscriptionUnauthorizedException
      * @throws TestWebhookSubscriptionForbiddenException
@@ -126,9 +125,6 @@ class TestWebhookSubscription extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 409 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new TestWebhookSubscriptionConflictException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

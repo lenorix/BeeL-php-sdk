@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\PatchCustomerInternalServerErrorExceptio
 use Lenorix\BeelSdk\Generated\Exception\PatchCustomerNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\PatchCustomerUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\PatchCustomerUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\PatchCustomerRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CustomersCustomerIdPatchResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -79,7 +78,7 @@ class PatchCustomer extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1CustomersCustomerIdPatchResponse200|ErrorResponse
+     * @return null|V1CustomersCustomerIdPatchResponse200
      *
      * @throws PatchCustomerBadRequestException
      * @throws PatchCustomerUnauthorizedException
@@ -116,9 +115,6 @@ class PatchCustomer extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new PatchCustomerInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

@@ -10,7 +10,6 @@ use Lenorix\BeelSdk\Generated\Exception\VoidInvoiceNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\VoidInvoiceTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\VoidInvoiceUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\VoidInvoiceUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdVoidPostResponse200;
 use Lenorix\BeelSdk\Generated\Model\VoidInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -110,7 +109,7 @@ class VoidInvoice extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1InvoicesInvoiceIdVoidPostResponse200|ErrorResponse
+     * @return null|V1InvoicesInvoiceIdVoidPostResponse200
      *
      * @throws VoidInvoiceBadRequestException
      * @throws VoidInvoiceUnauthorizedException
@@ -151,9 +150,6 @@ class VoidInvoice extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new VoidInvoiceInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

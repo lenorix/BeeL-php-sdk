@@ -9,7 +9,6 @@ use Lenorix\BeelSdk\Generated\Exception\RescheduleInvoiceNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\RescheduleInvoiceTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\RescheduleInvoiceUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\RescheduleInvoiceUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdReschedulePatchBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdReschedulePatchResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -72,7 +71,7 @@ class RescheduleInvoice extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1InvoicesInvoiceIdReschedulePatchResponse200|ErrorResponse
+     * @return null|V1InvoicesInvoiceIdReschedulePatchResponse200
      *
      * @throws RescheduleInvoiceBadRequestException
      * @throws RescheduleInvoiceUnauthorizedException
@@ -109,9 +108,6 @@ class RescheduleInvoice extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new RescheduleInvoiceInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

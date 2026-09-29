@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\DeleteAccountInvitationInternalServerErr
 use Lenorix\BeelSdk\Generated\Exception\DeleteAccountInvitationNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\DeleteAccountInvitationTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\DeleteAccountInvitationUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
@@ -62,7 +61,7 @@ class DeleteAccountInvitation extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|ErrorResponse
+     * @return null
      *
      * @throws DeleteAccountInvitationUnauthorizedException
      * @throws DeleteAccountInvitationForbiddenException
@@ -91,9 +90,6 @@ class DeleteAccountInvitation extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new DeleteAccountInvitationInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

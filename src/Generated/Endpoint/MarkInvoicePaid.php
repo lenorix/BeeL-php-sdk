@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\MarkInvoicePaidInternalServerErrorExcept
 use Lenorix\BeelSdk\Generated\Exception\MarkInvoicePaidNotFoundException;
 use Lenorix\BeelSdk\Generated\Exception\MarkInvoicePaidTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\MarkInvoicePaidUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdMarkPaidPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1InvoicesInvoiceIdMarkPaidPostResponse200;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
@@ -103,7 +102,7 @@ class MarkInvoicePaid extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|V1InvoicesInvoiceIdMarkPaidPostResponse200|ErrorResponse
+     * @return null|V1InvoicesInvoiceIdMarkPaidPostResponse200
      *
      * @throws MarkInvoicePaidBadRequestException
      * @throws MarkInvoicePaidUnauthorizedException
@@ -136,9 +135,6 @@ class MarkInvoicePaid extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new MarkInvoicePaidInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

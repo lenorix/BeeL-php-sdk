@@ -8,7 +8,6 @@ use Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsInternalServerErro
 use Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Exception\ListAccountRequestLogsUnprocessableEntityException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Model\RequestLogListResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
@@ -103,7 +102,7 @@ class ListAccountRequestLogs extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|RequestLogListResponse|ErrorResponse
+     * @return null|RequestLogListResponse
      *
      * @throws ListAccountRequestLogsBadRequestException
      * @throws ListAccountRequestLogsUnauthorizedException
@@ -136,9 +135,6 @@ class ListAccountRequestLogs extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new ListAccountRequestLogsInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

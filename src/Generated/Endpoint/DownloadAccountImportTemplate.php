@@ -6,7 +6,6 @@ use Lenorix\BeelSdk\Generated\Exception\DownloadAccountImportTemplateForbiddenEx
 use Lenorix\BeelSdk\Generated\Exception\DownloadAccountImportTemplateInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\DownloadAccountImportTemplateTooManyRequestsException;
 use Lenorix\BeelSdk\Generated\Exception\DownloadAccountImportTemplateUnauthorizedException;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
@@ -69,7 +68,7 @@ class DownloadAccountImportTemplate extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|ErrorResponse
+     * @return null
      *
      * @throws DownloadAccountImportTemplateUnauthorizedException
      * @throws DownloadAccountImportTemplateForbiddenException
@@ -93,9 +92,6 @@ class DownloadAccountImportTemplate extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new DownloadAccountImportTemplateInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 

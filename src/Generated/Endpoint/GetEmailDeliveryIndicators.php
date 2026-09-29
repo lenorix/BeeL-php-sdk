@@ -7,7 +7,6 @@ use Lenorix\BeelSdk\Generated\Exception\GetEmailDeliveryIndicatorsForbiddenExcep
 use Lenorix\BeelSdk\Generated\Exception\GetEmailDeliveryIndicatorsInternalServerErrorException;
 use Lenorix\BeelSdk\Generated\Exception\GetEmailDeliveryIndicatorsUnauthorizedException;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryIndicatorListResponse;
-use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\BaseEndpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
 use Lenorix\BeelSdk\Generated\Runtime\Client\EndpointTrait;
@@ -83,7 +82,7 @@ class GetEmailDeliveryIndicators extends BaseEndpoint implements Endpoint
      * {@inheritdoc}
      *
      *
-     * @return null|EmailDeliveryIndicatorListResponse|ErrorResponse
+     * @return null|EmailDeliveryIndicatorListResponse
      *
      * @throws GetEmailDeliveryIndicatorsBadRequestException
      * @throws GetEmailDeliveryIndicatorsUnauthorizedException
@@ -108,9 +107,6 @@ class GetEmailDeliveryIndicators extends BaseEndpoint implements Endpoint
         }
         if (is_null($contentType) === false && ($status === 500 && stripos(strtolower($contentType), 'application/json') !== false)) {
             throw new GetEmailDeliveryIndicatorsInternalServerErrorException($serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json'), $response);
-        }
-        if (stripos(strtolower($contentType), 'application/json') !== false) {
-            return $serializer->deserialize($body, 'Lenorix\BeelSdk\Generated\Model\ErrorResponse', 'json');
         }
     }
 
