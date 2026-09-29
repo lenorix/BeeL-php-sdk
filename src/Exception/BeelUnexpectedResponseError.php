@@ -13,7 +13,7 @@ namespace Lenorix\BeelSdk\Exception;
  * does not treat a possible success as a failure. Inspect `Beel::getLastResponse()` before
  * retrying, since repeating a write that succeeded could duplicate it.
  */
-final class BeelUnexpectedResponseError extends \RuntimeException
+final class BeelUnexpectedResponseError extends \RuntimeException implements BeelException
 {
     /**
      * @param  int  $statusCode  The success status BeeL answered with.

@@ -7,7 +7,9 @@ use Lenorix\BeelSdk\Beel;
 use Lenorix\BeelSdk\Exception\BeelApiError;
 use Lenorix\BeelSdk\Exception\BeelAuthError;
 use Lenorix\BeelSdk\Exception\BeelConflictError;
+use Lenorix\BeelSdk\Exception\BeelException;
 use Lenorix\BeelSdk\Exception\BeelNotFoundError;
+use Lenorix\BeelSdk\Exception\BeelNotReadyError;
 use Lenorix\BeelSdk\Exception\BeelRateLimitError;
 use Lenorix\BeelSdk\Exception\BeelUnexpectedResponseError;
 use Lenorix\BeelSdk\Exception\BeelValidationError;
@@ -190,3 +192,14 @@ it('keeps the code BeeL sends and defaults a rate limit without delay to 60 seco
         ->and($caught[1]->retryAfter)->toBeNull()
         ->and($caught[2]->retryAfterSeconds)->toBe(7);
 });
+
+it('lets callers catch every BeeL response exception as BeelException', function (Response $response, string $class) {
+    $exception = thrown(fn () => testClient(new RecordingPsrClient([$response]))->company('c')->invoices->getPdf('inv-1', waitSeconds: 0), BeelException::class);
+
+    expect($exception)->toBeInstanceOf($class)
+        ->and($exception->context())->toHaveKey('request_id');
+})->with([
+    'error' => [new Response(404, ['Content-Type' => 'application/json'], '{"success":false}'), BeelNotFoundError::class],
+    'not ready' => [new Response(202, ['Retry-After' => '5']), BeelNotReadyError::class],
+    'unreadable success' => [new Response(200, ['Content-Type' => 'text/html'], '<html></html>'), BeelUnexpectedResponseError::class],
+]);

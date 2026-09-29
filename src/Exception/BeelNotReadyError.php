@@ -10,7 +10,7 @@ namespace Lenorix\BeelSdk\Exception;
  * This is not an API error, so it does not extend {@see BeelApiError}: ask again
  * after {@see self::$retryAfter} seconds.
  */
-final class BeelNotReadyError extends \RuntimeException
+final class BeelNotReadyError extends \RuntimeException implements BeelException
 {
     /**
      * @param  string  $message  Human-readable description of what is not ready yet.

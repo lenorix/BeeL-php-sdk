@@ -6,6 +6,7 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 ### Added
 
+- `BeelException`, an interface `BeelApiError`, `BeelNotReadyError` and `BeelUnexpectedResponseError` implement, to catch every exception about a BeeL response at once; each has `context()` with BeeL's request ID.
 - `WebhookEventType::dataModel()` and `requiredDataFields()` give the generated model of an event's `data` and the fields BeeL requires in it.
 - `InvoiceBuilder::mainTax()` sets the tax of the lines added with `addLine()`, which also takes a line's own tax as its fifth argument, like the Node.js SDK: BeeL rejects a normal line without one.
 

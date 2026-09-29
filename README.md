@@ -474,7 +474,7 @@ An error without a JSON body, such as an HTML `502` or an empty `503` from a pro
 
 Two exceptions do not extend `BeelApiError`, because they may not mean a failure. `BeelNotReadyError` (HTTP `202`, see [PDF downloads](#pdf-downloads)) means the result is still being generated. `BeelUnexpectedResponseError` means BeeL answered a success the SDK cannot read: a status it does not know for that operation (BeeL sometimes adds one before the SDK is updated), or a body that is missing or not JSON. The request may have succeeded, so check `getLastResponse()` before retrying.
 
-`$exception->context()` returns `status_code`, `api_code`, `request_id` and `retry_after` as an array, ready for a PSR-3 logging context. It leaves out `details`, because validation errors echo submitted values such as NIFs or amounts; read `$exception->details` explicitly when you need them.
+All three implement `BeelException`, so one `catch (BeelException $exception)` handles every exception about a BeeL response. `$exception->context()` returns `status_code`, `api_code`, `request_id` and `retry_after` as an array, ready for a PSR-3 logging context. It leaves out `details`, because validation errors echo submitted values such as NIFs or amounts; read `$exception->details` explicitly when you need them.
 
 ```php
 use Lenorix\BeelSdk\Exception\BeelNotFoundError;

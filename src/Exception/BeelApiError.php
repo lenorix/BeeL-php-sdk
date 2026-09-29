@@ -13,7 +13,7 @@ use Psr\Http\Message\ResponseInterface;
 use Throwable;
 
 /** Base exception for BeeL API failures, with HTTP and BeeL error metadata. */
-class BeelApiError extends \RuntimeException
+class BeelApiError extends \RuntimeException implements BeelException
 {
     /**
      * @param  string  $message  Human-readable API error message.
