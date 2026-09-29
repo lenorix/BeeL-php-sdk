@@ -77,7 +77,7 @@ Methods return the generated Jane model, so its getters and the complete BeeL re
 
 Date-times become `DateTime` objects with microseconds, the most PHP can hold (BeeL sends nanoseconds), and the ones you send go out with microseconds too. A date-time must be a full RFC 3339 value, or `null` where the field allows it: anything else, such as `''` or `tomorrow`, throws `InvalidDateException` instead of silently becoming the current time.
 
-In arrays passed to resource methods, a date-time field also accepts a date object (`DateTime`, `DateTimeImmutable`, Carbon…). Date-only fields such as `issue_date` take `Y-m-d` strings, and so does every date in a `$beel->request()` body.
+In arrays passed to resource methods, a date-time field also accepts a date object (`DateTime`, `DateTimeImmutable`, Carbon…). Date-only fields such as `due_date` take `Y-m-d` strings, and so does every date in a `$beel->request()` body.
 
 ## Client options
 
@@ -97,7 +97,7 @@ Use a test key (`beel_sk_test_...`) while developing and a live key (`beel_sk_li
 `maxRetries` is the maximum number of retries after the first attempt. The SDK retries `429` and `5xx` responses, and connection errors (timeouts, refused or dropped connections, DNS failures), with the same key on every attempt of a POST:
 
 - **Waiting:** when BeeL asks for a delay (`Retry-After` in seconds or as an HTTP date, or `retry_after` in the error body), the SDK waits exactly that long. If BeeL asks for longer than `maxRetryDelayMs`, the SDK does not wait less: it stops and throws, and `BeelRateLimitError::$retryAfterSeconds` (or `$retryAfter` on other errors) tells you how long to wait. Without a delay from BeeL it uses exponential backoff up to `maxRetryDelayMs`.
-- **What is repeated:** a `429` is always retried, because BeeL rejects it without applying the request. A `5xx` or a connection error may hide a request that was applied, so it is retried only for GET, PUT and DELETE, and for POST or PATCH carrying an `Idempotency-Key` (POST requests get one automatically unless `autoIdempotencyKey` is `false`). File downloads (`createPdfArchive()`, `export()`) do not retry them by default. Other client errors are not retried.
+- **What is repeated:** a `429` is always retried, because BeeL rejects it without applying the request. A `5xx` or a connection error may hide a request that was applied, so it is retried only for GET, HEAD, OPTIONS, PUT and DELETE, and for POST or PATCH carrying an `Idempotency-Key` (POST requests get one automatically unless `autoIdempotencyKey` is `false`). File downloads (`createPdfArchive()`, `export()`) do not retry them by default. Other client errors are not retried.
 - **Waits block the process** in PHP. To handle waits yourself, for example with a queued job's `release()`, set `maxRetries: 0` on the client or per call with `RequestOptions(maxRetries: 0)` and use `retryAfterSeconds` from the exception. The same setting avoids real waits in your application's tests.
 
 The client is instance-based. Each `Beel` instance has its own API key and transport; there is no global configuration or shared authentication state.
@@ -129,7 +129,7 @@ $customer = $company->customers->create($customerRequest);
 $product = $company->products->create($productRequest);
 $company->series->ensureDefaults();
 
-$summary = $company->fiscalSummary(['year' => 2026]);
+$summary = $company->fiscalSummary(['start_date' => '2026-01-01', 'end_date' => '2026-12-31']);
 $readiness = $company->issuingReadiness();
 ```
 
@@ -190,8 +190,8 @@ A stable idempotency key lets you retry a write safely after a timeout or a cras
 ```php
 $identity = $beel->me->identity();
 $identity->getAccountId();
-$identity->getCredential()->getEnvironment();
-$identity->getCredential()->getScopes();
+$identity->getCredential()?->getEnvironment();
+$identity->getCredential()?->getScopes();
 ```
 
 ## Switching a company on
@@ -423,7 +423,7 @@ if ($event->getType() === 'invoice.issued'
 }
 ```
 
-`verifyEvent()` returns Jane's generated `WebhookEvent` model, with `data` denormalized to the model of its event type, which suits dispatching typed framework events such as Laravel's. `verify()` returns the decoded payload as an array instead.
+`verifyEvent()` returns Jane's generated `WebhookEvent` model, with `data` denormalized to the model of its event type (an array for a type this SDK does not know yet), which suits dispatching typed framework events such as Laravel's. `verify()` returns the decoded payload as an array instead.
 
 To build the typed model later from a payload `verify()` already returned, for example in a queued job, use `$verifier->toEvent($payload)`, or the static `WebhookVerifier::eventFromPayload($payload)`, which needs no secret. Neither checks the signature again, so pass only verified payloads.
 
@@ -436,7 +436,7 @@ Each failure has its own exception, and all of them extend `WebhookVerificationE
 | `WebhookHeaderError` | The `BeeL-Signature` header is missing or malformed. |
 | `WebhookTimestampError` | The signed timestamp is outside the replay window. It exposes `timestamp`, `now` and `toleranceSeconds`. |
 | `WebhookSignatureError` | No signature matches the body: the secret is wrong or was rotated, or the body changed. |
-| `WebhookPayloadError` | The signature is valid, but the body is not a JSON object or does not match the event schema. |
+| `WebhookPayloadError` | The signature is valid, but the body is not a JSON object, or the event lacks a field BeeL always sends or does not match the event schema. |
 
 To reject malformed or stale requests before computing the HMAC, parse the header and check its timestamp first:
 
@@ -498,7 +498,7 @@ The SDK follows the official [`@beel_es/sdk`](https://www.npmjs.com/package/@bee
 - **Error data:** every error keeps the code and `details` BeeL sent. The Node.js SDK replaces the code of 401, 403, 404, 409, 422 and 429 errors with a fixed one, and drops `details` on all of them except 422, so a check such as `apiCode === 'UNPROCESSABLE_ENTITY'` only matches when BeeL sent no code.
 - **Arguments and return values:** requests can be arrays in API format, like the Node.js SDK's plain objects, or Jane models. Methods return Jane models (objects with getters), not plain JSON, and list methods return the whole page with its pagination.
 - **Retries:** they actually run (the Node.js SDK's retry middleware never fires), keep the same `Idempotency-Key` on every attempt, and honor `autoIdempotencyKey: false`. Connection errors are retried too, with the same safety rules as a `5xx`, and a delay BeeL asks for is never shortened. See [Client options](#client-options).
-- **Webhooks:** every `v1` signature in the header is checked, so a secret rotation does not break verification. The body must be a string with the exact bytes received. `verify()` returns an array and `verifyEvent()` a typed model; failures use the subclasses of `WebhookVerificationError`.
+- **Webhooks:** every `v1` signature in the header is checked. BeeL sends one and invalidates the old secret as soon as you rotate it, so switch the receiver to the new secret at once. The body must be a string with the exact bytes received. `verify()` returns an array and `verifyEvent()` a typed model; failures use the subclasses of `WebhookVerificationError`.
 - **Query parameters:** list filters such as `status` accept a single value or a list and are sent as a comma-separated value (`status=DRAFT,ISSUED`), as the OpenAPI contract describes; the Node.js SDK repeats the parameter instead. Booleans are sent as `true`/`false`, like in the Node.js SDK.
 - **Request IDs:** `requestId` comes from the `X-Request-Id` header when present, then from `meta.request_id` in the body; the Node.js SDK reads only the body.
 - **Any endpoint:** `$beel->request()` is the equivalent of `beel.raw.GET(...)`. `$beel->raw` is the generated Jane client, which does not map errors to `BeelApiError`.

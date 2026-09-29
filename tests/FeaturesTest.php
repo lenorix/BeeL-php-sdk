@@ -456,7 +456,7 @@ it('exposes API error data as a logging context without submitted values', funct
 
 it('builds the typed event from an already verified payload', function () {
     $verifier = new WebhookVerifier('whsec_test');
-    $body = json_encode(['id' => 'evt-1', 'type' => 'invoice.issued', 'created_at' => '2026-09-25T12:00:00.123Z', 'api_version' => '2026-09-01', 'company_id' => 'c', 'data' => ['invoice_id' => 'inv-1', 'invoice_number' => 'A-1']], JSON_THROW_ON_ERROR);
+    $body = json_encode(['id' => 'evt-1', 'type' => 'invoice.issued', 'created_at' => '2026-09-25T12:00:00.123Z', 'api_version' => '2026-09-01', 'livemode' => false, 'company_id' => 'c', 'data' => ['invoice_id' => 'inv-1', 'invoice_number' => 'A-1']], JSON_THROW_ON_ERROR);
     $payload = $verifier->verify($body, (new WebhookSigner('whsec_test'))->sign($body, 1_800_000_000), 1_800_000_000);
 
     $event = $verifier->toEvent($payload);
@@ -464,7 +464,7 @@ it('builds the typed event from an already verified payload', function () {
     expect($event)->toBeInstanceOf(WebhookEvent::class)
         ->and($event->getData())->toBeInstanceOf(WebhookEventDataInvoiceIssued::class)
         ->and($event->getData()->getInvoiceId())->toBe('inv-1')
-        ->and(fn () => $verifier->toEvent(['type' => 'invoice.issued', 'data' => ['invoice_id' => []]]))->toThrow(WebhookPayloadError::class);
+        ->and(fn () => $verifier->toEvent([...$payload, 'data' => ['invoice_id' => [], 'invoice_number' => 'A-1']]))->toThrow(WebhookPayloadError::class);
 });
 
 // Retries and date-time normalization
@@ -1207,7 +1207,7 @@ it('reads tax types from the canonical route', function () {
 });
 
 it('builds typed events without a verifier and flags provisioner-only events', function () {
-    $event = WebhookVerifier::eventFromPayload(['id' => 'evt-1', 'type' => 'invoice.issued', 'created_at' => '2026-09-25T12:00:00.5Z', 'api_version' => '2026-09-01', 'livemode' => false, 'data' => ['invoice_id' => 'inv-1']]);
+    $event = WebhookVerifier::eventFromPayload(['id' => 'evt-1', 'type' => 'invoice.issued', 'created_at' => '2026-09-25T12:00:00.5Z', 'api_version' => '2026-09-01', 'livemode' => false, 'data' => ['invoice_id' => 'inv-1', 'invoice_number' => 'A-1']]);
 
     expect($event->getData())->toBeInstanceOf(WebhookEventDataInvoiceIssued::class)
         ->and(array_values(array_map(static fn (WebhookEventType $type): string => $type->value, array_filter(WebhookEventType::cases(), static fn (WebhookEventType $type): bool => $type->isProvisionerOnly()))))
@@ -1243,7 +1243,7 @@ it('keeps the microseconds of API date-times, the most PHP DateTime can hold', f
 });
 
 it('keeps the microseconds of webhook date-times', function () {
-    $body = '{"id":"evt-1","type":"invoice.issued","created_at":"2026-09-25T01:29:40.548233096Z","api_version":"2026-09-01","livemode":false,"data":{"invoice_id":"inv-1"}}';
+    $body = '{"id":"evt-1","type":"invoice.issued","created_at":"2026-09-25T01:29:40.548233096Z","api_version":"2026-09-01","livemode":false,"data":{"invoice_id":"inv-1","invoice_number":"A-1"}}';
 
     $event = (new WebhookVerifier('whsec_test'))->verifyEvent($body, (new WebhookSigner('whsec_test'))->sign($body, 1_000), 1_000);
 
@@ -1289,7 +1289,7 @@ it('accepts null and every RFC 3339 form, and ignores free-form maps', function 
 });
 
 it('rejects invalid date-times in webhooks and in request arrays', function () {
-    $body = '{"id":"evt-1","type":"invoice.issued","created_at":"","api_version":"2026-09-01","livemode":false,"data":{"invoice_id":"inv-1"}}';
+    $body = '{"id":"evt-1","type":"invoice.issued","created_at":"","api_version":"2026-09-01","livemode":false,"data":{"invoice_id":"inv-1","invoice_number":"A-1"}}';
     $transport = new RecordingPsrClient([]);
 
     expect(fn () => (new WebhookVerifier('whsec_test'))->verifyEvent($body, (new WebhookSigner('whsec_test'))->sign($body, 1_000), 1_000))
@@ -1826,4 +1826,54 @@ it('maps an error status whose JSON Content-Type carries no JSON to BeelApiError
         expect($exception->statusCode)->toBe(502)
             ->and($exception->requestId)->toBe('req-9');
     }
+});
+
+/** A webhook event with every field BeeL's contract requires, for tests that change one of them. */
+function webhookEvent(array $overrides = []): array
+{
+    return [
+        'id' => 'evt-1',
+        'type' => 'invoice.issued',
+        'created_at' => '2026-09-25T12:00:00Z',
+        'api_version' => '2026-09-01',
+        'livemode' => false,
+        'data' => ['invoice_id' => 'inv-1', 'invoice_number' => 'F-2026-0001'],
+        ...$overrides,
+    ];
+}
+
+it('rejects a signed webhook body that is a JSON list, even an empty one', function (string $body) {
+    $verifier = new WebhookVerifier('whsec_test');
+
+    expect(fn () => $verifier->verify($body, (new WebhookSigner('whsec_test'))->sign($body, 1_000), 1_000))
+        ->toThrow(WebhookPayloadError::class);
+})->with(['[]', ' [ ] ', '[{"id":"evt-1"}]']);
+
+it('rejects a webhook event without a field BeeL requires, instead of a TypeError later', function (array $event) {
+    expect(fn () => WebhookVerifier::eventFromPayload($event))->toThrow(WebhookPayloadError::class);
+})->with([
+    'empty object' => [[]],
+    'no id' => [array_diff_key(webhookEvent(), ['id' => true])],
+    'no data' => [array_diff_key(webhookEvent(), ['data' => true])],
+    'data not an object' => [webhookEvent(['data' => 'inv-1'])],
+    'data without a required field' => [webhookEvent(['data' => ['invoice_id' => 'inv-1']])],
+]);
+
+it('keeps the data of an event type this SDK does not know as an array', function () {
+    $event = WebhookVerifier::eventFromPayload(webhookEvent(['type' => 'invoice.paid']));
+
+    expect($event->getType())->toBe('invoice.paid')
+        ->and($event->getData())->toBe(['invoice_id' => 'inv-1', 'invoice_number' => 'F-2026-0001']);
+});
+
+it('checks the required fields of every webhook event and its data as BeeL declares them', function () {
+    $schemas = openApiContract()['components']['schemas'];
+    $verifier = new ReflectionClass(WebhookVerifier::class);
+    $dataRequired = array_map(
+        static fn (string $model): array => $schemas[substr($model, strrpos($model, '\\') + 1)]['required'] ?? [],
+        $verifier->getConstant('EVENT_DATA_MODELS'),
+    );
+
+    expect($verifier->getConstant('EVENT_REQUIRED'))->toBe($schemas['WebhookEvent']['required'])
+        ->and($verifier->getConstant('EVENT_DATA_REQUIRED'))->toBe($dataRequired);
 });

@@ -43,6 +43,23 @@ final readonly class WebhookVerifier
         'representation.signed' => WebhookEventDataRepresentationSigned::class,
     ];
 
+    /** Fields BeeL's contract requires in every event; a test keeps this in sync with it. */
+    private const EVENT_REQUIRED = ['id', 'type', 'created_at', 'api_version', 'livemode', 'data'];
+
+    /** Fields BeeL's contract requires in the data of each event type; a test keeps this in sync with it. */
+    private const EVENT_DATA_REQUIRED = [
+        'invoice.issued' => ['invoice_id', 'invoice_number'],
+        'invoice.email.sent' => ['invoice_id', 'all_recipients', 'sent_at'],
+        'invoice.pdf.generated' => ['invoice_id'],
+        'invoice.voided' => ['invoice_id', 'invoice_number'],
+        'recurring_invoice.paused' => ['recurring_invoice_id', 'reason', 'since'],
+        'invoice.schedule_failed' => ['invoice_id'],
+        'verifactu.status.updated' => ['invoice_id', 'verifactu_registration_id', 'operation', 'new_status'],
+        'account.claimed' => ['account_id', 'external_ref'],
+        'company.created' => ['account_id', 'external_ref', 'nif'],
+        'representation.signed' => ['account_id', 'external_ref', 'company_id', 'nif', 'signed_at'],
+    ];
+
     private WebhookSigner $signer;
 
     /**
@@ -89,7 +106,8 @@ final readonly class WebhookVerifier
         } catch (\JsonException $exception) {
             throw new WebhookPayloadError('Invalid JSON in webhook body.', previous: $exception);
         }
-        if (! is_array($event) || ($event !== [] && array_is_list($event))) {
+        // An empty list and an empty object both decode to [], so check which one the body holds.
+        if (! is_array($event) || ($event !== [] && array_is_list($event)) || ($event === [] && ltrim($payload)[0] !== '{')) {
             throw new WebhookPayloadError('BeeL webhook payload must be a JSON object.');
         }
 
@@ -134,8 +152,7 @@ final readonly class WebhookVerifier
     /**
      * Verify the request and denormalize it to Jane's generated webhook model.
      *
-     * The signature is checked against the original, unmodified body before the
-     * timestamp is normalized for Jane's generated date-time normalizer.
+     * The signature is checked against the original, unmodified body.
      *
      * @throws WebhookVerificationError If verification fails; see {@see self::verify()} for the subclasses.
      * @throws WebhookPayloadError If the event does not match the BeeL event schema.
@@ -166,26 +183,51 @@ final readonly class WebhookVerifier
      * It needs no secret and checks no signature, so only pass payloads that were verified,
      * for example when a queued job processes an event verified earlier by the controller.
      *
+     * The event and, for the types this SDK knows, its `data` must have every field BeeL's
+     * contract requires. The `data` of a type it does not know yet is kept as an array.
+     *
      * @param  array<string, mixed>  $event  Decoded payload returned by `verify()`.
      *
      * @throws WebhookPayloadError If the event does not match the BeeL event schema.
      */
     public static function eventFromPayload(array $event): WebhookEvent
     {
+        self::requireFields($event, self::EVENT_REQUIRED, 'Webhook event');
+        $type = $event['type'];
+        $data = $event['data'];
+        if (! is_array($data) || ($data !== [] && array_is_list($data))) {
+            throw new WebhookPayloadError('Webhook event data must be a JSON object.');
+        }
+        if (is_string($type) && isset(self::EVENT_DATA_REQUIRED[$type])) {
+            self::requireFields($data, self::EVENT_DATA_REQUIRED[$type], "Webhook {$type} data");
+        }
         $serializer = new Serializer([new DateTimeNormalizer, new JaneObjectNormalizer]);
 
         try {
-            $eventType = $event['type'] ?? null;
-            $eventData = $event['data'] ?? null;
-            if (is_string($eventType) && is_array($eventData) && isset(self::EVENT_DATA_MODELS[$eventType])) {
-                $event['data'] = $serializer->denormalize($eventData, self::EVENT_DATA_MODELS[$eventType], 'json');
-            }
-
+            // Built without `data`, which Jane would otherwise read as whichever model its fields fit.
+            unset($event['data']);
             $model = $serializer->denormalize($event, WebhookEvent::class, 'json');
+            $model->setData(is_string($type) && isset(self::EVENT_DATA_MODELS[$type])
+                ? $serializer->denormalize($data, self::EVENT_DATA_MODELS[$type], 'json')
+                : $data);
         } catch (\Throwable $exception) {
             throw new WebhookPayloadError('Webhook payload does not match the BeeL event schema.', previous: $exception);
         }
 
         return $model;
+    }
+
+    /**
+     * @param  array<mixed>  $values
+     * @param  list<string>  $fields
+     *
+     * @throws WebhookPayloadError If a field is missing.
+     */
+    private static function requireFields(array $values, array $fields, string $what): void
+    {
+        $missing = array_values(array_diff($fields, array_keys($values)));
+        if ($missing !== []) {
+            throw new WebhookPayloadError("{$what} lacks ".implode(', ', $missing).', which BeeL always sends.');
+        }
     }
 }

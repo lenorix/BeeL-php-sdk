@@ -281,6 +281,7 @@ it('verifies webhooks into Jane generated event models', function () {
         'type' => 'invoice.issued',
         'created_at' => '2026-09-25T12:00:00.123Z',
         'api_version' => '2026-09-01',
+        'livemode' => false,
         'company_id' => 'company-123',
         'data' => [
             'invoice_id' => 'invoice-123',
@@ -313,6 +314,7 @@ it('uses webhook event type to select the correct generated data model', functio
         'type' => $type,
         'created_at' => '2026-09-25T12:00:00Z',
         'api_version' => '2026-09-01',
+        'livemode' => false,
         'data' => $data,
     ], JSON_THROW_ON_ERROR);
     $signature = hash_hmac('sha256', $timestamp.'.'.$body, $secret);
@@ -353,7 +355,7 @@ it('uses webhook event type to select the correct generated data model', functio
     ],
     'updated VeriFactu status' => [
         'verifactu.status.updated',
-        ['invoice_id' => 'invoice-123', 'verifactu_registration_id' => 'registration-123', 'previous_status' => 'PENDING', 'new_status' => 'ACCEPTED'],
+        ['invoice_id' => 'invoice-123', 'verifactu_registration_id' => 'registration-123', 'operation' => 'REGISTRATION', 'previous_status' => 'PENDING', 'new_status' => 'ACCEPTED'],
         WebhookEventDataVeriFactuStatusUpdated::class,
     ],
     'claimed account' => [
