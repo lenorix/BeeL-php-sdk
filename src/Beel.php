@@ -17,6 +17,7 @@ use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Http\ApiPathGuardPlugin;
 use Lenorix\BeelSdk\Http\BooleanQueryPlugin;
 use Lenorix\BeelSdk\Http\DateTimeNormalizer;
+use Lenorix\BeelSdk\Http\QueryString;
 use Lenorix\BeelSdk\Http\RequestOptions;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Http\Responses;
@@ -189,7 +190,7 @@ final readonly class Beel
 
             return rawurlencode((string) $pathParams[$matches[1]]);
         }, $path);
-        $queryString = self::queryString($query);
+        $queryString = QueryString::encode($query);
 
         $request = Psr17FactoryDiscovery::findRequestFactory()->createRequest(strtoupper($method), $path.($queryString === '' ? '' : '?'.$queryString))
             ->withHeader('Accept', 'application/json');
@@ -251,52 +252,5 @@ final readonly class Beel
         }
 
         return ['buffer' => (string) $response->getBody(), 'fileName' => $pdf->getFileName()];
-    }
-
-    /**
-     * @param  array<array-key, mixed>  $query
-     *
-     * @throws \InvalidArgumentException If a value has no query form, such as a date object or a list of maps.
-     */
-    private static function queryString(array $query, ?string $prefix = null): string
-    {
-        $pairs = [];
-        foreach ($query as $key => $value) {
-            $name = $prefix === null ? (string) $key : $prefix.'['.$key.']';
-            if (is_array($value) && ! array_is_list($value)) {
-                $nested = self::queryString($value, $name);
-                if ($nested !== '') {
-                    $pairs[] = $nested;
-                }
-
-                continue;
-            }
-            // Nulls, and lists left empty without them, are left out.
-            $items = array_values(array_filter(is_array($value) ? $value : [$value], static fn (mixed $item): bool => $item !== null));
-            if ($items !== []) {
-                $pairs[] = rawurlencode($name).'='.rawurlencode(implode(',', array_map(static fn (mixed $item): string => self::queryValue($name, $item), $items)));
-            }
-        }
-
-        return implode('&', $pairs);
-    }
-
-    /** @throws \InvalidArgumentException If the value has no query form. */
-    private static function queryValue(string $name, mixed $value): string
-    {
-        return match (true) {
-            is_bool($value) => $value ? 'true' : 'false',
-            is_int($value), is_string($value) => (string) $value,
-            // Plain decimal notation: PHP would write 1e20 as 1.0E+20.
-            is_float($value) && is_finite($value) => rtrim(rtrim(number_format($value, 14, '.', ''), '0'), '.'),
-            $value instanceof \BackedEnum => (string) $value->value,
-            $value instanceof \Stringable && ! $value instanceof \DateTimeInterface => (string) $value,
-            default => throw new \InvalidArgumentException(sprintf(
-                'Query parameter "%s" has a %s, which has no query form: pass text, a number, a boolean, an enum, or a list or map of them%s.',
-                $name,
-                get_debug_type($value),
-                $value instanceof \DateTimeInterface ? ' (a date as "Y-m-d" or an RFC 3339 date-time)' : '',
-            )),
-        };
     }
 }
