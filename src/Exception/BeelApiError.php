@@ -175,8 +175,9 @@ class BeelApiError extends \RuntimeException
         }
 
         foreach ($details as $key => $value) {
-            if ($key === 'retry_after' && is_numeric($value)) {
-                return (int) $value;
+            // The same rules as the transport, which retries on this delay.
+            if ($key === 'retry_after') {
+                return RetryAfter::fromValue($value);
             }
         }
 

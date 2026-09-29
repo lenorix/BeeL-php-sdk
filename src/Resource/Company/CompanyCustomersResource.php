@@ -69,7 +69,9 @@ final readonly class CompanyCustomersResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getCompanyCustomer($this->companyId, $customerId));
     }
 
-    /** Partially update a customer; omitted fields remain unchan     *
+    /**
+     * Partially update a customer; omitted fields remain unchanged.
+     *
      * @param  PatchCustomerRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
     public function update(string $customerId, PatchCustomerRequest|array $request): Customer
@@ -122,7 +124,9 @@ final readonly class CompanyCustomersResource extends GeneratedResource
         return $this->execute(fn () => $this->client->createCompanyCustomerImport($this->companyId, $request, $this->withIdempotencyKey($headers)));
     }
 
-    /** Validate an import payload and preview its results without importing custom     *
+    /**
+     * Validate an import payload and preview its results without importing customers.
+     *
      * @param  V1CompaniesCompanyIdCustomersImportsPreviewPostBody|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
     public function previewImport(V1CompaniesCompanyIdCustomersImportsPreviewPostBody|array $request): CustomerValidationUnifiedResult

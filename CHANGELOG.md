@@ -14,6 +14,8 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 ### Fixed
 
+- A `retry_after` in an error's `details` that is negative or not a finite number reached `retryAfter`/`retryAfterSeconds` (such as `-5`), because the exceptions read it without the transport's checks: both now use the same rules.
+- The legacy `$beel->invoices->list()` rejected whole numbers for `total_min` and the other amount filters, like the company-scoped list did.
 - `getLastResponse()` returned the previous call's response after a call rejected before anything was sent, such as one with an invalid request array: it is now `null` then.
 - `$beel->accounts->all()` stopped at a `next_cursor` only when it repeated the current one, so cursors cycling through several pages (A, B, A) were followed forever: it now stops at any cursor already read.
 - Numeric list filters rejected valid values: `total_min`/`total_max` and `taxable_base_min`/`taxable_base_max` a whole number, and the product `min_price`/`max_price` and payment event `min_amount`/`max_amount`, which the generated client read as integers, a decimal one. All of them now take both; `bin/prepare-openapi.php` gives BeeL's untyped `number` filters the `double` format.

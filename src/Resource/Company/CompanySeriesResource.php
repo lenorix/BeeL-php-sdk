@@ -69,7 +69,9 @@ final readonly class CompanySeriesResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getCompanySeries($this->companyId, $seriesId));
     }
 
-    /** Partially update a series; omitted fields remain unchan     *
+    /**
+     * Partially update a series; omitted fields remain unchanged.
+     *
      * @param  PatchSeriesRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
     public function update(string $seriesId, PatchSeriesRequest|array $request): InvoiceSeries

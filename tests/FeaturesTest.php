@@ -2159,3 +2159,39 @@ it('stops following cursors that cycle back to a page already read', function ()
     expect($ids)->toBe(['a', 'b', 'c'])
         ->and($transport->requests)->toHaveCount(3);
 });
+
+it('ignores an invalid retry_after in the error details, as the transport does', function (string $value) {
+    $transport = new RecordingPsrClient([new Response(429, ['Content-Type' => 'application/json'], '{"success":false,"error":{"code":"RATE_LIMIT_EXCEEDED","details":{"retry_after":'.$value.'}}}')]);
+
+    try {
+        testClient($transport)->company('c')->invoices->get('inv-1');
+        test()->fail('Expected BeelRateLimitError.');
+    } catch (BeelRateLimitError $exception) {
+        expect($exception->retryAfter)->toBeNull()
+            ->and($exception->retryAfterSeconds)->toBe(60);
+    }
+})->with(['negative' => ['-5'], 'overflowing' => ['1e400']]);
+
+it('accepts whole numbers in the legacy invoice list filters', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true, 'data' => []])]);
+
+    testClient($transport)->invoices->list(['total_min' => 100]);
+
+    expect(rawurldecode($transport->requests[0]->getUri()->getQuery()))->toContain('total_min=100');
+});
+
+it('keeps every docblock summary in the SDK whole', function () {
+    $broken = [];
+    foreach (new RecursiveIteratorIterator(new RecursiveDirectoryIterator(__DIR__.'/../src')) as $file) {
+        $path = str_replace('\\', '/', $file->getPathname());
+        if ($file->getExtension() !== 'php' || str_contains($path, '/src/Generated/')) {
+            continue;
+        }
+        // A summary cut off mid-word runs straight into the next docblock line.
+        if (preg_match_all('#/\*\*[^\n/]*[A-Za-z]\h+\*\h*$#m', sourceCode($path), $matches) > 0) {
+            $broken[] = basename($path).': '.implode(' | ', array_map('trim', $matches[0]));
+        }
+    }
+
+    expect($broken)->toBe([]);
+});

@@ -24,7 +24,9 @@ final readonly class CompanyTaxConfigurationResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getCompanyTaxConfiguration($this->companyId));
     }
 
-    /** Update the company's tax defaults used by the BeeL dashbo     *
+    /**
+     * Update the company's tax defaults used by the BeeL dashboard.
+     *
      * @param  UpdateTaxConfigurationRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
     public function update(UpdateTaxConfigurationRequest|array $request): TaxConfiguration

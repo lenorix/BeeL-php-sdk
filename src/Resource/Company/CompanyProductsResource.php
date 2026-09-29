@@ -71,7 +71,9 @@ final readonly class CompanyProductsResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getCompanyProduct($this->companyId, $productId));
     }
 
-    /** Partially update a product; omitted fields remain unchan     *
+    /**
+     * Partially update a product; omitted fields remain unchanged.
+     *
      * @param  PatchProductRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
     public function update(string $productId, PatchProductRequest|array $request): Product

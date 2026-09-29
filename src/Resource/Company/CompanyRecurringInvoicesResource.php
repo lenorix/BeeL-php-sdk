@@ -55,7 +55,9 @@ final readonly class CompanyRecurringInvoicesResource extends GeneratedResource
         );
     }
 
-    /** Create a recurring invoice templ     *
+    /**
+     * Create a recurring invoice template.
+     *
      * @param  CreateRecurringInvoiceRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
     public function create(CreateRecurringInvoiceRequest|array $request): RecurringInvoiceResponse
@@ -83,7 +85,9 @@ final readonly class CompanyRecurringInvoicesResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getCompanyRecurringInvoice($this->companyId, $recurringInvoiceId));
     }
 
-    /** Partially update a recurring template; omitted fields remain unchan     *
+    /**
+     * Partially update a recurring template; omitted fields remain unchanged.
+     *
      * @param  PatchRecurringInvoiceRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
     public function update(string $recurringInvoiceId, PatchRecurringInvoiceRequest|array $request): RecurringInvoiceResponse
@@ -93,7 +97,9 @@ final readonly class CompanyRecurringInvoicesResource extends GeneratedResource
         return $this->execute(fn () => $this->client->patchCompanyRecurringInvoice($this->companyId, $recurringInvoiceId, $request));
     }
 
-    /** Pause or resume a recurring invoice templ     *
+    /**
+     * Pause or resume a recurring invoice template.
+     *
      * @param  SetRecurringInvoiceStatusRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
     public function setStatus(string $recurringInvoiceId, SetRecurringInvoiceStatusRequest|array $request): RecurringInvoiceResponse
@@ -137,7 +143,9 @@ final readonly class CompanyRecurringInvoicesResource extends GeneratedResource
         );
     }
 
-    /** Create a recurring template derived from an existing invo     *
+    /**
+     * Create a recurring template derived from an existing invoice.
+     *
      * @param  CreateRecurringInvoiceDerivationRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
     public function derive(CreateRecurringInvoiceDerivationRequest|array $request): RecurringInvoiceResponse

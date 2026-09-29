@@ -72,7 +72,9 @@ final readonly class AccountScope extends GeneratedResource
         return $this->execute(fn () => $this->client->getAccountUsage($this->accountId));
     }
 
-    /** Change the access level for a managed acco     *
+    /**
+     * Change the access level for a managed account.
+     *
      * @param  ChangeAccessLevelRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
     public function changeAccessLevel(ChangeAccessLevelRequest|array $request): void
@@ -95,7 +97,9 @@ final readonly class AccountScope extends GeneratedResource
         return $this->execute(fn () => $this->client->createAccountClaimToken($this->accountId, $request));
     }
 
-    /** Transfer account ownership to another mem     *
+    /**
+     * Transfer account ownership to another member.
+     *
      * @param  SetAccountOwnerRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
     public function setOwner(SetAccountOwnerRequest|array $request): void

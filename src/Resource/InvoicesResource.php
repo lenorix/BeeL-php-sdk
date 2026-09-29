@@ -39,7 +39,7 @@ final readonly class InvoicesResource extends GeneratedResource
      */
     public function list(array $query = []): V1InvoicesGetResponse200Data
     {
-        return $this->execute(fn () => $this->client->listInvoices(QueryParameters::lists($query)));
+        return $this->execute(fn () => $this->client->listInvoices(QueryParameters::numbers(QueryParameters::lists($query))));
     }
 
     /**

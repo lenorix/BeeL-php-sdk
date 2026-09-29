@@ -31,7 +31,9 @@ final readonly class CatalogsResource extends GeneratedResource
         return $this->execute(fn () => $this->client->listInvoiceCustomizationOptions());
     }
 
-    /** Update preferences for the authenticated person, such as langu     *
+    /**
+     * Update preferences for the authenticated person, such as language.
+     *
      * @param  UpdateMeRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
     public function updateMe(UpdateMeRequest|array $request): MyPreferences

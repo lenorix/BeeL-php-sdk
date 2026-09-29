@@ -31,7 +31,9 @@ final readonly class MeResource extends GeneratedResource
         return $this->execute(fn () => $this->client->getMyIdentity());
     }
 
-    /** Update the authenticated user's preferen     *
+    /**
+     * Update the authenticated user's preferences.
+     *
      * @param  UpdateMeRequest|array<string, mixed>  $request  The request as a model or as an array in API format.
      */
     public function update(UpdateMeRequest|array $request): MyPreferences

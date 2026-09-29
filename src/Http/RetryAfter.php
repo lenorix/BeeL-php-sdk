@@ -53,6 +53,14 @@ final class RetryAfter
         $error = is_array($data['error'] ?? null) ? $data['error'] : [];
         $seconds = $error['retry_after'] ?? $data['retry_after'] ?? (is_array($error['details'] ?? null) ? ($error['details']['retry_after'] ?? null) : null);
 
+        return self::fromValue($seconds);
+    }
+
+    /**
+     * Seconds from a `retry_after` value: a finite, non-negative number, rounded up; null for anything else.
+     */
+    public static function fromValue(mixed $seconds): ?int
+    {
         return is_numeric($seconds) && is_finite((float) $seconds) && (float) $seconds >= 0 ? self::bounded((float) $seconds) : null;
     }
 
