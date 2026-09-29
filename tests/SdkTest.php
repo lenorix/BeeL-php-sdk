@@ -49,7 +49,7 @@ use Lenorix\BeelSdk\Webhook\WebhookEventType;
 use Lenorix\BeelSdk\Webhook\WebhookVerifier;
 
 it('constructs the public client, exposes scoped resources and Jane raw client', function () {
-    $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 0, httpClient: new RecordingPsrClient([]));
+    $beel = testClient(new RecordingPsrClient([]));
 
     expect($beel->raw)->toBeInstanceOf(Client::class)
         ->and($beel->company('co-1')->companyId)->toBe('co-1')
@@ -71,7 +71,7 @@ it('constructs the public client, exposes scoped resources and Jane raw client',
 
 it('fails closed instead of sending an unmocked request', function () {
     $transport = new RecordingPsrClient([]);
-    $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 0, httpClient: $transport);
+    $beel = testClient($transport);
 
     expect(fn () => $beel->raw->getMyIdentity())
         ->toThrow(LogicException::class, 'Unexpected HTTP request in test: GET')
@@ -82,7 +82,7 @@ it('keeps the NPM NIF validation convenience call while using Jane request model
     $transport = new RecordingPsrClient([
         new Response(200, ['Content-Type' => 'application/json'], '{"success":true,"data":{"valid":true,"status":"VALID","census_status":"ACTIVE","message":"Valid"}}'),
     ]);
-    $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 0, httpClient: $transport);
+    $beel = testClient($transport);
 
     $result = $beel->nif->validate('B12345678');
 
@@ -96,7 +96,7 @@ it('delegates legacy bulk product deletion with its generated request model', fu
     $transport = new RecordingPsrClient([
         new Response(200, ['Content-Type' => 'application/json'], '{"success":true,"data":{"deleted_products":["product-1"],"errors":[],"summary":{"total_processed":1,"successful":1,"failed":0}}}'),
     ]);
-    $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 0, httpClient: $transport);
+    $beel = testClient($transport);
 
     $result = $beel->products->deleteBulk(
         (new V1ProductsBulkDeleteBody)->setProductIds(['product-1']),
@@ -125,7 +125,7 @@ it('normalizes fractional metadata timestamps before Jane deserializes JSON resp
     $transport = new RecordingPsrClient([
         new Response(200, ['Content-Type' => 'application/json'], '{"success":true,"data":{"account_id":"account-1","email":"contact@example.com","language":"es"},"meta":{"timestamp":"2026-09-25T01:29:40.548233096Z","request_id":"req-test"}}'),
     ]);
-    $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 0, httpClient: $transport);
+    $beel = testClient($transport);
 
     $identity = $beel->raw->getMyIdentity()->getData();
 
@@ -137,7 +137,7 @@ it('normalizes fractional validated-at timestamps from BeeL responses', function
     $transport = new RecordingPsrClient([
         new Response(200, ['Content-Type' => 'application/json'], '{"success":true,"data":{"valid":true,"status":"VALID","legal_name_verified":false,"census_status":"IDENTIFIED","message":"Valid","validated_at":"2026-09-25T01:34:34.856943341Z"},"meta":{"timestamp":"2026-09-25T01:34:34.856943341Z","request_id":"req-test"}}'),
     ]);
-    $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 0, httpClient: $transport);
+    $beel = testClient($transport);
 
     $result = $beel->nif->validate('B00000000');
 
@@ -199,7 +199,7 @@ it('returns Jane generated response models from scoped resources', function () {
     $transport = new RecordingPsrClient([
         new Response(200, ['Content-Type' => 'application/json'], '{"success":true,"data":{"enabled":true,"status":"ACTIVE"}}'),
     ]);
-    $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 0, httpClient: $transport);
+    $beel = testClient($transport);
     $configuration = $beel->company('company-1')->verifactuConfiguration->get();
 
     expect($configuration)->toBeInstanceOf(VeriFactuConfiguration::class)
@@ -211,7 +211,7 @@ it('scopes account resource calls to the account path', function () {
     $transport = new RecordingPsrClient([
         new Response(401, ['Content-Type' => 'application/json'], '{"success":false,"error":{"code":"UNAUTHORIZED","message":"Invalid key"}}'),
     ]);
-    $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 0, httpClient: $transport);
+    $beel = testClient($transport);
 
     $exception = thrown(fn () => $beel->account('account-1')->members->list(), BeelAuthError::class);
     expect($exception->statusCode)->toBe(401)
@@ -219,7 +219,7 @@ it('scopes account resource calls to the account path', function () {
 });
 
 it('creates the company payment events resource with its company scope', function () {
-    $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 0, httpClient: new RecordingPsrClient([]));
+    $beel = testClient(new RecordingPsrClient([]));
     $events = $beel->company('company-1')->paymentConnections->events('connection-1');
 
     expect($events)->toBeInstanceOf(GeneratedResource::class);
@@ -374,7 +374,7 @@ it('downloads the PDF from its signed URL without forwarding the API key', funct
         new Response(200, ['Content-Type' => 'application/json'], '{"success":true,"data":{"download_url":"https://signed.example.test/file.pdf","file_name":"invoice.pdf","expires_in_seconds":300}}'),
         new Response(200, ['Content-Type' => 'application/pdf'], '%PDF-1.7 test'),
     ]);
-    $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 0, httpClient: $transport);
+    $beel = testClient($transport);
 
     $pdf = $beel->downloadPdf('invoice-1');
 
@@ -386,7 +386,7 @@ it('downloads the PDF from its signed URL without forwarding the API key', funct
 
 it('reports a pending PDF instead of dereferencing an empty 202 response', function () {
     $transport = new RecordingPsrClient([new Response(202, ['Retry-After' => '2'])]);
-    $beel = new Beel(apiKey: 'beel_sk_test_key', maxRetries: 0, httpClient: $transport);
+    $beel = testClient($transport);
 
     expect(fn () => $beel->downloadPdf('invoice-1'))
         ->toThrow(RuntimeException::class, 'Invoice PDF is still being generated');
