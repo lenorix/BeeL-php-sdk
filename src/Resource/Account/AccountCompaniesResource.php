@@ -9,6 +9,7 @@ use Lenorix\BeelSdk\Generated\Model\CompanyData;
 use Lenorix\BeelSdk\Generated\Model\CreateCompanyRequest;
 use Lenorix\BeelSdk\Generated\Model\ListCompanies200ResponseData;
 use Lenorix\BeelSdk\Generated\Model\ListCompanyStats200ResponseData;
+use Lenorix\BeelSdk\Resource\Paginator;
 
 final readonly class AccountCompaniesResource extends AccountResource
 {
@@ -31,7 +32,7 @@ final readonly class AccountCompaniesResource extends AccountResource
      */
     public function all(array $query = []): \Generator
     {
-        return $this->paginate(
+        return Paginator::pages(
             fn (array $query): ListCompanies200ResponseData => $this->list($query),
             static fn (ListCompanies200ResponseData $page): array => $page->getCompanies(),
             $query,

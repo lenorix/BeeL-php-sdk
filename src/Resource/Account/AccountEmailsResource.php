@@ -9,6 +9,7 @@ use Lenorix\BeelSdk\Generated\Model\EmailDeliveryIndicatorListResponseData;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryListResponseData;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryResponse;
 use Lenorix\BeelSdk\Http\QueryParameters;
+use Lenorix\BeelSdk\Resource\Paginator;
 
 final readonly class AccountEmailsResource extends AccountResource
 {
@@ -31,7 +32,7 @@ final readonly class AccountEmailsResource extends AccountResource
      */
     public function all(array $query = []): \Generator
     {
-        return $this->paginate(
+        return Paginator::pages(
             fn (array $query): EmailDeliveryListResponseData => $this->list($query),
             static fn (EmailDeliveryListResponseData $page): array => $page->getEmails(),
             $query,

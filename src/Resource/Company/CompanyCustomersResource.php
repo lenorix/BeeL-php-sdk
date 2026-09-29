@@ -14,6 +14,7 @@ use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersGetResponse200D
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersImportsPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersImportsPreviewPostBody;
 use Lenorix\BeelSdk\Http\QueryParameters;
+use Lenorix\BeelSdk\Resource\Paginator;
 
 /** Manage the customer records used by invoices for one company. */
 final readonly class CompanyCustomersResource extends CompanyResource
@@ -35,7 +36,7 @@ final readonly class CompanyCustomersResource extends CompanyResource
      */
     public function all(array $query = []): \Generator
     {
-        return $this->paginate(
+        return Paginator::pages(
             fn (array $query): V1CompaniesCompanyIdCustomersGetResponse200Data => $this->list($query),
             static fn (V1CompaniesCompanyIdCustomersGetResponse200Data $page): array => $page->getCustomers(),
             $query,

@@ -12,6 +12,7 @@ use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkDeleteRespon
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsGetResponse200Data;
 use Lenorix\BeelSdk\Http\QueryParameters;
+use Lenorix\BeelSdk\Resource\Paginator;
 
 /** Manage this company's product catalog and default line details. */
 final readonly class CompanyProductsResource extends CompanyResource
@@ -37,7 +38,7 @@ final readonly class CompanyProductsResource extends CompanyResource
      */
     public function all(array $query = []): \Generator
     {
-        return $this->paginate(
+        return Paginator::pages(
             fn (array $query): V1CompaniesCompanyIdProductsGetResponse200Data => $this->list($query),
             static fn (V1CompaniesCompanyIdProductsGetResponse200Data $page): array => $page->getProducts(),
             $query,

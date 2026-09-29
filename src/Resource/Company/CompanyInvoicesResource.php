@@ -38,6 +38,7 @@ use Lenorix\BeelSdk\Generated\Model\VoidInvoiceRequest;
 use Lenorix\BeelSdk\Http\BinaryDownload;
 use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\ResponseContext;
+use Lenorix\BeelSdk\Resource\Paginator;
 
 /** Invoice lifecycle and document operations for a single company. */
 final readonly class CompanyInvoicesResource extends CompanyResource
@@ -76,7 +77,7 @@ final readonly class CompanyInvoicesResource extends CompanyResource
      */
     public function all(array $query = []): \Generator
     {
-        return $this->paginate(
+        return Paginator::pages(
             fn (array $query): V1CompaniesCompanyIdInvoicesGetResponse200Data => $this->list($query),
             static fn (V1CompaniesCompanyIdInvoicesGetResponse200Data $page): array => $page->getInvoices(),
             $query,

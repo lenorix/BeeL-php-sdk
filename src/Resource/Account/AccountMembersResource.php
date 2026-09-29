@@ -11,6 +11,7 @@ use Lenorix\BeelSdk\Generated\Model\MemberGrant;
 use Lenorix\BeelSdk\Generated\Model\PutMemberGrantRequest;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdMembersGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdMembersMemberIdGrantsGetResponse200Data;
+use Lenorix\BeelSdk\Resource\Paginator;
 
 final readonly class AccountMembersResource extends AccountResource
 {
@@ -33,7 +34,7 @@ final readonly class AccountMembersResource extends AccountResource
      */
     public function all(array $query = []): \Generator
     {
-        return $this->paginate(
+        return Paginator::pages(
             fn (array $query): V1AccountsAccountIdMembersGetResponse200Data => $this->list($query),
             static fn (V1AccountsAccountIdMembersGetResponse200Data $page): array => $page->getMembers(),
             $query,
@@ -79,7 +80,7 @@ final readonly class AccountMembersResource extends AccountResource
      */
     public function allGrants(string $memberId, array $query = []): \Generator
     {
-        return $this->paginate(
+        return Paginator::pages(
             fn (array $query): V1AccountsAccountIdMembersMemberIdGrantsGetResponse200Data => $this->listGrants($memberId, $query),
             static fn (V1AccountsAccountIdMembersMemberIdGrantsGetResponse200Data $page): array => $page->getGrants(),
             $query,

@@ -10,6 +10,7 @@ use Lenorix\BeelSdk\Generated\Model\ManagedPaymentEvent;
 use Lenorix\BeelSdk\Generated\Model\ManagedPaymentEventDraftResponseData;
 use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\ResponseContext;
+use Lenorix\BeelSdk\Resource\Paginator;
 
 /** Inspect and recover payment events for one company payment connection. */
 final readonly class CompanyPaymentEventsResource extends CompanyResource
@@ -40,7 +41,7 @@ final readonly class CompanyPaymentEventsResource extends CompanyResource
      */
     public function all(array $query = []): \Generator
     {
-        return $this->paginate(
+        return Paginator::pages(
             fn (array $query): ListManagedPaymentEventsResponseData => $this->list($query),
             static fn (ListManagedPaymentEventsResponseData $page): array => $page->getEvents(),
             $query,

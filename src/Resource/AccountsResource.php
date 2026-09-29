@@ -37,7 +37,7 @@ final readonly class AccountsResource extends GeneratedResource
      */
     public function all(array $query = []): \Generator
     {
-        return $this->paginateCursor(
+        return Paginator::cursors(
             fn (array $query): V1AccountsGetResponse200Data => $this->list($query),
             static fn (V1AccountsGetResponse200Data $page): array => $page->getAccounts(),
             static fn (V1AccountsGetResponse200Data $page): ?string => $page->isInitialized('nextCursor') ? $page->getNextCursor() : null,

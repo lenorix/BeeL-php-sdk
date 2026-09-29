@@ -8,6 +8,7 @@ use Lenorix\BeelSdk\Generated\Model\CreateInvitationRequest;
 use Lenorix\BeelSdk\Generated\Model\Invitation;
 use Lenorix\BeelSdk\Generated\Model\InvitationSummary;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdInvitationsGetResponse200Data;
+use Lenorix\BeelSdk\Resource\Paginator;
 
 final readonly class AccountInvitationsResource extends AccountResource
 {
@@ -30,7 +31,7 @@ final readonly class AccountInvitationsResource extends AccountResource
      */
     public function all(array $query = []): \Generator
     {
-        return $this->paginate(
+        return Paginator::pages(
             fn (array $query): V1AccountsAccountIdInvitationsGetResponse200Data => $this->list($query),
             static fn (V1AccountsAccountIdInvitationsGetResponse200Data $page): array => $page->getInvitations(),
             $query,

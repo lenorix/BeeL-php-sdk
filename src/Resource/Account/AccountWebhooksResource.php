@@ -12,6 +12,7 @@ use Lenorix\BeelSdk\Generated\Model\WebhookDeliveryLog;
 use Lenorix\BeelSdk\Generated\Model\WebhookSubscription;
 use Lenorix\BeelSdk\Generated\Model\WebhookSubscriptionWithSecret;
 use Lenorix\BeelSdk\Generated\Model\WebhookTestResult;
+use Lenorix\BeelSdk\Resource\Paginator;
 
 final readonly class AccountWebhooksResource extends AccountResource
 {
@@ -34,7 +35,7 @@ final readonly class AccountWebhooksResource extends AccountResource
      */
     public function all(array $query = []): \Generator
     {
-        return $this->paginate(
+        return Paginator::pages(
             fn (array $query): V1AccountsAccountIdWebhooksGetResponse200Data => $this->list($query),
             static fn (V1AccountsAccountIdWebhooksGetResponse200Data $page): array => $page->getWebhooks() ?? [],
             $query,
@@ -100,7 +101,7 @@ final readonly class AccountWebhooksResource extends AccountResource
      */
     public function allDeliveries(string $webhookId, array $query = []): \Generator
     {
-        return $this->paginate(
+        return Paginator::pages(
             fn (array $query): V1AccountsAccountIdWebhooksWebhookIdDeliveriesGetResponse200Data => $this->listDeliveries($webhookId, $query),
             static fn (V1AccountsAccountIdWebhooksWebhookIdDeliveriesGetResponse200Data $page): array => $page->getDeliveries() ?? [],
             $query,

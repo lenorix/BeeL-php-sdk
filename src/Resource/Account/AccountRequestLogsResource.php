@@ -7,6 +7,7 @@ namespace Lenorix\BeelSdk\Resource\Account;
 use Lenorix\BeelSdk\Generated\Model\RequestLogDetail;
 use Lenorix\BeelSdk\Generated\Model\RequestLogListResponseData;
 use Lenorix\BeelSdk\Generated\Model\RequestLogSummary;
+use Lenorix\BeelSdk\Resource\Paginator;
 
 /** The history of API requests made to this account, for debugging. */
 final readonly class AccountRequestLogsResource extends AccountResource
@@ -31,7 +32,7 @@ final readonly class AccountRequestLogsResource extends AccountResource
      */
     public function all(array $query = []): \Generator
     {
-        return $this->paginateCursor(
+        return Paginator::cursors(
             fn (array $query): RequestLogListResponseData => $this->list($query),
             static fn (RequestLogListResponseData $page): array => $page->getRequestLogs(),
             static fn (RequestLogListResponseData $page): ?string => $page->getPagination()?->getNextCursor(),

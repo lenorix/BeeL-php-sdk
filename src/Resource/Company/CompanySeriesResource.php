@@ -10,6 +10,7 @@ use Lenorix\BeelSdk\Generated\Model\PatchSeriesRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdSeriesDefaultsGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdSeriesDefaultsPutResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdSeriesGetResponse200Data;
+use Lenorix\BeelSdk\Resource\Paginator;
 
 /** Manage invoice numbering series for one company. */
 final readonly class CompanySeriesResource extends CompanyResource
@@ -35,7 +36,7 @@ final readonly class CompanySeriesResource extends CompanyResource
      */
     public function all(array $query = []): \Generator
     {
-        return $this->paginate(
+        return Paginator::pages(
             fn (array $query): V1CompaniesCompanyIdSeriesGetResponse200Data => $this->list($query),
             static fn (V1CompaniesCompanyIdSeriesGetResponse200Data $page): array => $page->getSeries(),
             $query,

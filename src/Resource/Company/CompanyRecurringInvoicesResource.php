@@ -15,6 +15,7 @@ use Lenorix\BeelSdk\Generated\Model\SetRecurringInvoiceStatusRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdHistoryGetResponse200Data;
+use Lenorix\BeelSdk\Resource\Paginator;
 
 /** Manage recurring invoice templates and generated-invoice history for a company. */
 final readonly class CompanyRecurringInvoicesResource extends CompanyResource
@@ -40,7 +41,7 @@ final readonly class CompanyRecurringInvoicesResource extends CompanyResource
      */
     public function all(array $query = []): \Generator
     {
-        return $this->paginate(
+        return Paginator::pages(
             fn (array $query): V1CompaniesCompanyIdRecurringInvoicesGetResponse200Data => $this->list($query),
             static fn (V1CompaniesCompanyIdRecurringInvoicesGetResponse200Data $page): array => $page->getRecurringInvoices(),
             $query,
@@ -128,7 +129,7 @@ final readonly class CompanyRecurringInvoicesResource extends CompanyResource
      */
     public function allHistory(string $recurringInvoiceId, array $query = []): \Generator
     {
-        return $this->paginate(
+        return Paginator::pages(
             fn (array $query): V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdHistoryGetResponse200Data => $this->history($recurringInvoiceId, $query),
             static fn (V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdHistoryGetResponse200Data $page): array => $page->getHistory(),
             $query,
