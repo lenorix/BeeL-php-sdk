@@ -1748,14 +1748,22 @@ it('keeps the data of an event type this SDK does not know as an array', functio
 
 it('checks the required fields of every webhook event and its data as BeeL declares them', function () {
     $schemas = openApiContract()['components']['schemas'];
-    $verifier = new ReflectionClass(WebhookVerifier::class);
-    $dataRequired = array_map(
-        static fn (string $model): array => $schemas[substr($model, strrpos($model, '\\') + 1)]['required'] ?? [],
-        $verifier->getConstant('EVENT_DATA_MODELS'),
+    $dataSchemas = array_map(
+        static fn (array $option): string => substr($option['$ref'], strlen('#/components/schemas/')),
+        $schemas['WebhookEvent']['properties']['data']['oneOf'],
     );
+    $models = [];
+    foreach (WebhookEventType::cases() as $type) {
+        $schema = substr($type->dataModel(), strrpos($type->dataModel(), '\\') + 1);
+        $models[] = $schema;
+        expect($type->requiredDataFields())->toBe($schemas[$schema]['required'] ?? [], $type->value);
+    }
+    sort($models);
+    sort($dataSchemas);
 
-    expect($verifier->getConstant('EVENT_REQUIRED'))->toBe($schemas['WebhookEvent']['required'])
-        ->and($verifier->getConstant('EVENT_DATA_REQUIRED'))->toBe($dataRequired);
+    // Each event type has its own data schema, and every one the contract lists is used.
+    expect((new ReflectionClass(WebhookVerifier::class))->getConstant('EVENT_REQUIRED'))->toBe($schemas['WebhookEvent']['required'])
+        ->and($models)->toBe($dataSchemas);
 });
 
 it('keeps paginating by page numbers when BeeL sends a null has_next', function () {
