@@ -75,7 +75,7 @@ An array that does not match the model, or lacks a required field, throws `Inval
 
 Methods return the generated Jane model, so its getters and the complete BeeL response remain accessible. Values keep exactly what BeeL sent, including anything in `metadata`, except date-times.
 
-Date-times become `DateTime` objects with microseconds, the most PHP can hold (BeeL sends nanoseconds), and the ones you send go out with microseconds too. A date-time must be a full RFC 3339 value, or `null` where the field allows it: anything else, such as `''` or `tomorrow`, throws `InvalidDateException` instead of silently becoming the current time.
+Date-times become `DateTime` objects with microseconds, the most PHP can hold (BeeL sends nanoseconds), and the ones you send go out with microseconds too. A date-time must be a full RFC 3339 value, or `null` where the field allows it: anything else, such as `''` or `tomorrow`, throws `InvalidDateException`.
 
 In arrays passed to resource methods, a date-time field also accepts a date object (`DateTime`, `DateTimeImmutable`, Carbon…). Date-only fields such as `due_date` take `Y-m-d` strings, and so does every date in a `$beel->request()` body.
 
