@@ -38,8 +38,9 @@
     "require-dev": {
         "jane-php/open-api-3": "^7.14",
         "laravel/pint": "^1.0",
+        "pestphp/pest": "^4.0",
         "phpstan/phpstan": "^2.2.2",
-        "pestphp/pest": "^4.0"
+        "symfony/yaml": "^5.4 || ^6.4 || ^7.0 || ^8.0"
     },
     "autoload": {
         "psr-4": {
@@ -57,7 +58,8 @@
         "pint": "vendor/bin/pint src/Beel.php src/Builder src/Enum src/Exception src/Http src/Resource src/Webhook tests",
         "format": "vendor/bin/pint src/Beel.php src/Builder src/Enum src/Exception src/Http src/Resource src/Webhook tests",
         "phpstan": "vendor/bin/phpstan analyse --configuration=phpstan.neon.dist --memory-limit=512M",
-        "generate": "@php bin/prepare-openapi.php && php -d memory_limit=256M vendor/bin/jane-openapi generate && vendor/bin/pint src/Generated"
+        "prepare-openapi": "@php bin/prepare-openapi.php",
+        "generate": "@prepare-openapi && php -d memory_limit=256M vendor/bin/jane-openapi generate && vendor/bin/pint src/Generated"
     },
     "config": {
         "sort-packages": true,

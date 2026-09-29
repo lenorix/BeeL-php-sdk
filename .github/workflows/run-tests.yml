@@ -15,6 +15,10 @@ on:
       - 'phpunit.xml.dist'
       - 'composer.json'
       - 'composer.lock'
+  # The tests check the SDK against BeeL's live contract, which can change without a push here.
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -63,6 +67,9 @@ jobs:
       - name: Audit dependencies
         if: matrix.stability == 'prefer-stable' && matrix.os == 'ubuntu-latest' && matrix.php == '8.4'
         run: composer audit --no-interaction
+
+      - name: Prepare BeeL's OpenAPI contract
+        run: composer prepare-openapi
 
       - name: Run static analysis
         run: composer phpstan

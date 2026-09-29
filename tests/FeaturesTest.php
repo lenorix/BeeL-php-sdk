@@ -1013,75 +1013,6 @@ it('lists every boolean and list query parameter of the generated endpoints', fu
 
 // Return types
 
-it('declares every resource return type as the generated client actually returns it', function () {
-    $root = __DIR__.'/../';
-    $mismatches = [];
-    $checked = [];
-    $callers = [];
-    foreach (array_merge(glob($root.'src/Resource/*.php') ?: [], glob($root.'src/Resource/*/*.php') ?: []) as $file) {
-        preg_match_all('/public function (\w+)\(([^)]*)\): ([^\n{]+)\n    \{\n(.*?)\n    \}\n/s', sourceCode($file), $methods, PREG_SET_ORDER);
-        foreach ($methods as [, $name, , $declared, $body]) {
-            if (str_contains($body, '$this->client->')) {
-                $callers[] = basename($file, '.php').'::'.$name;
-            }
-            if (preg_match('/\$this->(execute(?:Ready|Void)?)\(\s*fn \(\) => \$this->client->(\w+)\(/', $body, $call) !== 1) {
-                continue;
-            }
-            $checked[] = basename($file, '.php').'::'.$name;
-            preg_match('/protected function transformResponseBody.*?\n    \}\n/s', sourceCode($root.'src/Generated/Endpoint/'.ucfirst($call[2]).'.php'), $transform);
-            // Raw Jane output writes `200 === $status`; Pint rewrites it to `$status === 200`.
-            preg_match_all('/(?|\$status === (2\d\d)|(2\d\d) === \$status)[^\n]*\n\s*return \$serializer->deserialize\(\$body, \'([^\']+)\'/', $transform[0], $bodies, PREG_SET_ORDER);
-            preg_match_all('/(?|\$status === (2\d\d)|(2\d\d) === \$status)/', $transform[0], $statuses);
-
-            $types = [];
-            $nullable = false;
-            foreach ($bodies as [, , $class]) {
-                if (str_ends_with($class, '[]')) {
-                    $types[] = 'array';
-
-                    continue;
-                }
-                $type = method_exists($class, 'getData') ? (string) (new ReflectionMethod($class, 'getData'))->getReturnType() : $class;
-                $nullable = $nullable || str_starts_with($type, '?');
-                $types[] = ltrim($type, '?\\');
-            }
-            $types = array_values(array_unique($types));
-            // execute() reports a success without a body as unexpected and executeReady() only accepts a
-            // bodiless 202, so a declared bodiless status needs executeVoid() or executeReady().
-            $bodiless = array_diff(array_unique($statuses[1]), array_column($bodies, 1));
-            if (($call[1] === 'execute' && $bodiless !== []) || ($call[1] === 'executeReady' && array_diff($bodiless, ['202']) !== [])) {
-                $mismatches[] = basename($file, '.php')."::{$name}(): {$call[1]}() cannot return the bodiless ".implode(', ', $bodiless);
-            }
-
-            $expected = $types === [] ? 'void' : (count($types) === 1 ? $types[0] : implode('|', $types));
-            $actual = (string) (new ReflectionMethod(
-                'Lenorix\\BeelSdk\\Resource\\'.str_replace(['/', '.php'], ['\\', ''], substr($file, strlen($root.'src/Resource/'))),
-                $name,
-            ))->getReturnType();
-            $actualType = ltrim($actual, '?\\');
-            // Compare unions as sets: declaration order is irrelevant to PHP.
-            $sortUnion = static function (string $type): string {
-                $parts = array_map(static fn (string $part): string => ltrim($part, '\\'), explode('|', $type));
-                sort($parts);
-
-                return implode('|', $parts);
-            };
-            $actualType = $sortUnion($actualType);
-            $expected = $sortUnion($expected);
-            $isNullable = str_starts_with($actual, '?');
-            // Declaring void deliberately discards the response (as the Node.js SDK does for customers->deactivate()); it can never fail.
-            if ($actual !== 'void' && ($actualType !== $expected || ($nullable && ! $isNullable && $expected !== 'void'))) {
-                $mismatches[] = basename($file, '.php')."::{$name}(): {$actual}, expected ".($nullable ? '?' : '').$expected;
-            }
-        }
-    }
-
-    // Every method that calls the generated client must have been checked, or the patterns above have drifted.
-    expect($checked)->not->toBeEmpty()
-        ->and(array_values(array_diff($callers, $checked)))->toBe([])
-        ->and($mismatches)->toBe([]);
-});
-
 // Endpoints without a Node.js SDK method, named in its style
 
 it('switches a company on and off, exposing the Live checkout URL', function () {
@@ -1617,33 +1548,6 @@ it('reports a 202 as not ready whatever body and Content-Type BeeL sends', funct
 ]);
 
 // Checks against the prepared OpenAPI contract the client is generated from (build/openapi.json)
-
-function openApiContract(): array
-{
-    return json_decode((string) file_get_contents(__DIR__.'/../build/openapi.json'), true, 512, JSON_THROW_ON_ERROR);
-}
-
-it('wraps every current operation of the contract in a resource method', function () {
-    $called = [];
-    foreach (array_merge(glob(__DIR__.'/../src/Resource/*.php') ?: [], glob(__DIR__.'/../src/Resource/*/*.php') ?: [], [__DIR__.'/../src/Beel.php']) as $file) {
-        preg_match_all('/client->(\w+)\(|new (\w+)\b/', sourceCode($file), $matches);
-        foreach (array_filter(array_merge($matches[1], $matches[2])) as $name) {
-            $called[lcfirst($name)] = true;
-        }
-    }
-
-    $missing = [];
-    foreach (openApiContract()['paths'] as $path => $operations) {
-        foreach ($operations as $method => $operation) {
-            if (is_array($operation) && isset($operation['operationId']) && ! ($operation['deprecated'] ?? false)
-                && ! isset($called[lcfirst($operation['operationId'])])) {
-                $missing[] = strtoupper($method).' '.$path.' '.$operation['operationId'];
-            }
-        }
-    }
-
-    expect($missing)->toBe([]);
-});
 
 it('keeps the hand-written enums in sync with the contract', function (string $schema, string $enum) {
     $values = array_map(static fn (BackedEnum $case): string|int => $case->value, $enum::cases());

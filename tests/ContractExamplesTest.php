@@ -15,7 +15,7 @@ use Lenorix\BeelSdk\Tests\Support\SchemaSample;
  */
 function contractResponseExamples(): array
 {
-    $spec = json_decode((string) file_get_contents(__DIR__.'/../build/openapi.json'), true, flags: JSON_THROW_ON_ERROR);
+    $spec = openApiContract();
     $examples = [];
     foreach ($spec['paths'] as $operations) {
         foreach ($operations as $operation) {
@@ -105,7 +105,7 @@ function failingGetters(object $model, string $path): array
 }
 
 it('reads every model of the contract filled from its property examples', function () {
-    $spec = json_decode((string) file_get_contents(__DIR__.'/../build/openapi.json'), true, flags: JSON_THROW_ON_ERROR);
+    $spec = openApiContract();
     $serializer = (fn () => $this->serializer)->call((new Beel(apiKey: 'beel_sk_test_key'))->raw);
     $sample = new SchemaSample($spec['components']['schemas']);
 
@@ -130,7 +130,7 @@ it('reads every model of the contract filled from its property examples', functi
 });
 
 it('reads everything BeeL sends when it leaves out every optional property', function () {
-    $spec = json_decode((string) file_get_contents(__DIR__.'/../build/openapi.json'), true, flags: JSON_THROW_ON_ERROR);
+    $spec = openApiContract();
     $serializer = (fn () => $this->serializer)->call((new Beel(apiKey: 'beel_sk_test_key'))->raw);
     $sample = new SchemaSample($spec['components']['schemas'], requiredOnly: true);
 

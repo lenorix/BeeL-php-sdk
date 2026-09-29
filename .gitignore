@@ -13,9 +13,8 @@ yarn-error.log
 .phpunit.cache
 .phpunit.result.cache
 .phpstan-cache
-# Build output, except the prepared OpenAPI contract the client is generated from (tests read it)
-/build/*
-!/build/openapi.json
+# Build output, including the prepared OpenAPI contract: `composer prepare-openapi` downloads it
+/build
 
 # Editors
 /.idea
