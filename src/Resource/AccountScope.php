@@ -41,7 +41,7 @@ final readonly class AccountScope extends GeneratedResource
     public AccountRequestLogsResource $requestLogs;
 
     /** @param string $accountId Account UUID returned by BeeL. */
-    public function __construct(Client $client, public string $accountId, ?ResponseContext $responseContext = null)
+    public function __construct(Client $client, public string $accountId, ResponseContext $responseContext)
     {
         parent::__construct($client, $responseContext);
         $this->companies = new AccountCompaniesResource($client, $accountId, $this->responseContext);

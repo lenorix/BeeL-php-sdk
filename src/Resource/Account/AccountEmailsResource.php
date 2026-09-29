@@ -4,22 +4,14 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource\Account;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryDetail;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryIndicatorListResponseData;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryListResponseData;
 use Lenorix\BeelSdk\Generated\Model\EmailDeliveryResponse;
 use Lenorix\BeelSdk\Http\QueryParameters;
-use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 
-final readonly class AccountEmailsResource extends GeneratedResource
+final readonly class AccountEmailsResource extends AccountResource
 {
-    public function __construct(Client $client, private string $accountId, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /**
      * @param  array<string, mixed>  $query
      */

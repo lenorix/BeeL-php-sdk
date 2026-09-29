@@ -4,22 +4,14 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource\Account;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CompanyCreatedData;
 use Lenorix\BeelSdk\Generated\Model\CompanyData;
 use Lenorix\BeelSdk\Generated\Model\CreateCompanyRequest;
 use Lenorix\BeelSdk\Generated\Model\ListCompanies200ResponseData;
 use Lenorix\BeelSdk\Generated\Model\ListCompanyStats200ResponseData;
-use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 
-final readonly class AccountCompaniesResource extends GeneratedResource
+final readonly class AccountCompaniesResource extends AccountResource
 {
-    public function __construct(Client $client, private string $accountId, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /**
      * @param  array<string, mixed>  $query
      */

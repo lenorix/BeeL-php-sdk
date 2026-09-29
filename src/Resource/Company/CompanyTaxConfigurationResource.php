@@ -4,20 +4,12 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource\Company;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\TaxConfiguration;
 use Lenorix\BeelSdk\Generated\Model\UpdateTaxConfigurationRequest;
-use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 
 /** Read and update the tax defaults for one company's fiscal profile. */
-final readonly class CompanyTaxConfigurationResource extends GeneratedResource
+final readonly class CompanyTaxConfigurationResource extends CompanyResource
 {
-    public function __construct(Client $client, private string $companyId, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /** Retrieve this company's tax configuration and default tax settings. */
     public function get(): TaxConfiguration
     {

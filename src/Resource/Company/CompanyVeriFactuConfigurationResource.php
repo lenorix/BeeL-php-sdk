@@ -4,20 +4,12 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource\Company;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\UpdateVeriFactuConfigurationRequest;
 use Lenorix\BeelSdk\Generated\Model\VeriFactuConfiguration;
-use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 
 /** Read or update whether VeriFactu applies to one company's invoices. */
-final readonly class CompanyVeriFactuConfigurationResource extends GeneratedResource
+final readonly class CompanyVeriFactuConfigurationResource extends CompanyResource
 {
-    public function __construct(Client $client, private string $companyId, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /** Retrieve the VeriFactu setting and server-resolved fiscal regime. */
     public function get(): VeriFactuConfiguration
     {

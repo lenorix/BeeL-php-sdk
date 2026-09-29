@@ -70,7 +70,7 @@ final readonly class CompanyScope extends GeneratedResource
     /**
      * @param  string  $companyId  Company UUID, not its NIF or legal name.
      */
-    public function __construct(Client $client, public string $companyId, ?ResponseContext $responseContext = null)
+    public function __construct(Client $client, public string $companyId, ResponseContext $responseContext)
     {
         parent::__construct($client, $responseContext);
         $this->invoices = new CompanyInvoicesResource($client, $companyId, $this->responseContext);

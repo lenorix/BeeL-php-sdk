@@ -4,21 +4,13 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource\Company;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CompanyLogo;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdLogoPutBody;
-use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 use Psr\Http\Message\StreamInterface;
 
 /** The logo printed on this company's invoices. */
-final readonly class CompanyLogoResource extends GeneratedResource
+final readonly class CompanyLogoResource extends CompanyResource
 {
-    public function __construct(Client $client, private string $companyId, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /**
      * Upload or replace the company logo, sent as `multipart/form-data`.
      *

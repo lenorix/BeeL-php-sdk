@@ -4,21 +4,13 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource\Account;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateInvitationRequest;
 use Lenorix\BeelSdk\Generated\Model\Invitation;
 use Lenorix\BeelSdk\Generated\Model\InvitationSummary;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdInvitationsGetResponse200Data;
-use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 
-final readonly class AccountInvitationsResource extends GeneratedResource
+final readonly class AccountInvitationsResource extends AccountResource
 {
-    public function __construct(Client $client, private string $accountId, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /**
      * @param  array<string, mixed>  $query  Pagination options such as `page` and `limit`.
      */

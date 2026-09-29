@@ -4,20 +4,12 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource\Company;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\InvoiceCustomization;
 use Lenorix\BeelSdk\Generated\Model\UpdateInvoiceCustomizationRequest;
-use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 
 /** How this company's invoices look: PDF template, colour and languages. */
-final readonly class CompanyInvoiceCustomizationResource extends GeneratedResource
+final readonly class CompanyInvoiceCustomizationResource extends CompanyResource
 {
-    public function __construct(Client $client, private string $companyId, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /**
      * Retrieve this company's invoice customization.
      *

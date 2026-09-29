@@ -6,21 +6,13 @@ namespace Lenorix\BeelSdk\Resource\Company;
 
 use Lenorix\BeelSdk\Enum\Environment;
 use Lenorix\BeelSdk\Exception\BeelPaymentRequiredError;
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\ActivateCompanyRequest;
 use Lenorix\BeelSdk\Generated\Model\CompanyActivation;
 use Lenorix\BeelSdk\Generated\Model\CompanyDeactivation;
-use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 
 /** Switch a company on or off in Test or Live. */
-final readonly class CompanyActivationsResource extends GeneratedResource
+final readonly class CompanyActivationsResource extends CompanyResource
 {
-    public function __construct(Client $client, private string $companyId, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /**
      * Switch the company on in the given environment.
      *

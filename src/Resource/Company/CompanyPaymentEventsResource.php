@@ -10,14 +10,13 @@ use Lenorix\BeelSdk\Generated\Model\ManagedPaymentEvent;
 use Lenorix\BeelSdk\Generated\Model\ManagedPaymentEventDraftResponseData;
 use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 
 /** Inspect and recover payment events for one company payment connection. */
-final readonly class CompanyPaymentEventsResource extends GeneratedResource
+final readonly class CompanyPaymentEventsResource extends CompanyResource
 {
-    public function __construct(Client $client, private string $companyId, private string $connectionId, ?ResponseContext $responseContext = null)
+    public function __construct(Client $client, string $companyId, private string $connectionId, ResponseContext $responseContext)
     {
-        parent::__construct($client, $responseContext);
+        parent::__construct($client, $companyId, $responseContext);
     }
 
     /**

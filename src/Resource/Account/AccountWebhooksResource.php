@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource\Account;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateWebhookSubscriptionRequest;
 use Lenorix\BeelSdk\Generated\Model\UpdateWebhookSubscriptionRequest;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdWebhooksGetResponse200Data;
@@ -13,16 +12,9 @@ use Lenorix\BeelSdk\Generated\Model\WebhookDeliveryLog;
 use Lenorix\BeelSdk\Generated\Model\WebhookSubscription;
 use Lenorix\BeelSdk\Generated\Model\WebhookSubscriptionWithSecret;
 use Lenorix\BeelSdk\Generated\Model\WebhookTestResult;
-use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 
-final readonly class AccountWebhooksResource extends GeneratedResource
+final readonly class AccountWebhooksResource extends AccountResource
 {
-    public function __construct(Client $client, private string $accountId, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /**
      * @param  array<string, mixed>  $query
      */

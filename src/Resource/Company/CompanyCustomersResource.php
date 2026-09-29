@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource\Company;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateCustomerRequest;
 use Lenorix\BeelSdk\Generated\Model\Customer;
 use Lenorix\BeelSdk\Generated\Model\CustomerBulkDeleteResult;
@@ -15,17 +14,10 @@ use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersGetResponse200D
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersImportsPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdCustomersImportsPreviewPostBody;
 use Lenorix\BeelSdk\Http\QueryParameters;
-use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 
 /** Manage the customer records used by invoices for one company. */
-final readonly class CompanyCustomersResource extends GeneratedResource
+final readonly class CompanyCustomersResource extends CompanyResource
 {
-    public function __construct(Client $client, private string $companyId, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /** @param array<string, mixed> $query Search and pagination filters accepted by BeeL. */
     public function list(array $query = []): V1CompaniesCompanyIdCustomersGetResponse200Data
     {

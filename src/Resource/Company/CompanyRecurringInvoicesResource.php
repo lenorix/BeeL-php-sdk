@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource\Company;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateRecurringInvoiceDerivationRequest;
 use Lenorix\BeelSdk\Generated\Model\CreateRecurringInvoiceRequest;
 use Lenorix\BeelSdk\Generated\Model\GenerationHistoryResponse;
@@ -16,17 +15,10 @@ use Lenorix\BeelSdk\Generated\Model\SetRecurringInvoiceStatusRequest;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdGeneratePostResponse201Data;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRecurringInvoicesRecurringInvoiceIdHistoryGetResponse200Data;
-use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 
 /** Manage recurring invoice templates and generated-invoice history for a company. */
-final readonly class CompanyRecurringInvoicesResource extends GeneratedResource
+final readonly class CompanyRecurringInvoicesResource extends CompanyResource
 {
-    public function __construct(Client $client, private string $companyId, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /**
      * List recurring invoice templates for this company.
      *

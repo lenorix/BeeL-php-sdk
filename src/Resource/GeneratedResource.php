@@ -27,9 +27,10 @@ abstract readonly class GeneratedResource
 {
     private RequestOptionsSlot $requestOptions;
 
+    /** @internal Resources are created by {@see Beel}. */
     public function __construct(
         protected Client $client,
-        protected ?ResponseContext $responseContext = null,
+        protected ResponseContext $responseContext,
     ) {
         $this->requestOptions = new RequestOptionsSlot;
     }
@@ -45,10 +46,6 @@ abstract readonly class GeneratedResource
      */
     public function withOptions(RequestOptions $options): static
     {
-        if ($this->responseContext === null) {
-            throw new \LogicException('Request options need a resource created by a Beel client.');
-        }
-
         $copy = clone $this;
         $copy->applyOptions($options);
 
@@ -170,15 +167,13 @@ abstract readonly class GeneratedResource
     /** Run one generated endpoint call and map every failure; the result may be null when nothing was read. */
     private function call(callable $operation): mixed
     {
-        $this->responseContext?->reset();
+        $this->responseContext->reset();
 
         try {
-            $response = $this->responseContext === null
-                ? $operation()
-                : $this->responseContext->withRequestOptions($this->options(), $operation);
+            $response = $this->responseContext->withRequestOptions($this->options(), $operation);
         } catch (NotEncodableValueException $exception) {
             // A JSON Content-Type with a body that is not JSON, such as an empty one or a proxy's error page.
-            $httpResponse = $this->responseContext?->response();
+            $httpResponse = $this->responseContext->response();
             if ($httpResponse !== null && ! HttpStatus::isSuccess($httpResponse)) {
                 throw BeelApiError::fromErrorResponse(new ErrorResponse, $httpResponse, $this->responseContext->body());
             }
@@ -188,7 +183,7 @@ abstract readonly class GeneratedResource
             throw BeelApiError::fromGenerated($exception);
         }
 
-        $httpResponse = $this->responseContext?->response();
+        $httpResponse = $this->responseContext->response();
         // An error status the operation does not declare (such as an empty 503 from a proxy) comes back
         // as null, and is read from its body here. A client generated with BeeL's `default` response,
         // which bin/prepare-openapi.php drops, returns an ErrorResponse for it instead.
@@ -229,7 +224,7 @@ abstract readonly class GeneratedResource
     /** The error for a success response the SDK could not read, or null when the last response was not a success. */
     private function unreadable(?Throwable $previous = null): ?BeelUnexpectedResponseError
     {
-        $response = $this->responseContext?->response();
+        $response = $this->responseContext->response();
         if ($response === null || ! HttpStatus::isSuccess($response)) {
             return null;
         }
@@ -249,9 +244,6 @@ abstract readonly class GeneratedResource
      */
     protected function executeRaw(Endpoint $endpoint, ?bool $retryServerErrors = null): ResponseInterface
     {
-        if ($this->responseContext === null) {
-            throw new \LogicException('Raw responses need a resource created by a Beel client.');
-        }
         $this->responseContext->reset();
         $options = ($this->options() ?? new RequestOptions)->withDefaults($retryServerErrors);
 
@@ -277,7 +269,7 @@ abstract readonly class GeneratedResource
     protected function executeReady(callable $operation, string $notReadyMessage): mixed
     {
         $result = $this->call($operation);
-        $response = $this->responseContext?->response();
+        $response = $this->responseContext->response();
         if ($response === null || $response->getStatusCode() !== 202) {
             return $this->unwrap($this->requireBody($result));
         }
@@ -299,7 +291,7 @@ abstract readonly class GeneratedResource
      */
     protected function model(object|array|null $value, string $class): ?object
     {
-        $this->responseContext?->reset();
+        $this->responseContext->reset();
 
         return RequestModels::from($value, $class);
     }
@@ -421,7 +413,7 @@ abstract readonly class GeneratedResource
         if (method_exists($response, 'isInitialized') && ! $response->isInitialized('data')) {
             return false;
         }
-        $body = $this->responseContext?->body();
+        $body = $this->responseContext->body();
         $decoded = $body === null ? null : json_decode($body, true);
 
         return ! is_array($decoded) || ($decoded['data'] ?? null) !== null;

@@ -4,21 +4,13 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource\Account;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\RequestLogDetail;
 use Lenorix\BeelSdk\Generated\Model\RequestLogListResponseData;
 use Lenorix\BeelSdk\Generated\Model\RequestLogSummary;
-use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 
 /** The history of API requests made to this account, for debugging. */
-final readonly class AccountRequestLogsResource extends GeneratedResource
+final readonly class AccountRequestLogsResource extends AccountResource
 {
-    public function __construct(Client $client, private string $accountId, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /**
      * List request logs, newest first.
      *

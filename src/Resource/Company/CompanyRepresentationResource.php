@@ -4,22 +4,14 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource\Company;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\RepresentationActionResponseData;
 use Lenorix\BeelSdk\Generated\Model\RepresentationDownloadResponseData;
 use Lenorix\BeelSdk\Generated\Model\RepresentationStatusResponseData;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdRepresentationSubmitPostBody;
-use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 
 /** The AEAT representation a company signs so BeeL can submit its invoices in production. */
-final readonly class CompanyRepresentationResource extends GeneratedResource
+final readonly class CompanyRepresentationResource extends CompanyResource
 {
-    public function __construct(Client $client, private string $companyId, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /**
      * Retrieve the state of this company's representation.
      *

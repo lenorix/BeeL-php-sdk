@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource\Account;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\AccountMember;
 use Lenorix\BeelSdk\Generated\Model\ChangeMemberRoleRequest;
 use Lenorix\BeelSdk\Generated\Model\GrantAssignment;
@@ -12,16 +11,9 @@ use Lenorix\BeelSdk\Generated\Model\MemberGrant;
 use Lenorix\BeelSdk\Generated\Model\PutMemberGrantRequest;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdMembersGetResponse200Data;
 use Lenorix\BeelSdk\Generated\Model\V1AccountsAccountIdMembersMemberIdGrantsGetResponse200Data;
-use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 
-final readonly class AccountMembersResource extends GeneratedResource
+final readonly class AccountMembersResource extends AccountResource
 {
-    public function __construct(Client $client, private string $accountId, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /**
      * @param  array<string, mixed>  $query  Pagination options such as `page` and `limit`.
      */

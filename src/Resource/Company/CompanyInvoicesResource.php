@@ -38,18 +38,17 @@ use Lenorix\BeelSdk\Generated\Model\VoidInvoiceRequest;
 use Lenorix\BeelSdk\Http\BinaryDownload;
 use Lenorix\BeelSdk\Http\QueryParameters;
 use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 
 /** Invoice lifecycle and document operations for a single company. */
-final readonly class CompanyInvoicesResource extends GeneratedResource
+final readonly class CompanyInvoicesResource extends CompanyResource
 {
     /** Set, inspect or clear a future issue date for an invoice. */
     public CompanyInvoiceScheduleResource $schedule;
 
-    public function __construct(Client $client, private string $companyId, ?ResponseContext $responseContext = null)
+    public function __construct(Client $client, string $companyId, ResponseContext $responseContext)
     {
         $this->schedule = new CompanyInvoiceScheduleResource($client, $companyId, $responseContext);
-        parent::__construct($client, $responseContext);
+        parent::__construct($client, $companyId, $responseContext);
     }
 
     /**

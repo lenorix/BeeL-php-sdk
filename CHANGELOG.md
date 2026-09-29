@@ -11,6 +11,8 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 ### Changed
 
+- Resource constructors require the client's `ResponseContext` and are marked `@internal`: resources are meant to be reached from `Beel` (`$beel->company($id)->invoices`), which always passed it. Code that built them by hand without one, which could not send per-call options, must use the client instead.
+
 - The generated client no longer reads a status an operation does not declare as an `ErrorResponse` (BeeL's `default` response, which `bin/prepare-openapi.php` now drops): called directly through `$beel->raw`, it returns `null` for one. Resource methods are unaffected: they still read such an error from its body, with its code, message and request ID.
 
 ### Fixed

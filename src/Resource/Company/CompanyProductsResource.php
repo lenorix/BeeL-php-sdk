@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Lenorix\BeelSdk\Resource\Company;
 
-use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\CreateProductRequest;
 use Lenorix\BeelSdk\Generated\Model\PatchProductRequest;
 use Lenorix\BeelSdk\Generated\Model\Product;
@@ -13,17 +12,10 @@ use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkDeleteRespon
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsBulkPostBody;
 use Lenorix\BeelSdk\Generated\Model\V1CompaniesCompanyIdProductsGetResponse200Data;
 use Lenorix\BeelSdk\Http\QueryParameters;
-use Lenorix\BeelSdk\Http\ResponseContext;
-use Lenorix\BeelSdk\Resource\GeneratedResource;
 
 /** Manage this company's product catalog and default line details. */
-final readonly class CompanyProductsResource extends GeneratedResource
+final readonly class CompanyProductsResource extends CompanyResource
 {
-    public function __construct(Client $client, private string $companyId, ?ResponseContext $responseContext = null)
-    {
-        parent::__construct($client, $responseContext);
-    }
-
     /**
      * List products for this company with optional filters and pagination.
      *
