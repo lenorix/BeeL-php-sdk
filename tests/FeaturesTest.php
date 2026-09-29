@@ -1877,3 +1877,41 @@ it('checks the required fields of every webhook event and its data as BeeL decla
     expect($verifier->getConstant('EVENT_REQUIRED'))->toBe($schemas['WebhookEvent']['required'])
         ->and($verifier->getConstant('EVENT_DATA_REQUIRED'))->toBe($dataRequired);
 });
+
+it('keeps paginating by page numbers when BeeL sends a null has_next', function () {
+    $transport = new RecordingPsrClient([
+        jsonResponse(['success' => true, 'data' => ['customers' => [['id' => 'a']], 'pagination' => ['current_page' => 1, 'total_pages' => 2, 'total_items' => 2, 'items_per_page' => 1, 'has_next' => null]]]),
+        jsonResponse(['success' => true, 'data' => ['customers' => [['id' => 'b']], 'pagination' => ['current_page' => 2, 'total_pages' => 2, 'total_items' => 2, 'items_per_page' => 1, 'has_next' => null]]]),
+    ]);
+
+    $ids = array_map(static fn (object $customer): string => $customer->getId(), iterator_to_array(testClient($transport)->company('c')->customers->all()));
+
+    expect($ids)->toBe(['a', 'b']);
+});
+
+it('maps an error body whose fields are not strings to BeelApiError', function (string $body, ?string $apiCode, string $message, ?string $requestId) {
+    $transport = new RecordingPsrClient([new Response(503, ['Content-Type' => 'application/json'], $body)]);
+
+    try {
+        testClient($transport)->company('c')->get();
+        test()->fail('Expected BeelApiError.');
+    } catch (BeelApiError $exception) {
+        expect($exception->statusCode)->toBe(503)
+            ->and($exception->apiCode)->toBe($apiCode)
+            ->and($exception->getMessage())->toBe($message)
+            ->and($exception->requestId)->toBe($requestId);
+    }
+})->with([
+    'numeric code' => ['{"error":{"code":500,"message":"Down"}}', '500', 'Down', null],
+    'list message' => ['{"error":{"code":"DOWN","message":["a","b"]}}', 'DOWN', 'API error 503', null],
+    'numeric request ID' => ['{"error":{"code":"DOWN"},"meta":{"request_id":123}}', 'DOWN', 'API error 503', '123'],
+    'string error' => ['{"error":"Service Unavailable"}', 'UNKNOWN', 'Service Unavailable', null],
+]);
+
+it('reports a success response without data as unexpected, not as a TypeError', function () {
+    $transport = new RecordingPsrClient([jsonResponse(['success' => true]), jsonResponse(['success' => true, 'data' => null])]);
+    $company = testClient($transport)->company('c');
+
+    expect(fn () => $company->get())->toThrow(BeelUnexpectedResponseError::class)
+        ->and(fn () => $company->get())->toThrow(BeelUnexpectedResponseError::class);
+});

@@ -101,11 +101,14 @@ class BeelApiError extends \RuntimeException
         if (($message === null || $code === null || $details === null || $requestId === null) && $body !== null) {
             $data = json_decode($body, true);
             if (is_array($data)) {
-                $errorData = is_array($data['error'] ?? null) ? $data['error'] : $data;
-                $message ??= $errorData['message'] ?? $data['detail'] ?? $data['title'] ?? null;
-                $code ??= $errorData['code'] ?? null;
+                // Bodies from gateways and proxies do not follow BeeL's error schema: take text values only.
+                $error = $data['error'] ?? null;
+                $errorData = is_array($error) ? $error : $data;
+                $message ??= self::text($errorData['message'] ?? null) ?? self::text(is_array($error) ? null : $error)
+                    ?? self::text($data['detail'] ?? null) ?? self::text($data['title'] ?? null);
+                $code ??= self::text($errorData['code'] ?? null);
                 $details ??= $errorData['details'] ?? null;
-                $requestId ??= $data['meta']['request_id'] ?? null;
+                $requestId ??= self::text(is_array($data['meta'] ?? null) ? ($data['meta']['request_id'] ?? null) : null);
             }
         }
 
@@ -120,6 +123,16 @@ class BeelApiError extends \RuntimeException
             $requestId,
             $retryAfter,
         );
+    }
+
+    /** A non-empty string, or a number written as one; anything else is not usable as text. */
+    private static function text(mixed $value): ?string
+    {
+        return match (true) {
+            is_string($value) && $value !== '' => $value,
+            is_int($value), is_float($value) => (string) $value,
+            default => null,
+        };
     }
 
     private static function forStatus(

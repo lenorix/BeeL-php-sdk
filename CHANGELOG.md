@@ -12,6 +12,9 @@ All notable changes to `BeeL-php-sdk` will be documented in this file.
 
 - A response without a `Content-Type` no longer triggers PHP's "Passing null to parameter #1 ($string) of type string is deprecated" in the generated client, which read BeeL's `default` response without checking the header exists.
 - A success status without a body the SDK can read (an undeclared status such as an empty `202` or `204`, or a declared one whose body is empty or not JSON) throws `BeelUnexpectedResponseError`; it ended in a `TypeError`, or a Symfony `NotEncodableValueException` for an empty JSON body. Only the operations that return nothing accept an empty `204`.
+- `all()` iterators stopped after the first page when BeeL sent `"has_next": null`, which its contract allows; they now fall back to comparing page numbers.
+- An error body whose `code`, `message` or `request_id` is not text (such as a proxy's numeric code) throws `BeelApiError` instead of a `TypeError`, and an `error` given as a plain string becomes its message.
+- A success response without `data`, or with `"data": null`, throws `BeelUnexpectedResponseError` instead of a `TypeError` or an empty model.
 - `verifyEvent()`, `toEvent()` and `WebhookVerifier::eventFromPayload()` throw `WebhookPayloadError` for an event without a field BeeL always sends, in the envelope or in the data of a known type, instead of a model whose getters throw a `TypeError`. `verify()` rejects a body that is an empty JSON list (`[]`), as it did a non-empty one.
 - The `data` of an event type this SDK does not know yet is kept as an array, instead of whichever typed model its fields happened to fit: an `invoice.paid` event with an invoice ID and number was read as `WebhookEventDataInvoiceIssued`.
 - The published package no longer includes `AGENTS.md`.

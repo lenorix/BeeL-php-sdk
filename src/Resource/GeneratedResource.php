@@ -341,8 +341,9 @@ abstract readonly class GeneratedResource
         if (! is_object($pagination) || ! method_exists($pagination, 'isInitialized')) {
             return false;
         }
-        if ($pagination->isInitialized('hasNext') && method_exists($pagination, 'getHasNext')) {
-            return (bool) $pagination->getHasNext();
+        // `has_next` is nullable in BeeL's contract: only a boolean decides, null falls back to page numbers.
+        if ($pagination->isInitialized('hasNext') && method_exists($pagination, 'getHasNext') && $pagination->getHasNext() !== null) {
+            return $pagination->getHasNext();
         }
         if ($pagination->isInitialized('currentPage') && $pagination->isInitialized('totalPages')
             && method_exists($pagination, 'getCurrentPage') && method_exists($pagination, 'getTotalPages')) {
@@ -352,12 +353,34 @@ abstract readonly class GeneratedResource
         return false;
     }
 
+    /**
+     * Return the envelope's `data`, reporting a success response without the data it must carry as unexpected.
+     */
     private function unwrap(mixed $response): mixed
     {
-        if (is_object($response) && method_exists($response, 'getData')) {
-            return $response->getData();
+        if (! is_object($response) || ! method_exists($response, 'getData')) {
+            return $response;
+        }
+        $type = (new \ReflectionMethod($response, 'getData'))->getReturnType();
+        if ($type !== null && ! $type->allowsNull() && ! $this->bodyHasData($response)) {
+            throw $this->unreadable() ?? new BeelUnexpectedResponseError(0);
         }
 
-        return $response;
+        return $response->getData();
+    }
+
+    /**
+     * Whether the envelope carries its `data`. Jane builds an empty model from a `null` one, so the
+     * JSON BeeL sent decides when it is available.
+     */
+    private function bodyHasData(object $response): bool
+    {
+        if (method_exists($response, 'isInitialized') && ! $response->isInitialized('data')) {
+            return false;
+        }
+        $body = $this->responseContext?->body();
+        $decoded = $body === null ? null : json_decode($body, true);
+
+        return ! is_array($decoded) || ($decoded['data'] ?? null) !== null;
     }
 }
