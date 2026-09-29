@@ -17,6 +17,7 @@ use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Http\ApiPathGuardPlugin;
 use Lenorix\BeelSdk\Http\BooleanQueryPlugin;
 use Lenorix\BeelSdk\Http\DateTimeNormalizer;
+use Lenorix\BeelSdk\Http\HttpStatus;
 use Lenorix\BeelSdk\Http\RequestOptions;
 use Lenorix\BeelSdk\Http\ResponseContext;
 use Lenorix\BeelSdk\Http\RetryingClient;
@@ -201,7 +202,7 @@ final readonly class Beel
 
         $response = $this->responseContext->withRequestOptions($options, fn () => $this->api->sendRequest($request));
         // A redirect is never followed (it could drop the method or the body), so it is not a success either.
-        if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
+        if (! HttpStatus::isSuccess($response)) {
             throw BeelApiError::fromErrorResponse(new ErrorResponse, $response, (string) $response->getBody());
         }
         // Check the type before reading, so a file is never loaded into memory here.
@@ -245,7 +246,7 @@ final readonly class Beel
 
         $request = Psr17FactoryDiscovery::findRequestFactory()->createRequest('GET', $pdf->getDownloadUrl());
         $response = $this->transport->sendRequest($request);
-        if ($response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
+        if (! HttpStatus::isSuccess($response)) {
             throw new \RuntimeException('Failed to download invoice PDF: HTTP '.$response->getStatusCode());
         }
 

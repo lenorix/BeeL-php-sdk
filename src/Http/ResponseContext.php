@@ -11,6 +11,8 @@ use Psr\Http\Message\ResponseInterface;
  *
  * Keeps the final HTTP response available while Jane transforms its body, and
  * carries the request options of the resource call in progress.
+ *
+ * @internal
  */
 final class ResponseContext
 {

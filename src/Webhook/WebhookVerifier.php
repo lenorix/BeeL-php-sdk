@@ -20,9 +20,7 @@ use Lenorix\BeelSdk\Generated\Model\WebhookEventDataInvoiceVoided;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataRecurringInvoicePaused;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataRepresentationSigned;
 use Lenorix\BeelSdk\Generated\Model\WebhookEventDataVeriFactuStatusUpdated;
-use Lenorix\BeelSdk\Generated\Normalizer\JaneObjectNormalizer;
-use Lenorix\BeelSdk\Http\DateTimeNormalizer;
-use Symfony\Component\Serializer\Serializer;
+use Lenorix\BeelSdk\Http\RequestModels;
 
 /** Verify signed BeeL webhook requests using the original JSON body. */
 final readonly class WebhookVerifier
@@ -68,14 +66,11 @@ final readonly class WebhookVerifier
      */
     public function __construct(string $secret, private int $toleranceSeconds = 300)
     {
-        if (trim($secret) === '') {
-            throw new \InvalidArgumentException('Webhook secret must not be empty.');
-        }
+        // The signer rejects an empty secret.
+        $this->signer = new WebhookSigner($secret);
         if ($toleranceSeconds < 0) {
             throw new \InvalidArgumentException('Webhook timestamp tolerance must not be negative.');
         }
-
-        $this->signer = new WebhookSigner($secret);
     }
 
     /**
@@ -201,7 +196,7 @@ final readonly class WebhookVerifier
         if (is_string($type) && isset(self::EVENT_DATA_REQUIRED[$type])) {
             self::requireFields($data, self::EVENT_DATA_REQUIRED[$type], "Webhook {$type} data");
         }
-        $serializer = new Serializer([new DateTimeNormalizer, new JaneObjectNormalizer]);
+        $serializer = RequestModels::serializer();
 
         try {
             // Built without `data`, which Jane would otherwise read as whichever model its fields fit.

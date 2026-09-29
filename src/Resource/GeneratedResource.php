@@ -11,6 +11,7 @@ use Lenorix\BeelSdk\Exception\BeelUnexpectedResponseError;
 use Lenorix\BeelSdk\Generated\Client;
 use Lenorix\BeelSdk\Generated\Model\ErrorResponse;
 use Lenorix\BeelSdk\Generated\Runtime\Client\Endpoint;
+use Lenorix\BeelSdk\Http\HttpStatus;
 use Lenorix\BeelSdk\Http\IdempotencyKey;
 use Lenorix\BeelSdk\Http\RequestModels;
 use Lenorix\BeelSdk\Http\RequestOptions;
@@ -178,7 +179,7 @@ abstract readonly class GeneratedResource
         } catch (NotEncodableValueException $exception) {
             // A JSON Content-Type with a body that is not JSON, such as an empty one or a proxy's error page.
             $httpResponse = $this->responseContext?->response();
-            if ($httpResponse !== null && ($httpResponse->getStatusCode() < 200 || $httpResponse->getStatusCode() >= 300)) {
+            if ($httpResponse !== null && ! HttpStatus::isSuccess($httpResponse)) {
                 throw BeelApiError::fromErrorResponse(new ErrorResponse, $httpResponse, $this->responseContext->body());
             }
 
@@ -192,7 +193,7 @@ abstract readonly class GeneratedResource
         // as null, and is read from its body here. A client generated with BeeL's `default` response,
         // which bin/prepare-openapi.php drops, returns an ErrorResponse for it instead.
         // A redirect is never followed, so it is reported like an error status rather than read as a success.
-        if ($httpResponse !== null && ($httpResponse->getStatusCode() < 200 || $httpResponse->getStatusCode() >= 300)) {
+        if ($httpResponse !== null && ! HttpStatus::isSuccess($httpResponse)) {
             throw BeelApiError::fromErrorResponse(
                 $response instanceof ErrorResponse ? $response : new ErrorResponse,
                 $httpResponse,
@@ -229,7 +230,7 @@ abstract readonly class GeneratedResource
     private function unreadable(?Throwable $previous = null): ?BeelUnexpectedResponseError
     {
         $response = $this->responseContext?->response();
-        if ($response === null || $response->getStatusCode() < 200 || $response->getStatusCode() >= 300) {
+        if ($response === null || ! HttpStatus::isSuccess($response)) {
             return null;
         }
 
@@ -260,8 +261,7 @@ abstract readonly class GeneratedResource
             throw BeelApiError::fromGenerated($exception);
         }
 
-        $status = $response->getStatusCode();
-        if ($status >= 200 && $status < 300) {
+        if (HttpStatus::isSuccess($response)) {
             return $response;
         }
 

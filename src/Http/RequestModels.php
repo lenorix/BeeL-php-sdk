@@ -16,6 +16,12 @@ final class RequestModels
 {
     private static ?Serializer $serializer = null;
 
+    /** The serializer for generated models outside a client: request arrays and webhook payloads. */
+    public static function serializer(): Serializer
+    {
+        return self::$serializer ??= new Serializer([new DateTimeNormalizer, new JaneObjectNormalizer]);
+    }
+
     /**
      * Return the model as is, or build it from an array that uses the API's field names.
      *
@@ -40,7 +46,7 @@ final class RequestModels
             return $value;
         }
 
-        $serializer = self::$serializer ??= new Serializer([new DateTimeNormalizer, new JaneObjectNormalizer]);
+        $serializer = self::serializer();
         try {
             $model = $serializer->denormalize($value, $class, 'json');
         } catch (\Throwable $exception) {

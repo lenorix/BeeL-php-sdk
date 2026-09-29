@@ -10,7 +10,11 @@ use Psr\Http\Client\NetworkExceptionInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-/** Adds BeeL's retry and POST idempotency behavior around Jane's PSR-18 transport. */
+/**
+ * Adds BeeL's retry and POST idempotency behavior around Jane's PSR-18 transport.
+ *
+ * @internal
+ */
 final readonly class RetryingClient implements ClientInterface
 {
     public const DEFAULT_MAX_RETRIES = 3;
@@ -130,11 +134,6 @@ final readonly class RetryingClient implements ClientInterface
         $code = is_array($data) && is_array($data['error'] ?? null) ? ($data['error']['code'] ?? null) : null;
 
         return is_string($code) ? $code : null;
-    }
-
-    public function responseContext(): ResponseContext
-    {
-        return $this->responseContext;
     }
 
     /** Exponential backoff with jitter for attempts BeeL gave no delay for, capped at maxRetryDelayMs. */
